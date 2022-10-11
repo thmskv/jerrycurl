@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/master/src/NerdBank.GitVersioning/version.schema.json",
+  "version": "1.1.0-rc.4.{height}",
+  "assemblyVersion": {
+    "precision": "major"
+  },
+  "nuGetPackageVersion": {
+    "semVer": 2.0
+  },
+  "publicReleaseRefSpec": [
+    "^refs/heads/release/"
+  ],
+  "cloudBuild": {
+    "buildNumber": {
+      "enabled": true
+    }
+  },
+  "pathFilters": [
+    "/",
+    ":!/LICENSE",
+    ":!/README.md",
+    ":!/test/unit/README.md",
+    ":!/test/integration/README.md"
+  ]
+}

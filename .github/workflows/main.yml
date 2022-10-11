@@ -1,0 +1,89 @@
+name: Jerrycurl CI/CD
+run-name: Build by @${{ github.actor}}
+on:
+  push:
+    branches:
+      - main
+      - release/*
+jobs:
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    env:
+      JERRY_MYSQL_CONN: SERVER=localhost;DATABASE=jerry_testdb;
+      JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;Integrated Security=true;
+      JERRY_ORACLE_CONN: DATA SOURCE=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=XEPDB1)));USER ID=jerryuser;PASSWORD=jerrypass12!
+    services:
+      oracle:
+        image: gvenzl/oracle-xe:latest-faststart
+        env:
+          ORACLE_RANDOM_PASSWORD: true
+          APP_USER: jerryuser
+          APP_USER_PASSWORD: jerrypass12!
+        ports:
+          - 1521:1521
+        options: >-
+          --health-cmd healthcheck.sh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up MySQL
+        uses: ankane/setup-mysql@v1
+        with:
+          database: jerry_testdb
+      - name: Set up PostgreSQL
+        uses: ankane/setup-postgres@v1
+        with:
+          database: jerry_testdb
+      - name: Build project
+        shell: pwsh
+        run: |
+          .\build.ps1
+
+  build-win32:
+    runs-on: windows-latest
+    env:
+      JERRY_SQLSERVER_CONN: SERVER=localhost;DATABASE=jerry_testdb;USER ID=sa;PASSWORD=YourStrong!Passw0rd;ENCRYPT=false
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up SQL Server
+        uses: ankane/setup-sqlserver@v1
+        with:
+          accept-eula: true
+      - name: Create databases
+        run: |
+          sqlcmd -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE jerry_testdb'
+      - name: Build project
+        shell: pwsh
+        run: |
+          .\build.ps1
+
+  deploy-nupkg:
+    needs: [build-ubuntu, build-win32]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Build project
+        shell: pwsh
+        run: |
+          .\build.ps1 -NoTest -NoIntegrate
+      - name: Push packages (GitHub)
+        run: |
+          dotnet nuget add source --username thmskv --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/thmskv/index.json"
+          dotnet nuget push artifacts/packages/*.nupkg --api-key ${{ secrets.GH_NUPKG_TOKEN }} --source "github"
+          dotnet nuget push artifacts/packages/*.snupkg --api-key ${{ secrets.GH_NUPKG_TOKEN }} --source "github"
+      - name: Push packages (NuGet)
+        if: startsWith(github.ref_name, 'release/')
+        run: |
+          dotnet nuget push artifacts/packages/*.nupkg --source https://apiint.nugettest.org/v3/index.json --api-key ${{ secrets.INT_NUGET_APIKEY }} --skip-duplicate
+          dotnet nuget push artifacts/packages/*.snupkg --source https://apiint.nugettest.org/v3/index.json --api-key ${{ secrets.INT_NUGET_APIKEY }} --skip-duplicate

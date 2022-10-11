@@ -1,0 +1,52 @@
+<Project>
+    <PropertyGroup Label="NuGet Package IDs">
+        <OraclePackageId>Oracle.ManagedDataAccess.Core</OraclePackageId>
+        <SqlServerPackageId>Microsoft.Data.SqlClient</SqlServerPackageId>
+        <MySqlPackageId>MySql.Data</MySqlPackageId>
+        <PostgresPackageId>Npgsql</PostgresPackageId>
+        <SqlitePackageId>Microsoft.Data.Sqlite</SqlitePackageId>
+    </PropertyGroup>
+
+    <PropertyGroup Label="NuGet Package Versions">
+		<OraclePackageVersion>3.21.80</OraclePackageVersion>
+        <SqlServerPackageVersion>5.0.1</SqlServerPackageVersion>
+        <MySqlPackageVersion>8.0.31</MySqlPackageVersion>
+        <PostgresPackageVersion>6.0.7</PostgresPackageVersion>
+        <SqlitePackageVersion>6.0.10</SqlitePackageVersion>
+        <EntityFrameworkCorePackageVersion>5.0.17</EntityFrameworkCorePackageVersion>
+        <JsonNetPackageVersion>13.0.1</JsonNetPackageVersion>
+        <JsonPackageVersion>5.0.1</JsonPackageVersion>
+        <MsBuildPackageVersion>16.9.0</MsBuildPackageVersion>
+        <CSharpPackageVersion>4.5.0</CSharpPackageVersion>
+        <AsyncInterfacesPackageVersion>6.0.0</AsyncInterfacesPackageVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Label="NuGet Package Versions (.NET Standard 2.0)">
+		<SqlServerPackageId_net20>System.Data.SqlClient</SqlServerPackageId_net20>
+		<SqlServerPackageVersion_net20>4.6.1</SqlServerPackageVersion_net20>
+		<SqlitePackageVersion_net20>3.1.30</SqlitePackageVersion_net20>
+		<EntityFrameworkCorePackageVersion_net20>3.1.30</EntityFrameworkCorePackageVersion_net20>
+		<OraclePackageVersion_net20>2.19.101</OraclePackageVersion_net20>
+    </PropertyGroup>
+
+    <PropertyGroup Label="Target Versions">
+        <OracleTargetVersion>$(OraclePackageVersion)</OracleTargetVersion>
+        <SqlServerTargetVersion>$(SqlServerPackageVersion)</SqlServerTargetVersion>
+        <MySqlTargetVersion>$(MySqlPackageVersion)</MySqlTargetVersion>
+        <PostgresTargetVersion>$(PostgresPackageVersion)</PostgresTargetVersion>
+        <SqliteTargetVersion>$(SqlitePackageVersion)</SqliteTargetVersion>
+        <EntityFrameworkCoreTargetVersion>$(EntityFrameworkCorePackageVersion)</EntityFrameworkCoreTargetVersion>
+        <JsonNetTargetVersion>$(JsonNetPackageVersion)</JsonNetTargetVersion>
+        <JsonTargetVersion>$(JsonPackageVersion)</JsonTargetVersion>
+        <MsBuildTargetVersion>$(MsBuildPackageVersion)</MsBuildTargetVersion>
+        <CSharpTargetVersion>$(CSharpPackageVersion)</CSharpTargetVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Label="Target Versions (.NET Standard 2.0)" Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net472'">
+		<SqlServerPackageId>$(SqlServerPackageId_net20)</SqlServerPackageId>
+		<SqlServerTargetVersion>$(SqlServerPackageVersion_net20)</SqlServerTargetVersion>
+		<SqliteTargetVersion>$(SqlitePackageVersion_net20)</SqliteTargetVersion>
+		<EntityFrameworkCoreTargetVersion>$(EntityFrameworkCorePackageVersion_net20)</EntityFrameworkCoreTargetVersion>
+		<OracleTargetVersion>$(OraclePackageVersion_net20)</OracleTargetVersion>
+	</PropertyGroup>
+</Project>

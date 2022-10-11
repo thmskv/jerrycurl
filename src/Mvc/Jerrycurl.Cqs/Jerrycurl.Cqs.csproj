@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>$(NetStandardMultiTargetMoniker)</TargetFrameworks>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Jerrycurl.Cqs.Abstractions\Jerrycurl.Cqs.Abstractions.csproj" />
+		<ProjectReference Include="..\Jerrycurl.Relations.Abstractions\Jerrycurl.Relations.Abstractions.csproj" />
+		<ProjectReference Include="..\Jerrycurl.Relations\Jerrycurl.Relations.csproj" />
+	</ItemGroup>
+</Project>

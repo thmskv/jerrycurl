@@ -1,0 +1,16 @@
+<Project>
+	<Import Project="$(MSBuildThisFileDirectory)..\..\eng\versions.props" />
+	
+	<PropertyGroup>
+		<LangVersion>latest</LangVersion>
+		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
+		<TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net472;netcoreapp3.1;net6.0</TargetFrameworks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Fixie" Version="2.2.2" />
+		<PackageReference Include="Shouldly" Version="4.1.0" />
+		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(AsyncInterfacesPackageVersion)" />
+		<DotNetCliToolReference Include="Fixie.Console" Version="2.2.2" />
+	</ItemGroup>
+</Project>

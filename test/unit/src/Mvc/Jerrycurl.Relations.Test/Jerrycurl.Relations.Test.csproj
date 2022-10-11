@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Cqs.Abstractions\Jerrycurl.Cqs.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Cqs\Jerrycurl.Cqs.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Relations.Abstractions\Jerrycurl.Relations.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Relations\Jerrycurl.Relations.csproj" />
+    <ProjectReference Include="..\..\Shared\Jerrycurl.Test.Common\Jerrycurl.Test.Common.csproj" />
+  </ItemGroup>
+
+	<Import Project="..\..\..\..\..\src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems" Label="Shared" />
+</Project>

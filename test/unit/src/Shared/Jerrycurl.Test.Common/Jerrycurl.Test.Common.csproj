@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Jerrycurl.Test</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Cqs.Abstractions\Jerrycurl.Cqs.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Cqs\Jerrycurl.Cqs.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Mvc.Abstractions\Jerrycurl.Mvc.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Mvc\Jerrycurl.Mvc.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Relations.Abstractions\Jerrycurl.Relations.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Relations\Jerrycurl.Relations.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Vendors\Jerrycurl.Vendors.Sqlite\Jerrycurl.Vendors.Sqlite.csproj" />
+  </ItemGroup>
+
+</Project>
