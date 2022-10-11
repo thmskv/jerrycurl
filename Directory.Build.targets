@@ -1,0 +1,88 @@
+<Project>
+    <PropertyGroup>
+        <NuspecFile>$(MSBuildThisFileDirectory)nuspec\$(PackageId).nuspec</NuspecFile>
+		<NuGetIntermediatePath>$(BaseIntermediateOutputPath).nusrc\</NuGetIntermediatePath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsPackable)' == 'true'">
+        <DefaultItemExcludes>$(DefaultItemExcludes);.nusrc\**</DefaultItemExcludes>
+        <CleanDependsOn>$(CleanDependsOn);CleanNuGet</CleanDependsOn>
+    </PropertyGroup>
+
+	<PropertyGroup>
+		<DefineConstants Condition="'$(TargetFramework)' == 'netstandard2.0' or $(TargetFramework) == 'net472'">$(DefineConstants);NET20_BASE</DefineConstants>
+		<DefineConstants Condition="'$(TargetFramework)' != 'netstandard2.0' and $(TargetFramework) != 'net472'">$(DefineConstants);NET21_BASE</DefineConstants>
+	</PropertyGroup>
+
+    <ItemGroup Condition="'$(IsPackable)' == 'true'">
+        <None Include=".nusrc\**" />
+        <NuGetSource Include=".nusrc\**" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(IsPackable)' == 'true'">
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(UseCodeAnalysis)' == 'true'">
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.2" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Nerdbank.GitVersioning" Version="3.5.108" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+    </ItemGroup>
+
+    <Target Name="CleanNuGet">
+        <RemoveDir Directories="$(NuGetIntermediatePath)" Condition="Exists($(NuGetIntermediatePath))" />
+    </Target>
+
+    <Target Name="PrepareNuGet" BeforeTargets="GenerateNuspec" DependsOnTargets="CleanNuGet" Condition="'$(IsPackable)' == 'true'">
+        <Copy SourceFiles="@(NuGetSource)" DestinationFolder="$(NuGetIntermediatePath)%(RecursiveDir)" />
+        <Copy SourceFiles="$(MSBuildThisFileDirectory)gfx\icon.png" DestinationFolder="$(NuGetIntermediatePath)" />
+        
+        <PropertyGroup>
+            <NuspecProperties>
+				PackageId=$(PackageId);
+				PackageVersion=$(PackageVersion);
+				PackageOwners=$(PackageOwners);
+				PackageAuthors=$(PackageAuthors);
+				PackageProjectUrl=$(PackageProjectUrl);
+				PackageIconUrl=$(PackageIconUrl);
+				PackageLicense=$(PackageLicense);
+				PackageCopyright=$(Copyright);
+				PackageTags=$(PackageTags);
+				TargetFramework=$(TargetFramework);
+				NetStandardMoniker=$(NetStandardMoniker);
+				NetFrameworkMoniker=$(NetFrameworkMoniker);
+				AssemblyName=$(AssemblyName);
+				BinPath=$(MSBuildProjectDirectory)\$(OutputPath);
+				SqlServerPackageId=$(SqlServerPackageId);
+				SqlServerPackageId_net20=$(SqlServerPackageId_net20);
+				SqlServerPackageVersion=$(SqlServerPackageVersion);
+				SqlServerPackageVersion_net20=$(SqlServerPackageVersion_net20);
+				SqlitePackageId=$(SqlitePackageId);
+				SqlitePackageVersion=$(SqlitePackageVersion);
+				SqlitePackageVersion_net20=$(SqlitePackageVersion_net20);
+				OraclePackageId=$(OraclePackageId);
+				OraclePackageVersion=$(OraclePackageVersion);
+				OraclePackageVersion_net20=$(OraclePackageVersion_net20);
+				MySqlPackageId=$(MySqlPackageId);
+				MySqlPackageVersion=$(MySqlPackageVersion);
+				PostgresPackageId=$(PostgresPackageId);
+				PostgresPackageVersion=$(PostgresPackageVersion);
+				EntityFrameworkCorePackageVersion=$(EntityFrameworkCorePackageVersion);
+				EntityFrameworkCorePackageVersion_net20=$(EntityFrameworkCorePackageVersion_net20);
+				JsonNetPackageVersion=$(JsonNetPackageVersion);
+				JsonPackageVersion=$(JsonPackageVersion);
+				CSharpPackageVersion=$(CSharpPackageVersion);
+				AsyncInterfacesPackageVersion=$(AsyncInterfacesPackageVersion);
+				RepositoryUrl=$(RepositoryUrl);
+				GitCommitId=$(GitCommitId);
+				PackageIconFile=$(PackageIconFile);
+				SourcePath=$(MSBuildProjectDirectory)\$(NuGetIntermediatePath);
+				SourceFiles=$(MSBuildProjectDirectory)\$(NuGetIntermediatePath)**\*;
+				IconPath=$(MSBuildProjectDirectory)\$(NuGetIntermediatePath)$(PackageIconFile)
+			</NuspecProperties>
+        </PropertyGroup>
+    </Target>
+</Project>

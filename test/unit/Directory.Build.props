@@ -1,0 +1,13 @@
+<Project>
+	<PropertyGroup>
+		<LangVersion>latest</LangVersion>
+		<TargetFrameworks>netcoreapp3.1;net6</TargetFrameworks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Fixie" Version="2.2.2" />
+		<PackageReference Include="Shouldly" Version="4.0.3" />
+		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
+		<DotNetCliToolReference Include="Fixie.Console" Version="2.2.2" />
+	</ItemGroup>
+</Project>
