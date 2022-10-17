@@ -383,7 +383,12 @@ namespace Jerrycurl.Mvc
 
             QueryEngine engine = new QueryEngine(queryOptions);
 
-            return engine.Execute<IList<T>>(queries, QueryType.Aggregate).FirstOrDefault() ?? default;
+            IList<T> list = engine.Execute<IList<T>>(queries, QueryType.Aggregate);
+
+            if (list == null || list.Count == 0)
+                return default;
+
+            return list[0];
         }
 
         /// <summary>
@@ -418,7 +423,12 @@ namespace Jerrycurl.Mvc
 
             QueryEngine engine = new QueryEngine(queryOptions);
 
-            return (await engine.ExecuteAsync<IList<T>>(queries, QueryType.Aggregate, cancellationToken).ConfigureAwait(false)).FirstOrDefault() ?? default;
+            IList<T> list = await engine.ExecuteAsync<IList<T>>(queries, QueryType.Aggregate, cancellationToken).ConfigureAwait(false);
+
+            if (list == null || list.Count == 0)
+                return default;
+
+            return list[0];
         }
         #endregion
     }

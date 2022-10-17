@@ -71,20 +71,25 @@ namespace Jerrycurl.Mvc.Metadata
             if (parent?.Reference != null)
             {
                 IEnumerable<IReference> references = parent.Reference.References.Where(r => r.HasFlag(ReferenceFlags.Foreign) && !r.HasFlag(ReferenceFlags.Self));
+                List<IReference> validReferences = new List<IReference>();
 
                 foreach (IReference reference in references.OrderBy(r => r.Priority))
                 {
-                    int valueIndex = reference.Key.Properties.IndexOf(m => m.Identity.Equals(metadata.Identity));
+                    bool hasKey = reference.Key.Properties.Any(m => m.Identity.Equals(metadata.Identity));
 
-                    if (valueIndex > -1 && !reference.Other.Metadata.Relation.HasFlag(RelationMetadataFlags.Recursive))
-                    {
-                        IReferenceMetadata valueMetadata = reference.Other.Key.Properties[valueIndex];
+                    if (hasKey && !reference.Other.Metadata.Relation.HasFlag(RelationMetadataFlags.Recursive))
+                        validReferences.Add(reference);
+                }
 
-                        metadata.Input = new Lazy<IProjectionMetadata>(() => this.GetMetadata(context, valueMetadata.Relation));
-                        metadata.Flags |= ProjectionMetadataFlags.Cascade;
+                if (validReferences.Count == 1)
+                {
+                    IReference reference = validReferences[0];
+                    IReferenceMetadata valueMetadata = reference.Other.Key.Properties.First(m => m.Identity.Equals(metadata.Identity));
 
-                        return;
-                    }
+                    metadata.Input = new Lazy<IProjectionMetadata>(() => this.GetMetadata(context, valueMetadata.Relation));
+                    metadata.Flags |= ProjectionMetadataFlags.Cascade;
+
+                    return;
                 }
             }
 
