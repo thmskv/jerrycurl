@@ -1,0 +1,14 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  push:
+    branches:
+      - gh-actions
+jobs:
+  build-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        shell: pwsh
+        run: |
+          .\build.ps1
