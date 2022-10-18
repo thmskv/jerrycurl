@@ -8,7 +8,4 @@ jobs:
   build-project:
     runs-on: ubuntu-latest
     steps:
-      - name: Build
-        shell: pwsh
-        run: |
-          .\build.ps1
+      - run: .\build.sh
