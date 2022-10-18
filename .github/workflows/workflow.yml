@@ -19,17 +19,18 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Setup dotnet
+      - name: Set up dotnet
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: |
             2.1.x
             3.1.x
             5.0.x
-      - name: Setup SQL Server
+      - name: Set up SQL Server
         uses: potatoqualitee/mssqlsuite@v1.5.1
         with:
           install: sqlengine
+        run: sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q "CREATE DATABASE jerry_testdb;"
       - name: Set up MySQL
         run: |
           sudo /etc/init.d/mysql start
