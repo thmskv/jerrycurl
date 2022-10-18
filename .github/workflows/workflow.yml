@@ -5,7 +5,8 @@ on:
     branches:
       - gh-actions
 env:
-  JERRY_SQLSERVER_CONN: SERVER=localhost;DATABASE=jerry_testdb;USER ID=sa;PASSWORD=dbatools.I0
+  JERRY_SQLSERVER_CONN: SERVER=localhost;DATABASE=jerry_testdb;USER ID=sa;PASSWORD=dbatools.I0;ENCRYPT=false
+  JERRY_MYSQL_CONN: SERVER=localhost;DATABASE=jerry_testdb;UID=root;PWD=root;
 jobs:
   build-project:
     runs-on: ${{ matrix.os }}
@@ -29,6 +30,10 @@ jobs:
         uses: potatoqualitee/mssqlsuite@v1.5.1
         with:
           install: sqlengine
+      - name: Set up MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE jerry_testdb' -uroot -proot
       - name: Build project
         shell: pwsh
         run: |
