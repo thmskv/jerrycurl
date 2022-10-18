@@ -6,7 +6,11 @@ on:
       - gh-actions
 jobs:
   build-project:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+        matrix:
+            os: [ubuntu-latest, windows-latest]
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -15,4 +19,4 @@ jobs:
       - name: Build project
         shell: pwsh
         run: |
-          .\build.ps1
+          .\build.ps1 -NoTest
