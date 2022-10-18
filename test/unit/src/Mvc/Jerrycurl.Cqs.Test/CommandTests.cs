@@ -47,7 +47,7 @@ namespace Jerrycurl.Cqs.Test
             buffer.Add(new ColumnBinding(target, "C0"));
             buffer.Update(10, ("", "c0"));
 
-            Should.Throw<BindingException>(() => buffer.Commit());
+            Should.NotThrow(() => buffer.Commit());
         }
 
         public void Test_Update_CaseInsensitive()

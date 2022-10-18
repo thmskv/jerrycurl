@@ -26,4 +26,4 @@ jobs:
       - name: Build project
         shell: pwsh
         run: |
-          .\build.ps1 -NoTest
+          .\build.ps1

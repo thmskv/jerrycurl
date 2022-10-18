@@ -83,8 +83,8 @@ namespace Jerrycurl.Mvc.Metadata
 
                 if (validReferences.Count == 1)
                 {
-                    IReference reference = validReferences[0];
-                    IReferenceMetadata valueMetadata = reference.Other.Key.Properties.First(m => m.Identity.Equals(metadata.Identity));
+                    int valueIndex = validReferences[0].Key.Properties.IndexOf(m => m.Identity.Equals(metadata.Identity));
+                    IReferenceMetadata valueMetadata = validReferences[0].Other.Key.Properties[valueIndex];
 
                     metadata.Input = new Lazy<IProjectionMetadata>(() => this.GetMetadata(context, valueMetadata.Relation));
                     metadata.Flags |= ProjectionMetadataFlags.Cascade;
