@@ -1,9 +1,11 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Jerrycurl CI/CD
+run-name: Build by @${{ github.actor}}
 on:
   push:
     branches:
       - gh-actions
+env:
+  JERRY_SQLSERVER_CONN: SERVER=localhost;DATABASE=jerry_testdb;USER ID=sa;PASSWORD=dbatools.I0
 jobs:
   build-project:
     runs-on: ${{ matrix.os }}
@@ -23,6 +25,10 @@ jobs:
             2.1.x
             3.1.x
             5.0.x
+      - name: Setup SQL Server
+        uses: potatoqualitee/mssqlsuite@v1.5.1
+        with:
+          install: sqlengine
       - name: Build project
         shell: pwsh
         run: |
