@@ -24,8 +24,6 @@ jobs:
         with:
           dotnet-version: |
             2.1.x
-            3.1.x
-            5.0.x
       - name: Set up SQL Server
         uses: potatoqualitee/mssqlsuite@v1.5.1
         with:
