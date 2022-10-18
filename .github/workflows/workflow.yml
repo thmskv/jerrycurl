@@ -33,8 +33,9 @@ jobs:
       - name: Set up MySQL
         run: sudo /etc/init.d/mysql start
       - name: Create databases
-        run: mysql -e 'CREATE DATABASE jerry_testdb' -uroot -proot
-        run: sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q "CREATE DATABASE jerry_testdb;"
+        run: |
+          mysql -e 'CREATE DATABASE jerry_testdb' -uroot -proot
+          sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q "CREATE DATABASE jerry_testdb;"
       - name: Build project
         shell: pwsh
         run: |
