@@ -47,7 +47,7 @@ namespace Jerrycurl.Vendors.Postgres.Test.Models
                 Boolean = true,
                 Money = 2352323.35m,
                 Date = new DateTime(1819, 5, 4),
-                TimeStamp = new DateTime(1979, 5, 4, 3, 2, 1),
+                TimeStamp = new DateTime(1979, 5, 4, 3, 2, 1, DateTimeKind.Utc),
                 TimeStampTz = new DateTimeOffset(1819, 5, 4, 3, 2, 1, TimeSpan.FromHours(3)),
                 Time = new TimeSpan(3, 2, 1),
                 Char = "Jerrycurl",
