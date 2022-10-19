@@ -6,7 +6,7 @@ on:
       - gh-actions
 env:
   JERRY_SQLSERVER_CONN: SERVER=localhost;DATABASE=jerry_testdb;USER ID=sa;PASSWORD=YourStrong!Passw0rd;ENCRYPT=false
-  JERRY_MYSQL_CONN: SERVER=localhost;DATABASE=jerry_testdb;UID=root;
+  JERRY_MYSQL_CONN: SERVER=localhost;DATABASE=jerry_testdb;
   JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;Integrated Security=true;
   MYSQL_ROOT_PASSWORD: root
 jobs:
