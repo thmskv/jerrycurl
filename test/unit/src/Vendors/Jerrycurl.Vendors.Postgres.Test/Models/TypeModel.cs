@@ -20,7 +20,7 @@ namespace Jerrycurl.Vendors.Postgres.Test.Models
         public decimal Money { get; set; }
         public DateTime Date { get; set; }
         public DateTime TimeStamp { get; set; }
-        public DateTime TimeStampTz { get; set; }
+        public DateTimeOffset TimeStampTz { get; set; }
         public TimeSpan Time { get; set; }
         public DateTimeOffset TimeTz { get; set; }
         public TimeSpan Interval { get; set; }
@@ -49,7 +49,7 @@ namespace Jerrycurl.Vendors.Postgres.Test.Models
                 Money = 2352323.35m,
                 Date = new DateTime(1819, 5, 4),
                 TimeStamp = new DateTime(1979, 5, 4, 3, 2, 1),
-                TimeStampTz = new DateTime(1819, 5, 4, 3, 2, 1, DateTimeKind.Utc),
+                TimeStampTz = new DateTimeOffset(1819, 5, 4, 3, 2, 1, TimeSpan.Zero),
                 Time = new TimeSpan(3, 2, 1),
                 TimeTz = new DateTimeOffset(2000, 1, 1, 3, 2, 1, TimeSpan.Zero),
                 Char = "Jerrycurl",
