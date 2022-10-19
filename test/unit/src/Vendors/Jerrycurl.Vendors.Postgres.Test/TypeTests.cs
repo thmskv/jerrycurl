@@ -28,6 +28,7 @@ CREATE TABLE jerry_types(
         ""TimeStamp"" timestamp NOT NULL,
         ""TimeStampTz"" timestamptz NOT NULL,
         ""Time"" time NOT NULL,
+        ""TimeTz"" timetz NOT NULL,
         ""Interval"" interval NOT NULL,
         ""Uuid"" uuid NOT NULL,
         ""ArrayOfInt"" int[] NOT NULL,
