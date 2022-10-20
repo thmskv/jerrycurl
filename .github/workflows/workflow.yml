@@ -7,7 +7,7 @@ on:
 env:
   JERRY_SQLSERVER_CONN: SERVER=localhost;DATABASE=jerry_testdb;USER ID=sa;PASSWORD=YourStrong!Passw0rd;ENCRYPT=false
   JERRY_MYSQL_CONN: SERVER=localhost;DATABASE=jerry_testdb;
-  JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;Integrated Security=true;
+  # JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;Integrated Security=true;
 jobs:
   build-project:
     runs-on: ${{ matrix.os }}
