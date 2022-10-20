@@ -85,7 +85,7 @@ function Test-Integration
 
 function Get-Target-Frameworks
 {
-    $tfm = @("netcoreapp2.1", "netcoreapp3.1")
+    $tfm = @("netcoreapp3.1", "net6.0")
     
     if ($IsWindows)
     {

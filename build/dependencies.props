@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet Package Versions">
-		<OraclePackageVersion>3.21.61</OraclePackageVersion>
-        <SqlServerPackageVersion>4.1.0</SqlServerPackageVersion>
-        <MySqlPackageVersion>8.0.29</MySqlPackageVersion>
-        <PostgresPackageVersion>6.0.5</PostgresPackageVersion>
-        <SqlitePackageVersion>6.0.7</SqlitePackageVersion>
+		<OraclePackageVersion>3.21.80</OraclePackageVersion>
+        <SqlServerPackageVersion>5.0.1</SqlServerPackageVersion>
+        <MySqlPackageVersion>8.0.31</MySqlPackageVersion>
+        <PostgresPackageVersion>6.0.7</PostgresPackageVersion>
+        <SqlitePackageVersion>6.0.10</SqlitePackageVersion>
         <EntityFrameworkCorePackageVersion>3.1.12</EntityFrameworkCorePackageVersion>
         <JsonNetPackageVersion>12.0.3</JsonNetPackageVersion>
         <JsonPackageVersion>5.0.1</JsonPackageVersion>
