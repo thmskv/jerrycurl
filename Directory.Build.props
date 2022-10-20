@@ -16,7 +16,7 @@
         <SignAssembly>false</SignAssembly>
         <UseCodeAnalysis>false</UseCodeAnalysis>
         <RepositoryType>git</RepositoryType>
-        <RepositoryUrl>https://github.com/rhodosaur/jerrycurl</RepositoryUrl>
+        <RepositoryUrl>https://github.com/thmskv/jerrycurl</RepositoryUrl>
         <DebugSymbols>true</DebugSymbols>
         <DebugType>portable</DebugType>
         <DefaultLanguage>en-US</DefaultLanguage>
@@ -27,12 +27,12 @@
         <IsPackable>false</IsPackable>
         <PackageOutputPath>$(MSBuildThisFileDirectory)artifacts\packages</PackageOutputPath>
         <PackageOwners>AC Dancode</PackageOwners>
-        <PackageAuthors>rhodosaur</PackageAuthors>
+        <PackageAuthors>thmskv</PackageAuthors>
         <IncludeSymbols>true</IncludeSymbols>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PackageProjectUrl>https://jerrycurl.net</PackageProjectUrl>
-        <PackageIconUrl>https://raw.githubusercontent.com/rhodosaur/jerrycurl/dev/gfx/icon.png</PackageIconUrl>
+        <PackageIconUrl>https://raw.githubusercontent.com/thmskv/jerrycurl/dev/gfx/icon.png</PackageIconUrl>
         <PackageIconFile>icon.png</PackageIconFile>
         <PackageId>$(MSBuildProjectName)</PackageId>
         <PackageLicense>MIT</PackageLicense>
