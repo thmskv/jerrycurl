@@ -7,24 +7,19 @@ on:
 env:
   JERRY_SQLSERVER_CONN: SERVER=localhost;DATABASE=jerry_testdb;USER ID=sa;PASSWORD=YourStrong!Passw0rd;ENCRYPT=false
   JERRY_MYSQL_CONN: SERVER=localhost;DATABASE=jerry_testdb;
-  # JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;Integrated Security=true;
+  JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;Integrated Security=true;
 jobs:
   build-project:
     runs-on: ${{ matrix.os }}
 
     strategy:
         matrix:
-            os: [ubuntu-latest, windows-latest]
+            os: [ubuntu-latest]
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Set up dotnet
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: |
-            2.1.x
       - name: Set up SQL Server
         uses: ankane/setup-sqlserver@v1
         with:
