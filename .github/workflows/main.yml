@@ -10,8 +10,8 @@ env:
   JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;Integrated Security=true;
   JERRY_ORACLE_CONN: DATA SOURCE=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=XEPDB1)));USER ID=jerryuser;PASSWORD=jerrypass12!
 jobs:
-  build-project:
-    runs-on: ${{ matrix.os }}
+  build-ubuntu:
+    runs-on: ubuntu-latest
     services:
       oracle:
         image: gvenzl/oracle-xe:latest-faststart
@@ -26,10 +26,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 10
-
-    strategy:
-        matrix:
-            os: [ubuntu-latest]
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -53,7 +49,23 @@ jobs:
       - name: Build project
         shell: pwsh
         run: |
+          .\build.ps1 -NoPack
+  build-win32:
+    runs-on: windows-latest
+    steps:
+      - name: Build project
+        shell: pwsh
+        run: |
           .\build.ps1
+
+  deploy-packages:
+    needs: [build-linux, build-win32]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build project
+        shell: pwsh
+        run: |
+          .\build.ps1 -NoTest
       - name: Push packages
         run: |
           dotnet nuget add source --username thmskv --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/thmskv/index.json"

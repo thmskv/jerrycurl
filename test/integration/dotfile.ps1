@@ -5,7 +5,6 @@ function Test-Integration
         [String] $Vendor,
         [Parameter(Mandatory=$true)]
         [String] $ConnectionString,
-        [String] $UserConnectionString,
         [String] $Version,
         [String] $TargetFramework = "netcoreapp3.1",
         [Parameter(Mandatory=$true)]
@@ -64,15 +63,6 @@ function Test-Integration
         Prepare-Source $Vendor $TargetFramework $TempPath $PackageSource
         
         Install-Cli $Vendor $Version $TargetFramework $Verbosity $TempPath $PackageSource
-        
-        #$integrateConnection = $ConnectionString
-        
-        #if ($UserConnectionString)
-        #{
-            #Create-Database-User $Vendor $integrateConnection $TargetFramework $TempPath
-            
-            #$integrateConnection = $UserConnectionString
-        #}
         
         Prepare-Database $Vendor $ConnectionString $TargetFramework $TempPath
         Run-Project-Test $Vendor $Version $ConnectionString $PackageSource $targetFramework $Verbosity $TempPath

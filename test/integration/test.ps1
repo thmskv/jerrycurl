@@ -18,9 +18,6 @@ Set-Live-Connection "sqlite" ("FILENAME=" + (Join-Path $BuildPath "sqlite\int.db
 foreach ($vendor in Get-All-Vendors)
 {
     $connectionString = Get-Live-Connection -Vendor $vendor
-    $userConnectionString = Get-Connection-String -Vendor $vendor -User
-    
-    if ($env:CI_WINDOWS -eq "true" -and $vendor -eq "mysql") { $connectionString = $null }
     
     Write-Host ""
     Write-Host "   Testing '$vendor'..."
@@ -31,7 +28,7 @@ foreach ($vendor in Get-All-Vendors)
     }
     elseif ($connectionString)
     {
-        Test-Integration -Vendor $vendor -Connection $connectionString -PackageSource $PackageSource -Verbosity $Verbosity -TempPath $BuildPath -UserConnectionString $userConnectionString
+        Test-Integration -Vendor $vendor -Connection $connectionString -PackageSource $PackageSource -Verbosity $Verbosity -TempPath $BuildPath
         
         if (Verify-Integration -Vendor $vendor -TempPath $BuildPath)
         {
