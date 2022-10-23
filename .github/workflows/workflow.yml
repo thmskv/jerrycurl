@@ -8,16 +8,17 @@ env:
   JERRY_SQLSERVER_CONN: SERVER=localhost;DATABASE=jerry_testdb;USER ID=sa;PASSWORD=YourStrong!Passw0rd;ENCRYPT=false
   JERRY_MYSQL_CONN: SERVER=localhost;DATABASE=jerry_testdb;
   JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;Integrated Security=true;
+  JERRY_ORACLE_CONN: DATA SOURCE=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=XEPDB1)));USER ID=jerryuser;PASSWORD=jerrypass12!
 jobs:
   build-project:
     runs-on: ${{ matrix.os }}
     services:
       oracle:
-        image: gvenzl/oracle-xe:latest
+        image: gvenzl/oracle-xe:latest-faststart
         env:
           ORACLE_RANDOM_PASSWORD: true
-          APP_USER: my_user
-          APP_USER_PASSWORD: my_password_which_I_really_should_change
+          APP_USER: jerryuser
+          APP_USER_PASSWORD: jerrypass12!
         ports:
           - 1521:1521
         options: >-
