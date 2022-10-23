@@ -65,17 +65,17 @@ function Test-Integration
         
         Install-Cli $Vendor $Version $TargetFramework $Verbosity $TempPath $PackageSource
         
-        $integrateConnection = $ConnectionString
+        #$integrateConnection = $ConnectionString
         
-        if ($UserConnectionString)
-        {
-            Create-Database-User $Vendor $integrateConnection $TargetFramework $TempPath
+        #if ($UserConnectionString)
+        #{
+            #Create-Database-User $Vendor $integrateConnection $TargetFramework $TempPath
             
-            $integrateConnection = $UserConnectionString
-        }
+            #$integrateConnection = $UserConnectionString
+        #}
         
-        Prepare-Database $Vendor $integrateConnection $TargetFramework $TempPath
-        Run-Project-Test $Vendor $Version $integrateConnection $PackageSource $targetFramework $Verbosity $TempPath
+        Prepare-Database $Vendor $ConnectionString $TargetFramework $TempPath
+        Run-Project-Test $Vendor $Version $ConnectionString $PackageSource $targetFramework $Verbosity $TempPath
         
         $success = Verify-Integration $Vendor $targetFramework $TempPath
         
