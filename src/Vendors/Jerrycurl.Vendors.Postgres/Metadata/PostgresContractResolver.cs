@@ -65,6 +65,29 @@ namespace Jerrycurl.Vendors.Postgres.Metadata
                     }
                 };
             }
+            else if (metadata.Type == typeof(DateTime) || metadata.Type == typeof(DateTime?) || metadata.Type == typeof(DateTimeOffset) || metadata.Type == typeof(DateTimeOffset?))
+            {
+                return new BindingParameterContract()
+                {
+                    Convert = fallback.Convert,
+                    Write = pi =>
+                    {
+                        fallback?.Write?.Invoke(pi);
+
+                        if (pi.Parameter is NpgsqlParameter npgParam)
+                        {
+                            npgParam.NpgsqlDbType = pi.Parameter.Value switch
+                            {
+                                DateTime dt => dt.Kind == DateTimeKind.Utc ? NpgsqlDbType.TimestampTz : NpgsqlDbType.Timestamp,
+                                DateTimeOffset dt => dt.Offset.Ticks == 0 ? NpgsqlDbType.TimestampTz : NpgsqlDbType.Timestamp,
+                                _ => npgParam.NpgsqlDbType,
+                            };
+                        }
+
+                        this.SetInputParameter(pi);
+                    }
+                };
+            }
             else
             {
                 return new BindingParameterContract()
