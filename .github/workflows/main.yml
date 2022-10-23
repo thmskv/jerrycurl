@@ -59,7 +59,7 @@ jobs:
           .\build.ps1
 
   deploy-packages:
-    needs: [build-linux, build-win32]
+    needs: [build-ubuntu, build-win32]
     runs-on: ubuntu-latest
     steps:
       - name: Build project
