@@ -49,7 +49,7 @@ jobs:
       - name: Build project
         shell: pwsh
         run: |
-          .\build.ps1 -NoPack
+          .\build.ps1
   build-win32:
     runs-on: windows-latest
     steps:
