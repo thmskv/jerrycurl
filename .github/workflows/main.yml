@@ -4,14 +4,14 @@ on:
   push:
     branches:
       - gh-actions
-env:
-  JERRY_SQLSERVER_CONN: SERVER=localhost;DATABASE=jerry_testdb;USER ID=sa;PASSWORD=YourStrong!Passw0rd;ENCRYPT=false
-  JERRY_MYSQL_CONN: SERVER=localhost;DATABASE=jerry_testdb;
-  JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;Integrated Security=true;
-  JERRY_ORACLE_CONN: DATA SOURCE=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=XEPDB1)));USER ID=jerryuser;PASSWORD=jerrypass12!
 jobs:
   build-ubuntu:
     runs-on: ubuntu-latest
+    env:
+      JERRY_SQLSERVER_CONN: SERVER=localhost;DATABASE=jerry_testdb;USER ID=sa;PASSWORD=YourStrong!Passw0rd;ENCRYPT=false
+      JERRY_MYSQL_CONN: SERVER=localhost;DATABASE=jerry_testdb;
+      JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;Integrated Security=true;
+      JERRY_ORACLE_CONN: DATA SOURCE=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=XEPDB1)));USER ID=jerryuser;PASSWORD=jerrypass12!
     services:
       oracle:
         image: gvenzl/oracle-xe:latest-faststart
@@ -50,15 +50,20 @@ jobs:
         shell: pwsh
         run: |
           .\build.ps1
+
   build-win32:
     runs-on: windows-latest
     steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Build project
         shell: pwsh
         run: |
           .\build.ps1
 
-  deploy-packages:
+  deploy-gh:
     needs: [build-ubuntu, build-win32]
     runs-on: ubuntu-latest
     steps:
