@@ -63,14 +63,14 @@ jobs:
         run: |
           .\build.ps1
 
-  deploy-gh:
+  deploy-private:
     needs: [build-ubuntu, build-win32]
     runs-on: ubuntu-latest
     steps:
       - name: Build project
         shell: pwsh
         run: |
-          .\build.ps1 -NoTest
+          .\build.ps1 -NoTest -NoIntegrate
       - name: Push packages
         run: |
           dotnet nuget add source --username thmskv --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/thmskv/index.json"
