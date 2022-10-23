@@ -26,7 +26,7 @@ END;");
 
             create.Sql(@"
 CREATE TABLE ""jerry_json""(
-        ""Json"" varchar2(8000) NOT NULL
+        ""Json"" varchar2(4000) NOT NULL
 )");
 
             Runner.Command(drop);
