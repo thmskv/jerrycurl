@@ -8,7 +8,7 @@ namespace Jerrycurl.Extensions.EntityFrameworkCore.Test
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
-                optionsBuilder.UseSqlite("FILENAME=ef.db");
+                optionsBuilder.UseSqlite("DATA SOURCE=ef.db");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
