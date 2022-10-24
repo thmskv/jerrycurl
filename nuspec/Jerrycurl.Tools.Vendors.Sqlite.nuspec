@@ -24,6 +24,10 @@
 				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
 				<dependency id="$SqlitePackageId$" version="$SqlitePackageVersion$" />
 			</group>
+			<group targetFramework="netstandard2.1">
+				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
+				<dependency id="$SqlitePackageId$" version="$SqlitePackageVersion$" />
+			</group>
         </dependencies>
     </metadata>
     <files>
