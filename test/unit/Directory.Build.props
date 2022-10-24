@@ -3,9 +3,8 @@
 	
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
-		<TargetFrameworks>net472;netcoreapp3.1;net6.0</TargetFrameworks>
-		<PlatformTarget Condition="'$(TargetFramework)' == 'net472'">x64</PlatformTarget>
-		<!--<CopyLocalLockFileAssemblies Condition="'$(TargetFramework)' == 'net472'">true</CopyLocalLockFileAssemblies>-->
+		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
+		<TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net472;netcoreapp3.1;net6.0</TargetFrameworks>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -16,6 +16,10 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>SQLite support for Jerrycurl.</description>
         <dependencies>
+			<group targetFramework="net472">
+				<dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
+				<dependency id="$SqlitePackageId$" version="$SqlitePackageVersion_net20$" />
+			</group>
             <group targetFramework="netstandard2.0">
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
                 <dependency id="$SqlitePackageId$" version="$SqlitePackageVersion_net20$" />
