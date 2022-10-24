@@ -7,7 +7,7 @@ namespace Jerrycurl.Extensions.EntityFrameworkCore.Test
     {
         public override void Configure(DomainOptions options)
         {
-            options.UseSqlite("FILENAME=ef.db");
+            options.UseSqlite("DATA SOURCE=ef.db");
             options.UseEntityFrameworkCore<EntityContext>();
         }
     }

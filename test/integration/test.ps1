@@ -13,7 +13,7 @@ param(
 if (-not $PackageSource) { $PackageSource = Join-Path $PSScriptRoot "..\..\artifacts\packages" }
 if (-not $BuildPath)     { $BuildPath     = Join-Path $PSScriptRoot "..\..\artifacts\integration" }
 
-Set-Live-Connection "sqlite" ("FILENAME=" + (Join-Path $BuildPath "sqlite\int.db"))
+Set-Live-Connection "sqlite" ("DATA SOURCE=" + (Join-Path $BuildPath "sqlite\int.db"))
 
 foreach ($vendor in Get-All-Vendors)
 {
