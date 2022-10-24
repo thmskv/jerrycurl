@@ -12,6 +12,7 @@ using Jerrycurl.Extensions.Json.Metadata;
 using Jerrycurl.Cqs.Commands;
 using Jerrycurl.Test.Models.Database;
 using Jerrycurl.Cqs.Test.Models.Views;
+using System.Text.Json.Serialization;
 
 namespace Jerrycurl.Cqs.Test
 {
@@ -96,7 +97,7 @@ namespace Jerrycurl.Cqs.Test
             var options = new JsonSerializerOptions()
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                IgnoreNullValues = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             };
             var store = DatabaseHelper.Default.GetStore();
 
@@ -118,7 +119,7 @@ namespace Jerrycurl.Cqs.Test
             var options = new JsonSerializerOptions()
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                IgnoreNullValues = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             };
             var store = DatabaseHelper.Default.GetStore();
 

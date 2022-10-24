@@ -202,7 +202,6 @@ namespace Jerrycurl.Test.Profiling
 
         public override int GetValues(object[] values) => throw new NotSupportedException();
 
-        public override object InitializeLifetimeService() => this.InnerReader.InitializeLifetimeService();
         public override bool NextResult()
         {
             this.ClearCount();

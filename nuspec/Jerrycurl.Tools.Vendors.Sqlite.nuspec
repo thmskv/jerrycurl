@@ -18,9 +18,13 @@
         <dependencies>
             <group targetFramework="net472">
                 <dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
-                <dependency id="$SqlitePackageId$" version="$SqlitePackageVersion$" />
+                <dependency id="$SqlitePackageId$" version="$SqlitePackageVersion_net20$" />
             </group>
 			<group targetFramework="netstandard2.0">
+				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
+				<dependency id="$SqlitePackageId$" version="$SqlitePackageVersion_net20$" />
+			</group>
+			<group targetFramework="netstandard2.1">
 				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
 				<dependency id="$SqlitePackageId$" version="$SqlitePackageVersion$" />
 			</group>

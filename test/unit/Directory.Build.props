@@ -1,13 +1,17 @@
 <Project>
+	<Import Project="$(MSBuildThisFileDirectory)..\..\build\dependencies.props" />
+	
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
-		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
+		<TargetFrameworks>net472;netcoreapp3.1;net6.0</TargetFrameworks>
+		<PlatformTarget Condition="'$(TargetFramework)' == 'net472'">x64</PlatformTarget>
+		<!--<CopyLocalLockFileAssemblies Condition="'$(TargetFramework)' == 'net472'">true</CopyLocalLockFileAssemblies>-->
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Fixie" Version="2.2.2" />
 		<PackageReference Include="Shouldly" Version="4.1.0" />
-		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(AsyncInterfacesPackageVersion)" />
 		<DotNetCliToolReference Include="Fixie.Console" Version="2.2.2" />
 	</ItemGroup>
 </Project>

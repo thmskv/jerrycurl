@@ -6,5 +6,6 @@
     <ProjectReference Include="..\..\..\..\..\src\Vendors\Jerrycurl.Vendors.Sqlite\Jerrycurl.Vendors.Sqlite.csproj" />
     <ProjectReference Include="..\..\Shared\Jerrycurl.Test.Common\Jerrycurl.Test.Common.csproj" />
   </ItemGroup>
-  <Import Project="..\..\..\..\..\src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems" Label="Shared" />
+  
+  <Import Project="..\..\..\..\..\src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems" Label="Shared" />  
 </Project>
