@@ -2,11 +2,7 @@
 using Jerrycurl.Tools.Scaffolding.Model;
 using System;
 using System.Collections.Generic;
-#if NET20_BASE
-using SqliteConnection = System.Data.SQLite.SQLiteConnection;
-#else
 using Microsoft.Data.Sqlite;
-#endif
 using System.Linq;
 using System.Data.Common;
 using System.Threading;
