@@ -257,6 +257,11 @@ function Run-Project-Test
         $buildArgs += "-p:JerrycurlUseCli=true", "-p:JerrycurlCliPath=..\jerry"
     }
     
+    if ($TargetFramework -eq "net472")
+    {
+        $buildArgs += "-p:PlatformTarget=x64"
+    }
+    
     Push-Location $projectPath
     Write-Host "  Building project ($TargetFramework)..." -ForegroundColor Cyan
     dotnet add package Jerrycurl --version $Version
