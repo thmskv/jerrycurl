@@ -46,8 +46,8 @@
     <PropertyGroup Label="Target Versions (.NET Standard 2.0)" Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net472'">
 		<SqlServerPackageId>$(SqlServerPackageId_net20)</SqlServerPackageId>
 		<SqlServerTargetVersion>$(SqlServerPackageVersion_net20)</SqlServerTargetVersion>
-		<SqlitePackageId>$(SqlitePackageId_net20)</SqlitePackageId>
-		<SqliteTargetVersion>$(SqlitePackageVersion_net20)</SqliteTargetVersion>
+		<!--<SqlitePackageId>$(SqlitePackageId_net20)</SqlitePackageId>
+		<SqliteTargetVersion>$(SqlitePackageVersion_net20)</SqliteTargetVersion>-->
 		<EntityFrameworkCoreTargetVersion>$(EntityFrameworkCorePackageVersion_net20)</EntityFrameworkCoreTargetVersion>
 		<OracleTargetVersion>$(OraclePackageVersion_net20)</OracleTargetVersion>
 	</PropertyGroup>
