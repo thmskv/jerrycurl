@@ -1,5 +1,9 @@
 ﻿using Jerrycurl.Vendors.Sqlite.Metadata;
+#if NET20_BASE
+using SqliteConnection = System.Data.SQLite.SQLiteConnection;
+#else
 using Microsoft.Data.Sqlite;
+#endif
 
 namespace Jerrycurl.Mvc
 {
