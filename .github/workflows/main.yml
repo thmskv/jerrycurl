@@ -3,12 +3,11 @@ run-name: Build by @${{ github.actor}}
 on:
   push:
     branches:
-      - gh-actions
+      - main
 jobs:
   build-ubuntu:
     runs-on: ubuntu-latest
     env:
-      JERRY_SQLSERVER_CONN: SERVER=localhost;DATABASE=jerry_testdb;USER ID=sa;PASSWORD=YourStrong!Passw0rd;ENCRYPT=false
       JERRY_MYSQL_CONN: SERVER=localhost;DATABASE=jerry_testdb;
       JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;Integrated Security=true;
       JERRY_ORACLE_CONN: DATA SOURCE=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=XEPDB1)));USER ID=jerryuser;PASSWORD=jerrypass12!
@@ -31,10 +30,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Set up SQL Server
-        uses: ankane/setup-sqlserver@v1
-        with:
-          accept-eula: true
       - name: Set up MySQL
         uses: ankane/setup-mysql@v1
         with:
@@ -43,9 +38,6 @@ jobs:
         uses: ankane/setup-postgres@v1
         with:
           database: jerry_testdb
-      - name: Create databases
-        run: |
-          sqlcmd -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE jerry_testdb'
       - name: Build project
         shell: pwsh
         run: |
@@ -53,11 +45,20 @@ jobs:
 
   build-win32:
     runs-on: windows-latest
+    env:
+      JERRY_SQLSERVER_CONN: SERVER=localhost;DATABASE=jerry_testdb;USER ID=sa;PASSWORD=YourStrong!Passw0rd;ENCRYPT=false
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Set up SQL Server
+        uses: ankane/setup-sqlserver@v1
+        with:
+          accept-eula: true
+      - name: Create databases
+        run: |
+          sqlcmd -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE jerry_testdb'
       - name: Build project
         shell: pwsh
         run: |
