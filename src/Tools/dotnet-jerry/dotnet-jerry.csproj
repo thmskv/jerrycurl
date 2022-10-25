@@ -5,10 +5,11 @@
 		<IsPackable>true</IsPackable>
 		<PackageId>dotnet-jerry</PackageId>
 		<LangVersion>7.1</LangVersion>
-    <RootNamespace>Jerrycurl.Tools.DotNet.Cli</RootNamespace>
+        <RootNamespace>Jerrycurl.Tools.DotNet.Cli</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\Build\Jerrycurl.CodeAnalysis.Razor\Jerrycurl.CodeAnalysis.Razor.csproj" />
 	  <ProjectReference Include="..\Jerrycurl.Tools.Common\Jerrycurl.Tools.Common.csproj" />
 	</ItemGroup>
 

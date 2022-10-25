@@ -10,18 +10,16 @@
         <license type="expression">$PackageLicense$</license>
         <icon>$PackageIconFile$</icon>
         <iconUrl>$PackageIconUrl$</iconUrl>
-        <projectUrl>$PackageProjectUrl$</projectUrl>
         <tags>$PackageTags$</tags>
         <repository type="git" url="$RepositoryUrl$" commit="$GitCommitId$" />
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Tooling interfaces for Jerrycurl CLI. Do not reference this package directly.</description>
-        <dependencies>
-            <group targetFramework="net472" />
+        <description>Razor SQL analysis tools for Jerrycurl.</description>
+		<dependencies>
 			<group targetFramework="netstandard2.0" />
-        </dependencies>
+		</dependencies>
     </metadata>
     <files>
         <file src="$IconPath$" target="" />
-        <file src="$BinPath$**\Jerrycurl.Tools.Common.*" target="lib" />
+        <file src="$BinPath$**\Jerrycurl.CodeAnalysis.*" target="lib\netstandard2.0" />
     </files>
 </package>

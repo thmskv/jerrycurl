@@ -10,8 +10,8 @@
     </PropertyGroup>
 
 	<PropertyGroup>
-		<DefineConstants Condition="'$(TargetFramework)' == 'netstandard2.0' or $(TargetFramework) == 'net472'">$(DefineConstants);NET20_BASE</DefineConstants>
-		<DefineConstants Condition="'$(TargetFramework)' != 'netstandard2.0' and $(TargetFramework) != 'net472'">$(DefineConstants);NET21_BASE</DefineConstants>
+		<DefineConstants Condition="'$(TargetFramework)' == '$(NetStandardMoniker)' or $(TargetFramework) == '$(NetFrameworkMoniker)'">$(DefineConstants);NET20_BASE</DefineConstants>
+		<DefineConstants Condition="'$(TargetFramework)' != '$(NetStandardMoniker)' and $(TargetFramework) != '$(NetFrameworkMoniker)'">$(DefineConstants);NET21_BASE</DefineConstants>
 	</PropertyGroup>
 
     <ItemGroup Condition="'$(IsPackable)' == 'true'">

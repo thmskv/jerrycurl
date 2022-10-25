@@ -16,6 +16,11 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <developmentDependency>true</developmentDependency>
         <description>Razor SQL build targets for Jerrycurl.</description>
+		<dependencies>
+			<group>
+				<dependency id="Jerrycurl.CodeAnalysis.Razor" version="$PackageVersion$" />
+			</group>
+		</dependencies>
     </metadata>
     <files>
         <file src="$SourceFiles$" target="" />

@@ -15,6 +15,11 @@
         <repository type="git" url="$RepositoryUrl$" commit="$GitCommitId$" />
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Jerrycurl CLI. Install as .NET Core Global Tool.</description>
+		<dependencies>
+			<group>
+				<dependency id="Jerrycurl.CodeAnalysis.Razor" version="$PackageVersion$" />
+			</group>
+		</dependencies>
         <packageTypes>
             <packageType name="DotnetTool" />
         </packageTypes>

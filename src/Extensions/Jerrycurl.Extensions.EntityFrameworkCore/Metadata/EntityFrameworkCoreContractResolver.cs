@@ -98,8 +98,17 @@ namespace Jerrycurl.Extensions.EntityFrameworkCore.Metadata
         private IKey GetPrimaryKey(IProperty property) => property?.FindContainingPrimaryKey();
         private string GetTableName(IEntityType entity) => entity?.GetTableName() ?? entity?.GetDefaultTableName();
         private string GetSchemaName(IEntityType entity) => entity?.GetSchema() ?? entity?.GetDefaultSchema();
-        private string GetColumnName(IProperty property) => property?.GetColumnName() ?? property?.GetDefaultColumnName();
         private string GetKeyName(IKey key) => key?.GetName();
         private string GetKeyName(IForeignKey key) => key.GetConstraintName();
+
+        private string GetColumnName(IProperty property)
+        {
+            return property?.GetColumnName() ?? property?.GetDefaultColumnName();          
+//#if NET21_BASE
+//            var id = StoreObjectIdentifier.Create(property.DeclaringEntityType, StoreObjectType.Table);
+
+//            return property?.GetColumnName(id) ?? property?.GetDefaultColumnName(id);
+//#endif
+        }
     }
 }
