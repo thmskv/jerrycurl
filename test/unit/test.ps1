@@ -15,7 +15,7 @@ $args = @(
 
 if ($NoBuild) { $args += "--no-build" }
 
-foreach ($path in Get-Test-Projects)
+foreach ($path in Get-TestProjects)
 {
     Push-Location $path
     dotnet fixie @args

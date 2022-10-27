@@ -14,7 +14,7 @@ function Test-Integration
         [String] $TempPath
     )
     
-    $allFrameworks = Get-Target-Frameworks
+    $allFrameworks = Get-TargetFrameworks
     
     if (-not ($allFrameworks.Contains($TargetFramework)))
     {
@@ -24,7 +24,7 @@ function Test-Integration
     
     if (-not $Version)
     {
-        [String[]]$nuget = Get-NuGet-Versions -PackageSource $PackageSource
+        [String[]]$nuget = Get-NuGetVersions -PackageSource $PackageSource
         
         if ($nuget.Length -eq 0)
         {
@@ -49,7 +49,7 @@ function Test-Integration
         $PackageSource = Resolve-Path $PackageSource
     }
     
-    $package = Get-Vendor-Package $Vendor
+    $package = Get-VendorPackage $Vendor
     
     if (-not $package)
     {
@@ -65,7 +65,7 @@ function Test-Integration
         Install-Cli $Vendor $Version $TargetFramework $Verbosity $TempPath $PackageSource
         
         Prepare-Database $Vendor $ConnectionString $TargetFramework $TempPath
-        Run-Project-Test $Vendor $Version $ConnectionString $PackageSource $targetFramework $Verbosity $TempPath
+        Run-ProjectTest $Vendor $Version $ConnectionString $PackageSource $targetFramework $Verbosity $TempPath
         
         $success = Verify-Integration $Vendor $targetFramework $TempPath
         
@@ -73,7 +73,7 @@ function Test-Integration
     }
 }
 
-function Get-Target-Frameworks
+function Get-TargetFrameworks
 {
     $tfm = @("netcoreapp3.1", "net6.0")
     
@@ -96,14 +96,14 @@ function Verify-Integration
     
     if ($TargetFramework)
     {
-        $path = Join-Path (Get-Temp-Path $Vendor $TargetFramework $TempPath) "results.txt"
+        $path = Join-Path (Get-TempPath $Vendor $TargetFramework $TempPath) "results.txt"
     
         if (Test-Path $path) { ((Get-Content $path) -eq "OK") }
         else { $false }
     }
     else
     {
-        foreach ($targetFramework in Get-Target-Frameworks)
+        foreach ($targetFramework in Get-TargetFrameworks)
         {
             $result = (Verify-Integration $Vendor $targetFramework $TempPath)
             
@@ -124,7 +124,7 @@ function Clean-Source
     
     Write-Host "  Cleaning source ($TargetFramework)..." -ForegroundColor Cyan
     
-    $path = Get-Temp-Path $Vendor $TargetFramework $TempPath
+    $path = Get-TempPath $Vendor $TargetFramework $TempPath
     
     if (Test-Path $path)
     {
@@ -153,7 +153,7 @@ function Prepare-Source
     ((Get-Content -Path $configFile -Raw) -Replace '%PackageSource%', "$PackageSource") | Set-Content -Path $configFile
 }
 
-function Get-Temp-Path
+function Get-TempPath
 {
     param(
         [String] $Vendor,
@@ -177,30 +177,10 @@ function Install-Cli
     
     Write-Host "  Installing CLI ($TargetFramework)..." -ForegroundColor Cyan
     
-    $toolPath = Get-Temp-Path $Vendor $TargetFramework $TempPath
+    $toolPath = Get-TempPath $Vendor $TargetFramework $TempPath
     
     Push-Location $toolPath
     dotnet tool install --tool-path . dotnet-jerry --version $Version --verbosity $Verbosity --add-source "$PackageSource"
-    Pop-Location
-}
-
-function Create-Database-User
-{
-    param(
-        [String] $Vendor,
-        [String] $ConnectionString,
-        [String] $TargetFramework,
-        [String] $TempPath
-    )
-
-    Write-Host "  Creating database user ($TargetFramework)..." -ForegroundColor Cyan
-    
-    $sql = Join-Path $PSScriptRoot "sql\user.$Vendor.sql"
-    $toolPath = Get-Temp-Path $Vendor $TargetFramework $TempPath
-    
-    Push-Location $toolPath
-    .\jerry run -v "$Vendor" -c "$ConnectionString" --file "$sql"
-    if ($LastExitCode -ne 0) { Pop-Location; throw "Error running 'jerry run'." }
     Pop-Location
 }
 
@@ -216,7 +196,7 @@ function Prepare-Database
     Write-Host "  Preparing database ($TargetFramework)..." -ForegroundColor Cyan
 
     $sql = Join-Path $PSScriptRoot "sql\prepare.$Vendor.sql"
-    $toolPath = Get-Temp-Path $Vendor $TargetFramework $TempPath
+    $toolPath = Get-TempPath $Vendor $TargetFramework $TempPath
 
     Push-Location $toolPath
     .\jerry run -v "$Vendor" -c "$ConnectionString" --file "$sql"
@@ -224,7 +204,7 @@ function Prepare-Database
     Pop-Location
 }
 
-function Run-Project-Test
+function Run-ProjectTest
 {
     param(
         [String] $Vendor,
@@ -237,10 +217,10 @@ function Run-Project-Test
         [Switch] $TranspileWithCli
     )
     
-    $projectPath = Join-Path (Get-Temp-Path $Vendor $TargetFramework $TempPath) "Jerrycurl.Test.Integration"
-    $resultsPath = Join-Path (Get-Temp-Path $Vendor $TargetFramework $TempPath) "results.txt"
-    $package = Get-Vendor-Package $Vendor
-    $constant = Get-Vendor-Constant $Vendor
+    $projectPath = Join-Path (Get-TempPath $Vendor $TargetFramework $TempPath) "Jerrycurl.Test.Integration"
+    $resultsPath = Join-Path (Get-TempPath $Vendor $TargetFramework $TempPath) "results.txt"
+    $package = Get-VendorPackage $Vendor
+    $constant = Get-VendorConstant $Vendor
     $buildArgs = @(
         "--framework",
         "$TargetFramework",
@@ -279,7 +259,7 @@ function Run-Project-Test
     Pop-Location
 }
 
-function Get-NuGet-Versions
+function Get-NuGetVersions
 {
     param(
         [String] $PackageSource
@@ -291,7 +271,7 @@ function Get-NuGet-Versions
     {
         foreach ($file in (Get-ChildItem "$PackageSource\*.nupkg"))
         {
-            $nuget = Parse-NuGet-String $file.Name
+            $nuget = Parse-NuGetString $file.Name
             
             if ($nuget.Package -eq "Jerrycurl")
             {
@@ -303,7 +283,7 @@ function Get-NuGet-Versions
     $versions
 }
 
-function Get-Vendor-Constant
+function Get-VendorConstant
 {
     param(
         [String] $Vendor
@@ -318,7 +298,7 @@ function Get-Vendor-Constant
     $constant
 }
 
-function Get-Vendor-Package
+function Get-VendorPackage
 {
     param(
         [String] $Vendor
@@ -333,7 +313,7 @@ function Get-Vendor-Package
     $package
 }
 
-function Parse-NuGet-String
+function Parse-NuGetString
 {
     param(
         [Parameter(Mandatory=$true)]
@@ -353,4 +333,59 @@ function Parse-NuGet-String
             Version = $version
         }
     }
+}
+
+function Set-Connection
+{
+    param(
+        [Parameter(Mandatory=$true)]
+        [String] $Vendor,
+        [String] $ConnectionString
+    )
+    
+    $variable = Get-ConnectionVariable -Vendor $Vendor
+    
+    if ($variable)
+    {
+        [Environment]::SetEnvironmentVariable($variable, $ConnectionString, "User")
+        [Environment]::SetEnvironmentVariable($variable, $ConnectionString)
+    }
+}
+
+function Get-Connection
+{
+    param(
+        [Parameter(Mandatory=$true)]
+        [String] $Vendor
+    )
+    
+    $variable = Get-ConnectionVariable -Vendor $Vendor
+    
+    if ($variable)
+    {
+        $value = [Environment]::GetEnvironmentVariable($variable, "Machine")
+        
+        if (-not $value) { $value = [Environment]::GetEnvironmentVariable($variable, "User") }
+        if (-not $value) { $value = [Environment]::GetEnvironmentVariable($variable) }
+        
+        $value
+    }
+}
+
+function Get-VendorMonikers
+{
+    @("sqlite", "sqlserver", "postgres", "oracle", "mysql")
+}
+
+function Get-ConnectionVariable
+{
+    param(
+        [String] $Vendor
+    )
+    
+    if ($Vendor -eq "sqlserver") { "JERRY_SQLSERVER_CONN" }
+    if ($Vendor -eq "postgres")  { "JERRY_POSTGRES_CONN" }
+    if ($Vendor -eq "oracle")    { "JERRY_ORACLE_CONN" }
+    if ($Vendor -eq "mysql")     { "JERRY_MYSQL_CONN" }
+    if ($Vendor -eq "sqlite")    { "JERRY_SQLITE_CONN" }
 }

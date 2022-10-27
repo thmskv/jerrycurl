@@ -1,4 +1,4 @@
-function Get-Test-Projects
+function Get-TestProjects
 {
     $source = Join-Path $PSScriptRoot .\src
     
