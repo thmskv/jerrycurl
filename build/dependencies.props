@@ -14,7 +14,7 @@
         <PostgresPackageVersion>6.0.7</PostgresPackageVersion>
         <SqlitePackageVersion>6.0.10</SqlitePackageVersion>
         <EntityFrameworkCorePackageVersion>5.0.17</EntityFrameworkCorePackageVersion>
-        <JsonNetPackageVersion>12.0.3</JsonNetPackageVersion>
+        <JsonNetPackageVersion>13.0.1</JsonNetPackageVersion>
         <JsonPackageVersion>5.0.1</JsonPackageVersion>
         <MsBuildPackageVersion>16.9.0</MsBuildPackageVersion>
         <CSharpPackageVersion>4.5.0</CSharpPackageVersion>

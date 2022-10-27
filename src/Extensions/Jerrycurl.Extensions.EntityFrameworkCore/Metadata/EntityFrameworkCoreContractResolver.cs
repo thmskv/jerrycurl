@@ -103,12 +103,13 @@ namespace Jerrycurl.Extensions.EntityFrameworkCore.Metadata
 
         private string GetColumnName(IProperty property)
         {
-            return property?.GetColumnName() ?? property?.GetDefaultColumnName();          
-//#if NET21_BASE
-//            var id = StoreObjectIdentifier.Create(property.DeclaringEntityType, StoreObjectType.Table);
+#if NET21_BASE
+            var id = StoreObjectIdentifier.Create(property.DeclaringEntityType, StoreObjectType.Table);
 
-//            return property?.GetColumnName(id) ?? property?.GetDefaultColumnName(id);
-//#endif
+            return property?.GetColumnName(id.Value) ?? property?.GetDefaultColumnName(id.Value);
+#else
+            return property?.GetColumnName() ?? property?.GetDefaultColumnName();
+#endif
         }
     }
 }
