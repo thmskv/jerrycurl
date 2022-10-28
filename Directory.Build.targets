@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <NuspecFile>$(MSBuildThisFileDirectory)nuspec\$(PackageId).nuspec</NuspecFile>
+        <NuspecFile>$(MSBuildThisFileDirectory)eng\nuspec\$(PackageId).nuspec</NuspecFile>
 		<NuGetIntermediatePath>$(BaseIntermediateOutputPath).nusrc\</NuGetIntermediatePath>
     </PropertyGroup>
 
