@@ -37,6 +37,7 @@
 			BeforeTargets="GenerateAssemblyNBGVVersionInfo">
 		<ItemGroup>
 			<AdditionalThisAssemblyFields Include="NuGetPackageVersion" String="$(NuGetPackageVersion)" />
+			<AssemblyMetadata Include="NuGetPackageVersion" Value="$(NuGetPackageVersion)" />
 		</ItemGroup>
 	</Target>
 
