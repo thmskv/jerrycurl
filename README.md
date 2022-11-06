@@ -3,7 +3,7 @@
 [![NuGet](https://img.shields.io/nuget/v/Jerrycurl)](https://nuget.org/packages/Jerrycurl)
 [![NuGet](https://img.shields.io/nuget/vpre/Jerrycurl)](https://nuget.org/packages/Jerrycurl)
 [![Build status](https://github.com/thmskv/jerrycurl/actions/workflows/main.yml/badge.svg)](https://github.com/thmskv/jerrycurl/actions)
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/jerrycurl-mvc/community)
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/jerrycurl-mvc/chat)
 
 ## Jerrycurl - High-performance ORM and MVC framework for .NET
 **Jerrycurl** is an object-relational mapper, MVC framework and Razor SQL implementation that allows developers to build data access for .NET using tools and features inspired by those of ASP.NET.
