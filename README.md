@@ -5,8 +5,9 @@
 [![Build status](https://github.com/thmskv/jerrycurl/actions/workflows/main.yml/badge.svg)](https://github.com/thmskv/jerrycurl/actions)
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/jerrycurl-mvc/chat)
 
-## Jerrycurl - High-performance ORM and MVC framework for .NET
-**Jerrycurl** is an object-relational mapper, MVC framework and Razor SQL implementation that allows developers to build data access for .NET using tools and features inspired by those of ASP.NET.
+## High-performance ORM powered by MVC and Razor SQL
+### Open source and free for .NET and Visual Studio
+**Jerrycurl** is an object-relational mapper, MVC framework and Razor SQL implementation that allows developers to build data access libraries for .NET using tools and features inspired by those of ASP.NET.
 
 ### Installation
 Jerrycurl is available on NuGet and can be installed into any [SDK-style](https://docs.microsoft.com/en-us/nuget/resources/check-project-format) C# project. Its main package contains support for compiling `.cssql` files into your project and executing them via the built-in MVC engine. Additionally you can install support for [one of our supported databases](https://nuget.org/packages?q=Jerrycurl.Vendors) from NuGet as well.
