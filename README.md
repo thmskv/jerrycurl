@@ -2,7 +2,7 @@
 
 [![NuGet](https://img.shields.io/nuget/v/Jerrycurl)](https://nuget.org/packages/Jerrycurl)
 [![NuGet](https://img.shields.io/nuget/vpre/Jerrycurl)](https://nuget.org/packages/Jerrycurl)
-[![Build status](https://img.shields.io/github/workflow/status/thmskv/jerrycurl/Jerrycurl+CI/CD)](https://github.com/thmskv/jerrycurl/actions)
+[![Build status](https://github.com/thmskv/jerrycurl/actions/workflows/main.yml/badge.svg)](https://github.com/thmskv/jerrycurl/actions)
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/jerrycurl-mvc/community)
 
 ## Jerrycurl - High-performance ORM and MVC framework for .NET
