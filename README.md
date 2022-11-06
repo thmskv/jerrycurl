@@ -1,8 +1,8 @@
 ![Jerrycurl](gfx/icon.png)
 
 [![NuGet](https://img.shields.io/nuget/v/Jerrycurl)](https://nuget.org/packages/Jerrycurl)
-[![Build status](https://ci.appveyor.com/api/projects/status/aihogw33ef50go9r?svg=true)](https://ci.appveyor.com/project/rhodosaur/jerrycurl/branch/master)
-[![Test status](https://img.shields.io/appveyor/tests/rhodosaur/jerrycurl/dev)](https://ci.appveyor.com/project/rhodosaur/jerrycurl/branch/master/tests)
+[![NuGet](https://img.shields.io/nuget/vpre/Jerrycurl)](https://nuget.org/packages/Jerrycurl)
+[![Build status](https://img.shields.io/github/workflow/status/thmskv/jerrycurl/Jerrycurl+CI/CD)](https://github.com/thmskv/jerrycurl/actions)
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/jerrycurl-mvc/community)
 
 ## Jerrycurl - High-performance ORM and MVC framework for .NET
