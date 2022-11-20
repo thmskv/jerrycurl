@@ -34,6 +34,30 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
                 await this.AddTablesAndColumnsAsync(builder, tablesAndColumns);
             }
 
+            using (DbCommand tableTypesAndColumns = connection.CreateCommand())
+            {
+                tableTypesAndColumns.CommandText = @"SELECT
+	                                                    T4.name		AS TABLE_SCHEMA,
+	                                                    T1.name     AS TABLE_NAME,
+	                                                    T2.name     AS COLUMN_NAME,
+	                                                    T3.name     AS DATA_TYPE,
+	                                                    CASE T2.is_nullable
+		                                                    WHEN 1 THEN 'YES'
+		                                                    ELSE 'NO'
+	                                                    END AS IS_NULLABLE,
+	                                                    0 AS IS_IDENTITY
+                                                    FROM		sys.table_types T1
+                                                    INNER JOIN	sys.columns T2
+	                                                    ON T2.object_id = T1.type_table_object_id
+                                                    INNER JOIN	sys.systypes T3
+	                                                    ON T3.xusertype = T2.system_type_id AND T3.uid = 4
+                                                    INNER JOIN	sys.schemas T4
+	                                                    ON T4.schema_id = T1.schema_id
+                                                    ORDER BY T1.name, T2.column_id";
+
+                await this.AddTablesAndColumnsAsync(builder, tableTypesAndColumns);
+            }
+
             using (DbCommand primaryKeys = connection.CreateCommand())
             {
                 primaryKeys.CommandText = @"SELECT T2.* FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS T1

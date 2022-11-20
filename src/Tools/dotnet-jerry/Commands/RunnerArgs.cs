@@ -109,17 +109,16 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
         private static string GetNuGetPackageVersionString()
         {
-#pragma warning disable CS0162
             NuGetVersion version = GetNuGetPackageVersion();
 
             if (version == null)
                 return null;
+#pragma warning disable CS0162
             else if (ThisAssembly.IsPublicRelease)
                 return version.PublicVersion;
+#pragma warning restore CS0162
             else
                 return version.Version;
-
-#pragma warning restore CS0162
         }
 
         public static NuGetVersion GetNuGetPackageVersion() => typeof(DotNetJerryHost).Assembly.GetNuGetPackageVersion();

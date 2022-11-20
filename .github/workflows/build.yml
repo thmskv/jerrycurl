@@ -1,5 +1,5 @@
-name: Jerrycurl CI/CD
-run-name: Build by @${{ github.actor}}
+name: build
+run-name: build-deploy
 on:
   push:
     branches:
