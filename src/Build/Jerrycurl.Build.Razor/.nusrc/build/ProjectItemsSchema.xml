@@ -2,7 +2,7 @@
 <ProjectSchemaDefinitions xmlns="http://schemas.microsoft.com/build/2009/properties">
 	<ContentType Name="JerryFile" DisplayName="Jerrycurl Razor Page" ItemType="JerryFile" />
 	<ContentType Name="KeplerFile" DisplayName="Jerrycurl Configuration File" ItemType="None">
-		<NameValuePair Name="DependentExtensions" Value=".orm.cs;.orm.js; orm.d.ts" />
+		<NameValuePair Name="DependentExtensions" Value=".orm.cs;.orm.js;.orm.d.ts" />
 	</ContentType>
 
 	<ItemType Name="JerryFile" DisplayName="Jerrycurl Razor Page"/>
