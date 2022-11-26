@@ -24,6 +24,10 @@
 				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
 				<dependency id="$SqlServerPackageId_net20$" version="$SqlServerPackageVersion_net20$" />
 			</group>
+			<group targetFramework="net6.0">
+				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
+				<dependency id="$SqlServerPackageId$" version="$SqlServerPackageVersion$" />
+			</group>
         </dependencies>
     </metadata>
     <files>

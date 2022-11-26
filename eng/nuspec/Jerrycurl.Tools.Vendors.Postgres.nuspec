@@ -24,6 +24,10 @@
 				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
 				<dependency id="$PostgresPackageId$" version="$PostgresPackageVersion$" />
 			</group>
+			<group targetFramework="net6.0">
+				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
+				<dependency id="$PostgresPackageId$" version="$PostgresPackageVersion$" />
+			</group>
         </dependencies>
     </metadata>
     <files>

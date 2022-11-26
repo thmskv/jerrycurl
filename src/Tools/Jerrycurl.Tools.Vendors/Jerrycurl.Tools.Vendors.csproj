@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(ToolingTargetMoniker)</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="$(MySqlPackageId)" Version="$(MySqlTargetVersion)" />
+    <PackageReference Include="$(OraclePackageId)" Version="$(OracleTargetVersion)" />
+    <PackageReference Include="$(PostgresPackageId)" Version="$(PostgresTargetVersion)" />
+    <PackageReference Include="$(SqlitePackageId)" Version="$(SqliteTargetVersion)" />
+    <PackageReference Include="$(SqlServerPackageId)" Version="$(SqlServerTargetVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jerrycurl.Tools.Common\Jerrycurl.Tools.Common.csproj" />
+  </ItemGroup>
+
+</Project>

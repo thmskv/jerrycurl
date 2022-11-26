@@ -12,9 +12,9 @@ namespace Jerrycurl.CodeAnalysis.Razor.Generation
 {
     public class RazorGenerator
     {
-        public GeneratorOptions Options { get; }
+        public RazorGeneratorOptions Options { get; }
 
-        public RazorGenerator(GeneratorOptions options)
+        public RazorGenerator(RazorGeneratorOptions options)
         {
             this.Options = options ?? throw new ArgumentNullException(nameof(options));
         }

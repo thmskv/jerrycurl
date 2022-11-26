@@ -3,7 +3,7 @@ using Jerrycurl.CodeAnalysis.Razor.Parsing;
 
 namespace Jerrycurl.CodeAnalysis.Razor.Generation
 {
-    public class GeneratorOptions
+    public class RazorGeneratorOptions
     {
         public IList<RazorFragment> Imports { get; set; } = new List<RazorFragment>();
         public RazorFragment Class { get; set; }

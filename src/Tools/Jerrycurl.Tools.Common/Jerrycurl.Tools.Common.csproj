@@ -4,4 +4,25 @@
 		<RootNamespace>Jerrycurl.Tools</RootNamespace>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="Resources\razor_skeleton.txt" />
+	  <None Remove="Resources\transform_host.js" />
+	  <None Remove="Resources\transform_template.js" />
+	  <None Remove="Resources\transform_template_d.ts" />
+	  <None Remove="Resources\transform_template_notypes.js.js" />
+	</ItemGroup>
+  
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\razor_skeleton.txt" />
+	  <EmbeddedResource Include="Resources\transform_host.js" />
+	  <EmbeddedResource Include="Resources\transform_template.js" />
+	  <EmbeddedResource Include="Resources\transform_template_d.ts" />
+	  <EmbeddedResource Include="Resources\transform_template_notypes.js.js" />
+	</ItemGroup>
+  
+	<ItemGroup>
+	  <PackageReference Include="System.Text.Json" Version="7.0.0" />
+	</ItemGroup>
+  
+	<Import Project="..\..\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems" Label="Shared" />
 </Project>

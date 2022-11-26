@@ -24,6 +24,10 @@
 				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
 				<dependency id="$MySqlPackageId$" version="$MySqlPackageVersion$" />
 			</group>
+			<group targetFramework="net6.0">
+				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
+				<dependency id="$MySqlPackageId$" version="$MySqlPackageVersion$" />
+			</group>
         </dependencies>
     </metadata>
     <files>

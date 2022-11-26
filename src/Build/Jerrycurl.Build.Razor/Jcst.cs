@@ -76,14 +76,14 @@ namespace Jerrycurl.Build.Razor
                 return $"{escapedNs}.{escapedClass}";
         }
 
-        private GeneratorOptions CreateGeneratorOptions()
+        private RazorGeneratorOptions CreateGeneratorOptions()
         {
             string templateCode = null;
 
             if (File.Exists(this.SkeletonPath))
                 templateCode = File.ReadAllText(this.SkeletonPath);
 
-            return new GeneratorOptions()
+            return new RazorGeneratorOptions()
             {
                 TemplateCode = templateCode,
                 Imports = RazorFacts.DefaultNamespaces.Select(ns => new RazorFragment() { Text = ns }).ToList(),

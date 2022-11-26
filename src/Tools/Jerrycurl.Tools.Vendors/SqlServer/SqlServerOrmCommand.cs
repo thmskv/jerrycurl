@@ -1,9 +1,9 @@
-﻿using Jerrycurl.Tools.Scaffolding;
-using Jerrycurl.Tools.Scaffolding.Model;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using Jerrycurl.Tools.Orm;
+using Jerrycurl.Tools.Orm.Model;
 #if NET20_BASE
 using System.Data.SqlClient;
 #else
@@ -12,13 +12,13 @@ using Microsoft.Data.SqlClient;
 
 namespace Jerrycurl.Tools.Vendors.SqlServer
 {
-    public class SqlServerScaffoldCommand : ScaffoldCommand
+    public class SqlServerOrmCommand : OrmCommand
     {
         public override DbConnection GetDbConnection() => new SqlConnection();
 
         public override async Task<DatabaseModel> GetDatabaseModelAsync(DbConnection connection, CancellationToken cancellationToken = default)
         {
-            ModelBuilder builder = new ModelBuilder();
+            DatabaseModelBuilder builder = new DatabaseModelBuilder();
 
             builder.Model.DefaultSchema = "dbo";
 
@@ -80,9 +80,9 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
             return builder.Model;
         }
 
-        private async Task AddTablesAndColumnsAsync(ModelBuilder builder, DbCommand command)
+        private async Task AddTablesAndColumnsAsync(DatabaseModelBuilder builder, DbCommand command)
         {
-            foreach (TupleData tuple in await TupleData.FromDbCommandAsync(command))
+            foreach (TupleModel tuple in await TupleModel.FromDbCommandAsync(command))
             {
                 string tableSchema = tuple["TABLE_SCHEMA"] as string;
                 string tableName = tuple["TABLE_NAME"] as string;
@@ -96,9 +96,9 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
             }
         }
 
-        private async Task AddPrimaryKeysAsync(ModelBuilder builder, DbCommand command)
+        private async Task AddPrimaryKeysAsync(DatabaseModelBuilder builder, DbCommand command)
         {
-            foreach (TupleData tuple in await TupleData.FromDbCommandAsync(command))
+            foreach (TupleModel tuple in await TupleModel.FromDbCommandAsync(command))
             {
                 string tableSchema = tuple["TABLE_SCHEMA"] as string;
                 string tableName = tuple["TABLE_NAME"] as string;
@@ -110,9 +110,9 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
             }
         }
 
-        public async Task AddForeignKeysAsync(ModelBuilder builder, DbCommand command)
+        public async Task AddForeignKeysAsync(DatabaseModelBuilder builder, DbCommand command)
         {
-            foreach (TupleData tuple in await TupleData.FromDbCommandAsync(command))
+            foreach (TupleModel tuple in await TupleModel.FromDbCommandAsync(command))
             {
                 string tableSchema = tuple["TABLE_SCHEMA"] as string;
                 string tableName = tuple["TABLE_NAME"] as string;
@@ -133,40 +133,40 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
             return false;
         }
 
-        public override IEnumerable<TypeMapping> GetTypeMappings()
+        public override IEnumerable<TypeModel> GetTypeMappings()
         {
-            yield return new TypeMapping("int", "int", true);
-            yield return new TypeMapping("bigint", "long", true);
-            yield return new TypeMapping("smallint", "short", true);
-            yield return new TypeMapping("tinyint", "byte", true);
-            yield return new TypeMapping("bit", "bool", true);
-            yield return new TypeMapping("date", "DateTime", true);
-            yield return new TypeMapping("datetime", "DateTime", true);
-            yield return new TypeMapping("datetime2", "DateTime", true);
-            yield return new TypeMapping("smalldatetime", "DateTime", true);
-            yield return new TypeMapping("time", "TimeSpan", true);
-            yield return new TypeMapping("datetimeoffset", "DateTimeOffset", true);
-            yield return new TypeMapping("nvarchar", "string", false);
-            yield return new TypeMapping("varchar", "string", false);
-            yield return new TypeMapping("text", "string", false);
-            yield return new TypeMapping("ntext", "string", false);
-            yield return new TypeMapping("char", "string", false);
-            yield return new TypeMapping("nchar", "string", false);
-            yield return new TypeMapping("varbinary", "byte[]", false);
-            yield return new TypeMapping("binary", "byte[]", false);
-            yield return new TypeMapping("image", "byte[]", false);
-            yield return new TypeMapping("smallmoney", "decimal", true);
-            yield return new TypeMapping("money", "decimal", true);
-            yield return new TypeMapping("decimal", "decimal", true);
-            yield return new TypeMapping("numeric", "decimal", true);
-            yield return new TypeMapping("real", "float", true);
-            yield return new TypeMapping("float", "double", true);
-            yield return new TypeMapping("uniqueidentifier", "Guid", true);
-            yield return new TypeMapping("geography", "Microsoft.SqlServer.Types.SqlGeography", false);
-            yield return new TypeMapping("geometry", "Microsoft.SqlServer.Types.SqlGeometry", false);
-            yield return new TypeMapping("hierarchyid", "Microsoft.SqlServer.Types.SqlHierarchyId", true);
-            yield return new TypeMapping("sql_variant", "object", false);
-            yield return new TypeMapping("xml", "System.Xml.Linq.XDocument", false);
+            yield return new TypeModel("int", "int", true);
+            yield return new TypeModel("bigint", "long", true);
+            yield return new TypeModel("smallint", "short", true);
+            yield return new TypeModel("tinyint", "byte", true);
+            yield return new TypeModel("bit", "bool", true);
+            yield return new TypeModel("date", "DateTime", true);
+            yield return new TypeModel("datetime", "DateTime", true);
+            yield return new TypeModel("datetime2", "DateTime", true);
+            yield return new TypeModel("smalldatetime", "DateTime", true);
+            yield return new TypeModel("time", "TimeSpan", true);
+            yield return new TypeModel("datetimeoffset", "DateTimeOffset", true);
+            yield return new TypeModel("nvarchar", "string", false);
+            yield return new TypeModel("varchar", "string", false);
+            yield return new TypeModel("text", "string", false);
+            yield return new TypeModel("ntext", "string", false);
+            yield return new TypeModel("char", "string", false);
+            yield return new TypeModel("nchar", "string", false);
+            yield return new TypeModel("varbinary", "byte[]", false);
+            yield return new TypeModel("binary", "byte[]", false);
+            yield return new TypeModel("image", "byte[]", false);
+            yield return new TypeModel("smallmoney", "decimal", true);
+            yield return new TypeModel("money", "decimal", true);
+            yield return new TypeModel("decimal", "decimal", true);
+            yield return new TypeModel("numeric", "decimal", true);
+            yield return new TypeModel("real", "float", true);
+            yield return new TypeModel("float", "double", true);
+            yield return new TypeModel("uniqueidentifier", "Guid", true);
+            yield return new TypeModel("geography", "Microsoft.SqlServer.Types.SqlGeography", false);
+            yield return new TypeModel("geometry", "Microsoft.SqlServer.Types.SqlGeometry", false);
+            yield return new TypeModel("hierarchyid", "Microsoft.SqlServer.Types.SqlHierarchyId", true);
+            yield return new TypeModel("sql_variant", "object", false);
+            yield return new TypeModel("xml", "System.Xml.Linq.XDocument", false);
         }
     }
 }

@@ -62,7 +62,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Runners
                 }
             }
 
-            GeneratorOptions options = new GeneratorOptions()
+            RazorGeneratorOptions options = new RazorGeneratorOptions()
             {
                 TemplateCode = File.ReadAllText(skeletonPath),
                 Imports = RazorFacts.DefaultNamespaces.Select(ns => new RazorFragment() { Text = ns }).ToList(),

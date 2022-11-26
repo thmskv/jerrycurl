@@ -24,6 +24,10 @@
 				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
 				<dependency id="$OraclePackageId$" version="$OraclePackageVersion_net20$" />
 			</group>
+			<group targetFramework="net6.0">
+				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
+				<dependency id="$OraclePackageId$" version="$OraclePackageVersion$" />
+			</group>
         </dependencies>
     </metadata>
     <files>

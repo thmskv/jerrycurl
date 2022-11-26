@@ -10,7 +10,7 @@ namespace Jerrycurl.Tools.DotNet.Cli
 {
     public class DotNetJerryHost
     {
-        public async static Task<int> Main(string[] args)
+        public async static Task<int> MainX(string[] args)
         {
             RunnerArgs runnerArgs;
             

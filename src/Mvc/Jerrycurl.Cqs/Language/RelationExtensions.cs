@@ -47,7 +47,7 @@ namespace Jerrycurl.Cqs.Language
                 Parameters = store,
             };
 
-            using var reader = relation.GetReader();
+            using IRelationReader reader = relation.GetReader();
 
             while (reader.Read())
             {
