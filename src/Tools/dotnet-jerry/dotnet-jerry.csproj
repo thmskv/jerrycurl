@@ -20,7 +20,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Build\Jerrycurl.CodeAnalysis.Razor\Jerrycurl.CodeAnalysis.Razor.csproj" />
 	  <ProjectReference Include="..\Jerrycurl.Tools.Common\Jerrycurl.Tools.Common.csproj" />
 	  <ProjectReference Include="..\Jerrycurl.Tools.Vendors\Jerrycurl.Tools.Vendors.csproj" />
 	</ItemGroup>

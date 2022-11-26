@@ -16,7 +16,6 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Tools for Jerrycurl CLI.</description>
         <dependencies>
-            <group targetFramework="net472" />
 			<group targetFramework="netstandard2.0" />
 			<group targetFramework="net6.0" />
         </dependencies>
