@@ -9,12 +9,10 @@ using System.Threading.Tasks;
 
 namespace Jerrycurl.Tools.Orm
 {
-    public class OrmCodeWriter
+    internal class OrmCodeWriter
     {
-        public async Task WriteDefaultAsync(OrmModel ormModel, DatabaseModel databaseModel, string writePath = null)
+        public async Task WriteAsync(DatabaseModel databaseModel, string writePath)
         {
-            writePath ??= Path.GetFullPath(ormModel.Output);
-
             if (!Directory.Exists(Path.GetDirectoryName(writePath)))
                 Directory.CreateDirectory(Path.GetDirectoryName(writePath));
 

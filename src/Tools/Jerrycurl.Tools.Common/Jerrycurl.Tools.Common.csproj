@@ -24,5 +24,9 @@
 	  <PackageReference Include="System.Text.Json" Version="7.0.0" />
 	</ItemGroup>
   
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Build\Jerrycurl.CodeAnalysis.Razor\Jerrycurl.CodeAnalysis.Razor.csproj" />
+	</ItemGroup>
+  
 	<Import Project="..\..\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems" Label="Shared" />
 </Project>

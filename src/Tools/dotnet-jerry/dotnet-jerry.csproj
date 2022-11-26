@@ -1,12 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>$(NetMoniker)</TargetFramework>
 		<IsPackable>true</IsPackable>
 		<PackageId>dotnet-jerry</PackageId>
         <RootNamespace>Jerrycurl.Tools.DotNet.Cli</RootNamespace>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Runners\**" />
+	  <Compile Remove="Scaffolding\**" />
+	  <EmbeddedResource Remove="Runners\**" />
+	  <EmbeddedResource Remove="Scaffolding\**" />
+	  <None Remove="Runners\**" />
+	  <None Remove="Scaffolding\**" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="DotNetJerryHost.cs" />
+	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Build\Jerrycurl.CodeAnalysis.Razor\Jerrycurl.CodeAnalysis.Razor.csproj" />

@@ -1,7 +1,7 @@
 ﻿declare interface SchemaModel {
     tables: TableModel[]
     imports: string[]
-    basePath: string
+    defaultSchema: string
 }
 
 declare interface TableModel {
@@ -17,7 +17,7 @@ declare interface ClassModel {
     name: string
     modifiers: string[]
     baseTypes: string[]
-    path: string
+    isStruct: boolean
 }
 
 declare interface ColumnModel {

@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace Jerrycurl.Tools.Orm
 {
-    public class OrmTransformer
+    internal class OrmTransformer
     {
-        public async Task<DatabaseModel> TransformAsync(OrmModel ormFile, DatabaseModel databaseModel)
+        public async Task<DatabaseModel> TransformAsync(OrmToolOptions options, DatabaseModel databaseModel)
         {
             string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            string jsFile = this.ResolveJavaScriptPath(ormFile);
+            string jsFile = this.ResolveJavaScriptPath(options);
 
             if (jsFile == null)
                 return databaseModel;
@@ -26,7 +26,7 @@ namespace Jerrycurl.Tools.Orm
             string inputFile = Path.Combine(tempPath, "input.json");
             string outputFile = Path.Combine(tempPath, "output.json");
             string workingDir = Path.GetDirectoryName(jsFile);
-            string nodePath = this.FindNodePath(ormFile);
+            string nodePath = this.FindNodePath();
 
             Directory.CreateDirectory(tempPath);
 
@@ -57,13 +57,13 @@ namespace Jerrycurl.Tools.Orm
             }
         }
 
-        private string ResolveJavaScriptPath(OrmModel ormFile)
+        private string ResolveJavaScriptPath(OrmToolOptions options)
         {
-            if (ormFile.Transform != null && File.Exists(ormFile.Transform))
-                return Path.GetFullPath(ormFile.Transform);
+            if (options.Transform != null && File.Exists(options.Transform))
+                return Path.GetFullPath(options.Transform);
             else
             {
-                var defaultPath = ormFile.Input + ".js";
+                var defaultPath = options.Input + ".js";
 
                 if (File.Exists(defaultPath))
                     return Path.GetFullPath(defaultPath);
@@ -95,28 +95,26 @@ namespace Jerrycurl.Tools.Orm
             await JsonSerializer.SerializeAsync(stream, value, this.GetJsonOptions());
         }
 
-        private string FindNodePath(OrmModel ormFile)
+        private string FindNodePath()
         {
-            var nodePath = this.GetDefaultNodePaths().FirstOrDefault(File.Exists);
+            return GetDefaultPaths().FirstOrDefault(File.Exists);
 
-            return nodePath;
-        }
-
-        private IEnumerable<string> GetDefaultNodePaths()
-        {
-            yield return Environment.ExpandEnvironmentVariables("%ProgramW6432%\\nodejs\\node.exe");
-            yield return "C:\\Program Files\\nodejs\\node.exe";
-            yield return "/usr/bin/node";
-            yield return "/usr/bin/nodejs";
-            yield return "/usr/local/bin/node";
-            yield return Environment.ExpandEnvironmentVariables("%PROGRAMFILES%\\nodejs\\node.exe");
-
-            foreach (var path in Environment.GetEnvironmentVariable("PATH").Split(Path.PathSeparator))
+            IEnumerable<string> GetDefaultPaths()
             {
-                string[] fullPaths = new[] { Path.Combine(path, "node.exe"), Path.Combine(path, "node") };
+                yield return Environment.ExpandEnvironmentVariables("%ProgramW6432%\\nodejs\\node.exe");
+                yield return "C:\\Program Files\\nodejs\\node.exe";
+                yield return "/usr/bin/node";
+                yield return "/usr/bin/nodejs";
+                yield return "/usr/local/bin/node";
+                yield return Environment.ExpandEnvironmentVariables("%PROGRAMFILES%\\nodejs\\node.exe");
 
-                foreach (var fullPath in fullPaths)
-                    yield return fullPath;
+                foreach (var path in Environment.GetEnvironmentVariable("PATH").Split(Path.PathSeparator))
+                {
+                    string[] fullPaths = new[] { Path.Combine(path, "node.exe"), Path.Combine(path, "node") };
+
+                    foreach (var fullPath in fullPaths)
+                        yield return fullPath;
+                }
             }
         }
     }

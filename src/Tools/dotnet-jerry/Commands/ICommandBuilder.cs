@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jerrycurl.Tools.DotNet.Cli.V2
+namespace Jerrycurl.Tools.DotNet.Cli.Commands
 {
     internal interface ICommandBuilder
     {

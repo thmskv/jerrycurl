@@ -14,24 +14,20 @@
         <tags>$PackageTags$</tags>
         <repository type="git" url="$RepositoryUrl$" commit="$GitCommitId$" />
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>PostgreSQL support for Jerrycurl CLI. Do not reference this package directly.</description>
+        <description>Supported vendors for Jerrycurl CLI.</description>
         <dependencies>
-            <group targetFramework="net472">
-                <dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
-                <dependency id="$PostgresPackageId$" version="$PostgresPackageVersion$" />
-            </group>
-			<group targetFramework="netstandard2.0">
-				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
-				<dependency id="$PostgresPackageId$" version="$PostgresPackageVersion$" />
-			</group>
 			<group targetFramework="net6.0">
 				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
+				<dependency id="$MySqlPackageId$" version="$MySqlPackageVersion$" />
+				<dependency id="$OraclePackageId$" version="$OraclePackageVersion$" />
 				<dependency id="$PostgresPackageId$" version="$PostgresPackageVersion$" />
+				<dependency id="$SqlitePackageId$" version="$SqlitePackageVersion$" />
+				<dependency id="$SqlServerPackageId$" version="$SqlServerPackageVersion$" />
 			</group>
         </dependencies>
     </metadata>
     <files>
         <file src="$IconPath$" target="" />
-        <file src="$BinPath$**\Jerrycurl.Tools.Vendors.Postgres.*" target="lib" />
+        <file src="$BinPath$**\Jerrycurl.Tools.Vendors.*" target="lib" />
     </files>
 </package>

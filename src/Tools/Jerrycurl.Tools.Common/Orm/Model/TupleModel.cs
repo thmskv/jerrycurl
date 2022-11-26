@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Jerrycurl.Tools.Orm.Model
 {
-    public class TupleModel
+    public class TupleModel : IEnumerable<KeyValuePair<string, object>>
     {
         private readonly Dictionary<string, object> map;
 
@@ -42,21 +43,7 @@ namespace Jerrycurl.Tools.Orm.Model
             }
         }
 
-        public static async Task<IList<TupleModel>> FromDbCommandAsync(DbCommand command)
-        {
-            List<TupleModel> tuples = new List<TupleModel>();
-
-            using (DbDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
-            {
-                do
-                {
-                    while (await reader.ReadAsync().ConfigureAwait(false))
-                        tuples.Add(new TupleModel(reader));
-                }
-                while (await reader.NextResultAsync().ConfigureAwait(false));
-            }
-
-            return tuples;
-        }
+        public IEnumerator<KeyValuePair<string, object>> GetEnumerator() => this.map.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
     }
 }

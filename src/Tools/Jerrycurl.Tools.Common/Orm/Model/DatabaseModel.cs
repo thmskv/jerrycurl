@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using Jerrycurl.Tools.Scaffolding.Model;
 
 namespace Jerrycurl.Tools.Orm.Model
 {
     public class DatabaseModel
     {
         public IList<TableModel> Tables { get; set; } = new List<TableModel>();
+        public IList<TypeModel> Types { get; set; } = new List<TypeModel>();
         public IList<string> Imports { get; set; } = new List<string>();
         public string DefaultSchema { get; set; }
 
@@ -62,6 +62,20 @@ namespace Jerrycurl.Tools.Orm.Model
             public string[] BaseTypes { get; set; }
             public bool IsStruct { get; set; }
             public string Name { get; set; }
+        }
+
+        public class TypeModel
+        {
+            public string DbName { get; }
+            public string ClrName { get; }
+            public bool IsValueType { get; }
+
+            public TypeModel(string dbName, string clrName, bool isValueType)
+            {
+                this.DbName = dbName;
+                this.ClrName = clrName;
+                this.IsValueType = isValueType;
+            }
         }
     }
 }

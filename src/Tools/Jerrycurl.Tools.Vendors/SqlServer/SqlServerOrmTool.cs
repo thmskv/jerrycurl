@@ -9,16 +9,24 @@ using System.Data.SqlClient;
 #else
 using Microsoft.Data.SqlClient;
 #endif
+using TypeModel = Jerrycurl.Tools.Orm.Model.DatabaseModel.TypeModel;
 
 namespace Jerrycurl.Tools.Vendors.SqlServer
 {
-    public class SqlServerOrmCommand : OrmCommand
+    public class SqlServerOrmTool : OrmTool
     {
-        public override DbConnection GetDbConnection() => new SqlConnection();
+        protected override DbConnection GetConnection(OrmToolOptions options) => new SqlConnection(options.Connection);
 
-        public override async Task<DatabaseModel> GetDatabaseModelAsync(DbConnection connection, CancellationToken cancellationToken = default)
+        protected override async Task<DatabaseModel> GetDatabaseModelAsync(OrmToolOptions options, CancellationToken cancellationToken = default)
         {
+            await using DbConnection connection = this.GetConnection(options);
+
+            await connection.OpenAsync();
+
             DatabaseModelBuilder builder = new DatabaseModelBuilder();
+
+            foreach (var type in this.GetTypeMappings())
+                builder.Model.Types.Add(type);
 
             builder.Model.DefaultSchema = "dbo";
 
@@ -82,7 +90,7 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
 
         private async Task AddTablesAndColumnsAsync(DatabaseModelBuilder builder, DbCommand command)
         {
-            foreach (TupleModel tuple in await TupleModel.FromDbCommandAsync(command))
+            await foreach (TupleModel tuple in this.QueryAsync(command))
             {
                 string tableSchema = tuple["TABLE_SCHEMA"] as string;
                 string tableName = tuple["TABLE_NAME"] as string;
@@ -98,7 +106,7 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
 
         private async Task AddPrimaryKeysAsync(DatabaseModelBuilder builder, DbCommand command)
         {
-            foreach (TupleModel tuple in await TupleModel.FromDbCommandAsync(command))
+            await foreach (TupleModel tuple in this.QueryAsync(command))
             {
                 string tableSchema = tuple["TABLE_SCHEMA"] as string;
                 string tableName = tuple["TABLE_NAME"] as string;
@@ -112,7 +120,7 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
 
         public async Task AddForeignKeysAsync(DatabaseModelBuilder builder, DbCommand command)
         {
-            foreach (TupleModel tuple in await TupleModel.FromDbCommandAsync(command))
+            await foreach (TupleModel tuple in this.QueryAsync(command))
             {
                 string tableSchema = tuple["TABLE_SCHEMA"] as string;
                 string tableName = tuple["TABLE_NAME"] as string;
@@ -133,7 +141,7 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
             return false;
         }
 
-        public override IEnumerable<TypeModel> GetTypeMappings()
+        private IEnumerable<TypeModel> GetTypeMappings()
         {
             yield return new TypeModel("int", "int", true);
             yield return new TypeModel("bigint", "long", true);
