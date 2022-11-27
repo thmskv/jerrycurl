@@ -18,6 +18,7 @@ using Jerrycurl.Tools.Resources;
 using System.Diagnostics;
 using System.Numerics;
 using System.Drawing;
+using Jerrycurl.IO;
 
 namespace Jerrycurl.Tools.DotNet.Cli.Commands
 {
@@ -31,7 +32,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
         public Option<string> NamespaceOption { get; private set; }
         public Option<string> TransformOption { get; private set; }
         public Option<string> OutputOption { get; private set; }
-        public Option<bool> NoFileOption { get; private set; }
+        public Option<string[]> FlagsOption { get; private set; }
 
         public OrmCommandBuilder()
         {
@@ -46,7 +47,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
             this.NamespaceOption = this.Option<string>(new[] { "--namespace", "-ns" }, "The namespace to place C# classes in.");
             this.OutputOption = this.Option<string>(new[] { "--output", "-o" }, "The .cs file to place generated classes in.");
             this.TransformOption = this.Option<string>(new[] { "--transform", "-t" }, "The .js file used for transforming output.");
-            this.NoFileOption = this.Option<bool>(new[] { "--no-file" }, "Do not load configuration from the default Database.orm file.");
+            this.FlagsOption = this.Option<string[]>(new[] { "--flags" }, "Flags to pass on to the configuration.");
         }
 
         public void Build(RootCommand rootCommand)
@@ -69,7 +70,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
             Option<bool> openOption = this.Option<bool>(new[] { "--open" }, "Open the .js file after creating using the default editor.");
             Option<bool> noTypesOption = this.Option<bool>(new[] { "--no-types" }, "Do not create an associated d.ts file.");
 
-            command.Add(this.FileOption, this.NoFileOption, this.TransformOption);
+            command.Add(this.FileOption, this.TransformOption);
             command.Add(openOption, noTypesOption);
 
             this.SetHandler(command, async (ctx, _, options) =>
@@ -109,7 +110,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
             Option<string> snippetOption = this.Option<string>(new[] { "--snippet" }, "Name of a snippet to execute.");
             Option<string> sqlOption = this.Option<string>(new[] { "--sql" }, "SQL to execute.");
 
-            command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.NoFileOption, this.TransformOption);
+            command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.TransformOption);
             command.Add(snippetOption, sqlOption);
 
             this.SetHandler(command, async (ctx, tool, options) =>
@@ -136,7 +137,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
         {
             Command command = new Command("diff", "Run a simple diff to check that your current C# classes matches the database schema.");
 
-            command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.NoFileOption, this.NamespaceOption, this.OutputOption, this.TransformOption);
+            command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption);
 
             this.SetHandler(command, async (_, tool, options) =>
             {
@@ -171,15 +172,13 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
             Option<bool> syncOption = this.Option<bool>(new[] { "--sync" }, "Generate C# classes after creation.");
 
-            command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.NoFileOption, this.NamespaceOption, this.OutputOption, this.TransformOption, syncOption);
+            command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption, syncOption);
 
             this.SetHandler(command, async (ctx, tool, options) =>
             {
-                string directory = Path.GetDirectoryName(options.Input);
                 bool sync = ctx.GetValue(syncOption);
 
-                if (directory != "")
-                    Directory.CreateDirectory(directory);
+                PathHelper.EnsureDirectory(options.Input);
 
                 var data = new
                 {
@@ -212,9 +211,12 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
 
 
-        private Option<T> Option<T>(string[] aliases, string description, string defaultValue = null)
+        private Option<T> Option<T>(string[] aliases, string description, string defaultValue = null, bool multiple = false)
         {
-            var option = new Option<T>(aliases[0], description);
+            var option = new Option<T>(aliases[0], description)
+            {
+                AllowMultipleArgumentsPerToken = multiple,
+            };
 
             option.SetDefaultValue(defaultValue);
 
@@ -228,7 +230,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
         {
             Command command = new Command("sync", "Generate C# classes from a database schema.");
 
-            command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.NoFileOption, this.NamespaceOption, this.OutputOption, this.TransformOption);
+            command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption);
 
             this.SetHandler(command, async (_, tool, options) =>
             {
@@ -245,27 +247,41 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
         {
             command.SetHandler(async context =>
             {
+                bool hasFile = context.IsExplicit(this.FileOption);
                 string fileValue = context.GetValue(this.FileOption);
                 string vendorValue = context.GetValue(this.VendorOption);
                 string connectionValue = context.GetValue(this.ConnectionOption);
                 string outputValue = context.GetValue(this.OutputOption);
                 string namespaceValue = context.GetValue(this.NamespaceOption);
                 string transformValue = context.GetValue(this.TransformOption);
-                bool noFileValue = context.GetValue(this.NoFileOption);
+                string[] flags = context.GetValue(this.FlagsOption);
 
                 OrmToolOptions options = new OrmToolOptions()
                 {
                     Input = fileValue ?? "Database.orm",
                 };
 
-                if (!noFileValue && File.Exists(fileValue))
+                if (File.Exists(fileValue))
                     options = await OrmToolOptions.FromFileAsync(fileValue);
+                else if (hasFile)
+                    throw new FileNotFoundException("Not found lol.");
 
                 options.Vendor = vendorValue ?? options.Vendor;
                 options.Connection = connectionValue ?? options.Connection;
                 options.Output = outputValue ?? options.Output;
                 options.Namespace = outputValue ?? options.Namespace;
                 options.Transform = transformValue ?? options.Transform;
+                options.Flags ??= new Dictionary<string, string>();
+
+                foreach (var flag in flags)
+                {
+                    string[] pair = flag.Split("=");
+
+                    if (pair.Length == 1)
+                        options.Flags[pair[0]] = "true";
+                    else
+                        options.Flags[pair[0]] = pair[1];
+                }
 
                 OrmTool tool = ToolResolver.GetOrmTool(options.Vendor);
 

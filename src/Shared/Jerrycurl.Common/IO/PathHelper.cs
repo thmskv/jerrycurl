@@ -7,6 +7,13 @@ namespace Jerrycurl.IO
     {
         public static bool IsRelativeTo(string path, string basePath) => (MakeRelativePath(basePath, path) != null);
 
+        public static void EnsureDirectory(string filePath)
+        {
+            string directoryPath = Path.GetDirectoryName(filePath);
+
+            if (directoryPath != "")
+                Directory.CreateDirectory(directoryPath);
+        }
         public static string MakeAbsolutePath(string basePath, string path)
         {
             MakeRelativeAndAbsolutePath(basePath, path, out string absolutePath, out _);
