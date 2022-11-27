@@ -1,23 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Jerrycurl.Tools.Orm.Model.DatabaseModel;
+using static Jerrycurl.Tools.Orm.Model.SchemaModel;
 
 namespace Jerrycurl.Tools.Orm.Model
 {
-    public class DatabaseModelBuilder
+    public class SchemaBuilder
     {
-        public DatabaseModel Model { get; }
+        public SchemaModel Model { get; } = new SchemaModel();
+        public OrmToolOptions Options { get; }
 
-        public DatabaseModelBuilder()
-            : this(null)
+        public SchemaBuilder(OrmToolOptions options)
         {
+            this.Options = options;
 
+            this.MergeFlags();
         }
 
-        public DatabaseModelBuilder(DatabaseModel model)
+        private void MergeFlags()
         {
-            this.Model = model ?? new DatabaseModel();
+            if (this.Options.Flags != null)
+            {
+                foreach (var kvp in this.Options.Flags)
+                    this.SetFlag(kvp.Key, kvp.Value);
+            }
         }
 
         public TableModel AddTable(string tableSchema, string tableName, bool ignore = false)
@@ -40,10 +46,12 @@ namespace Jerrycurl.Tools.Orm.Model
             return table;
         }
 
-        public void SetFlag(string flag, string value)
+        public void SetFlag(string flag, string value, bool overwrite = true)
         {
             this.Model.Flags ??= new Dictionary<string, string>();
-            this.Model.Flags[flag] = value;
+
+            if (overwrite || !this.Model.Flags.ContainsKey(flag))
+                this.Model.Flags[flag] = value;
         }
 
         public TypeModel AddType(string dbName, string clrName, bool isNullable)

@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 #else
 using Microsoft.Data.SqlClient;
 #endif
-using TypeModel = Jerrycurl.Tools.Orm.Model.DatabaseModel.TypeModel;
+using TypeModel = Jerrycurl.Tools.Orm.Model.SchemaModel.TypeModel;
 
 namespace Jerrycurl.Tools.Vendors.SqlServer
 {
@@ -17,17 +17,13 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
     {
         protected override DbConnection GetConnection(OrmToolOptions options) => new SqlConnection(options.Connection);
 
-        protected override async Task<DatabaseModel> GetDatabaseModelAsync(OrmToolOptions options, CancellationToken cancellationToken = default)
+        protected override async Task<SchemaModel> BuildSchemaAsync(SchemaBuilder builder, CancellationToken cancellationToken = default)
         {
-            await using DbConnection connection = this.GetConnection(options);
-
-            await connection.OpenAsync();
-
-            DatabaseModelBuilder builder = new DatabaseModelBuilder();
+            await using DbConnection connection = await this.OpenConnectionAsync(builder.Options);
 
             this.AddTypeMappings(builder);
 
-            builder.SetFlag("defaultSchema", "dbo");
+            builder.SetFlag("defaultSchema", "dbo", overwrite: false);
 
             using (DbCommand tablesAndColumns = connection.CreateCommand())
             {
@@ -87,7 +83,7 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
             return builder.Model;
         }
 
-        private async Task AddTablesAndColumnsAsync(DatabaseModelBuilder builder, DbCommand command)
+        private async Task AddTablesAndColumnsAsync(SchemaBuilder builder, DbCommand command)
         {
             await foreach (TupleModel tuple in this.QueryAsync(command))
             {
@@ -103,7 +99,7 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
             }
         }
 
-        private async Task AddPrimaryKeysAsync(DatabaseModelBuilder builder, DbCommand command)
+        private async Task AddPrimaryKeysAsync(SchemaBuilder builder, DbCommand command)
         {
             await foreach (TupleModel tuple in this.QueryAsync(command))
             {
@@ -117,7 +113,7 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
             }
         }
 
-        public async Task AddForeignKeysAsync(DatabaseModelBuilder builder, DbCommand command)
+        public async Task AddForeignKeysAsync(SchemaBuilder builder, DbCommand command)
         {
             await foreach (TupleModel tuple in this.QueryAsync(command))
             {
@@ -140,7 +136,7 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
             return false;
         }
 
-        private void AddTypeMappings(DatabaseModelBuilder builder)
+        private void AddTypeMappings(SchemaBuilder builder)
         {
             builder.AddType("int", "int", true);
             builder.AddType("bigint", "long", true);

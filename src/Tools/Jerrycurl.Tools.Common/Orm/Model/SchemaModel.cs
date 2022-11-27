@@ -2,7 +2,7 @@
 
 namespace Jerrycurl.Tools.Orm.Model
 {
-    public class DatabaseModel
+    public class SchemaModel
     {
         public IList<TableModel> Tables { get; set; } = new List<TableModel>();
         public IList<TypeModel> Types { get; set; } = new List<TypeModel>();

@@ -7,18 +7,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using Jerrycurl.Tools.Orm;
-using static Jerrycurl.Tools.Orm.Model.DatabaseModel;
+using static Jerrycurl.Tools.Orm.Model.SchemaModel;
 using Jerrycurl.Tools.Orm.Model;
 
 namespace Jerrycurl.Tools.Vendors.Sqlite
 {
     public class SqliteOrmTool : OrmTool
     {
-        protected override DbConnection GetConnection(OrmToolOptions options) => new SqliteConnection();
-        protected override async Task<DatabaseModel> GetDatabaseModelAsync(OrmToolOptions options, CancellationToken cancellationToken = default)
+        protected override DbConnection GetConnection(OrmToolOptions options) => new SqliteConnection(options.Connection);
+
+        protected override async Task<SchemaModel> BuildSchemaAsync(SchemaBuilder builder, CancellationToken cancellationToken = default)
         {
-            DbConnection connection = await this.OpenConnectionAsync(options);
-            DatabaseModelBuilder builder = new DatabaseModelBuilder();
+            DbConnection connection = await this.OpenConnectionAsync(builder.Options);
 
             this.AddTypeMappings(builder);
 
@@ -74,7 +74,7 @@ namespace Jerrycurl.Tools.Vendors.Sqlite
             }
         }
 
-        private async Task AddTablesAndColumnsAsync(DatabaseModelBuilder builder, DbCommand command)
+        private async Task AddTablesAndColumnsAsync(SchemaBuilder builder, DbCommand command)
         {
             await foreach (TupleModel tuple in this.QueryAsync(command))
             {
@@ -95,7 +95,7 @@ namespace Jerrycurl.Tools.Vendors.Sqlite
             }
         }
 
-        public async Task AddForeignKeysAsync(DatabaseModelBuilder builder, DbCommand command)
+        public async Task AddForeignKeysAsync(SchemaBuilder builder, DbCommand command)
         {
             await foreach (TupleModel tuple in this.QueryAsync(command))
             {
@@ -202,7 +202,7 @@ namespace Jerrycurl.Tools.Vendors.Sqlite
             return null;
         }
 
-        private void AddTypeMappings(DatabaseModelBuilder builder)
+        private void AddTypeMappings(SchemaBuilder builder)
         {
             // INTEGER affinity
             builder.AddType("int", "int", true);

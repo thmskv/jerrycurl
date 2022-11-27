@@ -89,7 +89,8 @@ namespace Jerrycurl.Tools.Razor
                 {
                     ProjectionResult result = generator.Generate(razorPage.Data);
 
-                    File.WriteAllText(razorPage.IntermediatePath, result.Content, Encoding.UTF8);
+                    using (StreamWriter writer = new StreamWriter(razorPage.IntermediatePath, append: false, Encoding.UTF8))
+                        await writer.WriteAsync(result.Content);
                 }
 
                 string filesString = parserResult.Count + " " + (parserResult.Count == 1 ? "file" : "files");

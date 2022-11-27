@@ -1,5 +1,5 @@
 ﻿using Jerrycurl.Tools.Orm;
-using static Jerrycurl.Tools.Orm.Model.DatabaseModel;
+using static Jerrycurl.Tools.Orm.Model.SchemaModel;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -13,11 +13,10 @@ namespace Jerrycurl.Tools.Vendors.MySql
     public class MySqlOrmTool : OrmTool
     {
         protected override DbConnection GetConnection(OrmToolOptions options) => new MySqlConnection(options.Connection);
-        protected override async Task<DatabaseModel> GetDatabaseModelAsync(OrmToolOptions options, CancellationToken cancellationToken = default)
-        {
-            await using DbConnection connection = await this.OpenConnectionAsync(options);
 
-            DatabaseModelBuilder builder = new DatabaseModelBuilder();
+        protected override async Task<SchemaModel> BuildSchemaAsync(SchemaBuilder builder, CancellationToken cancellationToken = default)
+        {
+            await using DbConnection connection = await this.OpenConnectionAsync(builder.Options);
 
             this.AddTypeMappings(builder);
 
@@ -55,7 +54,7 @@ namespace Jerrycurl.Tools.Vendors.MySql
             return builder.Model;
         }
 
-        private async Task AddTablesAndColumnsAsync(DatabaseModelBuilder builder, DbCommand command)
+        private async Task AddTablesAndColumnsAsync(SchemaBuilder builder, DbCommand command)
         {
             await foreach (TupleModel tuple in this.QueryAsync(command))
             {
@@ -69,7 +68,7 @@ namespace Jerrycurl.Tools.Vendors.MySql
             }
         }
 
-        private async Task AddPrimaryKeysAsync(DatabaseModelBuilder builder, DbCommand command)
+        private async Task AddPrimaryKeysAsync(SchemaBuilder builder, DbCommand command)
         {
             await foreach (TupleModel tuple in this.QueryAsync(command))
             {
@@ -82,7 +81,7 @@ namespace Jerrycurl.Tools.Vendors.MySql
             }
         }
 
-        public async Task AddForeignKeysAsync(DatabaseModelBuilder builder, DbCommand command)
+        public async Task AddForeignKeysAsync(SchemaBuilder builder, DbCommand command)
         {
             await foreach (TupleModel tuple in this.QueryAsync(command))
             {
@@ -96,7 +95,7 @@ namespace Jerrycurl.Tools.Vendors.MySql
             }
         }
 
-        private void AddTypeMappings(DatabaseModelBuilder builder)
+        private void AddTypeMappings(SchemaBuilder builder)
         {
             builder.AddType("bigint", "long", true);
             builder.AddType("decimal", "decimal", true);

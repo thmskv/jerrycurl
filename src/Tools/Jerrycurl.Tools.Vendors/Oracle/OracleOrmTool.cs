@@ -1,5 +1,5 @@
 ﻿using Jerrycurl.Tools.Orm;
-using static Jerrycurl.Tools.Orm.Model.DatabaseModel;
+using static Jerrycurl.Tools.Orm.Model.SchemaModel;
 using Oracle.ManagedDataAccess.Client;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -14,11 +14,9 @@ namespace Jerrycurl.Tools.Vendors.Oracle
     {
         protected override DbConnection GetConnection(OrmToolOptions options) => new OracleConnection(options.Connection);
 
-        protected override async Task<DatabaseModel> GetDatabaseModelAsync(OrmToolOptions options, CancellationToken cancellationToken = default)
+        protected override async Task<SchemaModel> BuildSchemaAsync(SchemaBuilder builder, CancellationToken cancellationToken = default)
         {
-            await using DbConnection connection = await this.OpenConnectionAsync(options);
-
-            DatabaseModelBuilder builder = new DatabaseModelBuilder();
+            await using DbConnection connection = await this.OpenConnectionAsync(builder.Options);
 
             this.AddTypeMappings(builder);
 
@@ -63,7 +61,7 @@ namespace Jerrycurl.Tools.Vendors.Oracle
             return builder.Model;
         }
 
-        private async Task AddTablesAndColumnAsync(DatabaseModelBuilder builder, DbCommand command)
+        private async Task AddTablesAndColumnAsync(SchemaBuilder builder, DbCommand command)
         {
             await foreach (TupleModel tuple in this.QueryAsync(command))
             {
@@ -89,7 +87,7 @@ namespace Jerrycurl.Tools.Vendors.Oracle
             return dataType;
         }
 
-        private async Task AddPrimaryKeysAsync(DatabaseModelBuilder builder, DbCommand command)
+        private async Task AddPrimaryKeysAsync(SchemaBuilder builder, DbCommand command)
         {
             await foreach (TupleModel tuple in this.QueryAsync(command))
             {
@@ -103,7 +101,7 @@ namespace Jerrycurl.Tools.Vendors.Oracle
             }
         }
 
-        public async Task AddForeignKeysAsync(DatabaseModelBuilder builder, DbCommand command)
+        public async Task AddForeignKeysAsync(SchemaBuilder builder, DbCommand command)
         {
             await foreach (TupleModel tuple in this.QueryAsync(command))
             {
@@ -118,7 +116,7 @@ namespace Jerrycurl.Tools.Vendors.Oracle
             }
         }
 
-        private void AddTypeMappings(DatabaseModelBuilder builder)
+        private void AddTypeMappings(SchemaBuilder builder)
         {
             builder.AddType("BFILE", "byte[]", false);
             builder.AddType("BLOB", "byte[]", false);

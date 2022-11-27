@@ -4,7 +4,7 @@ using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using Jerrycurl.Tools.Orm.Model;
-using static Jerrycurl.Tools.Orm.Model.DatabaseModel;
+using static Jerrycurl.Tools.Orm.Model.SchemaModel;
 using Jerrycurl.Tools.Orm;
 
 namespace Jerrycurl.Tools.Vendors.Postgres
@@ -13,15 +13,13 @@ namespace Jerrycurl.Tools.Vendors.Postgres
     {
         protected override DbConnection GetConnection(OrmToolOptions options) => new NpgsqlConnection(options.Connection);
 
-        protected override async Task<DatabaseModel> GetDatabaseModelAsync(OrmToolOptions options, CancellationToken cancellationToken = default)
+        protected override async Task<SchemaModel> BuildSchemaAsync(SchemaBuilder builder, CancellationToken cancellationToken = default)
         {
-            await using DbConnection connection = await this.OpenConnectionAsync(options);
-
-            DatabaseModelBuilder builder = new DatabaseModelBuilder();
+            await using DbConnection connection = await this.OpenConnectionAsync(builder.Options);
 
             this.AddTypeMappings(builder);
 
-            builder.SetFlag("defaultSchema", "public");
+            builder.SetFlag("defaultSchema", "public", overwrite: false);
 
             using (DbCommand tablesAndColumns = connection.CreateCommand())
             {
@@ -57,7 +55,7 @@ namespace Jerrycurl.Tools.Vendors.Postgres
             return builder.Model;
         }
 
-        private async Task AddTablesAndColumnAsync(DatabaseModelBuilder builder, DbCommand command)
+        private async Task AddTablesAndColumnAsync(SchemaBuilder builder, DbCommand command)
         {
             await foreach (TupleModel tuple in this.QueryAsync(command))
             {
@@ -73,7 +71,7 @@ namespace Jerrycurl.Tools.Vendors.Postgres
             }
         }
 
-        private async Task AddPrimaryKeysAsync(DatabaseModelBuilder builder, DbCommand command)
+        private async Task AddPrimaryKeysAsync(SchemaBuilder builder, DbCommand command)
         {
             await foreach (TupleModel tuple in this.QueryAsync(command))
             {
@@ -87,7 +85,7 @@ namespace Jerrycurl.Tools.Vendors.Postgres
             }
         }
 
-        public async Task AddForeignKeysAsync(DatabaseModelBuilder builder, DbCommand command)
+        public async Task AddForeignKeysAsync(SchemaBuilder builder, DbCommand command)
         {
             await foreach (TupleModel tuple in this.QueryAsync(command))
             {
@@ -102,7 +100,7 @@ namespace Jerrycurl.Tools.Vendors.Postgres
             }
         }
 
-        private void AddTypeMappings(DatabaseModelBuilder builder)
+        private void AddTypeMappings(SchemaBuilder builder)
         {
             builder.AddType("boolean", "bool", true);
             builder.AddType("smallint", "short", true);

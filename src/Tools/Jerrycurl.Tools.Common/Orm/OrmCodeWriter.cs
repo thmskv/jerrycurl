@@ -12,7 +12,7 @@ namespace Jerrycurl.Tools.Orm
 {
     internal class OrmCodeWriter
     {
-        public async Task WriteAsync(DatabaseModel databaseModel, string writePath)
+        public async Task WriteAsync(SchemaModel schema, string writePath)
         {
             PathHelper.EnsureDirectory(writePath);
 
@@ -20,22 +20,22 @@ namespace Jerrycurl.Tools.Orm
             {
                 CSharpWriter writer = new CSharpWriter(fileWriter);
 
-                if (databaseModel.Imports.Any())
+                if (schema.Imports.Any())
                 {
-                    foreach (string import in databaseModel.Imports)
+                    foreach (string import in schema.Imports)
                         await writer.WriteImportAsync(import);
 
                     await writer.WriteLineAsync();
                 }
 
-                foreach (var namespaceGroup in databaseModel.Tables.OrderBy(fg => fg.Clr.Namespace).GroupBy(fg => fg.Clr.Namespace).OrderBy(g => g.Key))
+                foreach (var namespaceGroup in schema.Tables.OrderBy(fg => fg.Clr.Namespace).GroupBy(fg => fg.Clr.Namespace).OrderBy(g => g.Key))
                 {
                     string ns = namespaceGroup.Key;
 
                     if (!string.IsNullOrWhiteSpace(ns))
                         await writer.WriteNamespaceStartAsync(ns);
 
-                    foreach (DatabaseModel.TableModel table in namespaceGroup.NotNull().OrderBy(t => t.Schema).ThenBy(t => t.Name))
+                    foreach (SchemaModel.TableModel table in namespaceGroup.NotNull().OrderBy(t => t.Schema).ThenBy(t => t.Name))
                     {
                         string warningMessage = this.GetWarningMessage(table);
 
@@ -66,9 +66,9 @@ namespace Jerrycurl.Tools.Orm
             }
         }
 
-        private async Task WriteColumnsAsync(CSharpWriter writer, DatabaseModel.TableModel tableModel)
+        private async Task WriteColumnsAsync(CSharpWriter writer, SchemaModel.TableModel tableModel)
         {
-            foreach (DatabaseModel.ColumnModel column in tableModel.Columns.NotNull().Where(c => !c.Ignore))
+            foreach (SchemaModel.ColumnModel column in tableModel.Columns.NotNull().Where(c => !c.Ignore))
             {
                 string warningMessage = this.GetWarningMessage(column);
 
@@ -99,10 +99,10 @@ namespace Jerrycurl.Tools.Orm
                 if (column.Clr.IsJson)
                     writer.AddAttribute("Json");
 
-                foreach (DatabaseModel.KeyModel key in column.Keys)
+                foreach (SchemaModel.KeyModel key in column.Keys)
                     writer.AddAttribute("Key", key.Name, key.Index);
 
-                foreach (DatabaseModel.ReferenceModel refModel in column.References)
+                foreach (SchemaModel.ReferenceModel refModel in column.References)
                 {
                     if (refModel.Name != null)
                         writer.AddAttribute("Ref", refModel.KeyName, refModel.KeyIndex, refModel.Name);
@@ -116,7 +116,7 @@ namespace Jerrycurl.Tools.Orm
             }
         }
 
-        private string GetWarningMessage(DatabaseModel.TableModel tableModel)
+        private string GetWarningMessage(SchemaModel.TableModel tableModel)
         {
             if (tableModel?.Clr?.Name == null)
                 return "Invalid model data.";
@@ -124,7 +124,7 @@ namespace Jerrycurl.Tools.Orm
             return null;
         }
 
-        private string GetWarningMessage(DatabaseModel.ColumnModel columnModel)
+        private string GetWarningMessage(SchemaModel.ColumnModel columnModel)
         {
             if (columnModel?.Clr?.TypeName == null || columnModel?.Clr?.Name == null)
                 return "Invalid model data.";

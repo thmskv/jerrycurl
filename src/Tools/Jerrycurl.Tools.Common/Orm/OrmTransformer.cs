@@ -13,13 +13,13 @@ namespace Jerrycurl.Tools.Orm
 {
     internal class OrmTransformer
     {
-        public async Task<DatabaseModel> TransformAsync(OrmToolOptions options, DatabaseModel databaseModel)
+        public async Task<SchemaModel> TransformAsync(OrmToolOptions options, SchemaModel schema)
         {
             string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             string jsFile = this.ResolveJavaScriptPath(options);
 
             if (jsFile == null)
-                return databaseModel;
+                return schema;
 
             string hostFile = Path.Combine(tempPath, "transform.host.js");
             string hostContent = ResourceHelper.GetTransformHostString();
@@ -31,13 +31,13 @@ namespace Jerrycurl.Tools.Orm
             Directory.CreateDirectory(tempPath);
 
             File.WriteAllText(hostFile, hostContent);
-            await this.SerializeAsync(databaseModel, inputFile);
+            await this.SerializeAsync(schema, inputFile);
 
             try
             {
                 await ToolRunner.RunAsync(nodePath, new[] { hostFile, jsFile, inputFile, outputFile }, workingDir, capture: true);
 
-                DatabaseModel newModel = await this.DeserializeAsync<DatabaseModel>(outputFile);
+                SchemaModel newModel = await this.DeserializeAsync<SchemaModel>(outputFile);
 
                 return newModel;
             }

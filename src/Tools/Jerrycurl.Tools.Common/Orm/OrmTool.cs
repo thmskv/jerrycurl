@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Jerrycurl.CodeAnalysis;
 using Jerrycurl.Text;
 using Jerrycurl.Tools.Orm.Model;
-using static Jerrycurl.Tools.Orm.Model.DatabaseModel;
+using static Jerrycurl.Tools.Orm.Model.SchemaModel;
 using Jerrycurl.Collections;
 
 namespace Jerrycurl.Tools.Orm
@@ -16,24 +16,26 @@ namespace Jerrycurl.Tools.Orm
     public abstract class OrmTool
     {
         protected abstract DbConnection GetConnection(OrmToolOptions options);
-        protected abstract Task<DatabaseModel> GetDatabaseModelAsync(OrmToolOptions options, CancellationToken cancellationToken = default);
+        protected abstract Task BuildSchemaAsync(SchemaBuilder builder, CancellationToken cancellationToken = default);
 
-        public async Task<DatabaseModel> BuildAsync(OrmToolOptions options, CancellationToken cancellationToken = default)
+        public async Task<SchemaModel> BuildAndTransformAsync(OrmToolOptions options, CancellationToken cancellationToken = default)
         {
+            SchemaBuilder builder = new SchemaBuilder(options);
             OrmTransformer transformer = new OrmTransformer();
-            DatabaseModel database = await this.GetDatabaseModelAsync(options, cancellationToken);
 
-            this.CreateDefaultClrModel(options, database);
+            await this.BuildSchemaAsync(builder, cancellationToken);
 
-            database = await transformer.TransformAsync(options, database);
+            this.CreateDefaultClrModel(options, builder.Model);
 
-            return database;
+            SchemaModel transformed = await transformer.TransformAsync(options, builder.Model);
+
+            return transformed;
         }
 
         public async Task BuildAndOutputAsync(OrmToolOptions options, string outputPath = null, CancellationToken cancellationToken = default)
         {
             OrmCodeWriter codeWriter = new OrmCodeWriter();
-            DatabaseModel database = await this.BuildAsync(options, cancellationToken);
+            SchemaModel model = await this.BuildAndTransformAsync(options, cancellationToken);
 
             await codeWriter.WriteAsync(database, outputPath ?? options.Output);
         }
@@ -51,7 +53,7 @@ namespace Jerrycurl.Tools.Orm
             }
         }
 
-        private void CreateDefaultClrModel(OrmToolOptions options, DatabaseModel database)
+        private void CreateDefaultClrModel(OrmToolOptions options, SchemaModel database)
         {
             database.Imports ??= new List<string>();
             database.Imports.Add("global::System");
