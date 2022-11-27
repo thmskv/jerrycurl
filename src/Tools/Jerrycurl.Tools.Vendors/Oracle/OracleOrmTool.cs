@@ -20,8 +20,7 @@ namespace Jerrycurl.Tools.Vendors.Oracle
 
             DatabaseModelBuilder builder = new DatabaseModelBuilder();
 
-            foreach (var type in this.GetTypeMappings())
-                builder.Model.Types.Add(type);
+            this.AddTypeMappings(builder);
 
             using (DbCommand tablesAndColumns = connection.CreateCommand())
             {
@@ -119,31 +118,31 @@ namespace Jerrycurl.Tools.Vendors.Oracle
             }
         }
 
-        private IEnumerable<TypeModel> GetTypeMappings()
+        private void AddTypeMappings(DatabaseModelBuilder builder)
         {
-            yield return new TypeModel("BFILE", "byte[]", false);
-            yield return new TypeModel("BLOB", "byte[]", false);
-            yield return new TypeModel("CHAR", "string", false);
-            yield return new TypeModel("CLOB", "string", false);
-            yield return new TypeModel("DATE", "DateTime", true);
-            yield return new TypeModel("FLOAT", "decimal", true);
-            yield return new TypeModel("INTEGER", "decimal", true);
-            yield return new TypeModel("INTERVAL YEAR TO MONTH", "long", true);
-            yield return new TypeModel("INTERVAL DAY TO SECOND", "TimeSpan", true);
-            yield return new TypeModel("LONG", "string", false);
-            yield return new TypeModel("LONG RAW", "byte[]", false);
-            yield return new TypeModel("NCHAR", "string", false);
-            yield return new TypeModel("NCLOB", "string", false);
-            yield return new TypeModel("NUMBER", "decimal", true);
-            yield return new TypeModel("NVARCHAR2", "string", false);
-            yield return new TypeModel("RAW", "byte[]", false);
-            yield return new TypeModel("ROWID", "string", false);
-            yield return new TypeModel("TIMESTAMP", "DateTime", true);
-            yield return new TypeModel("TIMESTAMP WITH LOCAL TIME ZONE", "DateTime", true);
-            yield return new TypeModel("TIMESTAMP WITH TIME ZONE", "DateTimeOffset", true);
-            yield return new TypeModel("UNSIGNED INTEGER", "decimal", true);
-            yield return new TypeModel("VARCHAR2", "string", false);
-            yield return new TypeModel("ANYDATA", "object", false);
+            builder.AddType("BFILE", "byte[]", false);
+            builder.AddType("BLOB", "byte[]", false);
+            builder.AddType("CHAR", "string", false);
+            builder.AddType("CLOB", "string", false);
+            builder.AddType("DATE", "DateTime", true);
+            builder.AddType("FLOAT", "decimal", true);
+            builder.AddType("INTEGER", "decimal", true);
+            builder.AddType("INTERVAL YEAR TO MONTH", "long", true);
+            builder.AddType("INTERVAL DAY TO SECOND", "TimeSpan", true);
+            builder.AddType("LONG", "string", false);
+            builder.AddType("LONG RAW", "byte[]", false);
+            builder.AddType("NCHAR", "string", false);
+            builder.AddType("NCLOB", "string", false);
+            builder.AddType("NUMBER", "decimal", true);
+            builder.AddType("NVARCHAR2", "string", false);
+            builder.AddType("RAW", "byte[]", false);
+            builder.AddType("ROWID", "string", false);
+            builder.AddType("TIMESTAMP", "DateTime", true);
+            builder.AddType("TIMESTAMP WITH LOCAL TIME ZONE", "DateTime", true);
+            builder.AddType("TIMESTAMP WITH TIME ZONE", "DateTimeOffset", true);
+            builder.AddType("UNSIGNED INTEGER", "decimal", true);
+            builder.AddType("VARCHAR2", "string", false);
+            builder.AddType("ANYDATA", "object", false);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Jerrycurl.Tools.Orm.Model
         public IList<TableModel> Tables { get; set; } = new List<TableModel>();
         public IList<TypeModel> Types { get; set; } = new List<TypeModel>();
         public IList<string> Imports { get; set; } = new List<string>();
-        public string DefaultSchema { get; set; }
+        public Dictionary<string, string> Flags { get; set; }
 
         public class TableModel
         {
@@ -66,15 +66,19 @@ namespace Jerrycurl.Tools.Orm.Model
 
         public class TypeModel
         {
-            public string DbName { get; }
-            public string ClrName { get; }
-            public bool IsValueType { get; }
+            public string DbName { get; set; }
+            public string ClrName { get; set; }
+            public bool IsNullable { get; set; }
 
-            public TypeModel(string dbName, string clrName, bool isValueType)
+            public TypeModel()
+            {
+
+            }
+            public TypeModel(string dbName, string clrName, bool isNullable)
             {
                 this.DbName = dbName;
                 this.ClrName = clrName;
-                this.IsValueType = isValueType;
+                this.IsNullable = isNullable;
             }
         }
     }

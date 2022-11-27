@@ -12,9 +12,10 @@ namespace Jerrycurl.Tools.DotNet.Cli
     {
         public async static Task<int> Main(string[] args)
         {
-            args = new[] { "orm", "new", "-v", "sqlserver", "-c", "server=.;database=gerstl_120922;trusted_connection=true;encrypt=false", "-f", @"d:\users\thomas\desktop\Database.orm" };
+            //args = new[] { "orm", "new", "-v", "sqlserver", "-c", "server=.;database=gerstl_120922;trusted_connection=true;encrypt=false", "-f", @"c:\users\thomas\desktop\Database.orm" };
             //args = new[] { "orm", "sync", "-f", @"c:\users\thomas\desktop\Database.orm" };
             //args = new[] { "orm", "transform", "-f", @"c:\users\thomas\desktop\Database.orm" };
+            //args = new[] { "orm", "run", "-f", @"c:\users\thomas\desktop\Database.orm", "--snippet", "test" };
 
             RootCommand rootCommand = new RootCommand();
 

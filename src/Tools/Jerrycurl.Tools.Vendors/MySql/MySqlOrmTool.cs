@@ -19,8 +19,7 @@ namespace Jerrycurl.Tools.Vendors.MySql
 
             DatabaseModelBuilder builder = new DatabaseModelBuilder();
 
-            foreach (var type in this.GetTypeMappings())
-                builder.Model.Types.Add(type);
+            this.AddTypeMappings(builder);
 
             using (DbCommand tablesAndColumns = connection.CreateCommand())
             {
@@ -97,40 +96,40 @@ namespace Jerrycurl.Tools.Vendors.MySql
             }
         }
 
-        private IEnumerable<TypeModel> GetTypeMappings()
+        private void AddTypeMappings(DatabaseModelBuilder builder)
         {
-            yield return new TypeModel("bigint", "long", true);
-            yield return new TypeModel("decimal", "decimal", true);
-            yield return new TypeModel("double", "double", true);
-            yield return new TypeModel("float", "float", true);
-            yield return new TypeModel("real", "float", true);
-            yield return new TypeModel("int", "int", true);
-            yield return new TypeModel("mediumint", "int", true);
-            yield return new TypeModel("smallint", "short", true);
-            yield return new TypeModel("year", "short", true);
-            yield return new TypeModel("bit", "bool", true);
-            yield return new TypeModel("tinyint", "byte", true);
-            yield return new TypeModel("char", "char", true);
-            yield return new TypeModel("varchar", "string", false);
-            yield return new TypeModel("tinytext", "string", false);
-            yield return new TypeModel("text", "string", false);
-            yield return new TypeModel("mediumtext", "string", false);
-            yield return new TypeModel("longtext", "string", false);
-            yield return new TypeModel("string", "string", false);
-            yield return new TypeModel("enum", "string", false);
-            yield return new TypeModel("set", "string", false);
-            yield return new TypeModel("json", "string", false);
-            yield return new TypeModel("datetime", "DateTime", true);
-            yield return new TypeModel("date", "DateTime", true);
-            yield return new TypeModel("time", "TimeSpan", true);
-            yield return new TypeModel("timestamp", "DateTimeOffset", true);
-            yield return new TypeModel("tinyblob", "byte[]", false);
-            yield return new TypeModel("blob", "byte[]", false);
-            yield return new TypeModel("mediumblob", "byte[]", false);
-            yield return new TypeModel("longblob", "byte[]", false);
-            yield return new TypeModel("binary", "byte[]", false);
-            yield return new TypeModel("varbinary", "byte[]", false);
-            yield return new TypeModel("geometry", "byte[]", false);
+            builder.AddType("bigint", "long", true);
+            builder.AddType("decimal", "decimal", true);
+            builder.AddType("double", "double", true);
+            builder.AddType("float", "float", true);
+            builder.AddType("real", "float", true);
+            builder.AddType("int", "int", true);
+            builder.AddType("mediumint", "int", true);
+            builder.AddType("smallint", "short", true);
+            builder.AddType("year", "short", true);
+            builder.AddType("bit", "bool", true);
+            builder.AddType("tinyint", "byte", true);
+            builder.AddType("char", "char", true);
+            builder.AddType("varchar", "string", false);
+            builder.AddType("tinytext", "string", false);
+            builder.AddType("text", "string", false);
+            builder.AddType("mediumtext", "string", false);
+            builder.AddType("longtext", "string", false);
+            builder.AddType("string", "string", false);
+            builder.AddType("enum", "string", false);
+            builder.AddType("set", "string", false);
+            builder.AddType("json", "string", false);
+            builder.AddType("datetime", "DateTime", true);
+            builder.AddType("date", "DateTime", true);
+            builder.AddType("time", "TimeSpan", true);
+            builder.AddType("timestamp", "DateTimeOffset", true);
+            builder.AddType("tinyblob", "byte[]", false);
+            builder.AddType("blob", "byte[]", false);
+            builder.AddType("mediumblob", "byte[]", false);
+            builder.AddType("longblob", "byte[]", false);
+            builder.AddType("binary", "byte[]", false);
+            builder.AddType("varbinary", "byte[]", false);
+            builder.AddType("geometry", "byte[]", false);
         }
     }
 }

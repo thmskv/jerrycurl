@@ -20,8 +20,7 @@ namespace Jerrycurl.Tools.Vendors.Sqlite
             DbConnection connection = await this.OpenConnectionAsync(options);
             DatabaseModelBuilder builder = new DatabaseModelBuilder();
 
-            foreach (TypeModel type in this.GetTypeMappings())
-                builder.Model.Types.Add(type);
+            this.AddTypeMappings(builder);
 
             using (DbCommand tablesAndColumns = connection.CreateCommand())
             {
@@ -203,45 +202,45 @@ namespace Jerrycurl.Tools.Vendors.Sqlite
             return null;
         }
 
-        private IEnumerable<TypeModel> GetTypeMappings()
+        private void AddTypeMappings(DatabaseModelBuilder builder)
         {
             // INTEGER affinity
-            yield return new TypeModel("int", "int", true);
-            yield return new TypeModel("integer", "int", true);
-            yield return new TypeModel("tinyint", "byte", true);
-            yield return new TypeModel("smallint", "short", true);
-            yield return new TypeModel("mediumint", "int", true);
-            yield return new TypeModel("bigint", "long", true);
-            yield return new TypeModel("unsigned big int", "ulong", true);
-            yield return new TypeModel("int2", "short", true);
-            yield return new TypeModel("int4", "int", true);
-            yield return new TypeModel("int8", "long", true);
+            builder.AddType("int", "int", true);
+            builder.AddType("integer", "int", true);
+            builder.AddType("tinyint", "byte", true);
+            builder.AddType("smallint", "short", true);
+            builder.AddType("mediumint", "int", true);
+            builder.AddType("bigint", "long", true);
+            builder.AddType("unsigned big int", "ulong", true);
+            builder.AddType("int2", "short", true);
+            builder.AddType("int4", "int", true);
+            builder.AddType("int8", "long", true);
 
             // TEXT affinity
-            yield return new TypeModel("character", "string", false);
-            yield return new TypeModel("varchar", "string", false);
-            yield return new TypeModel("varying character", "string", false);
-            yield return new TypeModel("nchar", "string", false);
-            yield return new TypeModel("native character", "string", false);
-            yield return new TypeModel("nvarchar", "string", false);
-            yield return new TypeModel("text", "string", false);
-            yield return new TypeModel("clob", "string", false);
+            builder.AddType("character", "string", false);
+            builder.AddType("varchar", "string", false);
+            builder.AddType("varying character", "string", false);
+            builder.AddType("nchar", "string", false);
+            builder.AddType("native character", "string", false);
+            builder.AddType("nvarchar", "string", false);
+            builder.AddType("text", "string", false);
+            builder.AddType("clob", "string", false);
 
             // BLOB affinity
-            yield return new TypeModel("blob", "byte[]", false);
+            builder.AddType("blob", "byte[]", false);
 
             // FLOATING 
-            yield return new TypeModel("float", "float", false);
-            yield return new TypeModel("real", "float", false);
-            yield return new TypeModel("double", "double", true);
-            yield return new TypeModel("double precision", "double", true);
+            builder.AddType("float", "float", false);
+            builder.AddType("real", "float", false);
+            builder.AddType("double", "double", true);
+            builder.AddType("double precision", "double", true);
 
             // NUMERIC
-            yield return new TypeModel("numeric", "decimal", true);
-            yield return new TypeModel("decimal", "decimal", true);
-            yield return new TypeModel("boolean", "bool", true);
-            yield return new TypeModel("datetime", "DateTime", true);
-            yield return new TypeModel("date", "DateTime", true);
+            builder.AddType("numeric", "decimal", true);
+            builder.AddType("decimal", "decimal", true);
+            builder.AddType("boolean", "bool", true);
+            builder.AddType("datetime", "DateTime", true);
+            builder.AddType("date", "DateTime", true);
         }
     }
 }

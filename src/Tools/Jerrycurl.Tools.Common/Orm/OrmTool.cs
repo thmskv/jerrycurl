@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Jerrycurl.CodeAnalysis;
 using Jerrycurl.Text;
 using Jerrycurl.Tools.Orm.Model;
-using static System.Runtime.CompilerServices.YieldAwaitable;
 using static Jerrycurl.Tools.Orm.Model.DatabaseModel;
+using Jerrycurl.Collections;
 
 namespace Jerrycurl.Tools.Orm
 {
@@ -38,7 +38,7 @@ namespace Jerrycurl.Tools.Orm
             await codeWriter.WriteAsync(database, outputPath ?? options.Output);
         }
 
-        protected async IAsyncEnumerable<TupleModel> QueryAsync(DbCommand command)
+        public async IAsyncEnumerable<TupleModel> QueryAsync(DbCommand command)
         {
             using (DbDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
             {
@@ -57,6 +57,9 @@ namespace Jerrycurl.Tools.Orm
             database.Imports.Add("global::System");
             database.Imports.Add("global::Jerrycurl.Cqs.Metadata.Annotations");
             database.Imports.Add("global::Jerrycurl.Mvc.Metadata.Annotations");
+
+            string defaultSchema = database.Flags?.GetValueOrDefault("defaultSchema");
+            bool useNullables = (options.Flags?.GetValueOrDefault("useNullables") == "true");
 
             foreach (TableModel table in database.Tables)
             {
@@ -85,7 +88,7 @@ namespace Jerrycurl.Tools.Orm
             {
                 Namespace ns = new Namespace(options.Namespace ?? "Database");
 
-                if (!string.IsNullOrEmpty(table.Schema) && !table.Schema.Equals(database.DefaultSchema))
+                if (!string.IsNullOrEmpty(table.Schema) && !table.Schema.Equals(defaultSchema))
                     ns = ns.Add(table.Schema.ToCapitalCase());
 
                 return ns.Definition;
@@ -96,7 +99,7 @@ namespace Jerrycurl.Tools.Orm
                 TypeModel mapping = database.Types?.FirstOrDefault(t => t.DbName.Equals(column.TypeName, StringComparison.OrdinalIgnoreCase));
 
                 if (mapping != null)
-                    return (mapping.IsValueType && column.IsNullable) ? mapping.ClrName + "?" : mapping.ClrName;
+                    return ((mapping.IsNullable || useNullables) && column.IsNullable) ? mapping.ClrName + "?" : mapping.ClrName;
 
                 return column.TypeName;
             }

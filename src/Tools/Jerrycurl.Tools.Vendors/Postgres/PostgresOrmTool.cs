@@ -19,10 +19,9 @@ namespace Jerrycurl.Tools.Vendors.Postgres
 
             DatabaseModelBuilder builder = new DatabaseModelBuilder();
 
-            builder.Model.DefaultSchema = "public";
+            this.AddTypeMappings(builder);
 
-            foreach (var type in this.GetTypeMappings())
-                builder.Model.Types.Add(type);
+            builder.SetFlag("defaultSchema", "public");
 
             using (DbCommand tablesAndColumns = connection.CreateCommand())
             {
@@ -103,44 +102,44 @@ namespace Jerrycurl.Tools.Vendors.Postgres
             }
         }
 
-        private IEnumerable<TypeModel> GetTypeMappings()
+        private void AddTypeMappings(DatabaseModelBuilder builder)
         {
-            yield return new TypeModel("boolean", "bool", true);
-            yield return new TypeModel("smallint", "short", true);
-            yield return new TypeModel("integer", "int", true);
-            yield return new TypeModel("bigint", "long", true);
-            yield return new TypeModel("real", "float", true);
-            yield return new TypeModel("double precision", "double", true);
-            yield return new TypeModel("numeric", "decimal", true);
-            yield return new TypeModel("money", "decimal", true);
-            yield return new TypeModel("text", "string", false);
-            yield return new TypeModel("character varying", "string", false);
-            yield return new TypeModel("character", "string", false);
-            yield return new TypeModel("citext", "string", false);
-            yield return new TypeModel("json", "string", false);
-            yield return new TypeModel("jsonb", "string", false);
-            yield return new TypeModel("xml", "string", false);
-            yield return new TypeModel("name", "string", false);
-            yield return new TypeModel("bit", "System.Collections.BitArray", false);
-            yield return new TypeModel("hstore", "System.Collections.IDictionary<string, string>", false);
-            yield return new TypeModel("uuid", "Guid", true);
-            yield return new TypeModel("cidr", "(System.Net.IPAddress, int)", true);
-            yield return new TypeModel("inet", "System.Net.IPAddress", false);
-            yield return new TypeModel("macaddr", "System.Net.NetworkInformation.PhysicalAddress", true);
-            yield return new TypeModel("date", "DateTime", true);
-            yield return new TypeModel("timestamp", "DateTime", true);
-            yield return new TypeModel("timestamp with time zone", "DateTimeOffset", true);
-            yield return new TypeModel("timestamp without time zone", "DateTime", true);
-            yield return new TypeModel("time", "TimeSpan", true);
-            yield return new TypeModel("time with time zone", "DateTimeOffset", true);
-            yield return new TypeModel("time without time zone", "TimeSpan", true);
-            yield return new TypeModel("interval", "TimeSpan", true);
-            yield return new TypeModel("bytea", "byte[]", false);
-            yield return new TypeModel("oid", "uint", true);
-            yield return new TypeModel("xid", "uint", true);
-            yield return new TypeModel("cid", "uint", true);
-            yield return new TypeModel("oidvector", "uint[]", false);
-            yield return new TypeModel("ARRAY", "Array", false);
+            builder.AddType("boolean", "bool", true);
+            builder.AddType("smallint", "short", true);
+            builder.AddType("integer", "int", true);
+            builder.AddType("bigint", "long", true);
+            builder.AddType("real", "float", true);
+            builder.AddType("double precision", "double", true);
+            builder.AddType("numeric", "decimal", true);
+            builder.AddType("money", "decimal", true);
+            builder.AddType("text", "string", false);
+            builder.AddType("character varying", "string", false);
+            builder.AddType("character", "string", false);
+            builder.AddType("citext", "string", false);
+            builder.AddType("json", "string", false);
+            builder.AddType("jsonb", "string", false);
+            builder.AddType("xml", "string", false);
+            builder.AddType("name", "string", false);
+            builder.AddType("bit", "System.Collections.BitArray", false);
+            builder.AddType("hstore", "System.Collections.IDictionary<string, string>", false);
+            builder.AddType("uuid", "Guid", true);
+            builder.AddType("cidr", "(System.Net.IPAddress, int)", true);
+            builder.AddType("inet", "System.Net.IPAddress", false);
+            builder.AddType("macaddr", "System.Net.NetworkInformation.PhysicalAddress", true);
+            builder.AddType("date", "DateTime", true);
+            builder.AddType("timestamp", "DateTime", true);
+            builder.AddType("timestamp with time zone", "DateTimeOffset", true);
+            builder.AddType("timestamp without time zone", "DateTime", true);
+            builder.AddType("time", "TimeSpan", true);
+            builder.AddType("time with time zone", "DateTimeOffset", true);
+            builder.AddType("time without time zone", "TimeSpan", true);
+            builder.AddType("interval", "TimeSpan", true);
+            builder.AddType("bytea", "byte[]", false);
+            builder.AddType("oid", "uint", true);
+            builder.AddType("xid", "uint", true);
+            builder.AddType("cid", "uint", true);
+            builder.AddType("oidvector", "uint[]", false);
+            builder.AddType("ARRAY", "Array", false);
         }
     }
 }

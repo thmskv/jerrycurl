@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using static Jerrycurl.Tools.Orm.Model.DatabaseModel;
 
@@ -37,6 +38,23 @@ namespace Jerrycurl.Tools.Orm.Model
             });
 
             return table;
+        }
+
+        public void SetFlag(string flag, string value)
+        {
+            this.Model.Flags ??= new Dictionary<string, string>();
+            this.Model.Flags[flag] = value;
+        }
+
+        public TypeModel AddType(string dbName, string clrName, bool isNullable)
+        {
+            this.Model.Types ??= new List<TypeModel>();
+
+            TypeModel newType = new TypeModel() { DbName = dbName, ClrName = clrName, IsNullable = isNullable };
+
+            this.Model.Types.Add(newType);
+
+            return newType;
         }
 
         public ColumnModel AddColumn(string tableSchema, string tableName, string columnName, string typeName = null, bool isNullable = true, bool isIdentity = false, bool ignore = false, bool ignoreTable = false)

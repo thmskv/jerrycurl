@@ -25,10 +25,9 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
 
             DatabaseModelBuilder builder = new DatabaseModelBuilder();
 
-            foreach (var type in this.GetTypeMappings())
-                builder.Model.Types.Add(type);
+            this.AddTypeMappings(builder);
 
-            builder.Model.DefaultSchema = "dbo";
+            builder.SetFlag("defaultSchema", "dbo");
 
             using (DbCommand tablesAndColumns = connection.CreateCommand())
             {
@@ -141,40 +140,40 @@ namespace Jerrycurl.Tools.Vendors.SqlServer
             return false;
         }
 
-        private IEnumerable<TypeModel> GetTypeMappings()
+        private void AddTypeMappings(DatabaseModelBuilder builder)
         {
-            yield return new TypeModel("int", "int", true);
-            yield return new TypeModel("bigint", "long", true);
-            yield return new TypeModel("smallint", "short", true);
-            yield return new TypeModel("tinyint", "byte", true);
-            yield return new TypeModel("bit", "bool", true);
-            yield return new TypeModel("date", "DateTime", true);
-            yield return new TypeModel("datetime", "DateTime", true);
-            yield return new TypeModel("datetime2", "DateTime", true);
-            yield return new TypeModel("smalldatetime", "DateTime", true);
-            yield return new TypeModel("time", "TimeSpan", true);
-            yield return new TypeModel("datetimeoffset", "DateTimeOffset", true);
-            yield return new TypeModel("nvarchar", "string", false);
-            yield return new TypeModel("varchar", "string", false);
-            yield return new TypeModel("text", "string", false);
-            yield return new TypeModel("ntext", "string", false);
-            yield return new TypeModel("char", "string", false);
-            yield return new TypeModel("nchar", "string", false);
-            yield return new TypeModel("varbinary", "byte[]", false);
-            yield return new TypeModel("binary", "byte[]", false);
-            yield return new TypeModel("image", "byte[]", false);
-            yield return new TypeModel("smallmoney", "decimal", true);
-            yield return new TypeModel("money", "decimal", true);
-            yield return new TypeModel("decimal", "decimal", true);
-            yield return new TypeModel("numeric", "decimal", true);
-            yield return new TypeModel("real", "float", true);
-            yield return new TypeModel("float", "double", true);
-            yield return new TypeModel("uniqueidentifier", "Guid", true);
-            yield return new TypeModel("geography", "Microsoft.SqlServer.Types.SqlGeography", false);
-            yield return new TypeModel("geometry", "Microsoft.SqlServer.Types.SqlGeometry", false);
-            yield return new TypeModel("hierarchyid", "Microsoft.SqlServer.Types.SqlHierarchyId", true);
-            yield return new TypeModel("sql_variant", "object", false);
-            yield return new TypeModel("xml", "System.Xml.Linq.XDocument", false);
+            builder.AddType("int", "int", true);
+            builder.AddType("bigint", "long", true);
+            builder.AddType("smallint", "short", true);
+            builder.AddType("tinyint", "byte", true);
+            builder.AddType("bit", "bool", true);
+            builder.AddType("date", "DateTime", true);
+            builder.AddType("datetime", "DateTime", true);
+            builder.AddType("datetime2", "DateTime", true);
+            builder.AddType("smalldatetime", "DateTime", true);
+            builder.AddType("time", "TimeSpan", true);
+            builder.AddType("datetimeoffset", "DateTimeOffset", true);
+            builder.AddType("nvarchar", "string", false);
+            builder.AddType("varchar", "string", false);
+            builder.AddType("text", "string", false);
+            builder.AddType("ntext", "string", false);
+            builder.AddType("char", "string", false);
+            builder.AddType("nchar", "string", false);
+            builder.AddType("varbinary", "byte[]", false);
+            builder.AddType("binary", "byte[]", false);
+            builder.AddType("image", "byte[]", false);
+            builder.AddType("smallmoney", "decimal", true);
+            builder.AddType("money", "decimal", true);
+            builder.AddType("decimal", "decimal", true);
+            builder.AddType("numeric", "decimal", true);
+            builder.AddType("real", "float", true);
+            builder.AddType("float", "double", true);
+            builder.AddType("uniqueidentifier", "Guid", true);
+            builder.AddType("geography", "Microsoft.SqlServer.Types.SqlGeography", false);
+            builder.AddType("geometry", "Microsoft.SqlServer.Types.SqlGeometry", false);
+            builder.AddType("hierarchyid", "Microsoft.SqlServer.Types.SqlHierarchyId", true);
+            builder.AddType("sql_variant", "object", false);
+            builder.AddType("xml", "System.Xml.Linq.XDocument", false);
         }
     }
 }

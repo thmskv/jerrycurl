@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Jerrycurl.Tools.Orm.Model.Json;
 
 namespace Jerrycurl.Tools.Orm.Model
 {
@@ -30,6 +32,17 @@ namespace Jerrycurl.Tools.Orm.Model
                 if (!this.map.ContainsKey(key))
                     this.map.Add(key, dataReader.GetValue(i));
             }
+        }
+
+        public string Serialize()
+        {
+            JsonSerializerOptions options = new JsonSerializerOptions()
+            {
+                WriteIndented = true,
+                Converters = { new TupleConverter() }
+            };
+
+            return JsonSerializer.Serialize(this, options);
         }
 
         public object this[string name]
