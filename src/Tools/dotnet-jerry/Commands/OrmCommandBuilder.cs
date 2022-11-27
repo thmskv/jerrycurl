@@ -169,11 +169,17 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
         {
             Command command = new Command("new", "Create a new .orm configuration file.");
 
-            command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.NoFileOption, this.NamespaceOption, this.OutputOption, this.TransformOption);
+            Option<bool> syncOption = this.Option<bool>(new[] { "--sync" }, "Generate C# classes after creation.");
 
-            this.SetHandler(command, async (_, _, options) =>
+            command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.NoFileOption, this.NamespaceOption, this.OutputOption, this.TransformOption, syncOption);
+
+            this.SetHandler(command, async (ctx, tool, options) =>
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(options.Input));
+                string directory = Path.GetDirectoryName(options.Input);
+                bool sync = ctx.GetValue(syncOption);
+
+                if (directory != "")
+                    Directory.CreateDirectory(directory);
 
                 var data = new
                 {
@@ -191,6 +197,14 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
                 });
 
                 await File.WriteAllTextAsync(options.Input, json, Encoding.UTF8);
+
+                if (sync)
+                {
+                    options.Output ??= $"{options.Input}.cs";
+                    options.Transform ??= $"{options.Input}.js";
+
+                    await tool.BuildAndOutputAsync(options);
+                }
             });
 
             return command;

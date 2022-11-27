@@ -16,6 +16,7 @@ namespace Jerrycurl.Tools.DotNet.Cli
             //args = new[] { "orm", "sync", "-f", @"c:\users\thomas\desktop\Database.orm" };
             //args = new[] { "orm", "transform", "-f", @"c:\users\thomas\desktop\Database.orm" };
             //args = new[] { "orm", "run", "-f", @"c:\users\thomas\desktop\Database.orm", "--snippet", "test" };
+            args = new[] { "orm", "new", "-v", "sqlserver", "-c", "server=.;database=realescort_live;trusted_connection=true;encrypt=false" };
 
             RootCommand rootCommand = new RootCommand();
 
