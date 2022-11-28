@@ -14,6 +14,7 @@ using Jerrycurl.Tools.Vendors;
 using Jerrycurl.Tools.Resources;
 using System.Diagnostics;
 using Jerrycurl.IO;
+using System.Xml;
 
 namespace Jerrycurl.Tools.DotNet.Cli.Commands
 {
@@ -122,6 +123,9 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
                 using DbCommand command = connection.CreateCommand();
 
                 command.CommandText = sql;
+
+                DotNetHost.WriteLine($"Executing...", ConsoleColor.Yellow);
+                DotNetHost.WriteLine(sql, ConsoleColor.DarkRed);
 
                 await foreach (var tuple in tool.QueryAsync(command))
                     Console.WriteLine(tuple.Serialize());
