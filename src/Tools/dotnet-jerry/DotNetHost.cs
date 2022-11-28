@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Jerrycurl.Tools.DotNet.Cli
 {
-    public class DotNetJerryHostV2
+    public class DotNetHost
     {
         public async static Task<int> Main(string[] args)
         {
