@@ -69,7 +69,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
             this.SetHandler(command, async options =>
             {
-                await RazorTool.GenerateAsync(options);
+                await RazorTool.GenerateAsync(options, new ToolConsole());
             });
 
             rootCommand.Add(command);

@@ -35,9 +35,9 @@ namespace Jerrycurl.Tools.Orm
         public async Task BuildAndOutputAsync(OrmToolOptions options, string outputPath = null, CancellationToken cancellationToken = default)
         {
             OrmCodeWriter codeWriter = new OrmCodeWriter();
-            SchemaModel model = await this.BuildAndTransformAsync(options, cancellationToken);
+            SchemaModel schema = await this.BuildAndTransformAsync(options, cancellationToken);
 
-            await codeWriter.WriteAsync(database, outputPath ?? options.Output);
+            await codeWriter.WriteAsync(schema, outputPath ?? options.Output);
         }
 
         public async IAsyncEnumerable<TupleModel> QueryAsync(DbCommand command)

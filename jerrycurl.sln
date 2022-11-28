@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jerrycurl.Vendors.Sqlite", "src\Vendors\Jerrycurl.Vendors.Sqlite\Jerrycurl.Vendors.Sqlite.csproj", "{E932290A-B341-4B91-81C3-101D93A3D82E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jerrycurl.Tools.Common", "src\Tools\Jerrycurl.Tools.Common\Jerrycurl.Tools.Common.csproj", "{3CEE141F-14EF-4816-A524-3E6A42DC6895}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jerrycurl.Tools", "src\Tools\Jerrycurl.Tools\Jerrycurl.Tools.csproj", "{3CEE141F-14EF-4816-A524-3E6A42DC6895}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-jerry", "src\Tools\dotnet-jerry\dotnet-jerry.csproj", "{195AF90B-B4F3-441A-BD6F-333858A84FC5}"
 EndProject
@@ -97,7 +97,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{6E68DF
 		eng\nuspec\Jerrycurl.Mvc.nuspec = eng\nuspec\Jerrycurl.Mvc.nuspec
 		eng\nuspec\Jerrycurl.nuspec = eng\nuspec\Jerrycurl.nuspec
 		eng\nuspec\Jerrycurl.Relations.nuspec = eng\nuspec\Jerrycurl.Relations.nuspec
-		eng\nuspec\Jerrycurl.Tools.Common.nuspec = eng\nuspec\Jerrycurl.Tools.Common.nuspec
+		eng\nuspec\Jerrycurl.Tools.nuspec = eng\nuspec\Jerrycurl.Tools.nuspec
 		eng\nuspec\Jerrycurl.Tools.Vendors.nuspec = eng\nuspec\Jerrycurl.Tools.Vendors.nuspec
 		eng\nuspec\Jerrycurl.Vendors.MySql.nuspec = eng\nuspec\Jerrycurl.Vendors.MySql.nuspec
 		eng\nuspec\Jerrycurl.Vendors.Oracle.nuspec = eng\nuspec\Jerrycurl.Vendors.Oracle.nuspec

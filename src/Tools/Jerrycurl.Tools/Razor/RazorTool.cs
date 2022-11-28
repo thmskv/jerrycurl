@@ -18,7 +18,7 @@ namespace Jerrycurl.Tools.Razor
 {
     public static class RazorTool
     {
-        public static async Task GenerateAsync(RazorToolOptions options)
+        public static async Task GenerateAsync(RazorToolOptions options, ToolConsole console)
         {
             string projectDirectory = options.ProjectDirectory ?? Environment.CurrentDirectory;
             string rootNamespace = options.RootNamespace;
@@ -66,10 +66,11 @@ namespace Jerrycurl.Tools.Razor
 
             if (!options.NoClean && Directory.Exists(outputDirectory))
             {
-                //DotNetJerryHostV2.WriteLine("Cleaning...", ConsoleColor.Yellow);
-
-                foreach (string oldFile in Directory.GetFiles(outputDirectory, "*.cssql.cs"))
-                    File.Delete(oldFile);
+                console.Run("Cleaning", () =>
+                {
+                    foreach (string oldFile in Directory.GetFiles(outputDirectory, "*.cssql.cs"))
+                        File.Delete(oldFile);
+                });
             }
 
             if (project.Items.Any())
@@ -81,25 +82,26 @@ namespace Jerrycurl.Tools.Razor
                 RazorParser parser = new RazorParser();
                 RazorGenerator generator = new RazorGenerator(generatorOptions);
 
-                //DotNetJerryHostV2.WriteLine("Parsing...", ConsoleColor.Yellow);
-                IList<RazorPage> parserResult = parser.Parse(project).ToList();
+                IList<RazorPage> parserResult = console.Run("Parsing", () => parser.Parse(project).ToList());
 
-                //DotNetJerryHostV2.WriteLine("Transpiling...", ConsoleColor.Yellow);
-                foreach (RazorPage razorPage in parserResult)
+                await console.RunAsync("Transpiling", async () =>
                 {
-                    ProjectionResult result = generator.Generate(razorPage.Data);
+                    foreach (RazorPage razorPage in parserResult)
+                    {
+                        ProjectionResult result = generator.Generate(razorPage.Data);
 
-                    using (StreamWriter writer = new StreamWriter(razorPage.IntermediatePath, append: false, Encoding.UTF8))
-                        await writer.WriteAsync(result.Content);
-                }
+                        using (StreamWriter writer = new StreamWriter(razorPage.IntermediatePath, append: false, Encoding.UTF8))
+                            await writer.WriteAsync(result.Content);
+                    }
+                });
 
                 string filesString = parserResult.Count + " " + (parserResult.Count == 1 ? "file" : "files");
                 string outputString = PathHelper.MakeRelativeOrAbsolutePath(project.ProjectDirectory, outputDirectory);
 
-                //DotNetJerryHostV2.WriteLine($"Transpiled {filesString} in {stopwatch.ElapsedMilliseconds:0} ms into '{outputString}'", ConsoleColor.Green);
+                console.WriteLine($"Transpiled {filesString} in {stopwatch.ElapsedMilliseconds:0} ms into '{outputString}'", ConsoleColor.Green);
             }
-            //else
-            //    DotNetJerryHostV2.WriteLine($"No files found.", ConsoleColor.Yellow);
+            else
+                console.WriteLine($"No files found.", ConsoleColor.Yellow);
 
             string MakeAbsolutePath(string path) => PathHelper.MakeAbsolutePath(project.ProjectDirectory, path);
 
