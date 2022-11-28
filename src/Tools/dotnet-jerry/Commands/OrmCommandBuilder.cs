@@ -103,17 +103,19 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
             Command command = new Command("run", "Run SQL queries and commands against a database.");
 
             Option<string> snippetOption = this.Option<string>(new[] { "--snippet" }, "Name of a snippet to execute.");
-            Option<string> sqlOption = this.Option<string>(new[] { "--sql" }, "SQL to execute.");
+            Option<string> sqlOption = this.Option<string>(new[] { "--sql" }, "File to read and execute SQL from.");
+            Option<string> textOption = this.Option<string>(new[] { "--text" }, "SQL string to execute.");
 
             command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.TransformOption);
-            command.Add(snippetOption, sqlOption);
+            command.Add(snippetOption, sqlOption, textOption);
 
             this.SetHandler(command, async (ctx, tool, options) =>
             {
                 string snippetValue = ctx.GetValue(snippetOption);
+                string textValue = ctx.GetValue(textOption);
                 string sqlValue = ctx.GetValue(sqlOption);
 
-                string sql = options.Snippets?.GetValueOrDefault(snippetValue) ?? sqlValue;
+                string sql = options.Snippets?.GetValueOrDefault(snippetValue) ?? textValue ?? await File.ReadAllTextAsync(sqlValue);
 
                 await using DbConnection connection = await tool.OpenConnectionAsync(options);
 
@@ -126,6 +128,21 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
             });
 
             return command;
+
+            string GetSqlPreviewText(string sqlText)
+            {
+                StringBuilder builder = new StringBuilder();
+
+                for (int i = 0; i < sqlText.Length && builder.Length <= 30; i++)
+                {
+                    if (!char.IsWhiteSpace(sqlText[i]))
+                        builder.Append(sqlText[i]);
+                    else if (builder.Length > 0 && !char.IsWhiteSpace(builder[builder.Length - 1]))
+                        builder.Append(' ');
+                }
+
+                return builder.ToString();
+            }
         }
 
         private Command GetDiffCommand()
