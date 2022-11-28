@@ -11,6 +11,7 @@ namespace Jerrycurl.Tools.Razor
         public string RootNamespace { get; set; }
         public string OutputDirectory { get; set; }
         public bool NoClean { get; set; }
+        public bool Verbose { get; set; }
         public List<string> Imports { get; set; } = new List<string>();
         public List<string> Directories { get; set; } = new List<string>();
         public List<string> Files { get; set; } = new List<string>();

@@ -7,8 +7,18 @@ namespace Jerrycurl.Tools.DotNet.Cli
 {
     public class DotNetHost
     {
+        internal static Option<bool> VerboseOption { get; } = new Option<bool>("--verbose", "Show verbose output.");
+
         public async static Task<int> Main(string[] args)
         {
+            var console = new ToolConsole();
+
+            console.Run("Parsing", () =>
+            {
+                System.Threading.Thread.Sleep(500);
+            });
+
+            return 0;
             //Environment.CurrentDirectory = "C:\\Users\\thomas\\Desktop\\testx";
 
             //args = new[] { "orm", "sync", "--flags", "useNullables" };
@@ -20,9 +30,7 @@ namespace Jerrycurl.Tools.DotNet.Cli
 
             RootCommand rootCommand = new RootCommand();
 
-            Option<bool> verboseOption = new Option<bool>("--verbose", "Show verbose output.");
-
-            rootCommand.AddGlobalOption(verboseOption);
+            rootCommand.AddGlobalOption(VerboseOption);
 
             new OrmCommandBuilder().Build(rootCommand);
             new RazorCommandBuilder().Build(rootCommand);

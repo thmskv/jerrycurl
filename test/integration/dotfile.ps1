@@ -199,7 +199,7 @@ function Prepare-Database
     $toolPath = Get-TempPath $Vendor $TargetFramework $TempPath
 
     Push-Location $toolPath
-    .\jerry run -v "$Vendor" -c "$ConnectionString" --file "$sql"
+    .\jerry orm run -v "$Vendor" -c "$ConnectionString" --sql "$sql"
     if ($LastExitCode -ne 0) { Pop-Location; throw "Error running 'jerry run'." }
     Pop-Location
 }

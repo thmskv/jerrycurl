@@ -153,9 +153,9 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
                 byte[] rightBytes = await File.ReadAllBytesAsync(rightPath);
 
                 if (leftBytes.SequenceEqual(rightBytes))
-                    DotNetJerryHostV2.WriteLine("Files are equal", ConsoleColor.Green);
+                    DotNetHost.WriteLine("Files are equal", ConsoleColor.Green);
                 else
-                    DotNetJerryHostV2.WriteLine("Files are not equal", ConsoleColor.Red);
+                    DotNetHost.WriteLine("Files are not equal", ConsoleColor.Red);
             });
 
             return command;

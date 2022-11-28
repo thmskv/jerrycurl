@@ -37,35 +37,28 @@ namespace Jerrycurl.Tools.Razor
                 IntermediateDirectory = outputDirectory,
             };
 
-            foreach (string file in options.Files)
+            console.Run("Collecting files", () =>
             {
-                if (!HasVirtualFormat(file, out var fullPath, out var projectPath))
-                    project.AddItem(file);
-                else if (!string.IsNullOrEmpty(fullPath))
-                    project.Items.Add(new RazorProjectItem() { FullPath = MakeAbsolutePath(fullPath), ProjectPath = projectPath });
-            }
+                foreach (string file in options.Files)
+                {
+                    if (!HasVirtualFormat(file, out var fullPath, out var projectPath))
+                        project.AddItem(file);
+                    else if (!string.IsNullOrEmpty(fullPath))
+                        project.Items.Add(new RazorProjectItem() { FullPath = MakeAbsolutePath(fullPath), ProjectPath = projectPath });
+                }
 
-            foreach (string dir in options.Directories)
-            {
-                RazorProject fromDir = RazorProject.FromDirectory(MakeAbsolutePath(dir));
+                foreach (string dir in options.Directories)
+                {
+                    RazorProject fromDir = RazorProject.FromDirectory(MakeAbsolutePath(dir));
 
-                foreach (RazorProjectItem item in fromDir.Items)
-                    project.Items.Add(item);
-            }
-
-            RazorGeneratorOptions generatorOptions = new RazorGeneratorOptions()
-            {
-                TemplateCode = ResourceHelper.GetRazorSkeletonString(),
-                Imports = RazorFacts.DefaultNamespaces.Select(ns => new RazorFragment() { Text = ns }).ToList(),
-            };
-
-            foreach (string import in options.Imports)
-                generatorOptions.Imports.Add(new RazorFragment() { Text = import });
-
+                    foreach (RazorProjectItem item in fromDir.Items)
+                        project.Items.Add(item);
+                }
+            });
 
             if (!options.NoClean && Directory.Exists(outputDirectory))
             {
-                console.Run("Cleaning", () =>
+                console.Run("Cleaning output", () =>
                 {
                     foreach (string oldFile in Directory.GetFiles(outputDirectory, "*.cssql.cs"))
                         File.Delete(oldFile);
@@ -79,11 +72,19 @@ namespace Jerrycurl.Tools.Razor
                 Directory.CreateDirectory(outputDirectory);
 
                 RazorParser parser = new RazorParser();
+                IList<RazorPage> parserResult = console.Run("Parsing files", () => parser.Parse(project).ToList());
+
+                RazorGeneratorOptions generatorOptions = new RazorGeneratorOptions()
+                {
+                    TemplateCode = ResourceHelper.GetRazorSkeletonString(),
+                    Imports = RazorFacts.DefaultNamespaces.Select(ns => new RazorFragment() { Text = ns }).ToList(),
+                };
                 RazorGenerator generator = new RazorGenerator(generatorOptions);
 
-                IList<RazorPage> parserResult = console.Run("Parsing", () => parser.Parse(project).ToList());
+                foreach (string import in options.Imports)
+                    generatorOptions.Imports.Add(new RazorFragment() { Text = import });
 
-                await console.RunAsync("Transpiling", async () =>
+                await console.RunAsync("Transpiling into C#", async () =>
                 {
                     foreach (RazorPage razorPage in parserResult)
                     {

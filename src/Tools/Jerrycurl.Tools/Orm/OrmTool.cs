@@ -108,41 +108,42 @@ namespace Jerrycurl.Tools.Orm
 
         public async Task<DbConnection> OpenConnectionAsync(OrmToolOptions options)
         {
-            DbConnection connection = this.GetConnection(options);
+            //return await console.RunAsync("Connecting to database", async () =>
+            //{
+                DbConnection connection = this.GetConnection(options);
 
-            if (connection == null)
-                throw new Exception("Connection returned null.");
+                if (connection == null)
+                    throw new Exception("Connection returned null.");
 
-            try
-            {
-                connection.ConnectionString = options.Connection;
-            }
-            catch (Exception ex)
-            {
-                connection.Dispose();
+                try
+                {
+                    connection.ConnectionString = options.Connection;
+                }
+                catch (Exception ex)
+                {
+                    connection.Dispose();
 
-                throw new Exception("Invalid connection string: " + ex.Message, ex);
-            }
+                    throw new Exception("Invalid connection string: " + ex.Message, ex);
+                }
 
-            //if (!string.IsNullOrEmpty(connection.Database))
-            //    DotNetJerryHostV2.WriteLine($"Connecting to '{connection.Database}'...", ConsoleColor.Yellow);
-            //else
-            //    DotNetJerryHostV2.WriteLine("Connecting to database...", ConsoleColor.Yellow);
+                //if (!string.IsNullOrEmpty(connection.Database))
+                //    console.WriteLine($"Connecting to '{connection.Database}'...", ConsoleColor.Yellow);
+                //else
+                //    console.WriteLine("Connecting to database...", ConsoleColor.Yellow);
 
-            try
-            {
-                await connection.OpenAsync().ConfigureAwait(false);
+                try
+                {
+                    await connection.OpenAsync().ConfigureAwait(false);
 
-                return connection;
-            }
-            catch (Exception ex)
-            {
-                connection.Dispose();
+                    return connection;
+                }
+                catch (Exception ex)
+                {
+                    connection.Dispose();
 
-                throw new Exception("Unable to open connection: " + ex.Message, ex);
-            }
+                    throw new Exception("Unable to open connection: " + ex.Message, ex);
+                }
+            //});
         }
-
-
     }
 }

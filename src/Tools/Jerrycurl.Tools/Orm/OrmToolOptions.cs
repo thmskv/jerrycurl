@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.IO;
 using Jerrycurl.Tools.Orm.Model.Json;
+using System.Text.Json.Serialization;
 
 namespace Jerrycurl.Tools.Orm
 {
@@ -11,6 +12,7 @@ namespace Jerrycurl.Tools.Orm
         public string Name { get; set; }
         public string Vendor { get; set; }
         public string Connection { get; set; }
+        [JsonIgnore]
         public string Input { get; set; }
         public string Output { get; set; }
         public string Transform { get; set; }
