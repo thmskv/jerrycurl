@@ -286,7 +286,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
                 options.Vendor = vendorValue ?? options.Vendor;
                 options.Connection = connectionValue ?? options.Connection;
                 options.Output = outputValue ?? options.Output;
-                options.Namespace = outputValue ?? options.Namespace;
+                options.Namespace = namespaceValue ?? options.Namespace;
                 options.Transform = transformValue ?? options.Transform;
                 options.Flags ??= new Dictionary<string, string>();
 
