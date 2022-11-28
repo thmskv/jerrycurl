@@ -52,17 +52,17 @@ namespace Jerrycurl.Tools.Orm
             }
         }
 
-        private void CreateDefaultClrModel(OrmToolOptions options, SchemaModel database)
+        private void CreateDefaultClrModel(OrmToolOptions options, SchemaModel schema)
         {
-            database.Imports ??= new List<string>();
-            database.Imports.Add("global::System");
-            database.Imports.Add("global::Jerrycurl.Cqs.Metadata.Annotations");
-            database.Imports.Add("global::Jerrycurl.Mvc.Metadata.Annotations");
+            schema.Imports ??= new List<string>();
+            schema.Imports.Add("global::System");
+            schema.Imports.Add("global::Jerrycurl.Cqs.Metadata.Annotations");
+            schema.Imports.Add("global::Jerrycurl.Mvc.Metadata.Annotations");
 
-            string defaultSchema = database.Flags?.GetValueOrDefault("defaultSchema");
-            bool useNullables = (options.Flags?.GetValueOrDefault("useNullables") == "true");
+            string defaultSchema = schema.Flags?.GetValueOrDefault("defaultSchema");
+            bool useNullables = (options.Flags?.GetValueOrDefault("useNullables") != "false");
 
-            foreach (TableModel table in database.Tables)
+            foreach (TableModel table in schema.Tables)
             {
                 table.Clr = new ClassModel()
                 {
@@ -97,7 +97,7 @@ namespace Jerrycurl.Tools.Orm
 
             string GetColumnTypeName(ColumnModel column)
             {
-                TypeModel mapping = database.Types?.FirstOrDefault(t => t.DbName.Equals(column.TypeName, StringComparison.OrdinalIgnoreCase));
+                TypeModel mapping = schema.Types?.FirstOrDefault(t => t.DbName.Equals(column.TypeName, StringComparison.OrdinalIgnoreCase));
 
                 if (mapping != null)
                     return ((mapping.IsNullable || useNullables) && column.IsNullable) ? mapping.ClrName + "?" : mapping.ClrName;
