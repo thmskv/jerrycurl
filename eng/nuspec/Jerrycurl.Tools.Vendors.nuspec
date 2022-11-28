@@ -17,7 +17,7 @@
         <description>Vendor tooling for Jerrycurl CLI.</description>
         <dependencies>
 			<group targetFramework="net6.0">
-				<dependency id="Jerrycurl.Tools.Common" version="$PackageVersion$" />
+				<dependency id="Jerrycurl.Tools" version="$PackageVersion$" />
 				<dependency id="$MySqlPackageId$" version="$MySqlPackageVersion$" />
 				<dependency id="$OraclePackageId$" version="$OraclePackageVersion$" />
 				<dependency id="$PostgresPackageId$" version="$PostgresPackageVersion$" />
