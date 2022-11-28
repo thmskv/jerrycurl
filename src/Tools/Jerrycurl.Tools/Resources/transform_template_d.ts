@@ -1,7 +1,8 @@
 ﻿declare interface SchemaModel {
     tables: TableModel[]
     imports: string[]
-    defaultSchema: string
+    types: TypeModel[]
+    flags: { [key: string]: string }
 }
 
 declare interface TableModel {
@@ -49,4 +50,10 @@ declare interface ReferenceModel {
     name: string
     keyName: string
     keyIndex: number
+}
+
+declare interface TypeModel {
+    dbName: string
+    clrName: string
+    isNullable: boolean
 }

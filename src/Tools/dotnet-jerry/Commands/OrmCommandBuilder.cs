@@ -204,23 +204,6 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
             return command;
         }
 
-
-
-        private Option<T> Option<T>(string[] aliases, string description, string defaultValue = null, bool multiple = false)
-        {
-            var option = new Option<T>(aliases[0], description)
-            {
-                AllowMultipleArgumentsPerToken = multiple,
-            };
-
-            option.SetDefaultValue(defaultValue);
-
-            foreach (var alias in aliases.Skip(1))
-                option.AddAlias(alias);
-
-            return option;
-        }
-
         private Command GetSyncCommand()
         {
             Command command = new Command("sync", "Generate C# classes from a database schema.");
@@ -236,6 +219,24 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
             });
 
             return command;
+        }
+
+
+
+
+        private Option<T> Option<T>(string[] aliases, string description, string defaultValue = null, bool multiple = false)
+        {
+            var option = new Option<T>(aliases[0], description)
+            {
+                AllowMultipleArgumentsPerToken = multiple,
+            };
+
+            option.SetDefaultValue(defaultValue);
+
+            foreach (var alias in aliases.Skip(1))
+                option.AddAlias(alias);
+
+            return option;
         }
 
         private void SetHandler(Command command, Func<InvocationContext, OrmTool, OrmToolOptions, Task> handler)

@@ -69,17 +69,6 @@ namespace Jerrycurl.Tools.Orm.Model
             public string DbName { get; set; }
             public string ClrName { get; set; }
             public bool IsNullable { get; set; }
-
-            public TypeModel()
-            {
-
-            }
-            public TypeModel(string dbName, string clrName, bool isNullable)
-            {
-                this.DbName = dbName;
-                this.ClrName = clrName;
-                this.IsNullable = isNullable;
-            }
         }
     }
 }
