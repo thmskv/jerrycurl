@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.Common;
+﻿using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using Jerrycurl.Tools.Orm;
@@ -9,7 +8,6 @@ using System.Data.SqlClient;
 #else
 using Microsoft.Data.SqlClient;
 #endif
-using TypeModel = Jerrycurl.Tools.Orm.Model.SchemaModel.TypeModel;
 
 namespace Jerrycurl.Tools.Vendors.SqlServer
 {

@@ -12,7 +12,6 @@ using Jerrycurl.Relations.Metadata;
 using System.Drawing;
 using Jerrycurl.Cqs.Test.Metadata;
 using Jerrycurl.Test.Extensions;
-using Jerrycurl.Collections;
 using Jerrycurl.Cqs.Test.Models.Views;
 using Jerrycurl.Cqs.Test.Models.Custom;
 using Jerrycurl.Test.Models.Database;

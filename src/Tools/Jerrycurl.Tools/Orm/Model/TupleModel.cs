@@ -2,9 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Jerrycurl.Tools.Orm.Model.Json;
 
 namespace Jerrycurl.Tools.Orm.Model

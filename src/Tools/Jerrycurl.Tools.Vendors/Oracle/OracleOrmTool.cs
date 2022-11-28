@@ -1,7 +1,5 @@
 ﻿using Jerrycurl.Tools.Orm;
-using static Jerrycurl.Tools.Orm.Model.SchemaModel;
 using Oracle.ManagedDataAccess.Client;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Text.RegularExpressions;
 using System.Threading;

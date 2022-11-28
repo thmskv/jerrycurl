@@ -4,10 +4,8 @@ using Jerrycurl.Test.Extensions;
 using Jerrycurl.Test.Project.Accessors;
 using Jerrycurl.Test.Project.Models;
 using Jerrycurl.Vendors.SqlServer.Test.Models;
-using Shouldly;
 using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 
 namespace Jerrycurl.Vendors.SqlServer.Test
 {

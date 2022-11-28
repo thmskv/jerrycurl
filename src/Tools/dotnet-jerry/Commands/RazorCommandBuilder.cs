@@ -2,22 +2,7 @@
 using System.Collections.Generic;
 using System.CommandLine;
 using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Text.Json;
 using System.Threading.Tasks;
-using System.IO;
-using System.CommandLine.Invocation;
-using Jerrycurl.CodeAnalysis.Projection;
-using Jerrycurl.CodeAnalysis.Razor.Generation;
-using Jerrycurl.CodeAnalysis.Razor.Parsing;
-using Jerrycurl.CodeAnalysis.Razor.ProjectSystem;
-using Jerrycurl.Facts;
-using Jerrycurl.IO;
-using System.Diagnostics;
-using Jerrycurl.Tools.Resources;
-using Jerrycurl.Tools.Orm;
-using Jerrycurl.Tools.Vendors;
 using Jerrycurl.Tools.Razor;
 
 namespace Jerrycurl.Tools.DotNet.Cli.Commands

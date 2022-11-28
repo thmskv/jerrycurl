@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.CommandLine;
+﻿using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jerrycurl.Tools.Orm;
 
 namespace Jerrycurl.Tools.DotNet.Cli.Commands
 {

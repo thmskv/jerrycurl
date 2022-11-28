@@ -1,11 +1,8 @@
 ﻿using Jerrycurl.Tools.Orm;
-using static Jerrycurl.Tools.Orm.Model.SchemaModel;
 using MySql.Data.MySqlClient;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
-using Google.Protobuf.WellKnownTypes;
 using Jerrycurl.Tools.Orm.Model;
 
 namespace Jerrycurl.Tools.Vendors.MySql

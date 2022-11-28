@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jerrycurl.Tools.Orm;
+﻿using Jerrycurl.Tools.Orm;
 using Jerrycurl.Tools.Vendors.MySql;
 using Jerrycurl.Tools.Vendors.Oracle;
 using Jerrycurl.Tools.Vendors.Postgres;

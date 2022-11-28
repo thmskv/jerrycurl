@@ -1,10 +1,8 @@
 ﻿using Npgsql;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using Jerrycurl.Tools.Orm.Model;
-using static Jerrycurl.Tools.Orm.Model.SchemaModel;
 using Jerrycurl.Tools.Orm;
 
 namespace Jerrycurl.Tools.Vendors.Postgres

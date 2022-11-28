@@ -8,16 +8,11 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.IO;
 using System.CommandLine.Invocation;
-using Jerrycurl.Tools.Orm.Model;
 using Jerrycurl.Tools.Orm;
-using Jerrycurl.Reflection;
 using System.Data.Common;
-using Jerrycurl.Tools.Vendors.SqlServer;
 using Jerrycurl.Tools.Vendors;
 using Jerrycurl.Tools.Resources;
 using System.Diagnostics;
-using System.Numerics;
-using System.Drawing;
 using Jerrycurl.IO;
 
 namespace Jerrycurl.Tools.DotNet.Cli.Commands

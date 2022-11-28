@@ -2,7 +2,6 @@
 using Jerrycurl.Collections;
 using Jerrycurl.IO;
 using Jerrycurl.Tools.Orm.Model;
-using System;
 using System.IO;
 using System.Linq;
 using System.Text;

@@ -9,7 +9,6 @@ using Jerrycurl.CodeAnalysis.Projection;
 using Jerrycurl.CodeAnalysis.Razor.Generation;
 using Jerrycurl.CodeAnalysis.Razor.Parsing;
 using Jerrycurl.CodeAnalysis.Razor.ProjectSystem;
-using Jerrycurl.CodeAnalysis;
 using Jerrycurl.Facts;
 using Jerrycurl.IO;
 using Jerrycurl.Tools.Resources;

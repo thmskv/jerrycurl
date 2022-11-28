@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using Jerrycurl.Tools.Orm;
-using static Jerrycurl.Tools.Orm.Model.SchemaModel;
 using Jerrycurl.Tools.Orm.Model;
 
 namespace Jerrycurl.Tools.Vendors.Sqlite
