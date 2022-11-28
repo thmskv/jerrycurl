@@ -10,6 +10,7 @@ using Jerrycurl.CodeAnalysis.Razor.Generation;
 using Jerrycurl.CodeAnalysis.Razor.Parsing;
 using Jerrycurl.CodeAnalysis.Razor.ProjectSystem;
 using Jerrycurl.Facts;
+using Jerrycurl.IO;
 using Jerrycurl.Reflection;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -46,7 +47,7 @@ namespace Jerrycurl.Build.Razor
                 RazorGenerator generator = new RazorGenerator(this.CreateGeneratorOptions());
                 ProjectionResult result = generator.Generate(razorPage.Data);
 
-                Directory.CreateDirectory(Path.GetDirectoryName(razorPage.IntermediatePath));
+                PathHelper.EnsureDirectory(razorPage.IntermediatePath);
                 File.WriteAllText(razorPage.IntermediatePath, result.Content, Encoding.UTF8);
 
                 this.PrintPageData(razorPage, razorPage.IntermediatePath);
