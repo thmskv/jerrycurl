@@ -20,6 +20,10 @@ namespace Jerrycurl.Tools.DotNet.Cli
 
             RootCommand rootCommand = new RootCommand();
 
+            Option<bool> verboseOption = new Option<bool>("--verbose", "Show verbose output.");
+
+            rootCommand.AddGlobalOption(verboseOption);
+
             new OrmCommandBuilder().Build(rootCommand);
             new RazorCommandBuilder().Build(rootCommand);
 
