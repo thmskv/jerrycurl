@@ -4,6 +4,7 @@
         <OutputType>exe</OutputType>
         <JerrycurlVerbose>true</JerrycurlVerbose>
         <WarningsAsErrors>true</WarningsAsErrors>
+        <LangVersion>8.0</LangVersion>
     </PropertyGroup>
 
   <ItemGroup>
