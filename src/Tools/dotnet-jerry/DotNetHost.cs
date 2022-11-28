@@ -11,14 +11,6 @@ namespace Jerrycurl.Tools.DotNet.Cli
 
         public async static Task<int> Main(string[] args)
         {
-            var console = new ToolConsole();
-
-            console.Run("Parsing", () =>
-            {
-                System.Threading.Thread.Sleep(500);
-            });
-
-            return 0;
             //Environment.CurrentDirectory = "C:\\Users\\thomas\\Desktop\\testx";
 
             //args = new[] { "orm", "sync", "--flags", "useNullables" };
