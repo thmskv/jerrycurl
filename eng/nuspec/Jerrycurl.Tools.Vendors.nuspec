@@ -14,7 +14,7 @@
         <tags>$PackageTags$</tags>
         <repository type="git" url="$RepositoryUrl$" commit="$GitCommitId$" />
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Vendor tooling for Jerrycurl CLI.</description>
+        <description>Vendor support for Jerrycurl CLI.</description>
         <dependencies>
 			<group targetFramework="net6.0">
 				<dependency id="Jerrycurl.Tools" version="$PackageVersion$" />
