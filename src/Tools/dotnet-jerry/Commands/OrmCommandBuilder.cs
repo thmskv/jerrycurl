@@ -15,6 +15,7 @@ using Jerrycurl.Tools.Resources;
 using System.Diagnostics;
 using Jerrycurl.IO;
 using System.Xml;
+using Jerrycurl.Tools.Orm.Model;
 
 namespace Jerrycurl.Tools.DotNet.Cli.Commands
 {
@@ -118,7 +119,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
                 string sql = options.Snippets?.GetValueOrDefault(snippetValue) ?? textValue ?? await File.ReadAllTextAsync(sqlValue);
 
-                await using DbConnection connection = await tool.OpenConnectionAsync(options);
+                await using DbConnection connection = await tool.OpenConnectionAsync(options, new ToolConsole());
 
                 using DbCommand command = connection.CreateCommand();
 
@@ -168,7 +169,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
                 else
                     await File.WriteAllTextAsync(leftPath, "");
 
-                await tool.BuildAndOutputAsync(options, rightPath);
+                await this.BuildAndWriteAsync(tool, options, rightPath);
 
                 byte[] leftBytes = await File.ReadAllBytesAsync(leftPath);
                 byte[] rightBytes = await File.ReadAllBytesAsync(rightPath);
@@ -218,7 +219,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
                     options.Output ??= $"{options.Input}.cs";
                     options.Transform ??= $"{options.Input}.js";
 
-                    await tool.BuildAndOutputAsync(options);
+                    await this.BuildAndWriteAsync(tool, options);
                 }
             });
 
@@ -236,7 +237,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
                 options.Output ??= $"{options.Input}.cs";
                 options.Transform ??= $"{options.Input}.js";
 
-                await tool.BuildAndOutputAsync(options);
+                await this.BuildAndWriteAsync(tool, options);
             });
 
             return command;
@@ -260,6 +261,12 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
             return option;
         }
 
+        private async Task BuildAndWriteAsync(OrmTool tool, OrmToolOptions options, string outputPath = null)
+        {
+            SchemaModel schema = await tool.BuildAsync(options, new ToolConsole());
+
+            await tool.WriteAsync(schema, options, new ToolConsole());
+        }
         private void SetHandler(Command command, Func<InvocationContext, OrmTool, OrmToolOptions, Task> handler)
         {
             command.SetHandler(async context =>

@@ -11,10 +11,8 @@ namespace Jerrycurl.Tools.Vendors.MySql
     {
         protected override DbConnection GetConnection(OrmToolOptions options) => new MySqlConnection(options.Connection);
 
-        protected override async Task<SchemaModel> BuildSchemaAsync(SchemaBuilder builder, CancellationToken cancellationToken = default)
+        protected override async Task<SchemaModel> BuildSchemaAsync(DbConnection connection, SchemaBuilder builder, CancellationToken cancellationToken = default)
         {
-            await using DbConnection connection = await this.OpenConnectionAsync(builder.Options);
-
             this.AddTypeMappings(builder);
 
             using (DbCommand tablesAndColumns = connection.CreateCommand())

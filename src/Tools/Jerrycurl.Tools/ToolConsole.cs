@@ -17,7 +17,7 @@ namespace Jerrycurl.Tools
 
         public async Task<T> RunAsync<T>(string action, Func<Task<T>> asyncTask)
         {
-            this.Write($"- {action}...");
+            this.Write($"> {action}...");
 
             try
             {
@@ -36,7 +36,7 @@ namespace Jerrycurl.Tools
 
         public T Run<T>(string action, Func<T> task)
         {
-            this.Write($"- {action}...");
+            this.Write($"> {action}...");
 
             try
             {

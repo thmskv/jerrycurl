@@ -6,7 +6,7 @@ namespace Jerrycurl.Tools
     {
         public int ErrorCode { get; set; }
 
-        public ToolException(string message, int errorCode, Exception innerException)
+        public ToolException(string message, int errorCode, Exception innerException = null)
             : base(message, innerException)
         {
             this.ErrorCode = errorCode;

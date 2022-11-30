@@ -11,7 +11,7 @@ namespace Jerrycurl.Tools.Orm
 {
     internal class OrmCodeWriter
     {
-        public async Task WriteAsync(SchemaModel schema, string writePath)
+        public async Task WriteAsync(SchemaModel schema, string writePath, ToolConsole console)
         {
             PathHelper.EnsureDirectory(writePath);
 

@@ -15,28 +15,35 @@ namespace Jerrycurl.Tools.Orm
     public abstract class OrmTool
     {
         protected abstract DbConnection GetConnection(OrmToolOptions options);
-        protected abstract Task BuildSchemaAsync(SchemaBuilder builder, CancellationToken cancellationToken = default);
+        protected abstract Task BuildSchemaAsync(DbConnection connection, SchemaBuilder builder, CancellationToken cancellationToken = default);
 
-        public async Task<SchemaModel> BuildAndTransformAsync(OrmToolOptions options, CancellationToken cancellationToken = default)
+        public async Task<SchemaModel> BuildAsync(OrmToolOptions options, ToolConsole console, CancellationToken cancellationToken = default)
         {
-            SchemaBuilder builder = new SchemaBuilder(options);
-            OrmTransformer transformer = new OrmTransformer();
+            using DbConnection connection = await this.OpenConnectionAsync(options, console);
 
-            await this.BuildSchemaAsync(builder, cancellationToken);
+            return await console.RunAsync("Building schema", async () =>
+            {
+                SchemaBuilder builder = new SchemaBuilder(options);
+                OrmTransformer transformer = new OrmTransformer();
 
-            this.CreateDefaultClrModel(options, builder.Model);
+                await this.BuildSchemaAsync(connection, builder, cancellationToken);
 
-            SchemaModel transformed = await transformer.TransformAsync(options, builder.Model);
+                this.CreateDefaultClrModel(options, builder.Model);
 
-            return transformed;
+                SchemaModel transformed = await transformer.TransformAsync(options, builder.Model);
+
+                return transformed;
+            });
         }
 
-        public async Task BuildAndOutputAsync(OrmToolOptions options, string outputPath = null, CancellationToken cancellationToken = default)
+        public async Task WriteAsync(SchemaModel schema, OrmToolOptions options, ToolConsole console, string outputPath = null, CancellationToken cancellationToken = default)
         {
-            OrmCodeWriter codeWriter = new OrmCodeWriter();
-            SchemaModel schema = await this.BuildAndTransformAsync(options, cancellationToken);
+            await console.RunAsync("Writing to file", async () =>
+            {
+                OrmCodeWriter codeWriter = new OrmCodeWriter();
 
-            await codeWriter.WriteAsync(schema, outputPath ?? options.Output);
+                await codeWriter.WriteAsync(schema, outputPath ?? options.Output, console);
+            });
         }
 
         public async IAsyncEnumerable<TupleModel> QueryAsync(DbCommand command)
@@ -106,14 +113,14 @@ namespace Jerrycurl.Tools.Orm
             }
         }
 
-        public async Task<DbConnection> OpenConnectionAsync(OrmToolOptions options)
+        public async Task<DbConnection> OpenConnectionAsync(OrmToolOptions options, ToolConsole console)
         {
-            //return await console.RunAsync("Connecting to database", async () =>
-            //{
+            DbConnection connection = await console.RunAsync("Preparing database", async () =>
+            {
                 DbConnection connection = this.GetConnection(options);
 
                 if (connection == null)
-                    throw new Exception("Connection returned null.");
+                    throw new ToolException("Connection returned null.", OrmErrorCodes.InvalidConnection);
 
                 try
                 {
@@ -123,14 +130,17 @@ namespace Jerrycurl.Tools.Orm
                 {
                     connection.Dispose();
 
-                    throw new Exception("Invalid connection string: " + ex.Message, ex);
+                    throw new ToolException($"Invalid connection string '{connection.ConnectionString}': {ex.Message}", OrmErrorCodes.InvalidConnection, ex);
                 }
 
-                //if (!string.IsNullOrEmpty(connection.Database))
-                //    console.WriteLine($"Connecting to '{connection.Database}'...", ConsoleColor.Yellow);
-                //else
-                //    console.WriteLine("Connecting to database...", ConsoleColor.Yellow);
+                return connection;
+            });
 
+            bool hasDatabase = !string.IsNullOrEmpty(connection.Database);
+            string connectText = hasDatabase ? $"Connecting to database '{connection.Database}'" : "Connecting to database";
+
+            return await console.RunAsync(connectText, async () =>
+            {
                 try
                 {
                     await connection.OpenAsync().ConfigureAwait(false);
@@ -141,9 +151,9 @@ namespace Jerrycurl.Tools.Orm
                 {
                     connection.Dispose();
 
-                    throw new Exception("Unable to open connection: " + ex.Message, ex);
+                    throw new ToolException($"Cannot connect to database: {ex.Message}", OrmErrorCodes.ConnectionFailed, ex);
                 }
-            //});
+            });
         }
     }
 }
