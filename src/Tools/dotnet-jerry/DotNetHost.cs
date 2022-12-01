@@ -18,7 +18,7 @@ namespace Jerrycurl.Tools.DotNet.Cli
 
             //args = new[] { "orm", "sync", "--flags", "useNullables" };
             //args = new[] { "orm", "new", "-v", "sqlserver", "-c", "server=.;database=gerstl_120922;trusted_connection=true;encrypt=false", "-f", @"c:\users\thomas\desktop\Database.orm" };
-            args = new[] { "orm", "sync", "-f", @"C:\Users\thomas\Desktop\Database.orm", "--verbose" };
+            //args = new[] { "orm", "sync", "-f", @"C:\Users\thomas\Desktop\Database.orm", "--verbose" };
             //args = new[] { "orm", "transform", "-f", @"c:\users\thomas\desktop\Database.orm" };
             //args = new[] { "orm", "run", "-f", @"c:\users\thomas\desktop\Database.orm", "--snippet", "test" };
             //args = new[] { "orm", "new", "-v", "sqlserver", "-c", "server=.;database=realescort_live;trusted_connection=true;encrypt=false" };
