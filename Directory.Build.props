@@ -8,7 +8,7 @@
         <NetStandardMultiTargetMoniker>netstandard2.0;netstandard2.1</NetStandardMultiTargetMoniker>
         <ToolingTargetMoniker>$(NetStandardMoniker);$(NetMoniker)</ToolingTargetMoniker>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <NoWarn>1591;NU5105;NU5048;SYSLIB0010</NoWarn>
+        <NoWarn>1591;NU5105;NU5048;SYSLIB0010;IDE0090;IDE0063</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup>
