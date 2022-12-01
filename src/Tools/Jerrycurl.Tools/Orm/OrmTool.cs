@@ -120,7 +120,7 @@ namespace Jerrycurl.Tools.Orm
                 DbConnection connection = this.GetConnection(options);
 
                 if (connection == null)
-                    throw new ToolException("Connection returned null.", OrmErrorCodes.InvalidConnection);
+                    throw new ToolException(OrmErrorCodes.InvalidConnection, "Connection returned null.");
 
                 try
                 {
@@ -130,7 +130,7 @@ namespace Jerrycurl.Tools.Orm
                 {
                     connection.Dispose();
 
-                    throw new ToolException($"Invalid connection string '{connection.ConnectionString}': {ex.Message}", OrmErrorCodes.InvalidConnection, ex);
+                    throw new ToolException(OrmErrorCodes.InvalidConnection, $"Invalid connection string '{connection.ConnectionString}': {ex.Message}", innerException: ex);
                 }
 
                 return connection;
@@ -151,7 +151,7 @@ namespace Jerrycurl.Tools.Orm
                 {
                     connection.Dispose();
 
-                    throw new ToolException($"Cannot connect to database: {ex.Message}", OrmErrorCodes.ConnectionFailed, ex);
+                    throw new ToolException(OrmErrorCodes.ConnectionFailed, $"Cannot connect to database: {ex.Message}", innerException: ex);
                 }
             });
         }

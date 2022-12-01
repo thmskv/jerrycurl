@@ -12,9 +12,9 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
         public Option<string> ProjectOption { get; private set; }
         public Option<string> RootNamespaceOption { get; private set; }
         public Option<string> OutputOption { get; private set; }
-        public Option<IEnumerable<string>> DirectoryOption { get; private set; }
-        public Option<IEnumerable<string>> FileOption { get; private set; }
-        public Option<IEnumerable<string>> ImportOption { get; private set; }
+        public Option<string[]> DirectoryOption { get; private set; }
+        public Option<string[]> FileOption { get; private set; }
+        public Option<string[]> ImportOption { get; private set; }
         public Option<bool> NoCleanOption { get; private set; }
 
         public RazorCommandBuilder()
@@ -27,9 +27,9 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
             this.ProjectOption = Option<string>(new[] { "--project", "-p" }, ""); ;
             this.RootNamespaceOption = Option<string>(new[] { "--namespace", "-ns" }, ""); ;
             this.OutputOption = Option<string>(new[] { "--output", "-o" }, "");
-            this.DirectoryOption = Option<IEnumerable<string>>(new[] { "--directory", "-d" }, "", multiple: true);
-            this.FileOption = Option<IEnumerable<string>>(new[] { "--file", "-f" }, "", multiple: true);
-            this.ImportOption = Option<IEnumerable<string>>(new[] { "--import", "-i" }, "", multiple: true);
+            this.DirectoryOption = Option<string[]>(new[] { "--directory", "-d" }, "", multiple: true);
+            this.FileOption = Option<string[]>(new[] { "--file", "-f" }, "", multiple: true);
+            this.ImportOption = Option<string[]>(new[] { "--import", "-i" }, "", multiple: true);
             this.NoCleanOption = Option<bool>(new[] { "--no-clean" }, "");
 
             Option<T> Option<T>(string[] aliases, string description, bool multiple = false)

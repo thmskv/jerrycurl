@@ -1,5 +1,4 @@
-﻿using Jerrycurl.CommandLine;
-using Jerrycurl.Tools.Orm.Model;
+﻿using Jerrycurl.Tools.Orm.Model;
 using Jerrycurl.Tools.Resources;
 using System;
 using System.Collections.Generic;
@@ -34,7 +33,12 @@ namespace Jerrycurl.Tools.Orm
 
             try
             {
-                await ToolRunner.RunAsync(nodePath, new[] { hostFile, jsFile, inputFile, outputFile }, workingDir, capture: true);
+                await ToolRunner.RunAsync(new ToolRunnerOptions()
+                {
+                    ToolName = nodePath,
+                    Arguments = new[] { hostFile, jsFile, inputFile, outputFile },
+                    WorkingDirectory = workingDir,
+                });
 
                 SchemaModel newModel = await this.DeserializeAsync<SchemaModel>(outputFile);
 
