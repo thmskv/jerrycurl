@@ -37,32 +37,29 @@ namespace Jerrycurl.Tools.Razor
                 IntermediateDirectory = outputDirectory,
             };
 
-            console.Run("Collecting files", () =>
+            console.WriteLine("Collecting files...");
+            foreach (string file in options.Files)
             {
-                foreach (string file in options.Files)
-                {
-                    if (!HasVirtualFormat(file, out var fullPath, out var projectPath))
-                        project.AddItem(file);
-                    else if (!string.IsNullOrEmpty(fullPath))
-                        project.Items.Add(new RazorProjectItem() { FullPath = MakeAbsolutePath(fullPath), ProjectPath = projectPath });
-                }
+                if (!HasVirtualFormat(file, out var fullPath, out var projectPath))
+                    project.AddItem(file);
+                else if (!string.IsNullOrEmpty(fullPath))
+                    project.Items.Add(new RazorProjectItem() { FullPath = MakeAbsolutePath(fullPath), ProjectPath = projectPath });
+            }
 
-                foreach (string dir in options.Directories)
-                {
-                    RazorProject fromDir = RazorProject.FromDirectory(MakeAbsolutePath(dir));
+            foreach (string dir in options.Directories)
+            {
+                RazorProject fromDir = RazorProject.FromDirectory(MakeAbsolutePath(dir));
 
-                    foreach (RazorProjectItem item in fromDir.Items)
-                        project.Items.Add(item);
-                }
-            });
+                foreach (RazorProjectItem item in fromDir.Items)
+                    project.Items.Add(item);
+            }
 
             if (!options.NoClean && Directory.Exists(outputDirectory))
             {
-                console.Run("Cleaning output", () =>
-                {
-                    foreach (string oldFile in Directory.GetFiles(outputDirectory, "*.cssql.cs"))
-                        File.Delete(oldFile);
-                });
+                console.WriteLine("Cleaning...");
+
+                foreach (string oldFile in Directory.GetFiles(outputDirectory, "*.cssql.cs"))
+                    File.Delete(oldFile);
             }
 
             if (project.Items.Any())
@@ -71,8 +68,9 @@ namespace Jerrycurl.Tools.Razor
 
                 Directory.CreateDirectory(outputDirectory);
 
+                console.WriteLine("Parsing files...");
                 RazorParser parser = new RazorParser();
-                IList<RazorPage> parserResult = console.Run("Parsing files", () => parser.Parse(project).ToList());
+                IList<RazorPage> parserResult = parser.Parse(project).ToList();
 
                 RazorGeneratorOptions generatorOptions = new RazorGeneratorOptions()
                 {
@@ -84,16 +82,14 @@ namespace Jerrycurl.Tools.Razor
                 foreach (string import in options.Imports)
                     generatorOptions.Imports.Add(new RazorFragment() { Text = import });
 
-                await console.RunAsync("Transpiling into C#", async () =>
+                console.WriteLine("Transpiling...");
+                foreach (RazorPage razorPage in parserResult)
                 {
-                    foreach (RazorPage razorPage in parserResult)
-                    {
-                        ProjectionResult result = generator.Generate(razorPage.Data);
+                    ProjectionResult result = generator.Generate(razorPage.Data);
 
-                        using (StreamWriter writer = new StreamWriter(razorPage.IntermediatePath, append: false, Encoding.UTF8))
-                            await writer.WriteAsync(result.Content);
-                    }
-                });
+                    using (StreamWriter writer = new StreamWriter(razorPage.IntermediatePath, append: false, Encoding.UTF8))
+                        await writer.WriteAsync(result.Content);
+                }
 
                 string filesString = parserResult.Count + " " + (parserResult.Count == 1 ? "file" : "files");
                 string outputString = PathHelper.MakeRelativeOrAbsolutePath(project.ProjectDirectory, outputDirectory);

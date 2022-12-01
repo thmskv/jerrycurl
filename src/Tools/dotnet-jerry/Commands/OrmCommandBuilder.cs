@@ -243,9 +243,6 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
             return command;
         }
 
-
-
-
         private Option<T> Option<T>(string[] aliases, string description, string defaultValue = null, bool multiple = false)
         {
             var option = new Option<T>(aliases[0], description)
@@ -278,6 +275,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
                 string outputValue = context.GetValue(this.OutputOption);
                 string namespaceValue = context.GetValue(this.NamespaceOption);
                 string transformValue = context.GetValue(this.TransformOption);
+                bool verboseValue = context.GetValue(DotNetHost.VerboseOption);
                 string[] flags = context.GetValue(this.FlagsOption);
 
                 OrmToolOptions options = new OrmToolOptions()
@@ -296,6 +294,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
                 options.Namespace = namespaceValue ?? options.Namespace;
                 options.Transform = transformValue ?? options.Transform;
                 options.Flags ??= new Dictionary<string, string>();
+                options.Verbose = verboseValue;
 
                 foreach (var flag in flags)
                 {

@@ -2,16 +2,18 @@
 using Jerrycurl.Collections;
 using Jerrycurl.IO;
 using Jerrycurl.Tools.Orm.Model;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace Jerrycurl.Tools.Orm
 {
     internal class OrmCodeWriter
     {
-        public async Task WriteAsync(SchemaModel schema, string writePath, ToolConsole console)
+        public async Task WriteAsync(OrmToolOptions options, SchemaModel schema, string writePath, ToolConsole console)
         {
             PathHelper.EnsureDirectory(writePath);
 
@@ -63,6 +65,11 @@ namespace Jerrycurl.Tools.Orm
                         await writer.WriteNamespaceEndAsync();
                 }
             }
+
+            if (options.Verbose)
+                this.WriteVerboseOutput(options, schema, console);
+            else
+                this.WriteOutput(options, schema, console);
         }
 
         private async Task WriteColumnsAsync(CSharpWriter writer, SchemaModel.TableModel tableModel)
@@ -129,6 +136,40 @@ namespace Jerrycurl.Tools.Orm
                 return "Invalid model data.";
 
             return null;
+        }
+
+        private void WriteOutput(OrmToolOptions options, SchemaModel schema, ToolConsole console)
+        {
+            string outputName = Path.GetFileName(options.Output);
+            int count = schema.Tables.Count(t => !t.Ignore);
+            string classMoniker = count + " " + (count == 1 ? "class" : "classes");
+
+            console.WriteLine($"Created {classMoniker} in {outputName}.", ConsoleColor.Green);
+        }
+
+        private void WriteVerboseOutput(OrmToolOptions options, SchemaModel schema, ToolConsole console)
+        {
+            foreach (var table in schema.Tables)
+            {
+                string tableName = !string.IsNullOrEmpty(table.Schema) ? $"{table.Schema}.{table.Name}" : $"{table.Name}";
+                string className = !string.IsNullOrEmpty(table.Clr.Namespace) ? $"{table.Clr.Namespace}.{table.Clr.Name}" : table.Clr.Name;
+                string[] propertyNames = table.Columns.Where(c => !c.Ignore).Select(c => $"{c.Clr.Name}").ToArray();
+                string propertyMoniker = string.Join(", ", propertyNames.Take(5));
+
+                if (table.Ignore)
+                    console.WriteLine($"    table {tableName} [Ignored]");
+                else
+                {
+                    console.Write($"    {tableName}", ConsoleColor.DarkRed);
+                    console.Write(" -> ");
+                    console.WriteLine(className, ConsoleColor.Green);
+                }
+
+                if (propertyNames.Length > 5)
+                    propertyMoniker += $" [+{propertyNames.Length - 5}]";
+
+                console.WriteLine($"        -> property {propertyMoniker}");
+            }
         }
     }
 }

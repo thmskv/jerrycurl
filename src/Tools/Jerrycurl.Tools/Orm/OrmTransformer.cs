@@ -11,13 +11,15 @@ namespace Jerrycurl.Tools.Orm
 {
     internal class OrmTransformer
     {
-        public async Task<SchemaModel> TransformAsync(OrmToolOptions options, SchemaModel schema)
+        public async Task<SchemaModel> TransformAsync(OrmToolOptions options, SchemaModel schema, ToolConsole console)
         {
             string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             string jsFile = this.ResolveJavaScriptPath(options);
 
             if (jsFile == null)
                 return schema;
+
+            console.WriteLine($"Transforming with '{Path.GetFileName(jsFile)}'...");
 
             string hostFile = Path.Combine(tempPath, "transform.host.js");
             string hostContent = ResourceHelper.GetTransformHostString();

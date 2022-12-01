@@ -17,6 +17,8 @@ namespace Jerrycurl.Tools.Orm
         public string Output { get; set; }
         public string Transform { get; set; }
         public string Namespace { get; set; }
+        [JsonIgnore]
+        public bool Verbose { get; set; }
         public Dictionary<string, string> Flags { get; set; }
         public Dictionary<string, string> Snippets { get; set; }
 
