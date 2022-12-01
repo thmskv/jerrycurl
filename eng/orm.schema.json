@@ -1,0 +1,48 @@
+{
+   "id":"https://jerrycurl.net/schema/orm/1.1.0",
+   "$schema":"http://json-schema.org/draft-04/schema#",
+   "title":"Jerrycurl Database JSON file",
+   "version":"1.1.0",
+   "type":"object",
+   "properties":{
+      "name":{
+         "type":"string",
+         "optional": false,
+         "description":"The connection string to use when connecting to the database server."
+      },
+      "connection":{
+         "type":"string",
+         "optional": false,
+         "description":"The connection string to use when connecting to the database server."
+      },
+      "vendor":{
+         "type":"string",
+         "optional": false,
+         "description":"The vendor to use when connecting to the database server.",
+         "enum":[
+            "sqlserver",
+            "sqlite",
+            "postgres",
+            "oracle",
+            "mysql"
+         ]
+      },
+      "output":{
+         "type":"string",
+         "description":"The output path where the model is generated."
+      },
+      "transform":{
+         "type":"string",
+         "description":"JavaScript transformation file run through Node.js"
+      },
+      "namespace": {
+        "type": "string",
+        "description": "Namespace to define C# classes in."
+      },
+      "flags":{
+        "type":"object",
+        "description": "Flags representing various config settings.",
+        "additionalProperties": { "type": "string" }
+      }
+   }
+}

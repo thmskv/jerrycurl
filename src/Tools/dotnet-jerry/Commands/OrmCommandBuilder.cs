@@ -23,7 +23,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
     {
         public const string DefaultFileName = "Database.orm";
 
-        public Option<string> FileOption { get; private set; }
+        public Option<string> InputOption { get; private set; }
         public Option<string> VendorOption { get; private set; }
         public Option<string> ConnectionOption { get; private set; }
         public Option<string> NamespaceOption { get; private set; }
@@ -38,7 +38,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
         private void CreateOptions()
         {
-            this.FileOption = this.Option<string>(new[] { "--file", "-f" }, "The .orm file to read configuration from.", defaultValue: DefaultFileName);
+            this.InputOption = this.Option<string>(new[] { "--input", "-i" }, "The .orm file to read configuration from.", defaultValue: DefaultFileName);
             this.VendorOption = this.Option<string>(new[] { "--vendor", "-v" }, "The database vendor to target.");
             this.ConnectionOption = this.Option<string>(new[] { "--connection", "-c" }, "The connection string to use.");
             this.NamespaceOption = this.Option<string>(new[] { "--namespace", "-ns" }, "The namespace to place C# classes in.");
@@ -67,7 +67,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
             Option<bool> openOption = this.Option<bool>(new[] { "--open" }, "Open the .js file after creating using the default editor.");
             Option<bool> noTypesOption = this.Option<bool>(new[] { "--no-types" }, "Do not create an associated d.ts file.");
 
-            command.Add(this.FileOption, this.TransformOption);
+            command.Add(this.InputOption, this.TransformOption);
             command.Add(openOption, noTypesOption);
 
             this.SetHandler(command, async (ctx, _, options) =>
@@ -108,7 +108,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
             Option<string> sqlOption = this.Option<string>(new[] { "--sql" }, "File to read and execute SQL from.");
             Option<string> textOption = this.Option<string>(new[] { "--text" }, "SQL string to execute.");
 
-            command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.TransformOption);
+            command.Add(this.InputOption, this.ConnectionOption, this.VendorOption, this.TransformOption);
             command.Add(snippetOption, sqlOption, textOption);
 
             this.SetHandler(command, async (ctx, tool, options) =>
@@ -154,11 +154,11 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
         {
             Command command = new Command("diff", "Run a simple diff to check that your current C# classes matches the database schema.");
 
-            command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption);
+            command.Add(this.InputOption, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption);
 
             this.SetHandler(command, async (_, tool, options) =>
             {
-                string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+                string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName(), "diff.right.cs");
                 string leftPath = Path.Combine(tempPath, "diff.left.cs");
                 string rightPath = Path.Combine(tempPath, "diff.right.cs");
 
@@ -189,7 +189,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
             Option<bool> syncOption = this.Option<bool>(new[] { "--sync" }, "Generate C# classes after creation.");
 
-            command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption, syncOption);
+            command.Add(this.InputOption, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption, syncOption);
 
             this.SetHandler(command, async (ctx, tool, options) =>
             {
@@ -197,14 +197,23 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
                 PathHelper.EnsureDirectory(options.Input);
 
-                var data = new
+                var data = new Dictionary<string, object>()
                 {
-                    vendor = options.Vendor,
-                    connection = options.Connection,
-                    transform = options.Transform,
-                    output = options.Output,
-                    @namespace = options.Namespace,
+                    //["$schema"] = blah,
+                    ["vendor"] = options.Vendor,
+                    ["connection"] = options.Connection,
+                    ["transform"] = options.Transform,
+                    ["output"] = options.Output,
+                    ["namespace"] = options.Namespace,
                 };
+                //var data = new
+                //{
+                //    vendor = options.Vendor,
+                //    connection = options.Connection,
+                //    transform = options.Transform,
+                //    output = options.Output,
+                //    @namespace = options.Namespace,
+                //};
                 string json = JsonSerializer.Serialize(data, new JsonSerializerOptions()
                 {
                     WriteIndented = true,
@@ -230,7 +239,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
         {
             Command command = new Command("sync", "Generate C# classes from a database schema.");
 
-            command.Add(this.FileOption, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption);
+            command.Add(this.InputOption, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption);
 
             this.SetHandler(command, async (_, tool, options) =>
             {
@@ -268,8 +277,8 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
         {
             command.SetHandler(async context =>
             {
-                bool hasFile = context.IsExplicit(this.FileOption);
-                string fileValue = context.GetValue(this.FileOption);
+                bool hasFile = context.IsExplicit(this.InputOption);
+                string fileValue = context.GetValue(this.InputOption);
                 string vendorValue = context.GetValue(this.VendorOption);
                 string connectionValue = context.GetValue(this.ConnectionOption);
                 string outputValue = context.GetValue(this.OutputOption);
