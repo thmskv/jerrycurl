@@ -40,6 +40,7 @@ namespace Jerrycurl.CodeAnalysis
 
         public async Task WriteErrorDirectiveAsync(string message) => await this.TextWriter.WriteLineAsync($"#error {message}");
         public async Task WriteWarningDirectiveAsync(string message) => await this.TextWriter.WriteLineAsync($"#warning {message}");
+        public async Task WritePragmaDirectiveAsync(string pragma) => await this.TextWriter.WriteLineAsync($"#pragma {pragma}");
 
         public void AddAttribute(string typeName, params object[] arguments) => this.AddAttribute(typeName, (IEnumerable<object>)arguments);
         public void AddAttribute(string typeName, IEnumerable<object> arguments) => this.attributeBuffer.Add(new AttributeModel(typeName, arguments));

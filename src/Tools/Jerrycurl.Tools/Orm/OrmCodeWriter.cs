@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
 
 namespace Jerrycurl.Tools.Orm
 {
@@ -20,6 +19,11 @@ namespace Jerrycurl.Tools.Orm
             using (StreamWriter fileWriter = new StreamWriter(writePath, append: false, Encoding.UTF8))
             {
                 CSharpWriter writer = new CSharpWriter(fileWriter);
+
+                string noWarn = schema.Flags.GetValueOrDefault("noWarn");
+
+                if (!string.IsNullOrWhiteSpace(noWarn))
+                    await writer.WritePragmaDirectiveAsync($"warning disable {noWarn}");
 
                 if (schema.Imports.Any())
                 {
@@ -64,6 +68,9 @@ namespace Jerrycurl.Tools.Orm
                     if (!string.IsNullOrWhiteSpace(ns))
                         await writer.WriteNamespaceEndAsync();
                 }
+
+                if (!string.IsNullOrWhiteSpace(noWarn))
+                    await writer.WritePragmaDirectiveAsync($"warning enable {noWarn}");
             }
 
             if (options.Verbose)
