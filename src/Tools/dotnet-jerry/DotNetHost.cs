@@ -12,9 +12,23 @@ namespace Jerrycurl.Tools.DotNet.Cli
 
         public async static Task<int> Main(string[] args)
         {
+
             WriteHeader();
 
 #if DEBUG
+            try
+            {
+                await ToolRunner.RunAsync(new ToolRunnerOptions()
+                {
+                    ToolName = "jerry",
+                    Arguments = new[] { "" }
+                });
+            }
+            catch (ToolException ex)
+            {
+
+            }
+            
             //Environment.CurrentDirectory = "C:\\Users\\thomas\\Desktop\\testx";
 
             //args = new[] { "orm", "sync", "--flags", "useNullables" };
@@ -45,11 +59,12 @@ namespace Jerrycurl.Tools.DotNet.Cli
   / _` |/ _ \| __| '_ \ / _ \ __|____| |/ _ \ '__| '__| | | |
  | (_| | (_) | |_| | | |  __/ ||_____| |  __/ |  | |  | |_| |
   \__,_|\___/ \__|_| |_|\___|\__|   _/ |\___|_|  |_|   \__, |
-                                   |__/                |___/ ";
+                                   |__/                |___/ "
+;
             string versionText = version.CommitHash != null ? $"v{version.PublicVersion} ({version.CommitHash})" : $"v{version.PublicVersion}";
 
             WriteLine(logo);
-            WriteLine(versionText.PadLeft((logo.Length + versionText.Length) / 2));
+            WriteLine(versionText.PadLeft((60 + versionText.Length) / 2));
             WriteLine();
         }
 

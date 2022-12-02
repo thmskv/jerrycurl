@@ -199,21 +199,13 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
                 var data = new Dictionary<string, object>()
                 {
-                    //["$schema"] = blah,
+                    ["$schema"] = "https://raw.githubusercontent.com/thmskv/jerrycurl/main/eng/orm.schema.json",
                     ["vendor"] = options.Vendor,
                     ["connection"] = options.Connection,
                     ["transform"] = options.Transform,
                     ["output"] = options.Output,
                     ["namespace"] = options.Namespace,
                 };
-                //var data = new
-                //{
-                //    vendor = options.Vendor,
-                //    connection = options.Connection,
-                //    transform = options.Transform,
-                //    output = options.Output,
-                //    @namespace = options.Namespace,
-                //};
                 string json = JsonSerializer.Serialize(data, new JsonSerializerOptions()
                 {
                     WriteIndented = true,
@@ -293,9 +285,18 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
                 };
 
                 if (File.Exists(fileValue))
-                    options = await OrmToolOptions.FromFileAsync(fileValue);
+                {
+                    try
+                    {
+                        options = await OrmToolOptions.FromFileAsync(fileValue);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ToolException(OrmErrorCodes.InvalidOrmFile, innerException: ex);
+                    }
+                }
                 else if (hasFile)
-                    throw new FileNotFoundException("Not found lol.");
+                    throw new ToolException(OrmErrorCodes.OrmFileNotFound);
 
                 options.Vendor = vendorValue ?? options.Vendor;
                 options.Connection = connectionValue ?? options.Connection;

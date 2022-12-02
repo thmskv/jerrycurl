@@ -9,5 +9,7 @@ namespace Jerrycurl.Tools.Orm
         public const int NodejsNotFound = 20;
         public const int InvalidConnection = 21;
         public const int ConnectionFailed = 22;
+        public const int InvalidOrmFile = 23;
+        public const int OrmFileNotFound = 24;
     }
 }

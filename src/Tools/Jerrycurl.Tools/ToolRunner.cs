@@ -76,7 +76,6 @@ namespace Jerrycurl.Tools
             {
                 process.StartInfo = startInfo;
 
-                StringBuilder outputBuilder = new StringBuilder();
                 TaskCompletionSource<bool> outputCloseEvent = new TaskCompletionSource<bool>();
 
                 if (startInfo.RedirectStandardOutput)
@@ -93,7 +92,6 @@ namespace Jerrycurl.Tools
                     outputCloseEvent.SetResult(true);
 
 
-                StringBuilder errorBuilder = new StringBuilder();
                 TaskCompletionSource<bool> errorCloseEvent = new TaskCompletionSource<bool>();
 
                 if (startInfo.RedirectStandardError)
@@ -112,11 +110,11 @@ namespace Jerrycurl.Tools
                 try
                 {
                     if (!process.Start())
-                        throw new ToolException(-1, stdErrBuilder.ToString(), outputBuilder.ToString());
+                        throw new ToolException(-1, stdOutBuilder.ToString(), stdErrBuilder.ToString());
                 }
                 catch (Exception ex)
                 {
-                    throw new ToolException(-1, errorBuilder.ToString(), outputBuilder.ToString(), innerException: ex);
+                    throw new ToolException(-1, stdOutBuilder.ToString(), stdErrBuilder.ToString(), innerException: ex);
                 }
 
                 if (startInfo.RedirectStandardOutput)
@@ -131,7 +129,7 @@ namespace Jerrycurl.Tools
                 if (await Task.WhenAny(Task.Delay(options.Timeout), processTask) == processTask && await waitForExit)
                 {
                     if (process.ExitCode != 0)
-                        throw new ToolException(process.ExitCode, errorBuilder.ToString(), outputBuilder.ToString());
+                        throw new ToolException(process.ExitCode, stdOutBuilder.ToString(), stdErrBuilder.ToString());
                 }
                 else
                 {
@@ -144,9 +142,8 @@ namespace Jerrycurl.Tools
                     throw new Exception("Timed out.");
                 }
             }
+
+            static Task<bool> WaitForExitAsync(Process process, int timeout) => Task.Run(() => process.WaitForExit(timeout));
         }
-
-
-        private static Task<bool> WaitForExitAsync(Process process, int timeout) => Task.Run(() => process.WaitForExit(timeout));
     }
 }
