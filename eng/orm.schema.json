@@ -8,7 +8,7 @@
       "name":{
          "type":"string",
          "optional": false,
-         "description":"The connection string to use when connecting to the database server."
+         "description":"A unique name representing this configuration in a multi-config setup."
       },
       "connection":{
          "type":"string",
@@ -38,6 +38,11 @@
       "namespace": {
         "type": "string",
         "description": "Namespace to define C# classes in."
+      },
+      "snippets":{
+        "type":"object",
+        "description": "Snippets of SQL that can be run using the CLI.",
+        "additionalProperties": { "type": "string" }
       },
       "flags":{
         "type":"object",
