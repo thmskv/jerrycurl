@@ -1,6 +1,6 @@
 ﻿using Jerrycurl.Reflection;
+using Jerrycurl.Tools.Diagnostics;
 using Jerrycurl.Tools.DotNet.Cli.Commands;
-using Jerrycurl.Tools.DotNet.Cli.Diagnostics;
 using Jerrycurl.Tools.Orm;
 using System;
 using System.CommandLine;
