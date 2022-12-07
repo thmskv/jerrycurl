@@ -110,11 +110,11 @@ namespace Jerrycurl.Tools
                 try
                 {
                     if (!process.Start())
-                        throw new ToolException(-1, stdOutBuilder.ToString(), stdErrBuilder.ToString());
+                        throw new ToolException(-1, stdOut: stdOutBuilder.ToString(), stdErr: stdErrBuilder.ToString());
                 }
                 catch (Exception ex)
                 {
-                    throw new ToolException(-1, stdOutBuilder.ToString(), stdErrBuilder.ToString(), innerException: ex);
+                    throw new ToolException(-1, stdOut: stdOutBuilder.ToString(), stdErr: stdErrBuilder.ToString(), innerException: ex);
                 }
 
                 if (startInfo.RedirectStandardOutput)
@@ -129,7 +129,7 @@ namespace Jerrycurl.Tools
                 if (await Task.WhenAny(Task.Delay(options.Timeout), processTask) == processTask && await waitForExit)
                 {
                     if (process.ExitCode != 0)
-                        throw new ToolException(process.ExitCode, stdOutBuilder.ToString(), stdErrBuilder.ToString());
+                        throw new ToolException(process.ExitCode, stdOut: stdOutBuilder.ToString(), stdErr: stdErrBuilder.ToString());
                 }
                 else
                 {

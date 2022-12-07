@@ -292,11 +292,11 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
                     }
                     catch (Exception ex)
                     {
-                        throw new ToolException(OrmErrorCodes.InvalidOrmFile, innerException: ex);
+                        throw new OrmToolException($"{Path.GetFileName(fileValue)} is not a valid configuration file.", innerException: ex);
                     }
                 }
                 else if (hasFile)
-                    throw new ToolException(OrmErrorCodes.OrmFileNotFound);
+                    throw new OrmToolException($"{fileValue} not found.");
 
                 options.Vendor = vendorValue ?? options.Vendor;
                 options.Connection = connectionValue ?? options.Connection;

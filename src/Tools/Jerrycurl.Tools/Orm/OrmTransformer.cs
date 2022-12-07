@@ -33,14 +33,18 @@ namespace Jerrycurl.Tools.Orm
             File.WriteAllText(hostFile, hostContent);
             await this.SerializeAsync(schema, inputFile);
 
+            ToolRunnerOptions nodeOptions = new ToolRunnerOptions()
+            {
+                ToolName = nodePath,
+                Arguments = new[] { hostFile, jsFile, inputFile, outputFile },
+                WorkingDirectory = workingDir,
+                //StdErr = s => console.Write(s),
+                StdOut = s => console.Write(s),
+            };
+
             try
             {
-                await ToolRunner.RunAsync(new ToolRunnerOptions()
-                {
-                    ToolName = nodePath,
-                    Arguments = new[] { hostFile, jsFile, inputFile, outputFile },
-                    WorkingDirectory = workingDir,
-                });
+                await ToolRunner.RunAsync(nodeOptions);
 
                 SchemaModel newModel = await this.DeserializeAsync<SchemaModel>(outputFile);
 
@@ -48,17 +52,19 @@ namespace Jerrycurl.Tools.Orm
             }
             catch (ToolException ex)
             {
-                return null;
+                throw new OrmToolException("Transformation failed.", ex.StdErr, ex);
             }
-            //catch (ToolException ex)
-            //{
-            //    string log = string.IsNullOrEmpty(ex.StdErr) ? ex.StdOut : ex.StdErr;
-
-            //    throw new KeplerException("Error running Node.js.", fileName: transformItem.AbsolutePath, log: log, innerException: ex.InnerException ?? ex);
-            //}
+            catch (Exception ex)
+            {
+                throw new OrmToolException("Transformation failed.", ex);
+            }
             finally
             {
-                Directory.Delete(tempPath, true);
+                try
+                {
+                    Directory.Delete(tempPath, true);
+                }
+                catch { }
             }
         }
 
