@@ -13,6 +13,8 @@ namespace Jerrycurl.Tools.Diagnostics
     {
         public string Message { get; set; }
         public string Log { get; set; }
+        public string Type { get; set; }
+
         internal static JsonSerializerOptions Options { get; } = new JsonSerializerOptions()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,

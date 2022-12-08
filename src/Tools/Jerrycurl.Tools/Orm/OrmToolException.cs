@@ -7,6 +7,7 @@ namespace Jerrycurl.Tools.Orm
     public class OrmToolException : Exception
     {
         public string Log { get; }
+        public string Type { get; set; }
 
         public OrmToolException(string message)
             : base(message)
@@ -14,16 +15,11 @@ namespace Jerrycurl.Tools.Orm
 
         }
 
-        public OrmToolException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-
-        }
-
-        public OrmToolException(string message, string log, Exception innerException)
+        public OrmToolException(string message, Exception innerException = null, string log = null, string type = null)
             : base(message, innerException)
         {
             this.Log = log;
+            this.Type = type;
         }
     }
 }

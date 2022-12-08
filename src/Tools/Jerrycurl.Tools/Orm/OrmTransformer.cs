@@ -28,6 +28,9 @@ namespace Jerrycurl.Tools.Orm
             string workingDir = Path.GetDirectoryName(jsFile);
             string nodePath = this.FindNodePath();
 
+            if (nodePath == null)
+                throw new OrmToolException("Cannot find Node.js", type: "node_not_found");
+
             Directory.CreateDirectory(tempPath);
 
             File.WriteAllText(hostFile, hostContent);
@@ -52,7 +55,7 @@ namespace Jerrycurl.Tools.Orm
             }
             catch (ToolException ex)
             {
-                throw new OrmToolException("Transformation failed.", ex.StdErr, ex);
+                throw new OrmToolException("Transformation failed.", ex, log: ex.StdErr);
             }
             catch (Exception ex)
             {
