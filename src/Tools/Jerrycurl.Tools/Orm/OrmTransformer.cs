@@ -38,7 +38,7 @@ namespace Jerrycurl.Tools.Orm
                 ToolName = nodePath,
                 Arguments = new[] { hostFile, jsFile, inputFile, outputFile },
                 WorkingDirectory = workingDir,
-                //StdErr = s => console.Write(s),
+                StdErr = console.Error,
                 StdOut = s => console.Write(s),
             };
 

@@ -17,6 +17,7 @@ namespace Jerrycurl.Tools.DotNet.Cli
     public class DotNetHost
     {
         internal static Option<bool> VerboseOption { get; } = new Option<bool>("--verbose", "Show verbose output.");
+        internal static Option<bool> LogoOption { get; } = new Option<bool>("--logo", "Show fancy logo before running.");
         internal static Option<string> DebugOption { get; } = new Option<string>("--debug", "Output exception information to a machine-readable file.") { IsHidden = true };
 
         public async static Task<int> Main(string[] args)
@@ -46,22 +47,11 @@ namespace Jerrycurl.Tools.DotNet.Cli
             CommandLineBuilder b = new CommandLineBuilder(rootCommand);
 
             b.UseDefaults();
-            b.UseExceptionHandler(async (ex, ctx) =>
-            {
-                string debugPath = ctx.GetValue(DebugOption);
-                bool verbose = ctx.GetValue(VerboseOption);
-
-                if (debugPath != null)
-                    await WriteDebugInfoAsync(debugPath, ex);
-
-                if (verbose)
-                    WriteLine(ex.ToString(), ConsoleColor.Red);
-                else
-                    WriteLine(ex.Message, ConsoleColor.Red);
-            });
+            b.UseExceptionHandler(HandleExceptionAsync);
 
             rootCommand.AddGlobalOption(VerboseOption);
             rootCommand.AddGlobalOption(DebugOption);
+            rootCommand.AddGlobalOption(LogoOption);
 
             new OrmCommandBuilder().Build(rootCommand);
             new RazorCommandBuilder().Build(rootCommand);
@@ -69,6 +59,22 @@ namespace Jerrycurl.Tools.DotNet.Cli
             Parser parser = b.Build();
 
             return await parser.InvokeAsync(args);
+        }
+
+        private static async void HandleExceptionAsync(Exception ex, InvocationContext context)
+        {
+            string debugPath = context.GetValue(DebugOption);
+            bool verbose = context.GetValue(VerboseOption);
+
+            if (debugPath != null)
+                await WriteDebugInfoAsync(debugPath, ex);
+
+            if (verbose)
+                ErrorLine(ex.ToString());
+            else
+                ErrorLine(ex.Message);
+
+            context.ExitCode = ex is ToolException tex ? tex.ExitCode : -1;
         }
 
         private static async Task WriteDebugInfoAsync(string path, Exception ex)
@@ -121,6 +127,13 @@ namespace Jerrycurl.Tools.DotNet.Cli
                 Console.ForegroundColor = color.Value;
 
             Console.WriteLine(message);
+            Console.ResetColor();
+        }
+
+        public static void ErrorLine(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Error.WriteLine(message);
             Console.ResetColor();
         }
     }

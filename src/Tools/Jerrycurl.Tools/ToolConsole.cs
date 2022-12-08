@@ -12,6 +12,11 @@ namespace Jerrycurl.Tools
             Console.ForegroundColor = ConsoleColor.White;
         }
 
+        public virtual void Error(string message)
+        {
+            Console.Error.Write(message);
+        }
+
         public void WriteLine(string message, ConsoleColor color = ConsoleColor.White)
             => this.Write(message + "\n", color);
     }
