@@ -23,7 +23,8 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
     {
         public const string DefaultFileName = "Database.orm";
 
-        public Option<string> InputOption { get; private set; }
+        public Argument<string> ConfigArgument { get; set; }
+        //public Option<string> InputOption { get; private set; }
         public Option<string> VendorOption { get; private set; }
         public Option<string> ConnectionOption { get; private set; }
         public Option<string> NamespaceOption { get; private set; }
@@ -38,7 +39,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
         private void CreateOptions()
         {
-            this.InputOption = this.Option<string>(new[] { "--input", "-i" }, "The .orm file to read configuration from.", defaultValue: DefaultFileName);
+            this.ConfigArgument = new Argument<string>("config", description: "The .orm file to read configuration from.", getDefaultValue: () => DefaultFileName);
             this.VendorOption = this.Option<string>(new[] { "--vendor", "-v" }, "The database vendor to target.");
             this.ConnectionOption = this.Option<string>(new[] { "--connection", "-c" }, "The connection string to use.");
             this.NamespaceOption = this.Option<string>(new[] { "--namespace", "-ns" }, "The namespace to place C# classes in.");
@@ -49,26 +50,27 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
         public void Build(RootCommand rootCommand)
         {
-            var command = new Command("orm", "Interacts with a database using an .orm configuration file.");
-
-            command.Add(this.GetSyncCommand());
-            command.Add(this.GetNewCommand());
-            command.Add(this.GetDiffCommand());
-            command.Add(this.GetRunCommand());
-            command.Add(this.GetTransformCommand());
+            var command = new Command("orm", "Interacts with a database using an .orm configuration file.")
+            {
+                this.GetSyncCommand(),
+                this.GetNewCommand(),
+                this.GetDiffCommand(),
+                this.GetRunCommand(),
+                this.GetTransformCommand()
+            };
 
             rootCommand.Add(command);
         }
 
         private Command GetTransformCommand()
         {
-            Command command = new Command("transform", "Create a .js transformation file for an .orm configuration.");
-
             Option<bool> openOption = this.Option<bool>(new[] { "--open" }, "Open the .js file after creating using the default editor.");
             Option<bool> noTypesOption = this.Option<bool>(new[] { "--no-types" }, "Do not create an associated d.ts file.");
 
-            command.Add(this.InputOption, this.TransformOption);
-            command.Add(openOption, noTypesOption);
+            Command command = new Command("transform", "Create a .js transformation file for an .orm configuration.")
+            {
+                this.ConfigArgument, this.TransformOption, openOption, noTypesOption,
+            };
 
             this.SetHandler(command, async (ctx, _, options) =>
             {
@@ -102,14 +104,14 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
         private Command GetRunCommand()
         {
-            Command command = new Command("run", "Run SQL queries and commands against a database.");
-
             Option<string> snippetOption = this.Option<string>(new[] { "--snippet" }, "Name of a snippet to execute.");
             Option<string> sqlOption = this.Option<string>(new[] { "--sql" }, "File to read and execute SQL from.");
             Option<string> textOption = this.Option<string>(new[] { "--text" }, "SQL string to execute.");
 
-            command.Add(this.InputOption, this.ConnectionOption, this.VendorOption, this.TransformOption);
-            command.Add(snippetOption, sqlOption, textOption);
+            Command command = new Command("run", "Run SQL queries and commands against a database.")
+            {
+                this.ConfigArgument, this.ConnectionOption, this.VendorOption, this.TransformOption, snippetOption, sqlOption, textOption
+            };
 
             this.SetHandler(command, async (ctx, tool, options) =>
             {
@@ -152,9 +154,10 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
         private Command GetDiffCommand()
         {
-            Command command = new Command("diff", "Run a simple diff to check that your current C# classes matches the database schema.");
-
-            command.Add(this.InputOption, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption);
+            Command command = new Command("diff", "Run a simple diff to check that your current C# classes matches the database schema.")
+            {
+                this.ConfigArgument, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption
+            };
 
             this.SetHandler(command, async (_, tool, options) =>
             {
@@ -185,11 +188,12 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
         private Command GetNewCommand()
         {
-            Command command = new Command("new", "Create a new .orm configuration file.");
-
             Option<bool> syncOption = this.Option<bool>(new[] { "--sync" }, "Generate C# classes after creation.");
 
-            command.Add(this.InputOption, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption, syncOption);
+            Command command = new Command("new", "Create a new .orm configuration file.")
+            {
+                this.ConfigArgument, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption, syncOption,
+            };
 
             this.SetHandler(command, async (ctx, tool, options) =>
             {
@@ -229,9 +233,10 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
         private Command GetSyncCommand()
         {
-            Command command = new Command("sync", "Generate C# classes from a database schema.");
-
-            command.Add(this.InputOption, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption);
+            Command command = new Command("sync", "Generate C# classes from a database schema.")
+            {
+                this.ConfigArgument, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption
+            };
 
             this.SetHandler(command, async (_, tool, options) =>
             {
@@ -251,7 +256,8 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
                 AllowMultipleArgumentsPerToken = multiple,
             };
 
-            option.SetDefaultValue(defaultValue);
+            if (defaultValue != null)
+                option.SetDefaultValue(defaultValue);
 
             foreach (var alias in aliases.Skip(1))
                 option.AddAlias(alias);
@@ -269,8 +275,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
         {
             command.SetHandler(async context =>
             {
-                bool hasFile = context.IsExplicit(this.InputOption);
-                string fileValue = context.GetValue(this.InputOption);
+                string configValue = context.GetValue(this.ConfigArgument);
                 string vendorValue = context.GetValue(this.VendorOption);
                 string connectionValue = context.GetValue(this.ConnectionOption);
                 string outputValue = context.GetValue(this.OutputOption);
@@ -281,22 +286,22 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
                 OrmToolOptions options = new OrmToolOptions()
                 {
-                    Input = fileValue ?? "Database.orm",
+                    Input = configValue ?? "Database.orm",
                 };
 
-                if (File.Exists(fileValue))
+                if (File.Exists(configValue))
                 {
                     try
                     {
-                        options = await OrmToolOptions.FromFileAsync(fileValue);
+                        options = await OrmToolOptions.FromFileAsync(configValue);
                     }
                     catch (Exception ex)
                     {
-                        throw new OrmToolException($"{Path.GetFileName(fileValue)} is not a valid configuration file.", innerException: ex);
+                        throw new OrmToolException($"{Path.GetFileName(configValue)} is not a valid configuration file.", innerException: ex);
                     }
                 }
-                else if (hasFile)
-                    throw new OrmToolException($"{fileValue} not found.");
+                else if (command.Name != "new")
+                    throw new OrmToolException($"{configValue} not found.");
 
                 options.Vendor = vendorValue ?? options.Vendor;
                 options.Connection = connectionValue ?? options.Connection;
