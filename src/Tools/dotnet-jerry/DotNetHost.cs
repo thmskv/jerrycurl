@@ -48,6 +48,10 @@ namespace Jerrycurl.Tools.DotNet.Cli
 
             b.UseDefaults();
             b.UseExceptionHandler(HandleExceptionAsync);
+            rootCommand.SetHandler(() =>
+            {
+                var x = 100;
+            });
 
             rootCommand.AddGlobalOption(VerboseOption);
             rootCommand.AddGlobalOption(DebugOption);
@@ -82,6 +86,7 @@ namespace Jerrycurl.Tools.DotNet.Cli
             DebugModel model = new DebugModel()
             {
                 Message = ex.Message,
+                Type = ex.Message,
                 Log = ex switch
                 {
                     OrmToolException oex => oex.Log,
