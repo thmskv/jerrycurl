@@ -83,7 +83,7 @@ CREATE TYPE jerry_tt AS TABLE
             Runnable<TestModel, TestModel> select = new Runnable<TestModel, TestModel>(inputModel);
 
             select.Sql("SELECT ");
-            select.R(p => p.Star(m => m.Tvp, "X"));
+            select.R(p => p.Map(m => m.Tvp, "X"));
             select.Sql(" FROM ");
             select.M(p => p.Tvp(m => m.Tvp, "X"));
 

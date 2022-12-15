@@ -14,7 +14,7 @@ namespace Jerrycurl.Mvc.Test.Project.Queries.Crud
         public override void Execute()
         {
             this.WriteLiteral("SELECT ");
-            this.Write(this.R.Star());
+            this.Write(this.R.Map());
             this.WriteLiteral(" FROM ");
             this.Write(this.R.Tbl());
         }

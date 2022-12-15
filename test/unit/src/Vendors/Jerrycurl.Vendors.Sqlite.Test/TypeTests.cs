@@ -40,7 +40,7 @@ CREATE TABLE jerry_types(
             Runnable<object, TypeModel> select = new Runnable<object, TypeModel>();
 
             select.Sql("SELECT ");
-            select.R(p => p.Star());
+            select.R(p => p.Map());
             select.Sql(" FROM jerry_types ");
             select.R(p => p.Ali());
             select.Sql(";");

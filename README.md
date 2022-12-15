@@ -70,13 +70,13 @@ They are placed in either the `Queries` or `Commands` folders based on whether t
     var p = R.Open(m => m.Posts);
 }
 
-SELECT      @R.Star(),
-            @R.Star(m => m.Author)
+SELECT      @R.Map(),
+            @R.Map(m => m.Author)
 INNER JOIN  @R.Tbl(m => m.Author) ON @R.Col(m => m.Author.BlogId) = @R.Col(m => m.Id)
 FROM        @R.Tbl()
 WHERE       @R.Col(m => m.CreatedOn) >= @M.Par(m => m.FromDate)
 
-SELECT      @p.Star()
+SELECT      @p.Map()
 FROM        @p.Tbl()
 INNER JOIN  @R.Tbl() ON @R.Col(m => m.Id) = @p.Col(m => m.BlogId)
 WHERE       @R.Col(m => m.CreatedOn) >= @M.Par(m => m.FromDate)

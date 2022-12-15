@@ -42,7 +42,7 @@ CREATE TABLE jerry_json(
             Runnable<object, JsonView> select = new Runnable<object, JsonView>();
 
             select.Sql("SELECT ");
-            select.R(p => p.Star());
+            select.R(p => p.Map());
             select.Sql(" FROM jerry_json ");
             select.R(p => p.Ali());
             select.Sql(";");

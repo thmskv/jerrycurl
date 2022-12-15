@@ -84,12 +84,12 @@ CREATE TABLE ""jerry_types2""(
             Runnable<object, TypeModel2> select2 = new Runnable<object, TypeModel2>();
 
             select1.Sql("SELECT ");
-            select1.R(p => p.Star());
+            select1.R(p => p.Map());
             select1.Sql(@" FROM ""jerry_types"" ");
             select1.R(p => p.Ali());
 
             select2.Sql("SELECT ");
-            select2.R(p => p.Star());
+            select2.R(p => p.Map());
             select2.Sql(@" FROM ""jerry_types2"" ");
             select2.R(p => p.Ali());
 

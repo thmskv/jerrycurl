@@ -372,9 +372,9 @@ namespace Jerrycurl.Mvc.Test
             var runner = new Runner();
             var model = new Runnable<object, BlogView>(separator: ",");
 
-            model.R(p => p.Star());
+            model.R(p => p.Map());
             model.Sql(";");
-            model.R(p => p.Star(m => m.Posts));
+            model.R(p => p.Map(m => m.Posts));
             model.Sql(";");
             model.R(p => p.Cols().As().Props());
 
