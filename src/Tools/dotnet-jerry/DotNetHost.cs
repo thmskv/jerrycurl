@@ -86,7 +86,11 @@ namespace Jerrycurl.Tools.DotNet.Cli
             DebugModel model = new DebugModel()
             {
                 Message = ex.Message,
-                Type = ex.Message,
+                Type = ex switch
+                {
+                    OrmToolException oex => oex.Type,
+                    _ => null,
+                },
                 Log = ex switch
                 {
                     OrmToolException oex => oex.Log,
