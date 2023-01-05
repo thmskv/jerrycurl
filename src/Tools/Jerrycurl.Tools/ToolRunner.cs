@@ -91,7 +91,6 @@ namespace Jerrycurl.Tools
                 else
                     outputCloseEvent.SetResult(true);
 
-
                 TaskCompletionSource<bool> errorCloseEvent = new TaskCompletionSource<bool>();
 
                 if (startInfo.RedirectStandardError)

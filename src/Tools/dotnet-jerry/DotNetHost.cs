@@ -22,7 +22,6 @@ namespace Jerrycurl.Tools.DotNet.Cli
 
         public async static Task<int> Main(string[] args)
         {
-
             WriteHeader();
 
 #if DEBUG
@@ -48,10 +47,6 @@ namespace Jerrycurl.Tools.DotNet.Cli
 
             b.UseDefaults();
             b.UseExceptionHandler(HandleExceptionAsync);
-            rootCommand.SetHandler(() =>
-            {
-                var x = 100;
-            });
 
             rootCommand.AddGlobalOption(VerboseOption);
             rootCommand.AddGlobalOption(DebugOption);

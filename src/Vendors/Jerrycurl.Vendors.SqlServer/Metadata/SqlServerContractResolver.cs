@@ -12,6 +12,8 @@ namespace Jerrycurl.Vendors.SqlServer.Metadata
 {
     public class SqlServerContractResolver : IBindingContractResolver
     {
+        public const int DefaultStringSize = 4000;
+
         public int Priority => 1000;
         public IBindingParameterContract GetParameterContract(IBindingMetadata metadata)
         {
@@ -27,6 +29,22 @@ namespace Jerrycurl.Vendors.SqlServer.Metadata
                         fallback?.Write?.Invoke(pi);
 
                         pi.Parameter.DbType = DbType.DateTime2;
+                    }
+                };
+            }
+            else if (metadata.Type == typeof(string))
+            {
+                IBindingParameterContract fallback = metadata.Parameter;
+
+                return new BindingParameterContract()
+                {
+                    Convert = fallback.Convert,
+                    Write = pi =>
+                    {
+                        fallback?.Write?.Invoke(pi);
+
+                        if (pi.Parameter.Size < DefaultStringSize)
+                            pi.Parameter.Size = DefaultStringSize;
                     }
                 };
             }
