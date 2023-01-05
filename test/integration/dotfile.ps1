@@ -200,7 +200,7 @@ function Prepare-Database
 
     Push-Location $toolPath
     .\jerry orm run -v "$Vendor" -c "$ConnectionString" --sql "$sql"
-    if ($LastExitCode -ne 0) { Pop-Location; throw "Error running 'jerry run'." }
+    if ($LastExitCode -ne 0) { Pop-Location; throw "Error running 'jerry orm run'." }
     Pop-Location
 }
 

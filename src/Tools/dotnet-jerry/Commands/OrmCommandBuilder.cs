@@ -286,7 +286,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
 
                 OrmToolOptions options = new OrmToolOptions()
                 {
-                    Input = configValue ?? "Database.orm",
+                    Input = configValue ?? DefaultFileName,
                 };
 
                 if (File.Exists(configValue))
@@ -300,7 +300,7 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands
                         throw new OrmToolException($"{Path.GetFileName(configValue)} is not a valid configuration file.", innerException: ex);
                     }
                 }
-                else if (command.Name != "new")
+                else if (command.Name != "new" && (options.Input != DefaultFileName || (connectionValue == null || vendorValue == null)))
                     throw new OrmToolException($"{configValue} not found.");
 
                 options.Vendor = vendorValue ?? options.Vendor;
