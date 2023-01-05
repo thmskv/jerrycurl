@@ -4,14 +4,14 @@
 }
 
 SELECT
-    @R.Star(),
-    @R.Star(m => m.Details)
+    @R.Map(),
+    @R.Map(m => m.Details)
 FROM
     @R.Tbl()
 LEFT JOIN
     @R.Tbl(m => m.Details) ON @R.Col(m => m.Details.MovieId) = @R.Col(m => m.Id);
 
 SELECT
-    @c.Star()
+    @c.Map()
 FROM
     @c.Tbl()

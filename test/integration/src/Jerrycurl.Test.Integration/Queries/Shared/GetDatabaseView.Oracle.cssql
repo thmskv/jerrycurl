@@ -7,8 +7,8 @@
 BEGIN
 OPEN @R.Refcursor() FOR
 SELECT
-    @R.Star(),
-    @R.Star(m => m.Details)
+    @R.Map(),
+    @R.Map(m => m.Details)
 FROM
     @R.Tbl()
 LEFT JOIN
@@ -16,7 +16,7 @@ LEFT JOIN
 
 OPEN @c.Refcursor() FOR
 SELECT
-    @c.Star()
+    @c.Map()
 FROM
     @c.Tbl();
 END;

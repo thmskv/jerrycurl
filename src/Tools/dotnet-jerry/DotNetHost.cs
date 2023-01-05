@@ -22,15 +22,13 @@ namespace Jerrycurl.Tools.DotNet.Cli
 
         public async static Task<int> Main(string[] args)
         {
-            WriteHeader();
-
 #if DEBUG
             
             //Environment.CurrentDirectory = "C:\\Users\\thomas\\Desktop\\testx";
 
             //args = new[] { "orm", "sync", "--flags", "useNullables" };
             //args = new[] { "orm", "new", "-v", "sqlserver", "-c", "server=.;database=gerstl_120922;trusted_connection=true;encrypt=false", "-i", @"c:\users\thomas\desktop\Database.orm", "--debug", @"c:\users\thomas\desktop\Database.log" };
-            args = new[] { "orm", "sync", @"C:\Users\thomas\Desktop\Database.orm", "--debug", @"c:\users\thomas\desktop\Database.log" };
+            //args = new[] { "orm", "sync", "--vendor", "sqlserver", "-c", "server=.;database=gerstl_120922;trusted_connection=true;encrypt=false", "-ns", "Kaffezars", "--verbose", "--logo" };
             //args = new[] { "orm", "transform", "-f", @"c:\users\thomas\desktop\Database.orm" };
             //args = new[] { "orm", "run", "-f", @"c:\users\thomas\desktop\Database.orm", "--snippet", "test" };
             //args = new[] { "orm", "new", "-v", "sqlserver", "-c", "server=.;database=realescort_live;trusted_connection=true;encrypt=false" };
@@ -43,10 +41,10 @@ namespace Jerrycurl.Tools.DotNet.Cli
                 Name = "jerry",
             };
 
-            CommandLineBuilder b = new CommandLineBuilder(rootCommand);
+            CommandLineBuilder builder = new CommandLineBuilder(rootCommand);
 
-            b.UseDefaults();
-            b.UseExceptionHandler(HandleExceptionAsync);
+            builder.UseDefaults();
+            builder.UseExceptionHandler(HandleExceptionAsync);
 
             rootCommand.AddGlobalOption(VerboseOption);
             rootCommand.AddGlobalOption(DebugOption);
@@ -55,9 +53,13 @@ namespace Jerrycurl.Tools.DotNet.Cli
             new OrmCommandBuilder().Build(rootCommand);
             new RazorCommandBuilder().Build(rootCommand);
 
-            Parser parser = b.Build();
+            Parser parser = builder.Build();
+            ParseResult result = parser.Parse(args);
 
-            return await parser.InvokeAsync(args);
+            if (result.GetValueForOption(LogoOption))
+                WriteLogo();
+
+            return await parser.Parse(args).InvokeAsync();
         }
 
         private static async void HandleExceptionAsync(Exception ex, InvocationContext context)
@@ -104,7 +106,7 @@ namespace Jerrycurl.Tools.DotNet.Cli
 
             await JsonSerializer.SerializeAsync(stream, model, options);
         }
-        public static void WriteHeader()
+        public static void WriteLogo()
         {
             NuGetVersion version = typeof(DotNetHost).Assembly.GetNuGetPackageVersion();
 

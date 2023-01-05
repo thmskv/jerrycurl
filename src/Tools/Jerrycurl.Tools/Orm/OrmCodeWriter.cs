@@ -20,7 +20,7 @@ namespace Jerrycurl.Tools.Orm
             {
                 CSharpWriter writer = new CSharpWriter(fileWriter);
 
-                string noWarn = schema.Flags.GetValueOrDefault("noWarn");
+                string noWarn = schema.Flags?.GetValueOrDefault("noWarn");
 
                 if (!string.IsNullOrWhiteSpace(noWarn))
                     await writer.WritePragmaDirectiveAsync($"warning disable {noWarn}");
@@ -167,7 +167,7 @@ namespace Jerrycurl.Tools.Orm
                     console.WriteLine($"    table {tableName} [Ignored]");
                 else
                 {
-                    console.Write($"    {tableName}", ConsoleColor.DarkRed);
+                    console.Write($"    {tableName}", ConsoleColor.Blue);
                     console.Write(" -> ");
                     console.WriteLine(className, ConsoleColor.Green);
                 }

@@ -246,7 +246,7 @@ function Run-ProjectTest
     Write-Host "  Building project ($TargetFramework)..." -ForegroundColor Cyan
     dotnet add package Jerrycurl --version $Version
     dotnet add package $package --version $Version
-    ..\jerry orm sync -v $Vendor -c $ConnectionString -ns "Jerrycurl.Test.Integration.Database" --verbose
+    ..\jerry orm sync -v $Vendor -c $ConnectionString -ns "Jerrycurl.Test.Integration.Database" --verbose --flags useNullables=false
     if ($LastExitCode -eq 0)
     {
         dotnet build @buildArgs

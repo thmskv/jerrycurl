@@ -1,5 +1,5 @@
 ﻿SELECT
-	@R.Star()
+	@R.Map()
 FROM
 	@R.Tbl()
 
