@@ -40,7 +40,7 @@ namespace Jerrycurl.Tools.Orm
                     if (!string.IsNullOrWhiteSpace(ns))
                         await writer.WriteNamespaceStartAsync(ns);
 
-                    foreach (SchemaModel.TableModel table in namespaceGroup.NotNull().OrderBy(t => t.Schema).ThenBy(t => t.Name))
+                    foreach (SchemaModel.TableModel table in namespaceGroup.NotNull().Where(t => t.Ignore).OrderBy(t => t.Schema).ThenBy(t => t.Name))
                     {
                         string warningMessage = this.GetWarningMessage(table);
 
