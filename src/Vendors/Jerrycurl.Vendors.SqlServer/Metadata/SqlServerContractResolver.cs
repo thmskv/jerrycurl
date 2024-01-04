@@ -48,6 +48,22 @@ namespace Jerrycurl.Vendors.SqlServer.Metadata
                     }
                 };
             }
+            else if (metadata.Type.FullName == "Microsoft.SqlServer.Types.SqlGeography")
+            {
+                IBindingParameterContract fallback = metadata.Parameter;
+
+                return new BindingParameterContract()
+                {
+                    Convert = fallback.Convert,
+                    Write = pi =>
+                    {
+                        fallback?.Write?.Invoke(pi);
+
+                        if (pi.Parameter is SqlParameter sqlParam)
+                            sqlParam.UdtTypeName = "geography";
+                    }
+                };
+            }
 
             return null;
         }
