@@ -1,48 +1,47 @@
 ﻿using Jerrycurl.Mvc.Projections;
 using System;
 
-namespace Jerrycurl.Mvc
+namespace Jerrycurl.Mvc;
+
+internal class ProcRenderer : IProcRenderer
 {
-    internal class ProcRenderer : IProcRenderer
+    public ProcContext Context { get; }
+
+    public ProcRenderer(ProcContext context)
     {
-        public ProcContext Context { get; }
+        this.Context = context ?? throw new ArgumentNullException(nameof(context));
+    }
 
-        public ProcRenderer(ProcContext context)
-        {
-            this.Context = context ?? throw new ArgumentNullException(nameof(context));
-        }
+    public ISqlContent Body()
+    {
+        if (this.Context.Stack.IsEmpty)
+            throw new ProcExecutionException("Execution stack is empty. Please only call Body() on template pages.");
 
-        public ISqlContent Body()
-        {
-            if (this.Context.Stack.IsEmpty)
-                throw new ProcExecutionException("Execution stack is empty. Please only call Body() on template pages.");
+        this.Context.Execution.Body?.Invoke();
 
-            this.Context.Execution.Body?.Invoke();
+        return SqlContent.Empty;
+    }
 
-            return SqlContent.Empty;
-        }
+    public ISqlContent Partial(string procName, IProjection model, IProjection result)
+    {
+        if (procName == null)
+            throw new ArgumentNullException(nameof(procName));
 
-        public ISqlContent Partial(string procName, IProjection model, IProjection result)
-        {
-            if (procName == null)
-                throw new ArgumentNullException(nameof(procName));
+        if (model == null)
+            throw new ArgumentNullException(nameof(model));
 
-            if (model == null)
-                throw new ArgumentNullException(nameof(model));
+        if (result == null)
+            throw new ArgumentNullException(nameof(result));
 
-            if (result == null)
-                throw new ArgumentNullException(nameof(result));
+        PageDescriptor descriptor = this.Context.Locator.FindPage(procName, model.Context.Execution.Page.PageType);
+        PageFactory factory = this.Context.Domain.Engine.Page(descriptor.PageType);
 
-            PageDescriptor descriptor = this.Context.Locator.FindPage(procName, model.Context.Execution.Page.PageType);
-            PageFactory factory = this.Context.Domain.Engine.Page(descriptor.PageType);
+        this.Context.Stack.Push(new PageExecutionContext() { Page = descriptor });
 
-            this.Context.Stack.Push(new PageExecutionContext() { Page = descriptor });
+        factory(model, result);
 
-            factory(model, result);
+        this.Context.Stack.Pop();
 
-            this.Context.Stack.Pop();
-
-            return SqlContent.Empty;
-        }
+        return SqlContent.Empty;
     }
 }

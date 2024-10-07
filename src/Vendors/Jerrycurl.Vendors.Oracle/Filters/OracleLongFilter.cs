@@ -2,19 +2,18 @@
 using Jerrycurl.Cqs.Filters;
 using Oracle.ManagedDataAccess.Client;
 
-namespace Jerrycurl.Vendors.Oracle.Filters
+namespace Jerrycurl.Vendors.Oracle.Filters;
+
+internal class OracleLongFilter : FilterHandler, IFilter
 {
-    internal class OracleLongFilter : FilterHandler, IFilter
+    public IFilterAsyncHandler GetAsyncHandler(IDbConnection connection) => null;
+    public IFilterHandler GetHandler(IDbConnection connection) => this;
+
+    public override void OnCommandCreated(FilterContext context)
     {
-        public IFilterAsyncHandler GetAsyncHandler(IDbConnection connection) => null;
-        public IFilterHandler GetHandler(IDbConnection connection) => this;
+        base.OnCommandCreated(context);
 
-        public override void OnCommandCreated(FilterContext context)
-        {
-            base.OnCommandCreated(context);
-
-            if (context.Command is OracleCommand oracleCommand)
-                oracleCommand.InitialLONGFetchSize = -1;
-        }
+        if (context.Command is OracleCommand oracleCommand)
+            oracleCommand.InitialLONGFetchSize = -1;
     }
 }

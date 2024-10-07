@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Jerrycurl.Cqs.Metadata
+namespace Jerrycurl.Cqs.Metadata;
+
+public interface IReferenceKey : IEquatable<IReferenceKey>
 {
-    public interface IReferenceKey : IEquatable<IReferenceKey>
-    {
-        string Name { get; }
-        string Other { get; }
-        ReferenceKeyFlags Flags { get; }
-        IReadOnlyList<IReferenceMetadata> Properties { get; }
-    }
+    string Name { get; }
+    string Other { get; }
+    ReferenceKeyFlags Flags { get; }
+    IReadOnlyList<IReferenceMetadata> Properties { get; }
 }

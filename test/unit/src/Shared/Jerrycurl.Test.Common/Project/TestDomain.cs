@@ -3,32 +3,31 @@ using System.Linq;
 using System.Reflection;
 using Jerrycurl.Mvc;
 
-namespace Jerrycurl.Test.Project
+namespace Jerrycurl.Test.Project;
+
+public class TestDomain : IDomain
 {
-    public class TestDomain : IDomain
+    public void Configure(DomainOptions options)
     {
-        public void Configure(DomainOptions options)
+        Type conventionType = Assembly.GetEntryAssembly().GetExportedTypes().FirstOrDefault(this.IsValidDatabaseConvention);
+
+        if (conventionType != null)
         {
-            Type conventionType = Assembly.GetEntryAssembly().GetExportedTypes().FirstOrDefault(this.IsValidDatabaseConvention);
+            DatabaseConvention database = (DatabaseConvention)Activator.CreateInstance(conventionType);
 
-            if (conventionType != null)
-            {
-                DatabaseConvention database = (DatabaseConvention)Activator.CreateInstance(conventionType);
-
-                database.Configure(options);
-            }
+            database.Configure(options);
         }
+    }
 
-        private bool IsValidDatabaseConvention(Type type)
-        {
-            if (!typeof(DatabaseConvention).IsAssignableFrom(type))
-                return false;
-            else if (type.IsAbstract)
-                return false;
-            else if (type.GetConstructor(Type.EmptyTypes) == null)
-                return false;
+    private bool IsValidDatabaseConvention(Type type)
+    {
+        if (!typeof(DatabaseConvention).IsAssignableFrom(type))
+            return false;
+        else if (type.IsAbstract)
+            return false;
+        else if (type.GetConstructor(Type.EmptyTypes) == null)
+            return false;
 
-            return true;
-        }
+        return true;
     }
 }

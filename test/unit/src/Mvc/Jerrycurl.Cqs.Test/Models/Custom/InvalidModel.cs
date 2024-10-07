@@ -2,24 +2,23 @@
 using System.Collections.Generic;
 using Jerrycurl.Cqs.Metadata.Annotations;
 
-namespace Jerrycurl.Cqs.Test.Models.Custom
+namespace Jerrycurl.Cqs.Test.Models.Custom;
+
+public class InvalidModel
 {
-    public class InvalidModel
+    [Key("PK")]
+    public int InvalidId { get; set; }
+    public int GetOnly
     {
-        [Key("PK")]
-        public int InvalidId { get; set; }
-        public int GetOnly
-        {
-            get => 1;
-            set => throw new NotSupportedException("NoTryCatchHere");
-        }
+        get => 1;
+        set => throw new NotSupportedException("NoTryCatchHere");
+    }
 
-        public IList<RefModel> Many { get; set; }
+    public IList<RefModel> Many { get; set; }
 
-        public class RefModel
-        {
-            [Ref("PK")]
-            public string RefId { get; set; }
-        }
+    public class RefModel
+    {
+        [Ref("PK")]
+        public string RefId { get; set; }
     }
 }

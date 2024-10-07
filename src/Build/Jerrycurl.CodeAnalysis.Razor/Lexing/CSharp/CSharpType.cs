@@ -1,11 +1,10 @@
-﻿namespace Jerrycurl.CodeAnalysis.Razor.Lexing.CSharp
+﻿namespace Jerrycurl.CodeAnalysis.Razor.Lexing.CSharp;
+
+public enum CSharpType
 {
-    public enum CSharpType
-    {
-        None = 0,
-        Statement = 1,
-        Expression = 2,
-        Directive = 3,
-        Comment = 4,
-    }
+    None = 0,
+    Statement = 1,
+    Expression = 2,
+    Directive = 3,
+    Comment = 4,
 }

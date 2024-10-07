@@ -7,72 +7,71 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Jerrycurl.Cqs.Test.Metadata
+namespace Jerrycurl.Cqs.Test.Metadata;
+
+public class CustomContractResolver : IBindingContractResolver, IRelationContractResolver
 {
-    public class CustomContractResolver : IBindingContractResolver, IRelationContractResolver
+    public int Priority => 10;
+
+    public IEnumerable<Attribute> GetAnnotations(IRelationMetadata metadata) => null;
+
+    public IBindingCompositionContract GetCompositionContract(IBindingMetadata metadata)
     {
-        public int Priority => 10;
-
-        public IEnumerable<Attribute> GetAnnotations(IRelationMetadata metadata) => null;
-
-        public IBindingCompositionContract GetCompositionContract(IBindingMetadata metadata)
+        if (metadata.Type.IsOpenGeneric(typeof(CustomList<>), out Type itemType))
         {
-            if (metadata.Type.IsOpenGeneric(typeof(CustomList<>), out Type itemType))
+            return new BindingCompositionContract()
             {
-                return new BindingCompositionContract()
-                {
-                    Construct = Expression.New(typeof(CustomList<>).MakeGenericType(itemType)),
-                    Add = typeof(ICollection<>).MakeGenericType(itemType).GetMethod("Add"),
-                };
-            }
-
-            return null;
+                Construct = Expression.New(typeof(CustomList<>).MakeGenericType(itemType)),
+                Add = typeof(ICollection<>).MakeGenericType(itemType).GetMethod("Add"),
+            };
         }
 
-        public IRelationContract GetContract(IRelationMetadata metadata)
+        return null;
+    }
+
+    public IRelationContract GetContract(IRelationMetadata metadata)
+    {
+        if (metadata.Type.IsOpenGeneric(typeof(CustomList<>), out Type itemType))
         {
-            if (metadata.Type.IsOpenGeneric(typeof(CustomList<>), out Type itemType))
+            var indexer = metadata.Type.GetProperties().FirstOrDefault(pi => pi.Name == "Item" && pi.GetIndexParameters().FirstOrDefault()?.ParameterType == typeof(int));
+
+            return new RelationContract()
             {
-                var indexer = metadata.Type.GetProperties().FirstOrDefault(pi => pi.Name == "Item" && pi.GetIndexParameters().FirstOrDefault()?.ParameterType == typeof(int));
-
-                return new RelationContract()
-                {
-                    ItemType = itemType,
-                    ReadIndex = indexer.GetMethod,
-                    WriteIndex = indexer.SetMethod,
-                };
-            }
-
-            return null;
+                ItemType = itemType,
+                ReadIndex = indexer.GetMethod,
+                WriteIndex = indexer.SetMethod,
+            };
         }
 
-        public IBindingHelperContract GetHelperContract(IBindingMetadata metadata) => null;
-        public IBindingParameterContract GetParameterContract(IBindingMetadata metadata) => null;
-        public IBindingValueContract GetValueContract(IBindingMetadata metadata)
+        return null;
+    }
+
+    public IBindingHelperContract GetHelperContract(IBindingMetadata metadata) => null;
+    public IBindingParameterContract GetParameterContract(IBindingMetadata metadata) => null;
+    public IBindingValueContract GetValueContract(IBindingMetadata metadata)
+    {
+        if (metadata.Type.IsOpenGeneric(typeof(CustomList<>), out Type itemType))
         {
-            if (metadata.Type.IsOpenGeneric(typeof(CustomList<>), out Type itemType))
+            return new BindingValueContract()
             {
-                return new BindingValueContract()
+                Read = null,
+                Convert = info =>
                 {
-                    Read = null,
-                    Convert = info =>
-                    {
-                        var listType = typeof(CustomList<>).MakeGenericType(itemType);
-                        var collectionType = typeof(ICollection<>).MakeGenericType(itemType);
+                    var listType = typeof(CustomList<>).MakeGenericType(itemType);
+                    var collectionType = typeof(ICollection<>).MakeGenericType(itemType);
 
-                        var newList = Expression.New(listType);
-                        var addMethod = collectionType.GetMethod("Add");
-                        var variable = Expression.Variable(listType);
+                    var newList = Expression.New(listType);
+                    var addMethod = collectionType.GetMethod("Add");
+                    var variable = Expression.Variable(listType);
 
-                        var assignList = Expression.Assign(variable, newList);
-                        var addDefault = Expression.Call(variable, addMethod, Expression.Default(itemType));
+                    var assignList = Expression.Assign(variable, newList);
+                    var addDefault = Expression.Call(variable, addMethod, Expression.Default(itemType));
 
-                        return Expression.Block(new[] { variable }, assignList, addDefault, variable);
-                    }
-                };
-            }
-
-            return null;
+                    return Expression.Block(new[] { variable }, assignList, addDefault, variable);
+                }
+            };
         }
+
+        return null;
     }
 }

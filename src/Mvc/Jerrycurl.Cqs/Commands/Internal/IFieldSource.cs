@@ -1,8 +1,7 @@
-﻿namespace Jerrycurl.Cqs.Commands.Internal
+﻿namespace Jerrycurl.Cqs.Commands.Internal;
+
+internal interface IFieldSource
 {
-    internal interface IFieldSource
-    {
-        object Value { get; }
-        bool HasChanged { get; }
-    }
+    object Value { get; }
+    bool HasChanged { get; }
 }

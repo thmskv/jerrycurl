@@ -1,10 +1,9 @@
 ﻿using Jerrycurl.Relations.Metadata;
 using System.Collections.Generic;
 
-namespace Jerrycurl.Cqs.Metadata
+namespace Jerrycurl.Cqs.Metadata;
+
+public interface ITableMetadataBuilder : IMetadataBuilder<ITableMetadata>, ICollection<ITableContractResolver>
 {
-    public interface ITableMetadataBuilder : IMetadataBuilder<ITableMetadata>, ICollection<ITableContractResolver>
-    {
-        ITableContractResolver DefaultResolver { get; set; }
-    }
+    ITableContractResolver DefaultResolver { get; set; }
 }

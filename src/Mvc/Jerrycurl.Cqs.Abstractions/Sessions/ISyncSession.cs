@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 
-namespace Jerrycurl.Cqs.Sessions
+namespace Jerrycurl.Cqs.Sessions;
+
+public interface ISyncSession : IDisposable
 {
-    public interface ISyncSession : IDisposable
-    {
-        IEnumerable<IDataReader> Execute(IBatch batch);
-    }
+    IEnumerable<IDataReader> Execute(IBatch batch);
 }

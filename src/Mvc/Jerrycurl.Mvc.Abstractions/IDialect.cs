@@ -1,15 +1,14 @@
-﻿namespace Jerrycurl.Mvc
+﻿namespace Jerrycurl.Mvc;
+
+public interface IDialect
 {
-    public interface IDialect
-    {
-        string Identifier(string id);
-        string Parameter(string parameterName);
-        string Variable(string variableName);
-        string Literal(object value);
-        string String(string value);
+    string Identifier(string id);
+    string Parameter(string parameterName);
+    string Variable(string variableName);
+    string Literal(object value);
+    string String(string value);
 
-        string Qualifier { get; }
+    string Qualifier { get; }
 
-        DialectSupport Support { get; }
-    }
+    DialectSupport Support { get; }
 }

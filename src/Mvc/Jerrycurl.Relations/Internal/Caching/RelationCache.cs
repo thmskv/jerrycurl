@@ -4,38 +4,37 @@ using Jerrycurl.Relations.Internal.Queues;
 using Jerrycurl.Relations.Metadata;
 using Jerrycurl.Relations.Internal.Parsing;
 
-namespace Jerrycurl.Relations.Internal.Caching
+namespace Jerrycurl.Relations.Internal.Caching;
+
+internal static class RelationCache
 {
-    internal static class RelationCache
+    private readonly static ConcurrentDictionary<RelationCacheKey, BufferWriter> cache = new ConcurrentDictionary<RelationCacheKey, BufferWriter>();
+
+    public static RelationBuffer CreateBuffer(IRelation relation)
     {
-        private readonly static ConcurrentDictionary<RelationCacheKey, BufferWriter> cache = new ConcurrentDictionary<RelationCacheKey, BufferWriter>();
+        BufferWriter writer = GetWriter(relation.Source.Identity.Metadata, relation.Header);
 
-        public static RelationBuffer CreateBuffer(IRelation relation)
+        return new RelationBuffer()
         {
-            BufferWriter writer = GetWriter(relation.Source.Identity.Metadata, relation.Header);
+            Writer = writer,
+            Queues = new IRelationQueue[writer.Queues.Length],
+            Fields = new IField[relation.Header.Attributes.Count],
+            Model = relation.Source.Model,
+            Source = relation.Source,
+        };
+    }
 
-            return new RelationBuffer()
-            {
-                Writer = writer,
-                Queues = new IRelationQueue[writer.Queues.Length],
-                Fields = new IField[relation.Header.Attributes.Count],
-                Model = relation.Source.Model,
-                Source = relation.Source,
-            };
-        }
+    private static BufferWriter GetWriter(MetadataIdentity source, IRelationHeader header)
+    {
+        RelationCacheKey key = new RelationCacheKey(source, header);
 
-        private static BufferWriter GetWriter(MetadataIdentity source, IRelationHeader header)
+        return cache.GetOrAdd(key, _ =>
         {
-            RelationCacheKey key = new RelationCacheKey(source, header);
+            BufferParser parser = new BufferParser();
+            BufferTree tree = parser.Parse(source, header);
+            RelationCompiler compiler = new RelationCompiler();
 
-            return cache.GetOrAdd(key, _ =>
-            {
-                BufferParser parser = new BufferParser();
-                BufferTree tree = parser.Parse(source, header);
-                RelationCompiler compiler = new RelationCompiler();
-
-                return compiler.Compile(tree);
-            });
-        }
+            return compiler.Compile(tree);
+        });
     }
 }

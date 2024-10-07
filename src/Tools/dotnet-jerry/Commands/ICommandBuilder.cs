@@ -1,9 +1,8 @@
 ﻿using System.CommandLine;
 
-namespace Jerrycurl.Tools.DotNet.Cli.Commands
+namespace Jerrycurl.Tools.DotNet.Cli.Commands;
+
+internal interface ICommandBuilder
 {
-    internal interface ICommandBuilder
-    {
-        void Build(RootCommand command);
-    }
+    void Build(RootCommand command);
 }

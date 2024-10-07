@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace Jerrycurl.Cqs.Metadata
+namespace Jerrycurl.Cqs.Metadata;
+
+public interface IBindingHelperContract
 {
-    public interface IBindingHelperContract
-    {
-        object Object { get; }
-        Type Type { get; }
-    }
+    object Object { get; }
+    Type Type { get; }
 }

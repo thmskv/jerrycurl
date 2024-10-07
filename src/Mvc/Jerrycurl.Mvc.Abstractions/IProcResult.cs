@@ -1,8 +1,7 @@
-﻿namespace Jerrycurl.Mvc
+﻿namespace Jerrycurl.Mvc;
+
+public interface IProcResult
 {
-    public interface IProcResult
-    {
-        ISqlBuffer Buffer { get; }
-        IDomainOptions Domain { get; }
-    }
+    ISqlBuffer Buffer { get; }
+    IDomainOptions Domain { get; }
 }

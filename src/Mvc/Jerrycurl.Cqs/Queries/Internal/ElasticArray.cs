@@ -1,37 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace Jerrycurl.Cqs.Queries.Internal
+namespace Jerrycurl.Cqs.Queries.Internal;
+
+internal class ElasticArray<TValue> : IEnumerable<TValue>
 {
-    internal class ElasticArray<TValue> : IEnumerable<TValue>
+    private readonly List<TValue> innerList = new List<TValue>(2);
+
+    public TValue this[int index]
     {
-        private readonly List<TValue> innerList = new List<TValue>(2);
-
-        public TValue this[int index]
+        get
         {
-            get
-            {
-                this.EnsureIndex(index);
+            this.EnsureIndex(index);
 
-                return this.innerList[index];
-            }
-            set
-            {
-                this.EnsureIndex(index);
-
-                this.innerList[index] = value;
-            }
+            return this.innerList[index];
         }
-
-        private void EnsureIndex(int index)
+        set
         {
-            if (index >= this.innerList.Count)
-                this.innerList.AddRange(new TValue[index - this.innerList.Count + 1]);
-        }
+            this.EnsureIndex(index);
 
-        public IEnumerator<TValue> GetEnumerator() => this.innerList.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+            this.innerList[index] = value;
+        }
     }
 
-    internal class ElasticArray : ElasticArray<object> { }
+    private void EnsureIndex(int index)
+    {
+        if (index >= this.innerList.Count)
+            this.innerList.AddRange(new TValue[index - this.innerList.Count + 1]);
+    }
+
+    public IEnumerator<TValue> GetEnumerator() => this.innerList.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 }
+
+internal class ElasticArray : ElasticArray<object> { }

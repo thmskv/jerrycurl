@@ -11,140 +11,139 @@ using static Jerrycurl.Tools.Orm.Model.SchemaModel;
 using Jerrycurl.Collections;
 using System.IO;
 
-namespace Jerrycurl.Tools.Orm
+namespace Jerrycurl.Tools.Orm;
+
+public abstract class OrmTool
 {
-    public abstract class OrmTool
+    protected abstract DbConnection GetConnection(OrmToolOptions options);
+    protected abstract Task BuildSchemaAsync(DbConnection connection, SchemaBuilder builder, CancellationToken cancellationToken = default);
+
+    public async Task<SchemaModel> BuildAsync(OrmToolOptions options, ToolConsole console, CancellationToken cancellationToken = default)
     {
-        protected abstract DbConnection GetConnection(OrmToolOptions options);
-        protected abstract Task BuildSchemaAsync(DbConnection connection, SchemaBuilder builder, CancellationToken cancellationToken = default);
+        using DbConnection connection = await this.OpenConnectionAsync(options, console);
 
-        public async Task<SchemaModel> BuildAsync(OrmToolOptions options, ToolConsole console, CancellationToken cancellationToken = default)
+        SchemaBuilder builder = new SchemaBuilder(options);
+        OrmTransformer transformer = new OrmTransformer();
+
+        await this.BuildSchemaAsync(connection, builder, cancellationToken);
+
+        this.CreateDefaultClrModel(options, builder.Model);
+
+        SchemaModel transformed = await transformer.TransformAsync(options, builder.Model, console);
+
+        return transformed;
+    }
+
+    public async Task WriteAsync(SchemaModel schema, OrmToolOptions options, ToolConsole console, string outputPath = null, CancellationToken cancellationToken = default)
+    {
+        console.WriteLine($"Writing to '{Path.GetFileName(options.Output)}'...");
+
+        OrmCodeWriter codeWriter = new OrmCodeWriter();
+
+        await codeWriter.WriteAsync(options, schema, outputPath ?? options.Output, console);
+    }
+
+    public async IAsyncEnumerable<TupleModel> QueryAsync(DbCommand command)
+    {
+        using (DbDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
         {
-            using DbConnection connection = await this.OpenConnectionAsync(options, console);
-
-            SchemaBuilder builder = new SchemaBuilder(options);
-            OrmTransformer transformer = new OrmTransformer();
-
-            await this.BuildSchemaAsync(connection, builder, cancellationToken);
-
-            this.CreateDefaultClrModel(options, builder.Model);
-
-            SchemaModel transformed = await transformer.TransformAsync(options, builder.Model, console);
-
-            return transformed;
-        }
-
-        public async Task WriteAsync(SchemaModel schema, OrmToolOptions options, ToolConsole console, string outputPath = null, CancellationToken cancellationToken = default)
-        {
-            console.WriteLine($"Writing to '{Path.GetFileName(options.Output)}'...");
-
-            OrmCodeWriter codeWriter = new OrmCodeWriter();
-
-            await codeWriter.WriteAsync(options, schema, outputPath ?? options.Output, console);
-        }
-
-        public async IAsyncEnumerable<TupleModel> QueryAsync(DbCommand command)
-        {
-            using (DbDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
+            do
             {
-                do
-                {
-                    while (await reader.ReadAsync().ConfigureAwait(false))
-                        yield return new TupleModel(reader);
-                }
-                while (await reader.NextResultAsync().ConfigureAwait(false));
+                while (await reader.ReadAsync().ConfigureAwait(false))
+                    yield return new TupleModel(reader);
             }
+            while (await reader.NextResultAsync().ConfigureAwait(false));
         }
+    }
 
-        private void CreateDefaultClrModel(OrmToolOptions options, SchemaModel schema)
+    private void CreateDefaultClrModel(OrmToolOptions options, SchemaModel schema)
+    {
+        schema.Imports ??= new List<string>();
+        schema.Imports.Add("global::System");
+        schema.Imports.Add("global::Jerrycurl.Cqs.Metadata.Annotations");
+        schema.Imports.Add("global::Jerrycurl.Mvc.Metadata.Annotations");
+
+        string defaultSchema = schema.Flags?.GetValueOrDefault("defaultSchema");
+        bool useNullables = (options.Flags?.GetValueOrDefault("useNullables") != "false");
+
+        foreach (TableModel table in schema.Tables)
         {
-            schema.Imports ??= new List<string>();
-            schema.Imports.Add("global::System");
-            schema.Imports.Add("global::Jerrycurl.Cqs.Metadata.Annotations");
-            schema.Imports.Add("global::Jerrycurl.Mvc.Metadata.Annotations");
-
-            string defaultSchema = schema.Flags?.GetValueOrDefault("defaultSchema");
-            bool useNullables = (options.Flags?.GetValueOrDefault("useNullables") != "false");
-
-            foreach (TableModel table in schema.Tables)
+            table.Clr = new ClassModel()
             {
-                table.Clr = new ClassModel()
+                Modifiers = new[] { "public" },
+                Name = CSharp.Identifier(table.Name),
+                Namespace = GetNamespace(table),
+            };
+
+            foreach (ColumnModel column in table.Columns)
+            {
+                column.Clr = new PropertyModel()
                 {
                     Modifiers = new[] { "public" },
-                    Name = CSharp.Identifier(table.Name),
-                    Namespace = GetNamespace(table),
+                    TypeName = GetColumnTypeName(column),
+                    Name = CSharp.Identifier(column.Name),
                 };
 
-                foreach (ColumnModel column in table.Columns)
-                {
-                    column.Clr = new PropertyModel()
-                    {
-                        Modifiers = new[] { "public" },
-                        TypeName = GetColumnTypeName(column),
-                        Name = CSharp.Identifier(column.Name),
-                    };
-
-                    if (column.Clr.Name.Equals(table.Clr.Name))
-                        column.Clr.Name += "0";
-                }
-            }
-
-            string GetNamespace(TableModel table)
-            {
-                Namespace ns = new Namespace(options.Namespace ?? "Database");
-
-                if (!string.IsNullOrEmpty(table.Schema) && !table.Schema.Equals(defaultSchema))
-                    ns = ns.Add(table.Schema.ToCapitalCase());
-
-                return ns.Definition;
-            }
-
-            string GetColumnTypeName(ColumnModel column)
-            {
-                TypeModel mapping = schema.Types?.FirstOrDefault(t => t.DbName.Equals(column.TypeName, StringComparison.OrdinalIgnoreCase));
-
-                if (mapping != null)
-                    return ((mapping.IsNullable || useNullables) && column.IsNullable) ? mapping.ClrName + "?" : mapping.ClrName;
-
-                return column.TypeName;
+                if (column.Clr.Name.Equals(table.Clr.Name))
+                    column.Clr.Name += "0";
             }
         }
 
-        public async Task<DbConnection> OpenConnectionAsync(OrmToolOptions options, ToolConsole console)
+        string GetNamespace(TableModel table)
         {
-            DbConnection connection = this.GetConnection(options);
+            Namespace ns = new Namespace(options.Namespace ?? "Database");
 
-            if (connection == null)
-                throw new OrmToolException("Connection returned null.");
+            if (!string.IsNullOrEmpty(table.Schema) && !table.Schema.Equals(defaultSchema))
+                ns = ns.Add(table.Schema.ToCapitalCase());
 
-            try
-            {
-                connection.ConnectionString = options.Connection;
-            }
-            catch (Exception ex)
-            {
-                connection.Dispose();
+            return ns.Definition;
+        }
 
-                throw new OrmToolException($"Invalid connection string '{connection.ConnectionString}': {ex.Message}", innerException: ex);
-            }
+        string GetColumnTypeName(ColumnModel column)
+        {
+            TypeModel mapping = schema.Types?.FirstOrDefault(t => t.DbName.Equals(column.TypeName, StringComparison.OrdinalIgnoreCase));
 
-            bool hasDatabase = !string.IsNullOrEmpty(connection.Database);
-            string connectText = hasDatabase ? $"Connecting to database '{connection.Database}'..." : "Connecting to database...";
+            if (mapping != null)
+                return ((mapping.IsNullable || useNullables) && column.IsNullable) ? mapping.ClrName + "?" : mapping.ClrName;
 
-            console.WriteLine(connectText);
+            return column.TypeName;
+        }
+    }
 
-            try
-            {
-                await connection.OpenAsync().ConfigureAwait(false);
+    public async Task<DbConnection> OpenConnectionAsync(OrmToolOptions options, ToolConsole console)
+    {
+        DbConnection connection = this.GetConnection(options);
 
-                return connection;
-            }
-            catch (Exception ex)
-            {
-                connection.Dispose();
+        if (connection == null)
+            throw new OrmToolException("Connection returned null.");
 
-                throw new OrmToolException($"Cannot connect to database: {ex.Message}", innerException: ex);
-            }
+        try
+        {
+            connection.ConnectionString = options.Connection;
+        }
+        catch (Exception ex)
+        {
+            connection.Dispose();
+
+            throw new OrmToolException($"Invalid connection string '{connection.ConnectionString}': {ex.Message}", innerException: ex);
+        }
+
+        bool hasDatabase = !string.IsNullOrEmpty(connection.Database);
+        string connectText = hasDatabase ? $"Connecting to database '{connection.Database}'..." : "Connecting to database...";
+
+        console.WriteLine(connectText);
+
+        try
+        {
+            await connection.OpenAsync().ConfigureAwait(false);
+
+            return connection;
+        }
+        catch (Exception ex)
+        {
+            connection.Dispose();
+
+            throw new OrmToolException($"Cannot connect to database: {ex.Message}", innerException: ex);
         }
     }
 }

@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace Jerrycurl.Cqs.Metadata
+namespace Jerrycurl.Cqs.Metadata;
+
+[Flags]
+public enum ReferenceKeyFlags
 {
-    [Flags]
-    public enum ReferenceKeyFlags
-    {
-        None = 0,
-        Candidate = 1,
-        Primary = Candidate | 2,
-        Foreign = 4,
-    }
+    None = 0,
+    Candidate = 1,
+    Primary = Candidate | 2,
+    Foreign = 4,
 }

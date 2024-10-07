@@ -1,9 +1,8 @@
 ﻿using Jerrycurl.CodeAnalysis.Lexing;
 
-namespace Jerrycurl.CodeAnalysis.Razor.Lexing.CSharp
+namespace Jerrycurl.CodeAnalysis.Razor.Lexing.CSharp;
+
+public class Blank : ISymbol
 {
-    public class Blank : ISymbol
-    {
-        public bool Parse(Tokenizer tokenizer) => tokenizer.Blank();
-    }
+    public bool Parse(Tokenizer tokenizer) => tokenizer.Blank();
 }

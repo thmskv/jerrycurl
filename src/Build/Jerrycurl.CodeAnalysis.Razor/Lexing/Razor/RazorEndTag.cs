@@ -1,26 +1,25 @@
 ﻿using Jerrycurl.CodeAnalysis.Lexing;
 
-namespace Jerrycurl.CodeAnalysis.Razor.Lexing.Razor
+namespace Jerrycurl.CodeAnalysis.Razor.Lexing.Razor;
+
+public class RazorEndTag : ISymbol
 {
-    public class RazorEndTag : ISymbol
+    public RazorType Tag { get; private set; }
+
+    public RazorEndTag(RazorType startTag)
     {
-        public RazorType Tag { get; private set; }
+        this.Tag = startTag;
+    }
 
-        public RazorEndTag(RazorType startTag)
-        {
-            this.Tag = startTag;
-        }
+    public bool Parse(Tokenizer tokenizer)
+    {
+        if (this.Tag == RazorType.Expression)
+            return tokenizer.Char(')');
+        else if (this.Tag == RazorType.Statement)
+            return tokenizer.Char('}');
+        else if (this.Tag == RazorType.Comment)
+            return tokenizer.String("*@");
 
-        public bool Parse(Tokenizer tokenizer)
-        {
-            if (this.Tag == RazorType.Expression)
-                return tokenizer.Char(')');
-            else if (this.Tag == RazorType.Statement)
-                return tokenizer.Char('}');
-            else if (this.Tag == RazorType.Comment)
-                return tokenizer.String("*@");
-
-            return true;
-        }
+        return true;
     }
 }

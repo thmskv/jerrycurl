@@ -4,49 +4,48 @@ using Shouldly;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Jerrycurl.Mvc.Test
+namespace Jerrycurl.Mvc.Test;
+
+public class CrudTests
 {
-    public class CrudTests
+    public void Test_Create_UsingLiterals()
     {
-        public void Test_Create_UsingLiterals()
-        {
-            CrudAccessor crud = new CrudAccessor();
+        CrudAccessor crud = new CrudAccessor();
 
-            crud.Sql(@"CREATE TABLE IF NOT EXISTS CrudItem ( Id integer PRIMARY KEY AUTOINCREMENT, Counter integer NOT NULL, String nvarchar(50) NULL );");
-            crud.Sql(@"DELETE FROM CrudItem;");
+        crud.Sql(@"CREATE TABLE IF NOT EXISTS CrudItem ( Id integer PRIMARY KEY AUTOINCREMENT, Counter integer NOT NULL, String nvarchar(50) NULL );");
+        crud.Sql(@"DELETE FROM CrudItem;");
 
-            IList<CrudItem> newItems = Enumerable.Range(0, 20).Select(i => new CrudItem() { Counter = i, String = $"String {i}" }).ToList();
+        IList<CrudItem> newItems = Enumerable.Range(0, 20).Select(i => new CrudItem() { Counter = i, String = $"String {i}" }).ToList();
 
-            crud.CreateWithLiterals(newItems);
+        crud.CreateWithLiterals(newItems);
 
-            newItems.ShouldAllBe(it => it.Id > 0);
-        }
+        newItems.ShouldAllBe(it => it.Id > 0);
+    }
 
-        public void Test_Crud_UsingParameters()
-        {
-            CrudAccessor crud = new CrudAccessor();
+    public void Test_Crud_UsingParameters()
+    {
+        CrudAccessor crud = new CrudAccessor();
 
-            crud.Sql(@"CREATE TABLE IF NOT EXISTS CrudItem ( Id integer PRIMARY KEY AUTOINCREMENT, Counter integer NOT NULL, String nvarchar(50) NULL );");
-            crud.Sql(@"DELETE FROM CrudItem;");
+        crud.Sql(@"CREATE TABLE IF NOT EXISTS CrudItem ( Id integer PRIMARY KEY AUTOINCREMENT, Counter integer NOT NULL, String nvarchar(50) NULL );");
+        crud.Sql(@"DELETE FROM CrudItem;");
 
-            IList<CrudItem> newItems = Enumerable.Range(0, 20).Select(i => new CrudItem() { Counter = i }).ToList();
+        IList<CrudItem> newItems = Enumerable.Range(0, 20).Select(i => new CrudItem() { Counter = i }).ToList();
 
-            crud.Create(newItems);
+        crud.Create(newItems);
 
-            newItems.ShouldAllBe(it => it.Id > 0);
+        newItems.ShouldAllBe(it => it.Id > 0);
 
-            foreach (CrudItem item in newItems)
-                item.Counter *= 2;
+        foreach (CrudItem item in newItems)
+            item.Counter *= 2;
 
-            crud.Update(newItems);
+        crud.Update(newItems);
 
-            IList<CrudItem> getItems = crud.Get<CrudItem>();
+        IList<CrudItem> getItems = crud.Get<CrudItem>();
 
-            getItems.Select(it => it.Counter).ShouldBe(Enumerable.Range(0, 20).Select(i => i * 2));
+        getItems.Select(it => it.Counter).ShouldBe(Enumerable.Range(0, 20).Select(i => i * 2));
 
-            crud.Delete(getItems);
+        crud.Delete(getItems);
 
-            crud.Get<CrudItem>().ShouldBeEmpty();
-        }
+        crud.Get<CrudItem>().ShouldBeEmpty();
     }
 }

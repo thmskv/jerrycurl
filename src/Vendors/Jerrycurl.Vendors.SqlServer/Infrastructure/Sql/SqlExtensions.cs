@@ -1,5 +1,2 @@
 ﻿// only here to keep namespace
-namespace Jerrycurl.Mvc.Sql.SqlServer
-{
-
-}
+namespace Jerrycurl.Mvc.Sql.SqlServer;

@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace Jerrycurl.Mvc
+namespace Jerrycurl.Mvc;
+
+[Flags]
+public enum DialectSupport
 {
-    [Flags]
-    public enum DialectSupport
-    {
-        None = 0,
-        InputParameters = 1,
-        OutputParameters = 2,
-    }
+    None = 0,
+    InputParameters = 1,
+    OutputParameters = 2,
 }

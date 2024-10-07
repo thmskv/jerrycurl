@@ -1,19 +1,18 @@
 ﻿using System.Text;
 using Jerrycurl.Cqs.Metadata.Annotations;
 
-namespace Jerrycurl.Vendors.Oracle.Test.Models
-{
-    [Table]
-    public class TypeModel2
-    {
-        public byte[] LongRaw { get; set; }
+namespace Jerrycurl.Vendors.Oracle.Test.Models;
 
-        public static TypeModel2 GetSample()
+[Table]
+public class TypeModel2
+{
+    public byte[] LongRaw { get; set; }
+
+    public static TypeModel2 GetSample()
+    {
+        return new TypeModel2()
         {
-            return new TypeModel2()
-            {
-                LongRaw = Encoding.ASCII.GetBytes("Jerrycurl"),
-            };
-        }
+            LongRaw = Encoding.ASCII.GetBytes("Jerrycurl"),
+        };
     }
 }

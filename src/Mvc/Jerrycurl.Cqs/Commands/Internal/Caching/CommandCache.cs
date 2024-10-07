@@ -4,35 +4,34 @@ using Jerrycurl.Cqs.Commands.Internal.Compilation;
 using Jerrycurl.Cqs.Metadata;
 using Jerrycurl.Relations.Metadata;
 
-namespace Jerrycurl.Cqs.Commands.Internal.Caching
+namespace Jerrycurl.Cqs.Commands.Internal.Caching;
+
+internal static class CommandCache
 {
-    internal static class CommandCache
+    private static readonly ConcurrentDictionary<CommandCacheKey, BufferWriter> writerMap = new ConcurrentDictionary<CommandCacheKey, BufferWriter>();
+    private static readonly ConcurrentDictionary<CommandCacheKey, BufferConverter> converterMap = new ConcurrentDictionary<CommandCacheKey, BufferConverter>();
+
+    public static BufferWriter GetWriter(IReadOnlyList<ColumnName> columnNames)
     {
-        private static readonly ConcurrentDictionary<CommandCacheKey, BufferWriter> writerMap = new ConcurrentDictionary<CommandCacheKey, BufferWriter>();
-        private static readonly ConcurrentDictionary<CommandCacheKey, BufferConverter> converterMap = new ConcurrentDictionary<CommandCacheKey, BufferConverter>();
+        CommandCacheKey cacheKey = new CommandCacheKey(columnNames);
 
-        public static BufferWriter GetWriter(IReadOnlyList<ColumnName> columnNames)
+        return writerMap.GetOrAdd(cacheKey, k =>
         {
-            CommandCacheKey cacheKey = new CommandCacheKey(columnNames);
+            CommandCompiler compiler = new CommandCompiler();
 
-            return writerMap.GetOrAdd(cacheKey, k =>
-            {
-                CommandCompiler compiler = new CommandCompiler();
+            return compiler.Compile(k.Columns);
+        });
+    }
 
-                return compiler.Compile(k.Columns);
-            });
-        }
+    public static BufferConverter GetConverter(MetadataIdentity metadata, ColumnMetadata columnMetadata)
+    {
+        CommandCacheKey cacheKey = new CommandCacheKey(metadata, columnMetadata);
 
-        public static BufferConverter GetConverter(MetadataIdentity metadata, ColumnMetadata columnMetadata)
+        return converterMap.GetOrAdd(cacheKey, k =>
         {
-            CommandCacheKey cacheKey = new CommandCacheKey(metadata, columnMetadata);
+            CommandCompiler compiler = new CommandCompiler();
 
-            return converterMap.GetOrAdd(cacheKey, k =>
-            {
-                CommandCompiler compiler = new CommandCompiler();
-
-                return compiler.Compile(metadata, columnMetadata);
-            });
-        }
+            return compiler.Compile(metadata, columnMetadata);
+        });
     }
 }

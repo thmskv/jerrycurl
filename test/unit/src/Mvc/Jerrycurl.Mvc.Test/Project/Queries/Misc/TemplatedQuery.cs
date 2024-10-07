@@ -1,20 +1,19 @@
 ﻿using Jerrycurl.Mvc.Metadata.Annotations;
 using Jerrycurl.Mvc.Projections;
 
-namespace Jerrycurl.Mvc.Test.Project.Queries.Misc
+namespace Jerrycurl.Mvc.Test.Project.Queries.Misc;
+
+[Template("TemplateQuery2.cssql")]
+public class TemplatedQuery_cssql : ProcPage<object, object>
 {
-    [Template("TemplateQuery2.cssql")]
-    public class TemplatedQuery_cssql : ProcPage<object, object>
+    public TemplatedQuery_cssql(IProjection model, IProjection result)
+        : base(model, result)
     {
-        public TemplatedQuery_cssql(IProjection model, IProjection result)
-            : base(model, result)
-        {
 
-        }
+    }
 
-        public override void Execute()
-        {
-            this.WriteLiteral("SELECT 3 AS `Item`");
-        }
+    public override void Execute()
+    {
+        this.WriteLiteral("SELECT 3 AS `Item`");
     }
 }

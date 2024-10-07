@@ -5,78 +5,77 @@ using System.Linq;
 using System.Threading.Tasks;
 using Jerrycurl.Tools.Razor;
 
-namespace Jerrycurl.Tools.DotNet.Cli.Commands
+namespace Jerrycurl.Tools.DotNet.Cli.Commands;
+
+internal class RazorCommandBuilder : ICommandBuilder
 {
-    internal class RazorCommandBuilder : ICommandBuilder
+    public Option<string> ProjectOption { get; private set; }
+    public Option<string> RootNamespaceOption { get; private set; }
+    public Option<string> OutputOption { get; private set; }
+    public Option<string[]> DirectoryOption { get; private set; }
+    public Option<string[]> FileOption { get; private set; }
+    public Option<string[]> ImportOption { get; private set; }
+    public Option<bool> NoCleanOption { get; private set; }
+
+    public RazorCommandBuilder()
     {
-        public Option<string> ProjectOption { get; private set; }
-        public Option<string> RootNamespaceOption { get; private set; }
-        public Option<string> OutputOption { get; private set; }
-        public Option<string[]> DirectoryOption { get; private set; }
-        public Option<string[]> FileOption { get; private set; }
-        public Option<string[]> ImportOption { get; private set; }
-        public Option<bool> NoCleanOption { get; private set; }
+        this.CreateOptions();
 
-        public RazorCommandBuilder()
+    }
+    private void CreateOptions()
+    {
+        this.ProjectOption = Option<string>(new[] { "--project", "-p" }, ""); ;
+        this.RootNamespaceOption = Option<string>(new[] { "--namespace", "-ns" }, ""); ;
+        this.OutputOption = Option<string>(new[] { "--output", "-o" }, "");
+        this.DirectoryOption = Option<string[]>(new[] { "--directory", "-d" }, "", multiple: true);
+        this.FileOption = Option<string[]>(new[] { "--file", "-f" }, "", multiple: true);
+        this.ImportOption = Option<string[]>(new[] { "--import", "-i" }, "", multiple: true);
+        this.NoCleanOption = Option<bool>(new[] { "--no-clean" }, "");
+
+        Option<T> Option<T>(string[] aliases, string description, bool multiple = false)
         {
-            this.CreateOptions();
-
-        }
-        private void CreateOptions()
-        {
-            this.ProjectOption = Option<string>(new[] { "--project", "-p" }, ""); ;
-            this.RootNamespaceOption = Option<string>(new[] { "--namespace", "-ns" }, ""); ;
-            this.OutputOption = Option<string>(new[] { "--output", "-o" }, "");
-            this.DirectoryOption = Option<string[]>(new[] { "--directory", "-d" }, "", multiple: true);
-            this.FileOption = Option<string[]>(new[] { "--file", "-f" }, "", multiple: true);
-            this.ImportOption = Option<string[]>(new[] { "--import", "-i" }, "", multiple: true);
-            this.NoCleanOption = Option<bool>(new[] { "--no-clean" }, "");
-
-            Option<T> Option<T>(string[] aliases, string description, bool multiple = false)
+            var option = new Option<T>(aliases[0], description)
             {
-                var option = new Option<T>(aliases[0], description)
-                {
-                    AllowMultipleArgumentsPerToken = multiple,
-                };
+                AllowMultipleArgumentsPerToken = multiple,
+            };
 
-                foreach (var alias in aliases.Skip(1))
-                    option.AddAlias(alias);
+            foreach (var alias in aliases.Skip(1))
+                option.AddAlias(alias);
 
-                return option;
-            }
+            return option;
         }
+    }
 
-        public void Build(RootCommand rootCommand)
+    public void Build(RootCommand rootCommand)
+    {
+        var command = new Command("cssql", "Transpiles collections of Razor SQL files into C# classes.");
+
+        command.Add(this.ProjectOption, this.RootNamespaceOption, this.OutputOption, this.DirectoryOption, this.FileOption, this.ImportOption, this.NoCleanOption);
+
+        this.SetHandler(command, async options =>
         {
-            var command = new Command("cssql", "Transpiles collections of Razor SQL files into C# classes.");
+            await RazorTool.GenerateAsync(options, new ToolConsole());
+        });
 
-            command.Add(this.ProjectOption, this.RootNamespaceOption, this.OutputOption, this.DirectoryOption, this.FileOption, this.ImportOption, this.NoCleanOption);
+        rootCommand.Add(command);
+    }
 
-            this.SetHandler(command, async options =>
-            {
-                await RazorTool.GenerateAsync(options, new ToolConsole());
-            });
-
-            rootCommand.Add(command);
-        }
-
-        private void SetHandler(Command command, Func<RazorToolOptions, Task> handler)
+    private void SetHandler(Command command, Func<RazorToolOptions, Task> handler)
+    {
+        command.SetHandler(async context =>
         {
-            command.SetHandler(async context =>
+            RazorToolOptions options = new RazorToolOptions()
             {
-                RazorToolOptions options = new RazorToolOptions()
-                {
-                    Directories = context.GetValue(this.DirectoryOption).ToList(),
-                    Files = context.GetValue(this.FileOption).ToList(),
-                    OutputDirectory = context.GetValue(this.OutputOption),
-                    ProjectDirectory = context.GetValue(this.ProjectOption),
-                    Imports = context.GetValue(this.ImportOption).ToList(),
-                    NoClean = context.GetValue(this.NoCleanOption),
-                    RootNamespace = context.GetValue(this.RootNamespaceOption),
-                };
+                Directories = context.GetValue(this.DirectoryOption).ToList(),
+                Files = context.GetValue(this.FileOption).ToList(),
+                OutputDirectory = context.GetValue(this.OutputOption),
+                ProjectDirectory = context.GetValue(this.ProjectOption),
+                Imports = context.GetValue(this.ImportOption).ToList(),
+                NoClean = context.GetValue(this.NoCleanOption),
+                RootNamespace = context.GetValue(this.RootNamespaceOption),
+            };
 
-                await handler(options);
-            });
-        }
+            await handler(options);
+        });
     }
 }

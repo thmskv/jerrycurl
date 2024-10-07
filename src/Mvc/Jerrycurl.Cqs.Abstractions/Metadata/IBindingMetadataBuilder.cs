@@ -1,10 +1,9 @@
 ﻿using Jerrycurl.Relations.Metadata;
 using System.Collections.Generic;
 
-namespace Jerrycurl.Cqs.Metadata
+namespace Jerrycurl.Cqs.Metadata;
+
+public interface IBindingMetadataBuilder : IMetadataBuilder<IBindingMetadata>, ICollection<IBindingContractResolver>
 {
-    public interface IBindingMetadataBuilder : IMetadataBuilder<IBindingMetadata>, ICollection<IBindingContractResolver>
-    {
-        IBindingContractResolver DefaultResolver { get; set; }
-    }
+    IBindingContractResolver DefaultResolver { get; set; }
 }

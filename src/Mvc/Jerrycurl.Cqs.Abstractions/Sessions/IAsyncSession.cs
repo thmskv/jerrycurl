@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Threading;
 
-namespace Jerrycurl.Cqs.Sessions
+namespace Jerrycurl.Cqs.Sessions;
+
+public partial interface IAsyncSession : IAsyncDisposable
 {
-    public partial interface IAsyncSession : IAsyncDisposable
-    {
-        IAsyncEnumerable<DbDataReader> ExecuteAsync(IBatch batch, CancellationToken cancellationToken = default);
-    }
+    IAsyncEnumerable<DbDataReader> ExecuteAsync(IBatch batch, CancellationToken cancellationToken = default);
 }

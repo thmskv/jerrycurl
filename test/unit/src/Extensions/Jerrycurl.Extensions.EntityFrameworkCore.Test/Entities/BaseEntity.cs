@@ -1,7 +1,6 @@
-﻿namespace Jerrycurl.Extensions.EntityFrameworkCore.Test.Entities
+﻿namespace Jerrycurl.Extensions.EntityFrameworkCore.Test.Entities;
+
+public partial class BaseEntity
 {
-    public partial class BaseEntity
-    {
-        public int Id { get; set; }
-    }
+    public int Id { get; set; }
 }

@@ -1,7 +1,6 @@
-﻿namespace Jerrycurl.CodeAnalysis.Lexing
+﻿namespace Jerrycurl.CodeAnalysis.Lexing;
+
+public interface IRule
 {
-    public interface IRule
-    {
-        bool Parse(Lexer lexer);
-    }
+    bool Parse(Lexer lexer);
 }

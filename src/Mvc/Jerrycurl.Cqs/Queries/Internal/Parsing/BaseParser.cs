@@ -11,154 +11,153 @@ using Jerrycurl.Relations.Metadata;
 using Jerrycurl.Cqs.Queries.Internal.IO.Readers;
 using Jerrycurl.Cqs.Queries.Internal.IO.Writers;
 
-namespace Jerrycurl.Cqs.Queries.Internal.Parsing
+namespace Jerrycurl.Cqs.Queries.Internal.Parsing;
+
+internal abstract class BaseParser
 {
-    internal abstract class BaseParser
+    public ISchema Schema { get; set; }
+
+    public BaseParser(ISchema schema)
     {
-        public ISchema Schema { get; set; }
+        this.Schema = schema ?? throw new ArgumentNullException(nameof(schema));
+    }
 
-        public BaseParser(ISchema schema)
+    protected bool IsResultNode(Node node) => node.Metadata.HasFlag(BindingMetadataFlags.Model);
+    protected bool IsResultListNode(Node node) => (node.Metadata.Parent != null && node.Metadata.Parent.HasFlag(BindingMetadataFlags.Model));
+
+    protected T FindData<T>(Node node, IEnumerable<T> header)
+        where T : DataAttribute
+    {
+        foreach (T attribute in header)
         {
-            this.Schema = schema ?? throw new ArgumentNullException(nameof(schema));
+            MetadataIdentity metadata = new MetadataIdentity(node.Metadata.Identity.Schema, attribute.Name);
+
+            if (metadata.Equals(node.Identity))
+                return attribute;
         }
 
-        protected bool IsResultNode(Node node) => node.Metadata.HasFlag(BindingMetadataFlags.Model);
-        protected bool IsResultListNode(Node node) => (node.Metadata.Parent != null && node.Metadata.Parent.HasFlag(BindingMetadataFlags.Model));
+        return null;
+    }
 
-        protected T FindData<T>(Node node, IEnumerable<T> header)
-            where T : DataAttribute
-        {
-            foreach (T attribute in header)
-            {
-                MetadataIdentity metadata = new MetadataIdentity(node.Metadata.Identity.Schema, attribute.Name);
-
-                if (metadata.Equals(node.Identity))
-                    return attribute;
-            }
-
+    protected virtual DataReader CreateDataReader(BaseResult result, Node node)
+    {
+        if (node == null)
             return null;
+
+        if (node.Data is ColumnAttribute column)
+        {
+            ColumnReader reader = new ColumnReader(node)
+            {
+                Column = new ColumnMetadata(column.Name, column.Type, column.TypeName, column.Index),
+                CanBeDbNull = true,
+            };
+
+            this.AddHelper(result, reader);
+
+            return reader;
+        }
+        else if (node.Data is AggregateAttribute aggregate)
+        {
+            return new AggregateReader(node)
+            {
+                Attribute = aggregate,
+                CanBeDbNull = true,
+            };
         }
 
-        protected virtual DataReader CreateDataReader(BaseResult result, Node node)
-        {
-            if (node == null)
-                return null;
+        return null;
+    }
 
-            if (node.Data is ColumnAttribute column)
-            {
-                ColumnReader reader = new ColumnReader(node)
-                {
-                    Column = new ColumnMetadata(column.Name, column.Type, column.TypeName, column.Index),
-                    CanBeDbNull = true,
-                };
-
-                this.AddHelper(result, reader);
-
-                return reader;
-            }
-            else if (node.Data is AggregateAttribute aggregate)
-            {
-                return new AggregateReader(node)
-                {
-                    Attribute = aggregate,
-                    CanBeDbNull = true,
-                };
-            }
-
+    protected virtual BaseReader CreateReader(BaseResult result, Node node)
+    {
+        if (node == null)
             return null;
-        }
-
-        protected virtual BaseReader CreateReader(BaseResult result, Node node)
+        else if (node.Data != null)
+            return this.CreateDataReader(result, node);
+        else if (node.Metadata.HasFlag(BindingMetadataFlags.Dynamic))
         {
-            if (node == null)
-                return null;
-            else if (node.Data != null)
-                return this.CreateDataReader(result, node);
-            else if (node.Metadata.HasFlag(BindingMetadataFlags.Dynamic))
+            return new DynamicReader(node)
             {
-                return new DynamicReader(node)
-                {
-                    Properties = node.Properties.Select(n => this.CreateReader(result, n)).ToList(),
-                };
-            }
-            else
-            {
-                NewReader reader = new NewReader(node.Metadata)
-                {
-                    Properties = node.Properties.Select(n => this.CreateReader(result, n)).ToList(),
-                };
-
-                this.AddPrimaryKey(reader);
-
-                return reader;
-            }
+                Properties = node.Properties.Select(n => this.CreateReader(result, n)).ToList(),
+            };
         }
-
-        private void AddPrimaryKey(NewReader binder)
+        else
         {
-            IReferenceMetadata metadata = binder.Metadata.Identity.Lookup<IReferenceMetadata>();
-            IEnumerable<IReferenceKey> primaryKeys = metadata?.Keys.Where(k => k.HasFlag(ReferenceKeyFlags.Primary)).ToList();
-            IEnumerable<KeyReader> keys = primaryKeys?.Select(k => this.FindPrimaryKey(binder, k)).ToList();
-
-            binder.PrimaryKey = keys?.NotNull().FirstOrDefault();
-
-            if (binder.PrimaryKey != null)
+            NewReader reader = new NewReader(node.Metadata)
             {
-                foreach (DataReader valueReader in binder.PrimaryKey.Values)
-                    valueReader.CanBeDbNull = false;
-            }
+                Properties = node.Properties.Select(n => this.CreateReader(result, n)).ToList(),
+            };
+
+            this.AddPrimaryKey(reader);
+
+            return reader;
         }
+    }
 
-        protected KeyReader FindChildKey(BaseReader reader, IReference reference)
-            => reader is NewReader newReader ? this.FindKey(newReader, reference.FindChildKey(), reference) : null;
+    private void AddPrimaryKey(NewReader binder)
+    {
+        IReferenceMetadata metadata = binder.Metadata.Identity.Lookup<IReferenceMetadata>();
+        IEnumerable<IReferenceKey> primaryKeys = metadata?.Keys.Where(k => k.HasFlag(ReferenceKeyFlags.Primary)).ToList();
+        IEnumerable<KeyReader> keys = primaryKeys?.Select(k => this.FindPrimaryKey(binder, k)).ToList();
 
-        protected KeyReader FindChildKey(NewReader reader, IReference reference) => this.FindKey(reader, reference.FindChildKey(), reference);
-        protected KeyReader FindParentKey(NewReader reader, IReference reference) => this.FindKey(reader, reference.FindParentKey(), reference);
-        protected KeyReader FindPrimaryKey(NewReader reader, IReferenceKey primaryKey) => this.FindKey(reader, primaryKey, null);
+        binder.PrimaryKey = keys?.NotNull().FirstOrDefault();
 
-        private KeyReader FindKey(NewReader reader, IReferenceKey referenceKey, IReference reference)
+        if (binder.PrimaryKey != null)
         {
-            if (referenceKey == null)
-                return null;
+            foreach (DataReader valueReader in binder.PrimaryKey.Values)
+                valueReader.CanBeDbNull = false;
+        }
+    }
 
-            List<DataReader> values = new List<DataReader>();
+    protected KeyReader FindChildKey(BaseReader reader, IReference reference)
+        => reader is NewReader newReader ? this.FindKey(newReader, reference.FindChildKey(), reference) : null;
 
-            foreach (MetadataIdentity identity in referenceKey.Properties.Select(m => m.Identity))
-            {
-                DataReader value = reader.Properties.FirstOfType<DataReader>(m => m.Metadata.Identity.Equals(identity));
+    protected KeyReader FindChildKey(NewReader reader, IReference reference) => this.FindKey(reader, reference.FindChildKey(), reference);
+    protected KeyReader FindParentKey(NewReader reader, IReference reference) => this.FindKey(reader, reference.FindParentKey(), reference);
+    protected KeyReader FindPrimaryKey(NewReader reader, IReferenceKey primaryKey) => this.FindKey(reader, primaryKey, null);
 
-                values.Add(value);
-            }
-
-            if (values.All(v => v != null))
-            {
-                return new KeyReader()
-                {
-                    Values = values,
-                    Reference = reference,
-                    Target = reference?.Find(ReferenceFlags.Child).Metadata.Identity.Require<IBindingMetadata>(),
-                };
-            }
-
+    private KeyReader FindKey(NewReader reader, IReferenceKey referenceKey, IReference reference)
+    {
+        if (referenceKey == null)
             return null;
+
+        List<DataReader> values = new List<DataReader>();
+
+        foreach (MetadataIdentity identity in referenceKey.Properties.Select(m => m.Identity))
+        {
+            DataReader value = reader.Properties.FirstOfType<DataReader>(m => m.Metadata.Identity.Equals(identity));
+
+            values.Add(value);
         }
 
-        private void AddHelper(BaseResult result, ColumnReader reader)
+        if (values.All(v => v != null))
         {
-            IBindingHelperContract helper = reader.Metadata.Helper;
-
-            if (helper != null)
+            return new KeyReader()
             {
-                HelperWriter writer = new HelperWriter(reader.Metadata)
-                {
-                    Object = helper.Object,
-                    BufferIndex = result.Helpers.Count,
-                    Variable = Expression.Variable(helper.Type, $"helper_{result.Helpers.Count}"),
-                };
+                Values = values,
+                Reference = reference,
+                Target = reference?.Find(ReferenceFlags.Child).Metadata.Identity.Require<IBindingMetadata>(),
+            };
+        }
 
-                reader.Helper = writer.Variable;
-                result.Helpers.Add(writer);
-            }
+        return null;
+    }
+
+    private void AddHelper(BaseResult result, ColumnReader reader)
+    {
+        IBindingHelperContract helper = reader.Metadata.Helper;
+
+        if (helper != null)
+        {
+            HelperWriter writer = new HelperWriter(reader.Metadata)
+            {
+                Object = helper.Object,
+                BufferIndex = result.Helpers.Count,
+                Variable = Expression.Variable(helper.Type, $"helper_{result.Helpers.Count}"),
+            };
+
+            reader.Helper = writer.Variable;
+            result.Helpers.Add(writer);
         }
     }
 }

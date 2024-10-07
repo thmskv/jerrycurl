@@ -1,7 +1,6 @@
-﻿namespace Jerrycurl.CodeAnalysis.Lexing
+﻿namespace Jerrycurl.CodeAnalysis.Lexing;
+
+public interface ISymbol
 {
-    public interface ISymbol
-    {
-        bool Parse(Tokenizer tokenizer);
-    }
+    bool Parse(Tokenizer tokenizer);
 }

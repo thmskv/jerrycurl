@@ -1,8 +1,7 @@
-﻿namespace Jerrycurl.Mvc
+﻿namespace Jerrycurl.Mvc;
+
+internal class ProcResult : IProcResult
 {
-    internal class ProcResult : IProcResult
-    {
-        public ISqlBuffer Buffer { get; set; }
-        public IDomainOptions Domain { get; set; }
-    }
+    public ISqlBuffer Buffer { get; set; }
+    public IDomainOptions Domain { get; set; }
 }

@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace Jerrycurl.Cqs.Metadata
+namespace Jerrycurl.Cqs.Metadata;
+
+public interface IBindingValueInfo
 {
-    public interface IBindingValueInfo
-    {
-        bool CanBeNull { get; }
-        bool CanBeDbNull { get; }
-        IBindingMetadata Metadata { get; }
-        Expression Value { get; }
-        Expression Helper { get; }
-        Type SourceType { get; }
-        Type TargetType { get; }
-    }
+    bool CanBeNull { get; }
+    bool CanBeDbNull { get; }
+    IBindingMetadata Metadata { get; }
+    Expression Value { get; }
+    Expression Helper { get; }
+    Type SourceType { get; }
+    Type TargetType { get; }
 }

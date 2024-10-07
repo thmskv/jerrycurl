@@ -1,8 +1,7 @@
-﻿namespace Jerrycurl.Cqs.Sessions
+﻿namespace Jerrycurl.Cqs.Sessions;
+
+public interface ISessionOptions
 {
-    public interface ISessionOptions
-    {
-        IAsyncSession GetAsyncSession();
-        ISyncSession GetSyncSession();
-    }
+    IAsyncSession GetAsyncSession();
+    ISyncSession GetSyncSession();
 }

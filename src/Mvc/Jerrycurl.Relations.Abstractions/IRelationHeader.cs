@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using Jerrycurl.Relations.Metadata;
 
-namespace Jerrycurl.Relations
+namespace Jerrycurl.Relations;
+
+public interface IRelationHeader : IEquatable<IRelationHeader>
 {
-    public interface IRelationHeader : IEquatable<IRelationHeader>
-    {
-        ISchema Schema { get; }
-        IReadOnlyList<IRelationMetadata> Attributes { get; }
-        int Degree { get; }
-    }
+    ISchema Schema { get; }
+    IReadOnlyList<IRelationMetadata> Attributes { get; }
+    int Degree { get; }
 }

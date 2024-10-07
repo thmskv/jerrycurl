@@ -9,107 +9,106 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Jerrycurl.Extensions.EntityFrameworkCore.Metadata
+namespace Jerrycurl.Extensions.EntityFrameworkCore.Metadata;
+
+public class EntityFrameworkCoreContractResolver : IRelationContractResolver, ITableContractResolver
 {
-    public class EntityFrameworkCoreContractResolver : IRelationContractResolver, ITableContractResolver
+    public int Priority { get; } = 1000;
+
+    private IEntityType[] entities;
+
+    public EntityFrameworkCoreContractResolver(DbContext dbContext)
     {
-        public int Priority { get; } = 1000;
+        if (dbContext == null)
+            throw new ArgumentNullException(nameof(dbContext));
 
-        private IEntityType[] entities;
+        this.InitializeEntities(dbContext);
+    }
 
-        public EntityFrameworkCoreContractResolver(DbContext dbContext)
+    private void InitializeEntities(DbContext dbContext)
+    {
+        this.entities = dbContext.Model.GetEntityTypes().ToArray();
+    }
+
+    public IRelationContract GetContract(IRelationMetadata metadata) => null;
+
+    public IEnumerable<Attribute> GetAnnotations(IRelationMetadata metadata)
+    {
+        IProperty property = this.FindProperty(metadata);
+        IAnnotation[] propertyAnnotations = property?.GetAnnotations().ToArray() ?? new IAnnotation[0];
+
+        IKey primaryKey = this.GetPrimaryKey(property);
+        IForeignKey[] foreignKeys = property?.GetContainingForeignKeys().ToArray() ?? new IForeignKey[0];
+
+        if (primaryKey != null)
         {
-            if (dbContext == null)
-                throw new ArgumentNullException(nameof(dbContext));
+            string keyName = this.GetKeyName(primaryKey);
+            int index = this.GetKeyIndex(primaryKey, property);
 
-            this.InitializeEntities(dbContext);
+            yield return new KeyAttribute(keyName, index);
         }
 
-        private void InitializeEntities(DbContext dbContext)
+        foreach (IForeignKey foreignKey in foreignKeys)
         {
-            this.entities = dbContext.Model.GetEntityTypes().ToArray();
+            string primaryName = this.GetPrimaryKeyName(foreignKey);
+            string foreignName = this.GetKeyName(foreignKey);
+            int index = this.GetKeyIndex(foreignKey, property);
+
+            yield return new RefAttribute(primaryName, index, foreignName);
         }
 
-        public IRelationContract GetContract(IRelationMetadata metadata) => null;
+        if (propertyAnnotations.Any(a => a.Name == "SqlServer:ValueGenerationStrategy" && a.Value?.ToString() == "IdentityColumn"))
+            yield return new IdAttribute();
+    }
 
-        public IEnumerable<Attribute> GetAnnotations(IRelationMetadata metadata)
-        {
-            IProperty property = this.FindProperty(metadata);
-            IAnnotation[] propertyAnnotations = property?.GetAnnotations().ToArray() ?? new IAnnotation[0];
+    public string[] GetTableName(ITableMetadata metadata)
+    {
+        IEntityType entity = this.entities.FirstOrDefault(e => e.ClrType.IsAssignableFrom(metadata.Relation.Type));
 
-            IKey primaryKey = this.GetPrimaryKey(property);
-            IForeignKey[] foreignKeys = property?.GetContainingForeignKeys().ToArray() ?? new IForeignKey[0];
+        string schemaName = this.GetSchemaName(entity);
+        string tableName = this.GetTableName(entity);
 
-            if (primaryKey != null)
-            {
-                string keyName = this.GetKeyName(primaryKey);
-                int index = this.GetKeyIndex(primaryKey, property);
-
-                yield return new KeyAttribute(keyName, index);
-            }
-
-            foreach (IForeignKey foreignKey in foreignKeys)
-            {
-                string primaryName = this.GetPrimaryKeyName(foreignKey);
-                string foreignName = this.GetKeyName(foreignKey);
-                int index = this.GetKeyIndex(foreignKey, property);
-
-                yield return new RefAttribute(primaryName, index, foreignName);
-            }
-
-            if (propertyAnnotations.Any(a => a.Name == "SqlServer:ValueGenerationStrategy" && a.Value?.ToString() == "IdentityColumn"))
-                yield return new IdAttribute();
-        }
-
-        public string[] GetTableName(ITableMetadata metadata)
-        {
-            IEntityType entity = this.entities.FirstOrDefault(e => e.ClrType.IsAssignableFrom(metadata.Relation.Type));
-
-            string schemaName = this.GetSchemaName(entity);
-            string tableName = this.GetTableName(entity);
-
-            if (tableName == null)
-                return null;
-
-            return new[] { schemaName, tableName }.NotNull().ToArray();
-        }
-
-        public string GetColumnName(ITableMetadata metadata)
-        {
-            IProperty property = this.FindProperty(metadata.Relation);
-
-            if (property != null && metadata.Relation.Member != null && metadata.Relation.Member.DeclaringType.IsAssignableFrom(property.DeclaringType.ClrType))
-                return this.GetColumnName(property);
-
+        if (tableName == null)
             return null;
-        }
+
+        return new[] { schemaName, tableName }.NotNull().ToArray();
+    }
+
+    public string GetColumnName(ITableMetadata metadata)
+    {
+        IProperty property = this.FindProperty(metadata.Relation);
+
+        if (property != null && metadata.Relation.Member != null && metadata.Relation.Member.DeclaringType.IsAssignableFrom(property.DeclaringType.ClrType))
+            return this.GetColumnName(property);
+
+        return null;
+    }
 
 
-        private string GetPrimaryKeyName(IForeignKey key) => this.GetKeyName(key.PrincipalKey);
-        private int GetKeyIndex(IKey key, IProperty property) => key.Properties.ToList().IndexOf(property);
-        private int GetKeyIndex(IForeignKey key, IProperty property) => key.Properties.ToList().IndexOf(property);
-        private IProperty FindProperty(IRelationMetadata metadata)
-        {
-            IEntityType parentEntity = this.entities.FirstOrDefault(e => metadata.Parent != null && e.ClrType.IsAssignableFrom(metadata.Parent.Type));
+    private string GetPrimaryKeyName(IForeignKey key) => this.GetKeyName(key.PrincipalKey);
+    private int GetKeyIndex(IKey key, IProperty property) => key.Properties.ToList().IndexOf(property);
+    private int GetKeyIndex(IForeignKey key, IProperty property) => key.Properties.ToList().IndexOf(property);
+    private IProperty FindProperty(IRelationMetadata metadata)
+    {
+        IEntityType parentEntity = this.entities.FirstOrDefault(e => metadata.Parent != null && e.ClrType.IsAssignableFrom(metadata.Parent.Type));
 
-            return parentEntity?.GetProperties().FirstOrDefault(p => p.Name == metadata.Member?.Name);
-        }
+        return parentEntity?.GetProperties().FirstOrDefault(p => p.Name == metadata.Member?.Name);
+    }
 
-        private IKey GetPrimaryKey(IProperty property) => property?.FindContainingPrimaryKey();
-        private string GetTableName(IEntityType entity) => entity?.GetTableName() ?? entity?.GetDefaultTableName();
-        private string GetSchemaName(IEntityType entity) => entity?.GetSchema() ?? entity?.GetDefaultSchema();
-        private string GetKeyName(IKey key) => key?.GetName();
-        private string GetKeyName(IForeignKey key) => key.GetConstraintName();
+    private IKey GetPrimaryKey(IProperty property) => property?.FindContainingPrimaryKey();
+    private string GetTableName(IEntityType entity) => entity?.GetTableName() ?? entity?.GetDefaultTableName();
+    private string GetSchemaName(IEntityType entity) => entity?.GetSchema() ?? entity?.GetDefaultSchema();
+    private string GetKeyName(IKey key) => key?.GetName();
+    private string GetKeyName(IForeignKey key) => key.GetConstraintName();
 
-        private string GetColumnName(IProperty property)
-        {
+    private string GetColumnName(IProperty property)
+    {
 #if NET21_BASE
-            var id = StoreObjectIdentifier.Create(property.DeclaringEntityType, StoreObjectType.Table);
+        var id = StoreObjectIdentifier.Create(property.DeclaringEntityType, StoreObjectType.Table);
 
-            return property?.GetColumnName(id.Value) ?? property?.GetDefaultColumnName(id.Value);
+        return property?.GetColumnName(id.Value) ?? property?.GetDefaultColumnName(id.Value);
 #else
-            return property?.GetColumnName() ?? property?.GetDefaultColumnName();
+        return property?.GetColumnName() ?? property?.GetDefaultColumnName();
 #endif
-        }
     }
 }

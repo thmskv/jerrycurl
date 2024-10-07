@@ -1,7 +1,6 @@
-﻿namespace Jerrycurl.Mvc
+﻿namespace Jerrycurl.Mvc;
+
+public interface ISqlWritable
 {
-    public interface ISqlWritable
-    {
-        void WriteTo(ISqlBuffer buffer);
-    }
+    void WriteTo(ISqlBuffer buffer);
 }

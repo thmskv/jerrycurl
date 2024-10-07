@@ -1,8 +1,7 @@
-﻿namespace Jerrycurl.CodeAnalysis.Razor.Parsing.Directives
+﻿namespace Jerrycurl.CodeAnalysis.Razor.Parsing.Directives;
+
+public class InjectDirective
 {
-    public class InjectDirective
-    {
-        public RazorFragment Type { get; set; }
-        public RazorFragment Variable { get; set; }
-    }
+    public RazorFragment Type { get; set; }
+    public RazorFragment Variable { get; set; }
 }

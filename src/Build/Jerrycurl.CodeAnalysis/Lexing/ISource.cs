@@ -1,16 +1,15 @@
-﻿namespace Jerrycurl.CodeAnalysis.Lexing
+﻿namespace Jerrycurl.CodeAnalysis.Lexing;
+
+public interface ISource
 {
-    public interface ISource
-    {
-        char? this[int position] { get; }
+    char? this[int position] { get; }
 
-        bool Eof { get; }
-        bool Bof { get; }
+    bool Eof { get; }
+    bool Bof { get; }
 
-        SourceSpan Read(int length);
-        void Discard(int length);
+    SourceSpan Read(int length);
+    void Discard(int length);
 
-        string GetText(SourceSpan span);
-        string GetText();
-    }
+    string GetText(SourceSpan span);
+    string GetText();
 }

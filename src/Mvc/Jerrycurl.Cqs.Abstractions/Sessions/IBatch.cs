@@ -1,9 +1,8 @@
 ﻿using System.Data;
 
-namespace Jerrycurl.Cqs.Sessions
+namespace Jerrycurl.Cqs.Sessions;
+
+public interface IBatch
 {
-    public interface IBatch
-    {
-        void Build(IDbCommand adoCommand);
-    }
+    void Build(IDbCommand adoCommand);
 }

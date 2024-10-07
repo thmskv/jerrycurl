@@ -2,32 +2,31 @@
 using Fixie;
 using Jerrycurl.Mvc;
 
-namespace Jerrycurl.Test
+namespace Jerrycurl.Test;
+
+public abstract class DatabaseConvention : Discovery, Execution
 {
-    public abstract class DatabaseConvention : Discovery, Execution
+    public virtual bool Skip { get; } = false;
+    public virtual string SkipReason { get; } = "Test skipped.";
+
+    public abstract void Configure(DomainOptions options);
+
+    public void Execute(TestClass testClass)
     {
-        public virtual bool Skip { get; } = false;
-        public virtual string SkipReason { get; } = "Test skipped.";
+        object instance = testClass.Construct();
 
-        public abstract void Configure(DomainOptions options);
-
-        public void Execute(TestClass testClass)
+        testClass.RunCases(@case =>
         {
-            object instance = testClass.Construct();
+            if (this.Skip)
+                @case.Skip(this.SkipReason);
+            else
+                @case.Execute(instance);
+        });
 
-            testClass.RunCases(@case =>
-            {
-                if (this.Skip)
-                    @case.Skip(this.SkipReason);
-                else
-                    @case.Execute(instance);
-            });
-
-            instance.Dispose();
-        }
-
-        protected static string GetEnvironmentVariable(string variableName) => Environment.GetEnvironmentVariable(variableName, EnvironmentVariableTarget.Machine) ??
-                                                                               Environment.GetEnvironmentVariable(variableName, EnvironmentVariableTarget.User) ??
-                                                                               Environment.GetEnvironmentVariable(variableName);
+        instance.Dispose();
     }
+
+    protected static string GetEnvironmentVariable(string variableName) => Environment.GetEnvironmentVariable(variableName, EnvironmentVariableTarget.Machine) ??
+                                                                           Environment.GetEnvironmentVariable(variableName, EnvironmentVariableTarget.User) ??
+                                                                           Environment.GetEnvironmentVariable(variableName);
 }

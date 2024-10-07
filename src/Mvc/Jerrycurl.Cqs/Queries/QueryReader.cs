@@ -8,41 +8,40 @@ using System.Data.Common;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace Jerrycurl.Cqs.Queries
+namespace Jerrycurl.Cqs.Queries;
+
+public sealed class QueryReader
 {
-    public sealed class QueryReader
+    public ISchemaStore Store { get; }
+
+    private readonly IDataReader syncReader;
+    private readonly DbDataReader asyncReader;
+
+    public QueryReader(ISchemaStore store, IDataReader dataReader)
     {
-        public ISchemaStore Store { get; }
+        this.Store = store ?? throw new ArgumentNullException(nameof(store));
+        this.syncReader = dataReader ?? throw new ArgumentNullException(nameof(dataReader));
+        this.asyncReader = dataReader as DbDataReader;
+    }
 
-        private readonly IDataReader syncReader;
-        private readonly DbDataReader asyncReader;
+    public async IAsyncEnumerable<T> ReadAsync<T>([EnumeratorCancellation]CancellationToken cancellationToken = default)
+    {
+        if (this.asyncReader == null)
+            throw new QueryException("Async not available. To use async operations, instantiate with a DbDataReader instance.");
 
-        public QueryReader(ISchemaStore store, IDataReader dataReader)
-        {
-            this.Store = store ?? throw new ArgumentNullException(nameof(store));
-            this.syncReader = dataReader ?? throw new ArgumentNullException(nameof(dataReader));
-            this.asyncReader = dataReader as DbDataReader;
-        }
+        ISchema schema = this.Store.GetSchema(typeof(IList<T>));
+        EnumerateFactory<T> reader = QueryCache.GetEnumerateFactory<T>(schema, this.asyncReader);
 
-        public async IAsyncEnumerable<T> ReadAsync<T>([EnumeratorCancellation]CancellationToken cancellationToken = default)
-        {
-            if (this.asyncReader == null)
-                throw new QueryException("Async not available. To use async operations, instantiate with a DbDataReader instance.");
+        while (await this.asyncReader.ReadAsync(cancellationToken).ConfigureAwait(false))
+            yield return reader(this.asyncReader);
+    }
 
-            ISchema schema = this.Store.GetSchema(typeof(IList<T>));
-            EnumerateFactory<T> reader = QueryCache.GetEnumerateFactory<T>(schema, this.asyncReader);
+    public IEnumerable<T> Read<T>()
+    {
+        ISchema schema = this.Store.GetSchema(typeof(IList<T>));
+        EnumerateFactory<T> reader = QueryCache.GetEnumerateFactory<T>(schema, this.syncReader);
 
-            while (await this.asyncReader.ReadAsync(cancellationToken).ConfigureAwait(false))
-                yield return reader(this.asyncReader);
-        }
-
-        public IEnumerable<T> Read<T>()
-        {
-            ISchema schema = this.Store.GetSchema(typeof(IList<T>));
-            EnumerateFactory<T> reader = QueryCache.GetEnumerateFactory<T>(schema, this.syncReader);
-
-            while (this.syncReader.Read())
-                yield return reader(this.syncReader);
-        }
+        while (this.syncReader.Read())
+            yield return reader(this.syncReader);
     }
 }

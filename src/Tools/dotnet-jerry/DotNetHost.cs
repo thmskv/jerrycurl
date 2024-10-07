@@ -12,135 +12,134 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Jerrycurl.Tools.DotNet.Cli
+namespace Jerrycurl.Tools.DotNet.Cli;
+
+public class DotNetHost
 {
-    public class DotNetHost
+    internal static Option<bool> VerboseOption { get; } = new Option<bool>("--verbose", "Show verbose output.");
+    internal static Option<bool> LogoOption { get; } = new Option<bool>("--logo", "Show fancy logo before running.");
+    internal static Option<string> DebugOption { get; } = new Option<string>("--debug", "Output exception information to a machine-readable file.") { IsHidden = true };
+
+    public async static Task<int> Main(string[] args)
     {
-        internal static Option<bool> VerboseOption { get; } = new Option<bool>("--verbose", "Show verbose output.");
-        internal static Option<bool> LogoOption { get; } = new Option<bool>("--logo", "Show fancy logo before running.");
-        internal static Option<string> DebugOption { get; } = new Option<string>("--debug", "Output exception information to a machine-readable file.") { IsHidden = true };
-
-        public async static Task<int> Main(string[] args)
-        {
 #if DEBUG
-            
-            //Environment.CurrentDirectory = "C:\\Users\\thomas\\Desktop\\testx";
+        
+        //Environment.CurrentDirectory = "C:\\Users\\thomas\\Desktop\\testx";
 
-            //args = new[] { "orm", "sync", "--flags", "useNullables" };
-            //args = new[] { "orm", "new", "-v", "sqlserver", "-c", "server=.;database=gerstl_120922;trusted_connection=true;encrypt=false", "-i", @"c:\users\thomas\desktop\Database.orm", "--debug", @"c:\users\thomas\desktop\Database.log" };
-            //args = new[] { "orm", "sync", "--vendor", "sqlserver", "-c", "server=.;database=gerstl_120922;trusted_connection=true;encrypt=false", "-ns", "Kaffezars", "--verbose", "--logo" };
-            //args = new[] { "orm", "transform", "-f", @"c:\users\thomas\desktop\Database.orm" };
-            //args = new[] { "orm", "run", "-f", @"c:\users\thomas\desktop\Database.orm", "--snippet", "test" };
-            //args = new[] { "orm", "new", "-v", "sqlserver", "-c", "server=.;database=realescort_live;trusted_connection=true;encrypt=false" };
+        //args = new[] { "orm", "sync", "--flags", "useNullables" };
+        //args = new[] { "orm", "new", "-v", "sqlserver", "-c", "server=.;database=gerstl_120922;trusted_connection=true;encrypt=false", "-i", @"c:\users\thomas\desktop\Database.orm", "--debug", @"c:\users\thomas\desktop\Database.log" };
+        //args = new[] { "orm", "sync", "--vendor", "sqlserver", "-c", "server=.;database=gerstl_120922;trusted_connection=true;encrypt=false", "-ns", "Kaffezars", "--verbose", "--logo" };
+        //args = new[] { "orm", "transform", "-f", @"c:\users\thomas\desktop\Database.orm" };
+        //args = new[] { "orm", "run", "-f", @"c:\users\thomas\desktop\Database.orm", "--snippet", "test" };
+        //args = new[] { "orm", "new", "-v", "sqlserver", "-c", "server=.;database=realescort_live;trusted_connection=true;encrypt=false" };
 
 
 
 #endif
-            RootCommand rootCommand = new RootCommand()
-            {
-                Name = "jerry",
-            };
-
-            CommandLineBuilder builder = new CommandLineBuilder(rootCommand);
-
-            builder.UseDefaults();
-            builder.UseExceptionHandler(HandleExceptionAsync);
-
-            rootCommand.AddGlobalOption(VerboseOption);
-            rootCommand.AddGlobalOption(DebugOption);
-            rootCommand.AddGlobalOption(LogoOption);
-
-            new OrmCommandBuilder().Build(rootCommand);
-            new RazorCommandBuilder().Build(rootCommand);
-
-            Parser parser = builder.Build();
-            ParseResult result = parser.Parse(args);
-
-            if (result.GetValueForOption(LogoOption))
-                WriteLogo();
-
-            return await parser.Parse(args).InvokeAsync();
-        }
-
-        private static async void HandleExceptionAsync(Exception ex, InvocationContext context)
+        RootCommand rootCommand = new RootCommand()
         {
-            string debugPath = context.GetValue(DebugOption);
-            bool verbose = context.GetValue(VerboseOption);
+            Name = "jerry",
+        };
 
-            if (debugPath != null)
-                await WriteDebugInfoAsync(debugPath, ex);
+        CommandLineBuilder builder = new CommandLineBuilder(rootCommand);
 
-            if (verbose)
-                ErrorLine(ex.ToString());
-            else
-                ErrorLine(ex.Message);
+        builder.UseDefaults();
+        builder.UseExceptionHandler(HandleExceptionAsync);
 
-            context.ExitCode = ex is ToolException tex ? tex.ExitCode : -1;
-        }
+        rootCommand.AddGlobalOption(VerboseOption);
+        rootCommand.AddGlobalOption(DebugOption);
+        rootCommand.AddGlobalOption(LogoOption);
 
-        private static async Task WriteDebugInfoAsync(string path, Exception ex)
+        new OrmCommandBuilder().Build(rootCommand);
+        new RazorCommandBuilder().Build(rootCommand);
+
+        Parser parser = builder.Build();
+        ParseResult result = parser.Parse(args);
+
+        if (result.GetValueForOption(LogoOption))
+            WriteLogo();
+
+        return await parser.Parse(args).InvokeAsync();
+    }
+
+    private static async void HandleExceptionAsync(Exception ex, InvocationContext context)
+    {
+        string debugPath = context.GetValue(DebugOption);
+        bool verbose = context.GetValue(VerboseOption);
+
+        if (debugPath != null)
+            await WriteDebugInfoAsync(debugPath, ex);
+
+        if (verbose)
+            ErrorLine(ex.ToString());
+        else
+            ErrorLine(ex.Message);
+
+        context.ExitCode = ex is ToolException tex ? tex.ExitCode : -1;
+    }
+
+    private static async Task WriteDebugInfoAsync(string path, Exception ex)
+    {
+        DebugModel model = new DebugModel()
         {
-            DebugModel model = new DebugModel()
+            Message = ex.Message,
+            Type = ex switch
             {
-                Message = ex.Message,
-                Type = ex switch
-                {
-                    OrmToolException oex => oex.Type,
-                    _ => null,
-                },
-                Log = ex switch
-                {
-                    OrmToolException oex => oex.Log,
-                    _ => null,
-                }
-            };
-
-            JsonSerializerOptions options = new JsonSerializerOptions()
+                OrmToolException oex => oex.Type,
+                _ => null,
+            },
+            Log = ex switch
             {
-                WriteIndented = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            };
+                OrmToolException oex => oex.Log,
+                _ => null,
+            }
+        };
 
-            using FileStream stream = File.OpenWrite(path);
-
-            await JsonSerializer.SerializeAsync(stream, model, options);
-        }
-        public static void WriteLogo()
+        JsonSerializerOptions options = new JsonSerializerOptions()
         {
-            NuGetVersion version = typeof(DotNetHost).Assembly.GetNuGetPackageVersion();
+            WriteIndented = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        };
 
-            WriteLine();
+        using FileStream stream = File.OpenWrite(path);
 
-            string logo = @"      _       _              _        _                      
+        await JsonSerializer.SerializeAsync(stream, model, options);
+    }
+    public static void WriteLogo()
+    {
+        NuGetVersion version = typeof(DotNetHost).Assembly.GetNuGetPackageVersion();
+
+        WriteLine();
+
+        string logo = @"      _       _              _        _                      
    __| | ___ | |_ _ __   ___| |_     (_) ___ _ __ _ __ _   _ 
   / _` |/ _ \| __| '_ \ / _ \ __|____| |/ _ \ '__| '__| | | |
  | (_| | (_) | |_| | | |  __/ ||_____| |  __/ |  | |  | |_| |
   \__,_|\___/ \__|_| |_|\___|\__|   _/ |\___|_|  |_|   \__, |
                                    |__/                |___/ "
 ;
-            string versionText = version.CommitHash != null ? $"v{version.PublicVersion} ({version.CommitHash})" : $"v{version.PublicVersion}";
+        string versionText = version.CommitHash != null ? $"v{version.PublicVersion} ({version.CommitHash})" : $"v{version.PublicVersion}";
 
-            WriteLine(logo);
-            WriteLine(versionText.PadLeft((60 + versionText.Length) / 2));
-            WriteLine();
-        }
+        WriteLine(logo);
+        WriteLine(versionText.PadLeft((60 + versionText.Length) / 2));
+        WriteLine();
+    }
 
-        public static void WriteLine() => Console.WriteLine();
-        public static void WriteLine(string message, ConsoleColor? color = null)
-        {
-            if (color != null)
-                Console.ForegroundColor = color.Value;
+    public static void WriteLine() => Console.WriteLine();
+    public static void WriteLine(string message, ConsoleColor? color = null)
+    {
+        if (color != null)
+            Console.ForegroundColor = color.Value;
 
-            Console.WriteLine(message);
-            Console.ResetColor();
-        }
+        Console.WriteLine(message);
+        Console.ResetColor();
+    }
 
-        public static void ErrorLine(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Error.WriteLine(message);
-            Console.ResetColor();
-        }
+    public static void ErrorLine(string message)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Error.WriteLine(message);
+        Console.ResetColor();
     }
 }

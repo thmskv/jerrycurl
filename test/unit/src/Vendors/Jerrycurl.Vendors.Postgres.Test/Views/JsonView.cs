@@ -1,12 +1,11 @@
 ﻿using Jerrycurl.Cqs.Metadata.Annotations;
 using Jerrycurl.Vendors.Postgres.Test.Models;
 
-namespace Jerrycurl.Vendors.Postgres.Test.Views
+namespace Jerrycurl.Vendors.Postgres.Test.Views;
+
+[Table]
+public class JsonView
 {
-    [Table]
-    public class JsonView
-    {
-        public JsonModel Json { get; set; }
-        public JsonModel JsonB { get; set; }
-    }
+    public JsonModel Json { get; set; }
+    public JsonModel JsonB { get; set; }
 }

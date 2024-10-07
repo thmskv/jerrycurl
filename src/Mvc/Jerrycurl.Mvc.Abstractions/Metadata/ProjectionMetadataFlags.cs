@@ -1,14 +1,13 @@
 ﻿using System;
 
-namespace Jerrycurl.Mvc.Metadata
+namespace Jerrycurl.Mvc.Metadata;
+
+[Flags]
+public enum ProjectionMetadataFlags
 {
-    [Flags]
-    public enum ProjectionMetadataFlags
-    {
-        None = 0,
-        Input = 1,
-        Output = 2,
-        Identity = 4,
-        Cascade = 8,
-    }
+    None = 0,
+    Input = 1,
+    Output = 2,
+    Identity = 4,
+    Cascade = 8,
 }

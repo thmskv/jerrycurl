@@ -2,18 +2,17 @@
 using Jerrycurl.Cqs.Queries.Internal.Extensions;
 using Jerrycurl.Cqs.Queries.Internal.IO.Targets;
 
-namespace Jerrycurl.Cqs.Queries.Internal.IO.Readers
+namespace Jerrycurl.Cqs.Queries.Internal.IO.Readers;
+
+internal class JoinReader : BaseReader
 {
-    internal class JoinReader : BaseReader
+    public JoinTarget Target { get; set; }
+
+    public JoinReader(IReference reference)
     {
-        public JoinTarget Target { get; set; }
+        IReferenceMetadata metadata = reference.List ?? reference.Find(ReferenceFlags.Child).Metadata;
 
-        public JoinReader(IReference reference)
-        {
-            IReferenceMetadata metadata = reference.List ?? reference.Find(ReferenceFlags.Child).Metadata;
-
-            this.Metadata = metadata.Identity.Require<IBindingMetadata>();
-            this.Identity = this.Metadata.Identity;
-        }
+        this.Metadata = metadata.Identity.Require<IBindingMetadata>();
+        this.Identity = this.Metadata.Identity;
     }
 }

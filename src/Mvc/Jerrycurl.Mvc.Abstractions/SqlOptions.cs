@@ -1,15 +1,14 @@
 ﻿using Jerrycurl.Cqs.Filters;
 using System.Collections.Generic;
 
-namespace Jerrycurl.Mvc
+namespace Jerrycurl.Mvc;
+
+public class SqlOptions : ISqlOptions
 {
-    public class SqlOptions : ISqlOptions
-    {
-        public List<IFilter> Filters { get; set; } = new List<IFilter>();
+    public List<IFilter> Filters { get; set; } = new List<IFilter>();
 
-        public int MaxSql { get; set; }
-        public int MaxParameters { get; set; }
+    public int MaxSql { get; set; }
+    public int MaxParameters { get; set; }
 
-        IReadOnlyCollection<IFilter> ISqlOptions.Filters => this.Filters;
-    }
+    IReadOnlyCollection<IFilter> ISqlOptions.Filters => this.Filters;
 }

@@ -5,51 +5,50 @@ using System.Linq;
 using Jerrycurl.Cqs.Sessions;
 using Jerrycurl.Relations;
 
-namespace Jerrycurl.Cqs.Language
+namespace Jerrycurl.Cqs.Language;
+
+public class ParameterStore : Collection<IParameter>
 {
-    public class ParameterStore : Collection<IParameter>
+    private readonly Dictionary<IField, IParameter> innerMap = new Dictionary<IField, IParameter>();
+
+    public char? Prefix { get; }
+
+    public ParameterStore(char? prefix = null)
     {
-        private readonly Dictionary<IField, IParameter> innerMap = new Dictionary<IField, IParameter>();
+        this.Prefix = prefix;
+    }
 
-        public char? Prefix { get; }
+    public IParameter Add(IField field)
+    {
+        if (field == null)
+            throw new ArgumentNullException(nameof(field));
 
-        public ParameterStore(char? prefix = null)
+        if (!this.innerMap.TryGetValue(field, out IParameter param))
         {
-            this.Prefix = prefix;
+            string paramName = $"{this.Prefix}P{this.innerMap.Count}";
+
+            this.innerMap.Add(field, param = new Parameter(paramName, field));
+            this.Add(param);
         }
 
-        public IParameter Add(IField field)
-        {
-            if (field == null)
-                throw new ArgumentNullException(nameof(field));
+        return param;
+    }
 
-            if (!this.innerMap.TryGetValue(field, out IParameter param))
-            {
-                string paramName = $"{this.Prefix}P{this.innerMap.Count}";
+    public IList<IParameter> Add(ITuple tuple)
+        => tuple?.Select(this.Add).ToList() ?? throw new ArgumentNullException(nameof(tuple));
 
-                this.innerMap.Add(field, param = new Parameter(paramName, field));
-                this.Add(param);
-            }
+    public IList<IParameter> Add(IRelation relation)
+    {
+        if (relation == null)
+            throw new ArgumentNullException(nameof(relation));
 
-            return param;
-        }
+        using IRelationReader reader = relation.GetReader();
 
-        public IList<IParameter> Add(ITuple tuple)
-            => tuple?.Select(this.Add).ToList() ?? throw new ArgumentNullException(nameof(tuple));
+        List<IParameter> parameters = new List<IParameter>();
 
-        public IList<IParameter> Add(IRelation relation)
-        {
-            if (relation == null)
-                throw new ArgumentNullException(nameof(relation));
+        while (reader.Read())
+            parameters.AddRange(this.Add(reader));
 
-            using IRelationReader reader = relation.GetReader();
-
-            List<IParameter> parameters = new List<IParameter>();
-
-            while (reader.Read())
-                parameters.AddRange(this.Add(reader));
-
-            return parameters;
-        }
+        return parameters;
     }
 }

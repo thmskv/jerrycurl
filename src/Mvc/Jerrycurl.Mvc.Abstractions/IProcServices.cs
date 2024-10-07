@@ -1,10 +1,9 @@
 ﻿using Jerrycurl.Mvc.Projections;
 
-namespace Jerrycurl.Mvc
+namespace Jerrycurl.Mvc;
+
+public interface IProcServices
 {
-    public interface IProcServices
-    {
-        TService GetService<TService>() where TService : class;
-        IProjection<TModel> GetProjection<TModel>(IProcContext context);
-    }
+    TService GetService<TService>() where TService : class;
+    IProjection<TModel> GetProjection<TModel>(IProcContext context);
 }

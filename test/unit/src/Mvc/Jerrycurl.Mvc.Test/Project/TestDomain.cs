@@ -1,10 +1,9 @@
-﻿namespace Jerrycurl.Mvc.Test.Project
+﻿namespace Jerrycurl.Mvc.Test.Project;
+
+public class TestDomain : IDomain
 {
-    public class TestDomain : IDomain
+    public void Configure(DomainOptions options)
     {
-        public void Configure(DomainOptions options)
-        {
-            options.UseSqlite("DATA SOURCE=testmvc.db");
-        }
+        options.UseSqlite("DATA SOURCE=testmvc.db");
     }
 }

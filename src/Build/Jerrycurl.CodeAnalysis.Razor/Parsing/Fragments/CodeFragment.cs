@@ -1,9 +1,8 @@
 ﻿using Jerrycurl.CodeAnalysis.Razor.Lexing.CSharp;
 
-namespace Jerrycurl.CodeAnalysis.Razor.Parsing.Fragments
+namespace Jerrycurl.CodeAnalysis.Razor.Parsing.Fragments;
+
+public class CodeFragment : RazorFragment
 {
-    public class CodeFragment : RazorFragment
-    {
-        public CSharpType CodeType { get; set; }
-    }
+    public CSharpType CodeType { get; set; }
 }

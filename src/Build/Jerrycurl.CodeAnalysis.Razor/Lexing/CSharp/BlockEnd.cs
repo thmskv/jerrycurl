@@ -1,17 +1,16 @@
 ﻿using Jerrycurl.CodeAnalysis.Lexing;
 
-namespace Jerrycurl.CodeAnalysis.Razor.Lexing.CSharp
+namespace Jerrycurl.CodeAnalysis.Razor.Lexing.CSharp;
+
+public class BlockEnd : ISymbol
 {
-    public class BlockEnd : ISymbol
+    public bool Parse(Tokenizer tokenizer)
     {
-        public bool Parse(Tokenizer tokenizer)
-        {
-            if (!tokenizer.Sym(Facts.Statement.End))
-                return false;
+        if (!tokenizer.Sym(Facts.Statement.End))
+            return false;
 
-            tokenizer.Blanks();
+        tokenizer.Blanks();
 
-            return true;
-        }
+        return true;
     }
 }

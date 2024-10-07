@@ -1,8 +1,7 @@
-﻿namespace Jerrycurl.Cqs.Metadata
+﻿namespace Jerrycurl.Cqs.Metadata;
+
+public class BindingParameterContract : IBindingParameterContract
 {
-    public class BindingParameterContract : IBindingParameterContract
-    {
-        public BindingParameterWriter Write { get; set; }
-        public BindingParameterConverter Convert { get; set; }
-    }
+    public BindingParameterWriter Write { get; set; }
+    public BindingParameterConverter Convert { get; set; }
 }

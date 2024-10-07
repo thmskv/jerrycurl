@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+	<PropertyGroup>
+		<JerrycurlSkeletonPath Condition=" '$(JerrycurlSkeletonPath)' == '' ">$(MSBuildThisFileDirectory)skeleton.jerry</JerrycurlSkeletonPath>
+		<JerrycurlIntermediatePath Condition=" '$(JerrycurlIntermediatePath)' == '' ">$(IntermediateOutputPath)Jerrycurl</JerrycurlIntermediatePath>
+		<JerrycurlRootNamespace Condition=" '$(JerrycurlRootNamespace)' == '' ">$(RootNamespace)</JerrycurlRootNamespace>
+		<JerrycurlVerbose Condition=" '$(JerrycurlVerbose)' == '' ">false</JerrycurlVerbose>
+		<JerrycurlProjectName Condition=" '$(JerrycurlRootNamespace)' == '' ">$(MSBuildProjectName)</JerrycurlProjectName>
+		<JerrycurlUseLinks Condition=" '$(JerrycurlUseLinks)' == '' ">true</JerrycurlUseLinks>
+		<JerrycurlUseCli Condition=" '$(JerrycurlUseCli)' == '' ">false</JerrycurlUseCli>
+		<JerrycurlCliPath Condition=" '$(JerrycurlCliPath)' == '' ">jerry</JerrycurlCliPath>
+		<JerrycurlCliFileList>$(IntermediateOutputPath)Jerrycurl.AbsoluteFileList.txt</JerrycurlCliFileList>
+		<JerrycurlCliOutputImportance Condition=" '$(JerrycurlVerbose)' == 'false' ">low</JerrycurlCliOutputImportance>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectCapability Include="JerryProject" />
+	</ItemGroup>
+
+	<PropertyGroup Condition=" '$(UsingMicrosoftNETSdk)' != 'true' ">
+		<BuildDependsOn>$(BuildDependsOn);JerryNonSdkWarning</BuildDependsOn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PropertyPageSchema Include="$(MSBuildThisFileDirectory)ProjectItemsSchema.xml" />
+		<PropertyPageSchema Include="$(MSBuildThisFileDirectory)rules\JerryFile.xml">
+			<Context>File;BrowseObject</Context>
+		</PropertyPageSchema>
+	</ItemGroup>
+
+	<Target Name="JerryNonSdkWarning">
+		<Warning Code="JCSDK" Text="Jerrycurl compile-time engine is only available for SDK-style projects. For more info go to https://docs.microsoft.com/en-us/dotnet/core/tools/csproj" />
+	</Target>
+
+	<Target Name="_InjectAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
+		<ItemGroup>
+			<AdditionalFiles Include="@(JerryFile)" SourceItemGroup="JerryFile" />
+		</ItemGroup>
+	</Target>
+</Project>

@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace Jerrycurl.Cqs.Metadata
+namespace Jerrycurl.Cqs.Metadata;
+
+[Flags]
+public enum TableMetadataFlags
 {
-    [Flags]
-    public enum TableMetadataFlags
-    {
-        None = 0,
-        Table = 1,
-        Column = 2,
-    }
+    None = 0,
+    Table = 1,
+    Column = 2,
 }

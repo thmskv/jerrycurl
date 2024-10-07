@@ -1,8 +1,7 @@
-﻿namespace Jerrycurl.Cqs.Queries
+﻿namespace Jerrycurl.Cqs.Queries;
+
+public enum QueryType
 {
-    public enum QueryType
-    {
-        List = 0,
-        Aggregate = 1,
-    }
+    List = 0,
+    Aggregate = 1,
 }

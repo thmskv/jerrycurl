@@ -5,15 +5,15 @@ using Jerrycurl.Vendors.Sqlite.Test.Models;
 using Shouldly;
 using System.Linq;
 
-namespace Jerrycurl.Vendors.Sqlite.Test
-{
-    public class TypeTests
-    {
-        public void Test_Type_Insert_Select()
-        {
-            Runnable table = new Runnable();
+namespace Jerrycurl.Vendors.Sqlite.Test;
 
-            table.Sql(@"
+public class TypeTests
+{
+    public void Test_Type_Insert_Select()
+    {
+        Runnable table = new Runnable();
+
+        table.Sql(@"
 DROP TABLE IF EXISTS jerry_types;
 CREATE TABLE jerry_types(
         ""Integer"" integer NOT NULL,
@@ -22,54 +22,53 @@ CREATE TABLE jerry_types(
         ""Blob"" blob NOT NULL
 );");
 
-            Runner.Command(table);
-            
-            Runnable<TypeModel, object> insert = new Runnable<TypeModel, object>(TypeModel.GetSample());
+        Runner.Command(table);
+        
+        Runnable<TypeModel, object> insert = new Runnable<TypeModel, object>(TypeModel.GetSample());
 
-            insert.Sql("INSERT INTO jerry_types ( ");
-            insert.M(
-                p =>
-                p.ColNames()
-            );
-            insert.Sql(" ) VALUES ( ");
-            insert.M(p => p.Pars());
-            insert.Sql(");");
+        insert.Sql("INSERT INTO jerry_types ( ");
+        insert.M(
+            p =>
+            p.ColNames()
+        );
+        insert.Sql(" ) VALUES ( ");
+        insert.M(p => p.Pars());
+        insert.Sql(");");
 
-            Runner.Command(insert);
+        Runner.Command(insert);
 
-            Runnable<object, TypeModel> select = new Runnable<object, TypeModel>();
+        Runnable<object, TypeModel> select = new Runnable<object, TypeModel>();
 
-            select.Sql("SELECT ");
-            select.R(p => p.Map());
-            select.Sql(" FROM jerry_types ");
-            select.R(p => p.Ali());
-            select.Sql(";");
+        select.Sql("SELECT ");
+        select.R(p => p.Map());
+        select.Sql(" FROM jerry_types ");
+        select.R(p => p.Ali());
+        select.Sql(";");
 
-            TypeModel sample = TypeModel.GetSample();
-            TypeModel fromDb = Runner.Query(select).FirstOrDefault();
+        TypeModel sample = TypeModel.GetSample();
+        TypeModel fromDb = Runner.Query(select).FirstOrDefault();
 
-            this.CompareTypeModels(fromDb, sample);
+        this.CompareTypeModels(fromDb, sample);
 
-            TypeModel fromDb2 = new TypeModel();
-            Runnable<TypeModel, object> bind = new Runnable<TypeModel, object>(fromDb2);
+        TypeModel fromDb2 = new TypeModel();
+        Runnable<TypeModel, object> bind = new Runnable<TypeModel, object>(fromDb2);
 
-            bind.Sql("SELECT ");
-            bind.M(p => p.Cols().As().Props());
-            bind.Sql(" FROM jerry_types ");
-            bind.M(p => p.Ali());
-            bind.Sql(";");
+        bind.Sql("SELECT ");
+        bind.M(p => p.Cols().As().Props());
+        bind.Sql(" FROM jerry_types ");
+        bind.M(p => p.Ali());
+        bind.Sql(";");
 
-            Runner.Command(bind);
+        Runner.Command(bind);
 
-            this.CompareTypeModels(fromDb2, sample);
-        }
+        this.CompareTypeModels(fromDb2, sample);
+    }
 
-        private void CompareTypeModels(TypeModel fromDb, TypeModel sample)
-        {
-            fromDb.Integer.ShouldBe(sample.Integer);
-            fromDb.Real.ShouldBe(sample.Real);
-            fromDb.Text.ShouldBe(sample.Text);
-            fromDb.Blob.ShouldBe(sample.Blob);
-        }
+    private void CompareTypeModels(TypeModel fromDb, TypeModel sample)
+    {
+        fromDb.Integer.ShouldBe(sample.Integer);
+        fromDb.Real.ShouldBe(sample.Real);
+        fromDb.Text.ShouldBe(sample.Text);
+        fromDb.Blob.ShouldBe(sample.Blob);
     }
 }

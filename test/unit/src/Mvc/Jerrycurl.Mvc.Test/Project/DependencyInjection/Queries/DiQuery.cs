@@ -2,28 +2,27 @@
 using Jerrycurl.Mvc.Projections;
 using Jerrycurl.Mvc.Test.Project.DependencyInjection.Services;
 
-namespace Jerrycurl.Mvc.Test.Project.DependencyInjection.Queries
+namespace Jerrycurl.Mvc.Test.Project.DependencyInjection.Queries;
+
+public class DiQuery_cssql : ProcPage<object, object>
 {
-    public class DiQuery_cssql : ProcPage<object, object>
+    [Inject]
+    public MyService ms { get; set; }
+
+    [Inject]
+    public IProjection<int> p1 { get; set; }
+
+    public DiQuery_cssql(IProjection model, IProjection result)
+        : base(model, result)
     {
-        [Inject]
-        public MyService ms { get; set; }
 
-        [Inject]
-        public IProjection<int> p1 { get; set; }
+    }
 
-        public DiQuery_cssql(IProjection model, IProjection result)
-            : base(model, result)
-        {
+    public override void Execute()
+    {
+        this.WriteLiteral(this.ms.SomeValue);
 
-        }
-
-        public override void Execute()
-        {
-            this.WriteLiteral(this.ms.SomeValue);
-
-            if (this.p1 != null)
-                this.WriteLiteral("+PROJ");
-        }
+        if (this.p1 != null)
+            this.WriteLiteral("+PROJ");
     }
 }

@@ -8,95 +8,94 @@ using System.Data.SqlClient;
 using Microsoft.Data.SqlClient;
 #endif
 
-namespace Jerrycurl.Vendors.SqlServer.Metadata
+namespace Jerrycurl.Vendors.SqlServer.Metadata;
+
+public class SqlServerContractResolver : IBindingContractResolver
 {
-    public class SqlServerContractResolver : IBindingContractResolver
+    public const int DefaultStringSize = 4000;
+
+    public int Priority => 1000;
+    public IBindingParameterContract GetParameterContract(IBindingMetadata metadata)
     {
-        public const int DefaultStringSize = 4000;
-
-        public int Priority => 1000;
-        public IBindingParameterContract GetParameterContract(IBindingMetadata metadata)
+        if (metadata.Type == typeof(DateTime) || metadata.Type == typeof(DateTime?))
         {
-            if (metadata.Type == typeof(DateTime) || metadata.Type == typeof(DateTime?))
-            {
-                IBindingParameterContract fallback = metadata.Parameter;
+            IBindingParameterContract fallback = metadata.Parameter;
 
-                return new BindingParameterContract()
-                {
-                    Convert = fallback.Convert,
-                    Write = pi =>
-                    {
-                        fallback?.Write?.Invoke(pi);
-
-                        pi.Parameter.DbType = DbType.DateTime2;
-                    }
-                };
-            }
-            else if (metadata.Type == typeof(string))
-            {
-                IBindingParameterContract fallback = metadata.Parameter;
-
-                return new BindingParameterContract()
-                {
-                    Convert = fallback.Convert,
-                    Write = pi =>
-                    {
-                        fallback?.Write?.Invoke(pi);
-
-                        if (pi.Parameter.Size < DefaultStringSize)
-                            pi.Parameter.Size = DefaultStringSize;
-                    }
-                };
-            }
-            else if (metadata.Type.FullName == "Microsoft.SqlServer.Types.SqlGeography")
-            {
-                IBindingParameterContract fallback = metadata.Parameter;
-
-                return new BindingParameterContract()
-                {
-                    Convert = fallback.Convert,
-                    Write = pi =>
-                    {
-                        fallback?.Write?.Invoke(pi);
-
-                        if (pi.Parameter is SqlParameter sqlParam)
-                            sqlParam.UdtTypeName = "geography";
-                    }
-                };
-            }
-
-            return null;
-        }
-
-        public IBindingValueContract GetValueContract(IBindingMetadata metadata)
-        {
-            IBindingValueContract fallback = metadata.Value;
-
-            return new BindingValueContract()
+            return new BindingParameterContract()
             {
                 Convert = fallback.Convert,
-                Read = ci => this.GetValueReadMethod(ci, fallback),
+                Write = pi =>
+                {
+                    fallback?.Write?.Invoke(pi);
+
+                    pi.Parameter.DbType = DbType.DateTime2;
+                }
+            };
+        }
+        else if (metadata.Type == typeof(string))
+        {
+            IBindingParameterContract fallback = metadata.Parameter;
+
+            return new BindingParameterContract()
+            {
+                Convert = fallback.Convert,
+                Write = pi =>
+                {
+                    fallback?.Write?.Invoke(pi);
+
+                    if (pi.Parameter.Size < DefaultStringSize)
+                        pi.Parameter.Size = DefaultStringSize;
+                }
+            };
+        }
+        else if (metadata.Type.FullName == "Microsoft.SqlServer.Types.SqlGeography")
+        {
+            IBindingParameterContract fallback = metadata.Parameter;
+
+            return new BindingParameterContract()
+            {
+                Convert = fallback.Convert,
+                Write = pi =>
+                {
+                    fallback?.Write?.Invoke(pi);
+
+                    if (pi.Parameter is SqlParameter sqlParam)
+                        sqlParam.UdtTypeName = "geography";
+                }
             };
         }
 
-        public IBindingCompositionContract GetCompositionContract(IBindingMetadata metadata) => null;
-        public IBindingHelperContract GetHelperContract(IBindingMetadata metadata) => null;
+        return null;
+    }
 
-        private MethodInfo GetSqlReaderMethod(string methodName)
+    public IBindingValueContract GetValueContract(IBindingMetadata metadata)
+    {
+        IBindingValueContract fallback = metadata.Value;
+
+        return new BindingValueContract()
         {
-            Type reader = typeof(SqlDataReader);
+            Convert = fallback.Convert,
+            Read = ci => this.GetValueReadMethod(ci, fallback),
+        };
+    }
 
-            return reader.GetMethod(methodName, new[] { typeof(int) });
-        }
+    public IBindingCompositionContract GetCompositionContract(IBindingMetadata metadata) => null;
+    public IBindingHelperContract GetHelperContract(IBindingMetadata metadata) => null;
 
-        private MethodInfo GetValueReadMethod(IBindingColumnInfo columnInfo, IBindingValueContract fallback)
-        {
-            if (columnInfo.Column.Type == typeof(DateTimeOffset))
-                return this.GetSqlReaderMethod("GetDateTimeOffset");
-            else if (columnInfo.Column.Type == typeof(TimeSpan))
-                return this.GetSqlReaderMethod("GetTimeSpan");
+    private MethodInfo GetSqlReaderMethod(string methodName)
+    {
+        Type reader = typeof(SqlDataReader);
 
-            return fallback?.Read(columnInfo);
-        }
+        return reader.GetMethod(methodName, new[] { typeof(int) });
+    }
+
+    private MethodInfo GetValueReadMethod(IBindingColumnInfo columnInfo, IBindingValueContract fallback)
+    {
+        if (columnInfo.Column.Type == typeof(DateTimeOffset))
+            return this.GetSqlReaderMethod("GetDateTimeOffset");
+        else if (columnInfo.Column.Type == typeof(TimeSpan))
+            return this.GetSqlReaderMethod("GetTimeSpan");
+
+        return fallback?.Read(columnInfo);
     }
 }

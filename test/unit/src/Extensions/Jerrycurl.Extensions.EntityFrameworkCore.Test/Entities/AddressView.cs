@@ -1,7 +1,6 @@
-﻿namespace Jerrycurl.Extensions.EntityFrameworkCore.Test.Entities
+﻿namespace Jerrycurl.Extensions.EntityFrameworkCore.Test.Entities;
+
+public partial class AddressView : Address
 {
-    public partial class AddressView : Address
-    {
-        public string City { get; set; }
-    }
+    public string City { get; set; }
 }

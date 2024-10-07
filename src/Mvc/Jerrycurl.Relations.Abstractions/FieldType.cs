@@ -1,9 +1,8 @@
-﻿namespace Jerrycurl.Relations
+﻿namespace Jerrycurl.Relations;
+
+public enum FieldType
 {
-    public enum FieldType
-    {
-        Model = 0,
-        Value = 1,
-        Missing = 2,
-    }
+    Model = 0,
+    Value = 1,
+    Missing = 2,
 }

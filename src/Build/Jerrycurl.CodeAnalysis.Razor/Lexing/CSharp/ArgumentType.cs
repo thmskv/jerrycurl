@@ -1,8 +1,7 @@
-﻿namespace Jerrycurl.CodeAnalysis.Razor.Lexing.CSharp
+﻿namespace Jerrycurl.CodeAnalysis.Razor.Lexing.CSharp;
+
+public enum ArgumentType
 {
-    public enum ArgumentType
-    {
-        Line = 0,
-        Word = 1,
-    }
+    Line = 0,
+    Word = 1,
 }

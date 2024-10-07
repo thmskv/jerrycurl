@@ -1,8 +1,8 @@
 ﻿using global::System;
 using global::Jerrycurl.Cqs.Metadata.Annotations;
 
-namespace Jerrycurl.Test.Models.Database
-{
+namespace Jerrycurl.Test.Models.Database;
+
 	[Table("dbo", "Blog")]
 	public class Blog	
 	{
@@ -48,7 +48,7 @@ namespace Jerrycurl.Test.Models.Database
 	public class BlogTag	
 	{
 		[Key("PK_BlogTag", 1)]
-        public int Id { get; set; }
+    public int Id { get; set; }
 		public string Name { get; set; }
 	}
 	
@@ -61,4 +61,3 @@ namespace Jerrycurl.Test.Models.Database
 		public int BlogTagId { get; set; }
 	}
 	
-}

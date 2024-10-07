@@ -134,6 +134,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jerrycurl.Test.Common", "te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jerrycurl.Tools.Vendors", "src\Tools\Jerrycurl.Tools.Vendors\Jerrycurl.Tools.Vendors.csproj", "{52CE1C72-42C4-48F8-9C9E-7997D5F0437F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jerrycurl.SourceGenerator.Razor", "src\Build\Jerrycurl.SourceGenerator.Razor\Jerrycurl.SourceGenerator.Razor.csproj", "{56314BAE-5AB6-44A8-A264-03444E33A22F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -264,6 +266,10 @@ Global
 		{52CE1C72-42C4-48F8-9C9E-7997D5F0437F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52CE1C72-42C4-48F8-9C9E-7997D5F0437F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52CE1C72-42C4-48F8-9C9E-7997D5F0437F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56314BAE-5AB6-44A8-A264-03444E33A22F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56314BAE-5AB6-44A8-A264-03444E33A22F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56314BAE-5AB6-44A8-A264-03444E33A22F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56314BAE-5AB6-44A8-A264-03444E33A22F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -313,6 +319,7 @@ Global
 		{9B208979-73FF-4978-BEAB-A137E1AAC504} = {EE5078B9-5036-45D1-8324-37C1715F0212}
 		{63C12E40-D889-4525-9A2F-6BDDFF2E12C3} = {7D0177EC-E2A9-403A-AF4A-9561489F2700}
 		{52CE1C72-42C4-48F8-9C9E-7997D5F0437F} = {24A35FDF-4168-4F4D-9CEB-CE73E428B132}
+		{56314BAE-5AB6-44A8-A264-03444E33A22F} = {B2DC1C0A-AC90-4CC2-A779-6EB280FBFDE7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B86B955-5CFA-4BAE-A0E4-360DFA0C577B}
@@ -324,6 +331,7 @@ Global
 		src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems*{3cee141f-14ef-4816-a524-3e6a42dc6895}*SharedItemsImports = 5
 		src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems*{4ad5d8d7-2441-4a8e-b130-e40e37a5519d}*SharedItemsImports = 5
 		src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems*{4bbb040a-7ef4-47e5-85f3-fd4fc38bcc17}*SharedItemsImports = 5
+		src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems*{56314bae-5ab6-44a8-a264-03444e33a22f}*SharedItemsImports = 5
 		src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems*{5d959b12-95d7-47fa-bbf7-1a4a81308194}*SharedItemsImports = 5
 		src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems*{6b7401af-8115-4211-baec-a0d12feda7ea}*SharedItemsImports = 5
 		src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems*{8c1b68bb-0dde-4434-b596-c11e08033382}*SharedItemsImports = 5

@@ -3,18 +3,17 @@ using Jerrycurl.Cqs.Queries.Internal.IO.Readers;
 using Jerrycurl.Cqs.Queries.Internal.IO.Targets;
 using Jerrycurl.Relations.Metadata;
 
-namespace Jerrycurl.Cqs.Queries.Internal.IO
-{
-    internal class AggregateResult : BaseResult
-    {
-        public BaseReader Value { get; set; }
-        public AggregateTarget Target { get; set; }
-        public IBindingMetadata Metadata { get; set; }
+namespace Jerrycurl.Cqs.Queries.Internal.IO;
 
-        public AggregateResult(ISchema schema)
-            : base(schema)
-        {
-            this.Metadata = schema.Require<IBindingMetadata>();
-        }
+internal class AggregateResult : BaseResult
+{
+    public BaseReader Value { get; set; }
+    public AggregateTarget Target { get; set; }
+    public IBindingMetadata Metadata { get; set; }
+
+    public AggregateResult(ISchema schema)
+        : base(schema)
+    {
+        this.Metadata = schema.Require<IBindingMetadata>();
     }
 }

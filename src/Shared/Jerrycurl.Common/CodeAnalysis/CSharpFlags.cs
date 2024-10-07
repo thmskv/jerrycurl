@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace Jerrycurl.CodeAnalysis
+namespace Jerrycurl.CodeAnalysis;
+
+[Flags]
+internal enum CSharpFlags
 {
-    [Flags]
-    internal enum CSharpFlags
-    {
-        None = 0,
-        AutoIndent = 1,
-    }
+    None = 0,
+    AutoIndent = 1,
 }

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Jerrycurl.Relations
+namespace Jerrycurl.Relations;
+
+public interface ITuple : IReadOnlyList<IField>
 {
-    public interface ITuple : IReadOnlyList<IField>
-    {
-        int Degree { get; }
-    }
+    int Degree { get; }
 }

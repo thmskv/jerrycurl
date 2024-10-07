@@ -1,13 +1,12 @@
 ﻿using Jerrycurl.Cqs.Metadata.Annotations;
 using Newtonsoft.Json;
 
-namespace Jerrycurl.Vendors.SqlServer.Test.Models
+namespace Jerrycurl.Vendors.SqlServer.Test.Models;
+
+[Json]
+public class JsonModel
 {
-    [Json]
-    public class JsonModel
-    {
-        public int Value1 { get; set; }
-        [JsonProperty(PropertyName = "Value2")]
-        public int Value3 { get; set; }
-    }
+    public int Value1 { get; set; }
+    [JsonProperty(PropertyName = "Value2")]
+    public int Value3 { get; set; }
 }

@@ -1,9 +1,8 @@
-﻿namespace Jerrycurl.Cqs.Metadata
+﻿namespace Jerrycurl.Cqs.Metadata;
+
+public interface IBindingColumnInfo
 {
-    public interface IBindingColumnInfo
-    {
-        ColumnMetadata Column { get; }
-        IBindingMetadata Metadata { get; }
-        bool CanBeNull { get; }
-    }
+    ColumnMetadata Column { get; }
+    IBindingMetadata Metadata { get; }
+    bool CanBeNull { get; }
 }

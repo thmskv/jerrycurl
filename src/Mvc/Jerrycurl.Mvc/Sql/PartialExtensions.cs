@@ -5,40 +5,39 @@ using Jerrycurl.Mvc.Projections;
 using Jerrycurl.Relations;
 using Jerrycurl.Relations.Metadata;
 
-namespace Jerrycurl.Mvc.Sql
+namespace Jerrycurl.Mvc.Sql;
+
+public static class PartialExtensions
 {
-    public static class PartialExtensions
+    public static ISqlContent Subquery<TModel, TProperty>(this IProjection<TModel> projection, Expression<Func<TModel, TProperty>> expression, string queryName, object model = null)
+        => projection.For(expression).Subquery(queryName, model);
+
+    public static ISqlContent Subquery(this IProjection projection, string queryName, object model = null)
     {
-        public static ISqlContent Subquery<TModel, TProperty>(this IProjection<TModel> projection, Expression<Func<TModel, TProperty>> expression, string queryName, object model = null)
-            => projection.For(expression).Subquery(queryName, model);
+        ISchema modelSchema = projection.Context.Domain.Schemas.GetSchema(model?.GetType() ?? typeof(object));
+        IProjectionMetadata modelMetadata = modelSchema.Require<IProjectionMetadata>();
+        IField field = new Model(modelSchema, model);
 
-        public static ISqlContent Subquery(this IProjection projection, string queryName, object model = null)
-        {
-            ISchema modelSchema = projection.Context.Domain.Schemas.GetSchema(model?.GetType() ?? typeof(object));
-            IProjectionMetadata modelMetadata = modelSchema.Require<IProjectionMetadata>();
-            IField field = new Model(modelSchema, model);
+        ProjectionIdentity modelIdentity = new ProjectionIdentity(field);
 
-            ProjectionIdentity modelIdentity = new ProjectionIdentity(field);
+        IProjection modelProjection = new Projection(modelIdentity, projection.Context, modelMetadata);
+        IProjection resultProjection = projection;
 
-            IProjection modelProjection = new Projection(modelIdentity, projection.Context, modelMetadata);
-            IProjection resultProjection = projection;
+        return projection.Context.Renderer.Partial(queryName, modelProjection, resultProjection);
+    }
 
-            return projection.Context.Renderer.Partial(queryName, modelProjection, resultProjection);
-        }
+    public static ISqlContent Subcommand<TModel, TProperty>(this IProjection<TModel> projection, Expression<Func<TModel, TProperty>> expression, string commandName)
+        => projection.For(expression).Subcommand(commandName);
 
-        public static ISqlContent Subcommand<TModel, TProperty>(this IProjection<TModel> projection, Expression<Func<TModel, TProperty>> expression, string commandName)
-            => projection.For(expression).Subcommand(commandName);
+    public static ISqlContent Subcommand(this IProjection projection, string commandName)
+    {
+        ISchema resultSchema = projection.Context.Domain.Schemas.GetSchema(typeof(object));
+        IProjectionMetadata resultMetadata = resultSchema.Require<IProjectionMetadata>();
+        ProjectionIdentity resultIdentity = new ProjectionIdentity(resultSchema);
 
-        public static ISqlContent Subcommand(this IProjection projection, string commandName)
-        {
-            ISchema resultSchema = projection.Context.Domain.Schemas.GetSchema(typeof(object));
-            IProjectionMetadata resultMetadata = resultSchema.Require<IProjectionMetadata>();
-            ProjectionIdentity resultIdentity = new ProjectionIdentity(resultSchema);
+        IProjection modelProjection = projection;
+        IProjection resultProjection = new Projection(resultIdentity, projection.Context, resultMetadata);
 
-            IProjection modelProjection = projection;
-            IProjection resultProjection = new Projection(resultIdentity, projection.Context, resultMetadata);
-
-            return projection.Context.Renderer.Partial(commandName, modelProjection, resultProjection);
-        }
+        return projection.Context.Renderer.Partial(commandName, modelProjection, resultProjection);
     }
 }

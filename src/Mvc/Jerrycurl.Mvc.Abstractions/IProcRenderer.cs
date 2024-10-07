@@ -1,10 +1,9 @@
 ﻿using Jerrycurl.Mvc.Projections;
 
-namespace Jerrycurl.Mvc
+namespace Jerrycurl.Mvc;
+
+public interface IProcRenderer
 {
-    public interface IProcRenderer
-    {
-        ISqlContent Body();
-        ISqlContent Partial(string procName, IProjection model, IProjection result);
-    }
+    ISqlContent Body();
+    ISqlContent Partial(string procName, IProjection model, IProjection result);
 }

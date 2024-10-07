@@ -5,15 +5,15 @@ using Jerrycurl.Vendors.SqlServer.Test.Models;
 using Shouldly;
 using System.Linq;
 
-namespace Jerrycurl.Vendors.SqlServer.Test
-{
-    public class TypeTests
-    {
-        public void Test_Type_Insert_Select()
-        {
-            Runnable table = new Runnable();
+namespace Jerrycurl.Vendors.SqlServer.Test;
 
-            table.Sql(@"
+public class TypeTests
+{
+    public void Test_Type_Insert_Select()
+    {
+        Runnable table = new Runnable();
+
+        table.Sql(@"
 DROP TABLE IF EXISTS jerry_types;
 CREATE TABLE jerry_types(
         [BigInt] bigint NOT NULL,
@@ -42,69 +42,68 @@ CREATE TABLE jerry_types(
         [UniqueIdentifier] uniqueidentifier NOT NULL
 );");
 
-            Runner.Command(table);
+        Runner.Command(table);
 
-            
-            Runnable<TypeModel, object> insert = new Runnable<TypeModel, object>(TypeModel.GetSample());
+        
+        Runnable<TypeModel, object> insert = new Runnable<TypeModel, object>(TypeModel.GetSample());
 
-            insert.Sql("INSERT INTO jerry_types ( ");
-            insert.M(p => p.ColNames());
-            insert.Sql(" ) VALUES ( ");
-            insert.M(p => p.Pars());
-            insert.Sql(")");
+        insert.Sql("INSERT INTO jerry_types ( ");
+        insert.M(p => p.ColNames());
+        insert.Sql(" ) VALUES ( ");
+        insert.M(p => p.Pars());
+        insert.Sql(")");
 
-            Runner.Command(insert);
+        Runner.Command(insert);
 
-            Runnable<object, TypeModel> select = new Runnable<object, TypeModel>();
+        Runnable<object, TypeModel> select = new Runnable<object, TypeModel>();
 
-            select.Sql("SELECT ");
-            select.R(p => p.Map());
-            select.Sql(" FROM jerry_types ");
-            select.R(p => p.Ali());
+        select.Sql("SELECT ");
+        select.R(p => p.Map());
+        select.Sql(" FROM jerry_types ");
+        select.R(p => p.Ali());
 
-            TypeModel sample = TypeModel.GetSample();
-            TypeModel fromDb = Runner.Query(select).FirstOrDefault();
+        TypeModel sample = TypeModel.GetSample();
+        TypeModel fromDb = Runner.Query(select).FirstOrDefault();
 
-            this.CompareTypeModels(fromDb, sample);
+        this.CompareTypeModels(fromDb, sample);
 
-            TypeModel fromDb2 = new TypeModel();
-            Runnable<TypeModel, object> bind = new Runnable<TypeModel, object>(fromDb2);
+        TypeModel fromDb2 = new TypeModel();
+        Runnable<TypeModel, object> bind = new Runnable<TypeModel, object>(fromDb2);
 
-            bind.Sql("SELECT ");
-            bind.M(p => p.Cols().As().Props());
-            bind.Sql(" FROM jerry_types ");
-            bind.M(p => p.Ali());
+        bind.Sql("SELECT ");
+        bind.M(p => p.Cols().As().Props());
+        bind.Sql(" FROM jerry_types ");
+        bind.M(p => p.Ali());
 
-            Runner.Command(bind);
+        Runner.Command(bind);
 
-            this.CompareTypeModels(fromDb2, sample);
-        }
+        this.CompareTypeModels(fromDb2, sample);
+    }
 
-        private void CompareTypeModels(TypeModel fromDb, TypeModel sample)
-        {
-            fromDb.BigInt.ShouldBe(sample.BigInt);
-            fromDb.Binary.ShouldBe(sample.Binary.Concat(new byte[fromDb.Binary.Length - sample.Binary.Length]).ToArray());
-            fromDb.Bit.ShouldBe(sample.Bit);
-            fromDb.Char.ShouldBe(sample.Char.PadRight(20));
-            fromDb.Date.ShouldBe(sample.Date);
-            fromDb.DateTime.ShouldBe(sample.DateTime);
-            fromDb.DateTime2.ShouldBe(sample.DateTime2);
-            fromDb.DateTimeOffset.ShouldBe(sample.DateTimeOffset);
-            fromDb.Float.ShouldBe(sample.Float);
-            fromDb.Image.ShouldBe(sample.Image);
-            fromDb.Int.ShouldBe(sample.Int);
-            fromDb.NChar.ShouldBe(sample.NChar.PadRight(20));
-            fromDb.NText.ShouldBe(sample.NText);
-            fromDb.NVarChar.ShouldBe(sample.NVarChar);
-            fromDb.Real.ShouldBe(sample.Real);
-            fromDb.SmallDateTime.ShouldBe(sample.SmallDateTime);
-            fromDb.SmallInt.ShouldBe(sample.SmallInt);
-            fromDb.Text.ShouldBe(sample.Text);
-            fromDb.Time.ShouldBe(sample.Time);
-            fromDb.UniqueIdentifier.ShouldBe(sample.UniqueIdentifier);
-            fromDb.VarBinary.ShouldBe(sample.VarBinary);
-            fromDb.VarChar.ShouldBe(sample.VarChar);
-            fromDb.Xml.ToString().ShouldBe(sample.Xml.ToString());
-        }
+    private void CompareTypeModels(TypeModel fromDb, TypeModel sample)
+    {
+        fromDb.BigInt.ShouldBe(sample.BigInt);
+        fromDb.Binary.ShouldBe(sample.Binary.Concat(new byte[fromDb.Binary.Length - sample.Binary.Length]).ToArray());
+        fromDb.Bit.ShouldBe(sample.Bit);
+        fromDb.Char.ShouldBe(sample.Char.PadRight(20));
+        fromDb.Date.ShouldBe(sample.Date);
+        fromDb.DateTime.ShouldBe(sample.DateTime);
+        fromDb.DateTime2.ShouldBe(sample.DateTime2);
+        fromDb.DateTimeOffset.ShouldBe(sample.DateTimeOffset);
+        fromDb.Float.ShouldBe(sample.Float);
+        fromDb.Image.ShouldBe(sample.Image);
+        fromDb.Int.ShouldBe(sample.Int);
+        fromDb.NChar.ShouldBe(sample.NChar.PadRight(20));
+        fromDb.NText.ShouldBe(sample.NText);
+        fromDb.NVarChar.ShouldBe(sample.NVarChar);
+        fromDb.Real.ShouldBe(sample.Real);
+        fromDb.SmallDateTime.ShouldBe(sample.SmallDateTime);
+        fromDb.SmallInt.ShouldBe(sample.SmallInt);
+        fromDb.Text.ShouldBe(sample.Text);
+        fromDb.Time.ShouldBe(sample.Time);
+        fromDb.UniqueIdentifier.ShouldBe(sample.UniqueIdentifier);
+        fromDb.VarBinary.ShouldBe(sample.VarBinary);
+        fromDb.VarChar.ShouldBe(sample.VarChar);
+        fromDb.Xml.ToString().ShouldBe(sample.Xml.ToString());
     }
 }

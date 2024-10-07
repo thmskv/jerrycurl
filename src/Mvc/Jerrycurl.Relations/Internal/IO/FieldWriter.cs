@@ -1,16 +1,15 @@
 ﻿using Jerrycurl.Relations.Internal.Parsing;
 
-namespace Jerrycurl.Relations.Internal.IO
-{
-    internal class FieldWriter : NodeWriter
-    {
-        public int[] BufferIndex { get; set; }
-        public int? CacheIndex { get; set; }
+namespace Jerrycurl.Relations.Internal.IO;
 
-        public FieldWriter(Node node)
-            : base(node)
-        {
-            
-        }
+internal class FieldWriter : NodeWriter
+{
+    public int[] BufferIndex { get; set; }
+    public int? CacheIndex { get; set; }
+
+    public FieldWriter(Node node)
+        : base(node)
+    {
+        
     }
 }

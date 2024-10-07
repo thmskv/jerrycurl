@@ -8,80 +8,79 @@ using System.Data.Common;
 using System.Threading;
 using Jerrycurl.Cqs.Sessions;
 
-namespace Jerrycurl.Cqs.Commands
+namespace Jerrycurl.Cqs.Commands;
+
+public class CommandEngine
 {
-    public class CommandEngine
+    public CommandOptions Options { get; }
+
+    public CommandEngine(CommandOptions options)
     {
-        public CommandOptions Options { get; }
+        this.Options = options ?? throw new ArgumentNullException(nameof(options));
+    }
 
-        public CommandEngine(CommandOptions options)
+    public void Execute(Command command) => this.Execute(new[] { command });
+    public void Execute(IEnumerable<Command> commands)
+    {
+        CommandBuffer buffer = new CommandBuffer();
+
+        using ISyncSession session = this.Options.GetSyncSession();
+
+        foreach (IBatch batch in this.GetBufferedCommands(commands, buffer))
         {
-            this.Options = options ?? throw new ArgumentNullException(nameof(options));
+            foreach (IDataReader reader in session.Execute(batch))
+                buffer.Update(reader);
         }
 
-        public void Execute(Command command) => this.Execute(new[] { command });
-        public void Execute(IEnumerable<Command> commands)
+        buffer.Commit();
+    }
+
+    public Task ExecuteAsync(Command command, CancellationToken cancellationToken = default) => this.ExecuteAsync(new[] { command }, cancellationToken);
+    public async Task ExecuteAsync(IEnumerable<Command> commands, CancellationToken cancellationToken = default)
+    {
+        await using IAsyncSession session = this.Options.GetAsyncSession();
+
+        CommandBuffer buffer = new CommandBuffer();
+
+        foreach (IBatch batch in this.GetBufferedCommands(commands, buffer))
         {
-            CommandBuffer buffer = new CommandBuffer();
-
-            using ISyncSession session = this.Options.GetSyncSession();
-
-            foreach (IBatch batch in this.GetBufferedCommands(commands, buffer))
-            {
-                foreach (IDataReader reader in session.Execute(batch))
-                    buffer.Update(reader);
-            }
-
-            buffer.Commit();
+            await foreach (DbDataReader dataReader in session.ExecuteAsync(batch, cancellationToken).ConfigureAwait(false))
+                buffer.Update(dataReader);
         }
 
-        public Task ExecuteAsync(Command command, CancellationToken cancellationToken = default) => this.ExecuteAsync(new[] { command }, cancellationToken);
-        public async Task ExecuteAsync(IEnumerable<Command> commands, CancellationToken cancellationToken = default)
+        buffer.Commit();
+    }
+
+    private IEnumerable<IBatch> GetBufferedCommands(IEnumerable<Command> commands, CommandBuffer buffer)
+    {
+        IEnumerable<Command> filteredCommands = commands.NotNull().Where(c => !string.IsNullOrWhiteSpace(c.CommandText));
+
+        return filteredCommands.Select(c => new BufferedCommand(buffer, c));
+    }
+
+    private class BufferedCommand : IBatch
+    {
+        public CommandBuffer Buffer { get; }
+        public Command InnerCommand { get; }
+
+        public BufferedCommand(CommandBuffer buffer, Command innerCommand)
         {
-            await using IAsyncSession session = this.Options.GetAsyncSession();
-
-            CommandBuffer buffer = new CommandBuffer();
-
-            foreach (IBatch batch in this.GetBufferedCommands(commands, buffer))
-            {
-                await foreach (DbDataReader dataReader in session.ExecuteAsync(batch, cancellationToken).ConfigureAwait(false))
-                    buffer.Update(dataReader);
-            }
-
-            buffer.Commit();
+            this.Buffer = buffer;
+            this.InnerCommand = innerCommand;
         }
 
-        private IEnumerable<IBatch> GetBufferedCommands(IEnumerable<Command> commands, CommandBuffer buffer)
+        public void Build(IDbCommand adoCommand)
         {
-            IEnumerable<Command> filteredCommands = commands.NotNull().Where(c => !string.IsNullOrWhiteSpace(c.CommandText));
+            foreach (IParameter parameter in this.InnerCommand.Parameters ?? Array.Empty<IParameter>())
+                this.Buffer.Add(parameter);
 
-            return filteredCommands.Select(c => new BufferedCommand(buffer, c));
-        }
+            foreach (IUpdateBinding binding in this.InnerCommand.Bindings ?? Array.Empty<IUpdateBinding>())
+                this.Buffer.Add(binding);
 
-        private class BufferedCommand : IBatch
-        {
-            public CommandBuffer Buffer { get; }
-            public Command InnerCommand { get; }
+            adoCommand.CommandText = this.InnerCommand.CommandText;
 
-            public BufferedCommand(CommandBuffer buffer, Command innerCommand)
-            {
-                this.Buffer = buffer;
-                this.InnerCommand = innerCommand;
-            }
-
-            public void Build(IDbCommand adoCommand)
-            {
-                foreach (IParameter parameter in this.InnerCommand.Parameters ?? Array.Empty<IParameter>())
-                    this.Buffer.Add(parameter);
-
-                foreach (IUpdateBinding binding in this.InnerCommand.Bindings ?? Array.Empty<IUpdateBinding>())
-                    this.Buffer.Add(binding);
-
-                adoCommand.CommandText = this.InnerCommand.CommandText;
-
-                foreach (IDbDataParameter parameter in this.Buffer.Prepare(adoCommand))
-                    adoCommand.Parameters.Add(parameter);
-            }
+            foreach (IDbDataParameter parameter in this.Buffer.Prepare(adoCommand))
+                adoCommand.Parameters.Add(parameter);
         }
     }
 }

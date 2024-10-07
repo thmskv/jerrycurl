@@ -2,23 +2,22 @@
 using Jerrycurl.Collections;
 using Jerrycurl.Relations.Metadata;
 
-namespace Jerrycurl.Relations.Language
+namespace Jerrycurl.Relations.Language;
+
+public static class SchemaExtensions
 {
-    public static class SchemaExtensions
+    public static ISchemaStore Use(this ISchemaStore store, IRelationContractResolver resolver)
     {
-        public static ISchemaStore Use(this ISchemaStore store, IRelationContractResolver resolver)
-        {
-            if (store == null)
-                throw new ArgumentNullException(nameof(store));
+        if (store == null)
+            throw new ArgumentNullException(nameof(store));
 
-            if (resolver == null)
-                throw new ArgumentNullException(nameof(resolver));
+        if (resolver == null)
+            throw new ArgumentNullException(nameof(resolver));
 
-            RelationMetadataBuilder builder = store.Builders.FirstOfType<RelationMetadataBuilder>();
+        RelationMetadataBuilder builder = store.Builders.FirstOfType<RelationMetadataBuilder>();
 
-            builder?.Add(resolver);
+        builder?.Add(resolver);
 
-            return store;
-        }
+        return store;
     }
 }

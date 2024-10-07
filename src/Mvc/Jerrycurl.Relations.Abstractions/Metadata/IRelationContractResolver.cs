@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Jerrycurl.Relations.Metadata
+namespace Jerrycurl.Relations.Metadata;
+
+public interface IRelationContractResolver
 {
-    public interface IRelationContractResolver
-    {
-        IRelationContract GetContract(IRelationMetadata metadata);
-        IEnumerable<Attribute> GetAnnotations(IRelationMetadata metadata);
-    }
+    IRelationContract GetContract(IRelationMetadata metadata);
+    IEnumerable<Attribute> GetAnnotations(IRelationMetadata metadata);
 }

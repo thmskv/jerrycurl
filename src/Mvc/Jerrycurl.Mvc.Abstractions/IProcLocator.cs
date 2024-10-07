@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Jerrycurl.Mvc
+namespace Jerrycurl.Mvc;
+
+public interface IProcLocator
 {
-    public interface IProcLocator
-    {
-        PageDescriptor FindPage(string procName, Type originType);
-    }
+    PageDescriptor FindPage(string procName, Type originType);
 }

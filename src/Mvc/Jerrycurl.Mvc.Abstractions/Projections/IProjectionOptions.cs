@@ -1,7 +1,6 @@
-﻿namespace Jerrycurl.Mvc.Projections
+﻿namespace Jerrycurl.Mvc.Projections;
+
+public interface IProjectionOptions
 {
-    public interface IProjectionOptions
-    {
-        string Separator { get; }
-    }
+    string Separator { get; }
 }

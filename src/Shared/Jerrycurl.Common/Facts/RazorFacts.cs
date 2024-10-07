@@ -1,15 +1,14 @@
-﻿namespace Jerrycurl.Facts
+﻿namespace Jerrycurl.Facts;
+
+internal static class RazorFacts
 {
-    internal static class RazorFacts
+    public static string[] DefaultNamespaces { get; } = new[]
     {
-        public static string[] DefaultNamespaces { get; } = new[]
-        {
-            "System",
-            "System.Collections.Generic",
-            "System.Linq.Expressions",
-            "Jerrycurl.Mvc",
-            "Jerrycurl.Mvc.Projections",
-            "Jerrycurl.Mvc.Sql",
-        };
-    }
+        "System",
+        "System.Collections.Generic",
+        "System.Linq.Expressions",
+        "Jerrycurl.Mvc",
+        "Jerrycurl.Mvc.Projections",
+        "Jerrycurl.Mvc.Sql",
+    };
 }

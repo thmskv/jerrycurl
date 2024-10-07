@@ -1,9 +1,8 @@
-﻿namespace Jerrycurl.Mvc
+﻿namespace Jerrycurl.Mvc;
+
+public interface IPageExecutionContext
 {
-    public interface IPageExecutionContext
-    {
-        PageDescriptor Page { get; }
-        ISqlBuffer Buffer { get; }
-        BodyFactory Body { get; }
-    }
+    PageDescriptor Page { get; }
+    ISqlBuffer Buffer { get; }
+    BodyFactory Body { get; }
 }

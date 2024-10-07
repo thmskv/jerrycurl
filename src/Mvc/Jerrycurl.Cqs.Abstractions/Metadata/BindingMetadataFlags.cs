@@ -1,16 +1,15 @@
 ﻿using System;
 
-namespace Jerrycurl.Cqs.Metadata
+namespace Jerrycurl.Cqs.Metadata;
+
+[Flags]
+public enum BindingMetadataFlags
 {
-    [Flags]
-    public enum BindingMetadataFlags
-    {
-        None = 0,
-        List = 1,
-        Item = 2,
-        Dynamic = 4,
-        Model = 8,
-        Readable = 16,
-        Writable = 32,
-    }
+    None = 0,
+    List = 1,
+    Item = 2,
+    Dynamic = 4,
+    Model = 8,
+    Readable = 16,
+    Writable = 32,
 }

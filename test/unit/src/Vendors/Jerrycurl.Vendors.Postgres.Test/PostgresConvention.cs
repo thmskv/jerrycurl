@@ -2,20 +2,19 @@
 using Jerrycurl.Test;
 using Npgsql;
 
-namespace Jerrycurl.Vendors.Postgres.Test
+namespace Jerrycurl.Vendors.Postgres.Test;
+
+public class PostgresConvention : DatabaseConvention
 {
-    public class PostgresConvention : DatabaseConvention
+    public override bool Skip => string.IsNullOrEmpty(GetConnectionString());
+    public override string SkipReason => "Please configure connection in the 'JERRY_POSTGRES_CONN' environment variable.";
+
+    public override void Configure(DomainOptions options)
     {
-        public override bool Skip => string.IsNullOrEmpty(GetConnectionString());
-        public override string SkipReason => "Please configure connection in the 'JERRY_POSTGRES_CONN' environment variable.";
-
-        public override void Configure(DomainOptions options)
-        {
-            options.UsePostgres(GetConnectionString());
-            options.UseNewtonsoftJson();
-        }
-
-        public static string GetConnectionString() => GetEnvironmentVariable("JERRY_POSTGRES_CONN");
-        public static NpgsqlConnection GetConnection() => new NpgsqlConnection(GetConnectionString());
+        options.UsePostgres(GetConnectionString());
+        options.UseNewtonsoftJson();
     }
+
+    public static string GetConnectionString() => GetEnvironmentVariable("JERRY_POSTGRES_CONN");
+    public static NpgsqlConnection GetConnection() => new NpgsqlConnection(GetConnectionString());
 }

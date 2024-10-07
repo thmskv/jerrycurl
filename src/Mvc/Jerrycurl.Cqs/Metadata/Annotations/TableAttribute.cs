@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Jerrycurl.Cqs.Metadata.Annotations
+namespace Jerrycurl.Cqs.Metadata.Annotations;
+
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface | AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+public class TableAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface | AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-    public class TableAttribute : Attribute
+    public IEnumerable<string> Parts { get; }
+
+    public TableAttribute()
     {
-        public IEnumerable<string> Parts { get; }
 
-        public TableAttribute()
-        {
+    }
 
-        }
-
-        public TableAttribute(params string[] parts)
-        {
-            this.Parts = parts;
-        }
+    public TableAttribute(params string[] parts)
+    {
+        this.Parts = parts;
     }
 }

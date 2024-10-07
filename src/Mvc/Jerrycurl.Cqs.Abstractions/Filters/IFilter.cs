@@ -1,10 +1,9 @@
 ﻿using System.Data;
 
-namespace Jerrycurl.Cqs.Filters
+namespace Jerrycurl.Cqs.Filters;
+
+public interface IFilter
 {
-    public interface IFilter
-    {
-        IFilterHandler GetHandler(IDbConnection connection);
-        IFilterAsyncHandler GetAsyncHandler(IDbConnection connection);
-    }
+    IFilterHandler GetHandler(IDbConnection connection);
+    IFilterAsyncHandler GetAsyncHandler(IDbConnection connection);
 }

@@ -10,63 +10,62 @@ using Shouldly;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Jerrycurl.Vendors.Oracle.Test
+namespace Jerrycurl.Vendors.Oracle.Test;
+
+public class RefcursorTests
 {
-    public class RefcursorTests
+    public async Task Test_MultiSelect_WithRefcursors()
     {
-        public async Task Test_MultiSelect_WithRefcursors()
+        QueryOptions options = new QueryOptions()
         {
-            QueryOptions options = new QueryOptions()
-            {
-                ConnectionFactory = () => OracleConvention.GetConnection(),
-                Store = DatabaseHelper.Default.Store,
-            };
+            ConnectionFactory = () => OracleConvention.GetConnection(),
+            Store = DatabaseHelper.Default.Store,
+        };
 
-            Query query = new Query()
-            {
-                QueryText = "BEGIN OPEN :P0 FOR SELECT 1 AS Item FROM dual; OPEN :P1 FOR SELECT 2 AS Item FROM dual; END;",
-                Parameters = new IParameter[] { new Refcursor("P0"), new Refcursor("P1") },
-            };
-
-            QueryEngine handler = new QueryEngine(options);
-
-            IList<int> result1 = handler.List<int>(query);
-            IList<int> result2 = await handler.ListAsync<int>(query);
-
-            result1.ShouldBe(new[] { 1, 2 });
-            result2.ShouldBe(new[] { 1, 2 });
-        }
-
-        public void Test_MultiSelect_WithRefcursorsOnRazor()
+        Query query = new Query()
         {
-            Runnable<object, int> select = new Runnable<object, int>();
+            QueryText = "BEGIN OPEN :P0 FOR SELECT 1 AS Item FROM dual; OPEN :P1 FOR SELECT 2 AS Item FROM dual; END;",
+            Parameters = new IParameter[] { new Refcursor("P0"), new Refcursor("P1") },
+        };
 
-            select.Sql("BEGIN OPEN ");
-            select.R(m => m.Refcursor());
-            select.Sql(" FOR SELECT 1 AS ");
-            select.R(m => m.Prop());
-            select.Sql(" FROM dual; OPEN ");
-            select.R(m => m.Refcursor());
-            select.Sql(" FOR SELECT 2 AS ");
-            select.R(m => m.Prop());
-            select.Sql(" FROM dual; END;");
+        QueryEngine handler = new QueryEngine(options);
 
-            IList<int> result1 = Runner.Query(select);
+        IList<int> result1 = handler.List<int>(query);
+        IList<int> result2 = await handler.ListAsync<int>(query);
 
-            result1.ShouldBe(new[] { 1, 2 });
-        }
-        public async Task Test_SingleSelect_WithoutRefcursor()
+        result1.ShouldBe(new[] { 1, 2 });
+        result2.ShouldBe(new[] { 1, 2 });
+    }
+
+    public void Test_MultiSelect_WithRefcursorsOnRazor()
+    {
+        Runnable<object, int> select = new Runnable<object, int>();
+
+        select.Sql("BEGIN OPEN ");
+        select.R(m => m.Refcursor());
+        select.Sql(" FOR SELECT 1 AS ");
+        select.R(m => m.Prop());
+        select.Sql(" FROM dual; OPEN ");
+        select.R(m => m.Refcursor());
+        select.Sql(" FOR SELECT 2 AS ");
+        select.R(m => m.Prop());
+        select.Sql(" FROM dual; END;");
+
+        IList<int> result1 = Runner.Query(select);
+
+        result1.ShouldBe(new[] { 1, 2 });
+    }
+    public async Task Test_SingleSelect_WithoutRefcursor()
+    {
+        Query query = new Query()
         {
-            Query query = new Query()
-            {
-                QueryText = "SELECT 1 AS Item",
-            };
+            QueryText = "SELECT 1 AS Item",
+        };
 
-            IList<int> result1 = DatabaseHelper.Default.Queries.List<int>(query);
-            IList<int> result2 = await DatabaseHelper.Default.Queries.ListAsync<int>(query);
+        IList<int> result1 = DatabaseHelper.Default.Queries.List<int>(query);
+        IList<int> result2 = await DatabaseHelper.Default.Queries.ListAsync<int>(query);
 
-            result1.ShouldBe(new[] { 1 });
-            result2.ShouldBe(new[] { 1 });
-        }
+        result1.ShouldBe(new[] { 1 });
+        result2.ShouldBe(new[] { 1 });
     }
 }

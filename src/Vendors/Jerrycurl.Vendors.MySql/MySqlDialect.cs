@@ -1,9 +1,8 @@
 ﻿using Jerrycurl.Mvc;
 
-namespace Jerrycurl.Vendors.MySql
+namespace Jerrycurl.Vendors.MySql;
+
+public class MySqlDialect : IsoDialect
 {
-    public class MySqlDialect : IsoDialect
-    {
-        protected override char IdentifierQuote => '`';
-    }
+    protected override char IdentifierQuote => '`';
 }

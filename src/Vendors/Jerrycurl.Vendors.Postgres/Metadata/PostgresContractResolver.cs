@@ -8,119 +8,118 @@ using Jerrycurl.Cqs.Metadata.Annotations;
 using Npgsql;
 using NpgsqlTypes;
 
-namespace Jerrycurl.Vendors.Postgres.Metadata
+namespace Jerrycurl.Vendors.Postgres.Metadata;
+
+public class PostgresContractResolver : IBindingContractResolver
 {
-    public class PostgresContractResolver : IBindingContractResolver
+    public int Priority => 1000;
+
+    private MethodInfo GetNpgsqlReaderMethod(string methodName)
     {
-        public int Priority => 1000;
+        Type reader = typeof(NpgsqlDataReader);
 
-        private MethodInfo GetNpgsqlReaderMethod(string methodName)
+        return reader.GetMethod(methodName, new[] { typeof(int) }) ?? throw new InvalidOperationException("No such method.");
+    }
+
+    private MethodInfo GetValueReaderProxy(IBindingColumnInfo columnInfo, IBindingValueContract fallback)
+    {
+        if (columnInfo.Column.Type == typeof(TimeSpan))
+            return this.GetNpgsqlReaderMethod(nameof(NpgsqlDataReader.GetTimeSpan));
+
+        return fallback?.Read(columnInfo);
+    }
+
+    public IBindingParameterContract GetParameterContract(IBindingMetadata metadata)
+    {
+        IBindingParameterContract fallback = metadata.Parameter;
+
+        if (metadata.Relation.Annotations.OfType<JsonAttribute>().Any())
         {
-            Type reader = typeof(NpgsqlDataReader);
-
-            return reader.GetMethod(methodName, new[] { typeof(int) }) ?? throw new InvalidOperationException("No such method.");
-        }
-
-        private MethodInfo GetValueReaderProxy(IBindingColumnInfo columnInfo, IBindingValueContract fallback)
-        {
-            if (columnInfo.Column.Type == typeof(TimeSpan))
-                return this.GetNpgsqlReaderMethod(nameof(NpgsqlDataReader.GetTimeSpan));
-
-            return fallback?.Read(columnInfo);
-        }
-
-        public IBindingParameterContract GetParameterContract(IBindingMetadata metadata)
-        {
-            IBindingParameterContract fallback = metadata.Parameter;
-
-            if (metadata.Relation.Annotations.OfType<JsonAttribute>().Any())
-            {
-                return new BindingParameterContract()
-                {
-                    Convert = fallback.Convert,
-                    Write = pi =>
-                    {
-                        fallback?.Write?.Invoke(pi);
-
-                        if (pi.Parameter is NpgsqlParameter npgParam)
-                            npgParam.NpgsqlDbType = NpgsqlDbType.Json;
-
-                        this.SetInputParameter(pi);
-                    }
-                };
-            }
-            else if (metadata.Type == typeof(XDocument))
-            {
-                return new BindingParameterContract()
-                {
-                    Convert = fallback.Convert,
-                    Write = pi =>
-                    {
-                        fallback?.Write?.Invoke(pi);
-
-                        if (pi.Parameter is NpgsqlParameter npgParam)
-                            npgParam.NpgsqlDbType = NpgsqlDbType.Xml;
-
-                        this.SetInputParameter(pi);
-                    }
-                };
-            }
-            else if (metadata.Type == typeof(DateTime) || metadata.Type == typeof(DateTime?) || metadata.Type == typeof(DateTimeOffset) || metadata.Type == typeof(DateTimeOffset?))
-            {
-                return new BindingParameterContract()
-                {
-                    Convert = fallback.Convert,
-                    Write = pi =>
-                    {
-                        fallback?.Write?.Invoke(pi);
-
-                        if (pi.Parameter is NpgsqlParameter npgParam)
-                        {
-                            npgParam.NpgsqlDbType = pi.Parameter.Value switch
-                            {
-                                DateTime dt => dt.Kind == DateTimeKind.Utc ? NpgsqlDbType.TimestampTz : NpgsqlDbType.Timestamp,
-                                DateTimeOffset dt => dt.Offset.Ticks == 0 ? NpgsqlDbType.TimestampTz : NpgsqlDbType.Timestamp,
-                                _ => npgParam.NpgsqlDbType,
-                            };
-                        }
-
-                        this.SetInputParameter(pi);
-                    }
-                };
-            }
-            else
-            {
-                return new BindingParameterContract()
-                {
-                    Convert = fallback.Convert,
-                    Write = pi =>
-                    {
-                        fallback?.Write?.Invoke(pi);
-
-                        this.SetInputParameter(pi);
-                    }
-                };
-            }
-        }
-
-        private void SetInputParameter(IBindingParameterInfo paramInfo)
-        {
-            if (paramInfo.Parameter.Direction == ParameterDirection.InputOutput || paramInfo.Parameter.Direction == ParameterDirection.Output)
-                paramInfo.Parameter.Direction = ParameterDirection.Input;
-        }
-
-        public IBindingValueContract GetValueContract(IBindingMetadata metadata)
-        {
-            IBindingValueContract fallback = metadata.Value;
-
-            return new BindingValueContract()
+            return new BindingParameterContract()
             {
                 Convert = fallback.Convert,
-                Read = ci => this.GetValueReaderProxy(ci, fallback),
+                Write = pi =>
+                {
+                    fallback?.Write?.Invoke(pi);
+
+                    if (pi.Parameter is NpgsqlParameter npgParam)
+                        npgParam.NpgsqlDbType = NpgsqlDbType.Json;
+
+                    this.SetInputParameter(pi);
+                }
             };
         }
+        else if (metadata.Type == typeof(XDocument))
+        {
+            return new BindingParameterContract()
+            {
+                Convert = fallback.Convert,
+                Write = pi =>
+                {
+                    fallback?.Write?.Invoke(pi);
 
-        public IBindingCompositionContract GetCompositionContract(IBindingMetadata metadata) => null;
-        public IBindingHelperContract GetHelperContract(IBindingMetadata metadata) => null;
+                    if (pi.Parameter is NpgsqlParameter npgParam)
+                        npgParam.NpgsqlDbType = NpgsqlDbType.Xml;
+
+                    this.SetInputParameter(pi);
+                }
+            };
+        }
+        else if (metadata.Type == typeof(DateTime) || metadata.Type == typeof(DateTime?) || metadata.Type == typeof(DateTimeOffset) || metadata.Type == typeof(DateTimeOffset?))
+        {
+            return new BindingParameterContract()
+            {
+                Convert = fallback.Convert,
+                Write = pi =>
+                {
+                    fallback?.Write?.Invoke(pi);
+
+                    if (pi.Parameter is NpgsqlParameter npgParam)
+                    {
+                        npgParam.NpgsqlDbType = pi.Parameter.Value switch
+                        {
+                            DateTime dt => dt.Kind == DateTimeKind.Utc ? NpgsqlDbType.TimestampTz : NpgsqlDbType.Timestamp,
+                            DateTimeOffset dt => dt.Offset.Ticks == 0 ? NpgsqlDbType.TimestampTz : NpgsqlDbType.Timestamp,
+                            _ => npgParam.NpgsqlDbType,
+                        };
+                    }
+
+                    this.SetInputParameter(pi);
+                }
+            };
+        }
+        else
+        {
+            return new BindingParameterContract()
+            {
+                Convert = fallback.Convert,
+                Write = pi =>
+                {
+                    fallback?.Write?.Invoke(pi);
+
+                    this.SetInputParameter(pi);
+                }
+            };
+        }
     }
+
+    private void SetInputParameter(IBindingParameterInfo paramInfo)
+    {
+        if (paramInfo.Parameter.Direction == ParameterDirection.InputOutput || paramInfo.Parameter.Direction == ParameterDirection.Output)
+            paramInfo.Parameter.Direction = ParameterDirection.Input;
+    }
+
+    public IBindingValueContract GetValueContract(IBindingMetadata metadata)
+    {
+        IBindingValueContract fallback = metadata.Value;
+
+        return new BindingValueContract()
+        {
+            Convert = fallback.Convert,
+            Read = ci => this.GetValueReaderProxy(ci, fallback),
+        };
+    }
+
+    public IBindingCompositionContract GetCompositionContract(IBindingMetadata metadata) => null;
+    public IBindingHelperContract GetHelperContract(IBindingMetadata metadata) => null;
 }

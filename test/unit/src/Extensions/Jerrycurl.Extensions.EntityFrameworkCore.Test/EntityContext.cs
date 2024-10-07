@@ -1,58 +1,57 @@
 ﻿using Jerrycurl.Extensions.EntityFrameworkCore.Test.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Jerrycurl.Extensions.EntityFrameworkCore.Test
+namespace Jerrycurl.Extensions.EntityFrameworkCore.Test;
+
+public class EntityContext : DbContext
 {
-    public class EntityContext : DbContext
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        if (!optionsBuilder.IsConfigured)
+            optionsBuilder.UseSqlite("DATA SOURCE=ef.db");
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Address>(entity =>
         {
-            if (!optionsBuilder.IsConfigured)
-                optionsBuilder.UseSqlite("DATA SOURCE=ef.db");
-        }
+            entity.ToTable("Address");
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+            entity.Property(e => e.Street)
+                .IsRequired()
+                .HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<Order>(entity =>
         {
-            modelBuilder.Entity<Address>(entity =>
-            {
-                entity.ToTable("Address");
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                entity.Property(e => e.Street)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
+            entity.HasOne(d => d.BillingAddress)
+                .WithMany(p => p.OrderBillingAddress)
+                .HasForeignKey(d => d.BillingAddressId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Order_Address__Billing");
 
-            modelBuilder.Entity<Order>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.HasOne(d => d.ShippingAddress)
+                .WithMany(p => p.OrderShippingAddress)
+                .HasForeignKey(d => d.ShippingAddressId)
+                .HasConstraintName("FK_Order_Address__Shipping");
+        });
 
-                entity.HasOne(d => d.BillingAddress)
-                    .WithMany(p => p.OrderBillingAddress)
-                    .HasForeignKey(d => d.BillingAddressId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Address__Billing");
+        modelBuilder.Entity<OrderLine>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                entity.HasOne(d => d.ShippingAddress)
-                    .WithMany(p => p.OrderShippingAddress)
-                    .HasForeignKey(d => d.ShippingAddressId)
-                    .HasConstraintName("FK_Order_Address__Shipping");
-            });
+            entity.Property(e => e.Product)
+                .IsRequired()
+                .HasMaxLength(50);
 
-            modelBuilder.Entity<OrderLine>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
-                entity.Property(e => e.Product)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.HasOne(d => d.Order)
-                    .WithMany(p => p.OrderLine)
-                    .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderLine_Order");
-            });
-        }
+            entity.HasOne(d => d.Order)
+                .WithMany(p => p.OrderLine)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OrderLine_Order");
+        });
     }
 }

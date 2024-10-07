@@ -1,12 +1,11 @@
 ﻿using System.Data;
 using Jerrycurl.Relations;
 
-namespace Jerrycurl.Cqs.Metadata
+namespace Jerrycurl.Cqs.Metadata;
+
+public interface IBindingParameterInfo
 {
-    public interface IBindingParameterInfo
-    {
-        IBindingMetadata Metadata { get; }
-        IDbDataParameter Parameter { get; }
-        IField Field { get; }
-    }
+    IBindingMetadata Metadata { get; }
+    IDbDataParameter Parameter { get; }
+    IField Field { get; }
 }

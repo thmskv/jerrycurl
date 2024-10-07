@@ -1,7 +1,6 @@
-﻿namespace Jerrycurl.Mvc
+﻿namespace Jerrycurl.Mvc;
+
+public interface ISqlPage
 {
-    public interface ISqlPage
-    {
-        void Execute();
-    }
+    void Execute();
 }

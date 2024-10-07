@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jerrycurl.CodeAnalysis.Razor\Jerrycurl.CodeAnalysis.Razor.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".nusrc\build\Jerrycurl.Build.Razor.props" />
+    <None Include=".nusrc\build\Jerrycurl.Build.Razor.targets" />
+    <None Include=".nusrc\build\ProjectItemsSchema.xml" />
+    <None Include=".nusrc\build\rules\JerryFile.xml" />
+    <None Include=".nusrc\build\skeleton.jerry" />
+  </ItemGroup>
+
+  <Import Project="..\..\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems" Label="Shared" />
+</Project>

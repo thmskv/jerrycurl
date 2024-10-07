@@ -2,13 +2,12 @@
 using Jerrycurl.Relations;
 using Jerrycurl.Test.Models.Database;
 
-namespace Jerrycurl.Cqs.Test.Models.Views
-{
-    public class BlogPostView : BlogPost
-    {
-        [One]
-        public Blog Blog1 { get; set; }
+namespace Jerrycurl.Cqs.Test.Models.Views;
 
-        public One<Blog> Blog2 { get; set; }
-    }
+public class BlogPostView : BlogPost
+{
+    [One]
+    public Blog Blog1 { get; set; }
+
+    public One<Blog> Blog2 { get; set; }
 }

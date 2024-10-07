@@ -1,9 +1,8 @@
 ﻿using Jerrycurl.Relations;
 
-namespace Jerrycurl.Cqs.Commands
+namespace Jerrycurl.Cqs.Commands;
+
+public interface IUpdateBinding
 {
-    public interface IUpdateBinding
-    {
-        IField Target { get; }
-    }
+    IField Target { get; }
 }
