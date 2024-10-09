@@ -17,7 +17,7 @@
         <description>Jerrycurl is a high-performance ORM, MVC framework and Razor SQL implementation for .NET.</description>
         <dependencies>
             <group>
-                <dependency id="Jerrycurl.Build.Razor" version="$PackageVersion$" />
+                <dependency id="Jerrycurl.SourceGenerator.Razor" version="$PackageVersion$" />
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
             </group>
         </dependencies>
