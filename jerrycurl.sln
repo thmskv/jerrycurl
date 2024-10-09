@@ -134,7 +134,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jerrycurl.Test.Common", "te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jerrycurl.Tools.Vendors", "src\Tools\Jerrycurl.Tools.Vendors\Jerrycurl.Tools.Vendors.csproj", "{52CE1C72-42C4-48F8-9C9E-7997D5F0437F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jerrycurl.SourceGenerator.Razor", "src\Build\Jerrycurl.SourceGenerator.Razor\Jerrycurl.SourceGenerator.Razor.csproj", "{56314BAE-5AB6-44A8-A264-03444E33A22F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jerrycurl.SourceGenerator.Razor", "src\Build\Jerrycurl.SourceGenerator.Razor\Jerrycurl.SourceGenerator.Razor.csproj", "{56314BAE-5AB6-44A8-A264-03444E33A22F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{E4D2A05E-9C18-4ADE-B98E-827407F664FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -320,6 +322,7 @@ Global
 		{63C12E40-D889-4525-9A2F-6BDDFF2E12C3} = {7D0177EC-E2A9-403A-AF4A-9561489F2700}
 		{52CE1C72-42C4-48F8-9C9E-7997D5F0437F} = {24A35FDF-4168-4F4D-9CEB-CE73E428B132}
 		{56314BAE-5AB6-44A8-A264-03444E33A22F} = {B2DC1C0A-AC90-4CC2-A779-6EB280FBFDE7}
+		{E4D2A05E-9C18-4ADE-B98E-827407F664FA} = {64E7AA0B-8D96-4CA0-972F-E40BD32A7CFC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B86B955-5CFA-4BAE-A0E4-360DFA0C577B}

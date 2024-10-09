@@ -14,6 +14,7 @@ using Jerrycurl.CodeAnalysis;
 using Jerrycurl.Facts;
 using System.Linq;
 using Microsoft.CodeAnalysis.Diagnostics;
+using System.Net;
 
 namespace Jerrycurl.SourceGenerator.Razor;
 
@@ -31,140 +32,107 @@ public class RazorGeneratorX : IIncrementalGenerator
         var importFiles = sourceItems.Where(static file =>
         {
             var path = file.Left.Path;
-            if (path.EndsWith(".razor", StringComparison.OrdinalIgnoreCase))
-            {
-                var fileName = Path.GetFileNameWithoutExtension(path);
-                return string.Equals(fileName, "_Imports", StringComparison.OrdinalIgnoreCase);
-            }
-            else if (path.EndsWith(".cshtml", StringComparison.OrdinalIgnoreCase))
-            {
-                var fileName = Path.GetFileNameWithoutExtension(path);
-                return string.Equals(fileName, "_ViewImports", StringComparison.OrdinalIgnoreCase);
-            }
+
+            if (Path.GetFileNameWithoutExtension(path) == "_imports")
+                return true;
 
             return false;
         });
 
-        //.Select(ComputeProjectItems)
-        //.ReportDiagnostics(context);
-        var values = context.AdditionalTextsProvider.Combine(context.AnalyzerConfigOptionsProvider)
-            .Where(x => x.Right.GetOptions(x.Left).TryGetValue(SourceItemGroupMetadata, out var itemGroup) && itemGroup == "JerryFile");
-
+        var finalItems = sourceItems.Combine(importFiles.Collect());
 
 
         context.RegisterSourceOutput(
-            values,
+            finalItems,
             (context, data) =>
             {
+                //Debugger.Launch();
 
-                if (string.IsNullOrEmpty(data.Namespace))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(CommonDiagnostics.NoNamespace, Location.None, _manifestFileName));
-                    return;
-                }
+                var additionalText = data.Left.Left;
+                var config = data.Left.Right;
+                var imports = data.Right;
 
-                Manifest manifest;
                 try
                 {
-                    manifest = ManifestParser.Parse(data.ManifestContents);
+                    Go();
                 }
-                catch (InvalidManifestException ex)
+                catch (Exception ex)
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(_invalidManifestFile, Location.None, ex.Message));
-                    return;
+                    context.AddSource("jerry.log", "/*" + ex.ToString() + "*/");
+                    context.AddSource("jerry2.log", "/*" + string.Join("\n", additionalText.Path) + "*/");
                 }
 
-                GeneratedFile file = ManifestCodeWriter.Write(manifest, data.Namespace, data.LangVersion);
-                context.AddSource(file.FileName, file.Code);
+
+                //context.AddSource(file.FileName, file.Code);
+
+                void Go()
+                {
+
+
+                    config.GlobalOptions.TryGetValue("build_property.ProjectDir", out var projectDirectory);
+                    config.GlobalOptions.TryGetValue("build_property.RootNamespace", out var rootNamespace);
+
+                    var project = new RazorProject()
+                    {
+                        ProjectDirectory = projectDirectory.TrimEnd('\\'),
+                        RootNamespace = rootNamespace,
+                    };
+
+                    foreach (var (additionalFile, _) in imports)
+                        project.AddItem(additionalFile.Path);
+
+                    project.AddItem(additionalText.Path);
+
+                    var buf = new List<string>() { Guid.NewGuid().ToString() };
+                    foreach (var it in project.Items)
+                        buf.Add(it.FullPath + " / " + it.ProjectPath);
+
+                    //context.AddSource("jerry3.log", "/*" + string.Join("\n", buf) + "*/");
+
+
+                    var parser = new RazorParser();
+                    var generator = new RazorGenerator(new RazorGeneratorOptions()
+                    {
+                        TemplateCode = @"$pragmachecksum$
+#pragma warning disable IDE0009
+$globalimports$
+
+$beginnamespace$
+	#line hidden
+	$localimports$
+	$template$
+	internal class $class$ : global::Jerrycurl.Mvc.ProcPage<$model$,$result$>
+	{
+		#pragma warning disable IDE1006
+		$injectiondefs$
+		#pragma warning restore IDE1006
+    
+		public $class$(global::Jerrycurl.Mvc.Projections.IProjection model, global::Jerrycurl.Mvc.Projections.IProjection result)
+			: base(model, result)
+		{
+			
+		}
+		public override void Execute()
+		{
+			$execute$
+		}
+	}
+$endnamespace$
+#pragma warning restore IDE0009",
+                        Imports = RazorFacts.DefaultNamespaces.Select(ns => new RazorFragment() { Text = ns }).ToList(),
+                    });
+
+                    var parsed = parser.Parse(project);
+
+                    foreach (var razorPage in parsed)
+                    {
+                        var hintName = CSharp.Identifier(razorPage.ProjectPath) + ".g.cssql";
+                        var projectionResult = generator.Generate(razorPage.Data);
+
+                        context.AddSource(hintName, projectionResult.Content);
+                    }
+                }
             }
         );
-    }
-
-    public bool Execute()
-    {
-        RazorProject project = this.CreateRazorProject();
-        RazorParser parser = new RazorParser();
-
-        List<string> filesToCompile = new List<string>();
-
-        Stopwatch watch = Stopwatch.StartNew();
-
-        foreach (RazorPage razorPage in parser.Parse(project))
-        {
-            RazorGenerator generator = new RazorGenerator(this.CreateGeneratorOptions());
-            ProjectionResult result = generator.Generate(razorPage.Data);
-
-            PathHelper.EnsureDirectory(razorPage.IntermediatePath);
-            File.WriteAllText(razorPage.IntermediatePath, result.Content, Encoding.UTF8);
-
-            filesToCompile.Add(razorPage.IntermediatePath);
-        }
-        this.Compile = filesToCompile.ToArray();
-
-        return true;
-    }
-
-    private string GetFullyQualifiedPageName(RazorPage razorPage)
-    {
-        string escapedNs = Namespace.Escape(razorPage.Data.Namespace?.Text);
-        string escapedClass = string.IsNullOrWhiteSpace(razorPage.Data.Class?.Text) ? "" : CSharp.Identifier(razorPage.Data.Class.Text.Trim());
-
-        if (escapedClass.Length == 0 && escapedNs.Length == 0)
-            return "<invalid>";
-        else if (escapedNs.Length == 0)
-            return $"global::{escapedClass}";
-        else if (escapedClass.Length == 0)
-            return $"{escapedNs}.<invalid>";
-        else
-            return $"{escapedNs}.{escapedClass}";
-    }
-
-    private RazorGeneratorOptions CreateGeneratorOptions()
-    {
-        string templateCode = null;
-
-        if (File.Exists(this.SkeletonPath))
-            templateCode = File.ReadAllText(this.SkeletonPath);
-
-        return new RazorGeneratorOptions()
-        {
-            TemplateCode = templateCode,
-            Imports = RazorFacts.DefaultNamespaces.Select(ns => new RazorFragment() { Text = ns }).ToList(),
-        };
-    }
-
-    private RazorProject CreateRazorProject()
-    {
-        RazorProject project = new RazorProject()
-        {
-            RootNamespace = this.RootNamespace,
-            Items = this.GetProjectItems().ToList(),
-            ProjectDirectory = Environment.CurrentDirectory,
-            IntermediateDirectory = this.IntermediatePath ?? RazorProjectConventions.DefaultIntermediateDirectory,
-        };
-
-        if (string.IsNullOrWhiteSpace(project.RootNamespace))
-            project.RootNamespace = this.ProjectName;
-
-        if (string.IsNullOrWhiteSpace(project.RootNamespace))
-            project.RootNamespace = null;
-
-        return project;
-    }
-
-    private IEnumerable<RazorProjectItem> GetProjectItems()
-    {
-        foreach (ITaskItem taskItem in this.Sources)
-        {
-            string fullPath = taskItem.GetMetadata("FullPath");
-            string specPath = taskItem.ItemSpec;
-            string linkPath = taskItem.GetMetadata("Link");
-
-            yield return new RazorProjectItem()
-            {
-                ProjectPath = string.IsNullOrEmpty(linkPath) ? specPath : linkPath,
-                FullPath = fullPath,
-            };
-        }
     }
 }

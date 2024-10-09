@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <IsRoslynComponent>true</IsRoslynComponent>
+    <NoWarn>$(NoWarn);NU5100</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include=".nusrc\build\Jerrycurl.Build.Razor.props" />
-    <None Include=".nusrc\build\Jerrycurl.Build.Razor.targets" />
+    <None Include=".nusrc\build\Jerrycurl.SourceGenerator.Razor.props" />
+    <None Include=".nusrc\build\Jerrycurl.SourceGenerator.Razor.targets" />
     <None Include=".nusrc\build\ProjectItemsSchema.xml" />
     <None Include=".nusrc\build\rules\JerryFile.xml" />
     <None Include=".nusrc\build\skeleton.jerry" />
