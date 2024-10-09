@@ -13,6 +13,7 @@ using System.IO;
 using Jerrycurl.CodeAnalysis;
 using Jerrycurl.Facts;
 using System.Linq;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace Jerrycurl.SourceGenerator.Razor;
 
@@ -23,9 +24,33 @@ public class RazorGeneratorX : IIncrementalGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.ParseOptionsProvider.Select(x => x.)
+        var sourceItems = context.AdditionalTextsProvider
+            .Where(static (file) => file.Path.EndsWith(".cssql", StringComparison.OrdinalIgnoreCase))
+            .Combine(context.AnalyzerConfigOptionsProvider);
+
+        var importFiles = sourceItems.Where(static file =>
+        {
+            var path = file.Left.Path;
+            if (path.EndsWith(".razor", StringComparison.OrdinalIgnoreCase))
+            {
+                var fileName = Path.GetFileNameWithoutExtension(path);
+                return string.Equals(fileName, "_Imports", StringComparison.OrdinalIgnoreCase);
+            }
+            else if (path.EndsWith(".cshtml", StringComparison.OrdinalIgnoreCase))
+            {
+                var fileName = Path.GetFileNameWithoutExtension(path);
+                return string.Equals(fileName, "_ViewImports", StringComparison.OrdinalIgnoreCase);
+            }
+
+            return false;
+        });
+
+        //.Select(ComputeProjectItems)
+        //.ReportDiagnostics(context);
         var values = context.AdditionalTextsProvider.Combine(context.AnalyzerConfigOptionsProvider)
             .Where(x => x.Right.GetOptions(x.Left).TryGetValue(SourceItemGroupMetadata, out var itemGroup) && itemGroup == "JerryFile");
+
+
 
         context.RegisterSourceOutput(
             values,
