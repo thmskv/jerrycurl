@@ -51,7 +51,10 @@ public class RazorGenerator
         projector.Open("throw")
             .Write($"#line {firstSql?.Span?.Line ?? 1} {CSharp.Literal(pageData.SourceName)}")
             .WriteLine()
-            .Write("throw ex;");
+            .Write("throw ex;")
+            .WriteLine()
+            .WriteLine("#line default")
+            .WriteLine("#line hidden");
 
         if (pageData.SourceChecksum != null)
         {

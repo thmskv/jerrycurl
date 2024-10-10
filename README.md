@@ -134,10 +134,10 @@ To learn more about Jerrycurl and how to get started, visit [our official site](
 Jerrycurl can be built on [any OS supported by .NET Core](https://docs.microsoft.com/en-us/dotnet/core/install/dependencies) and included in this repository is a [PowerShell script](build.ps1) that performs all build-related tasks.
 
 ### Prerequisites
-* .NET SDK 5.0 (to build)
-* .NET Core Runtime 2.1 / 3.1 (to test)
+* .NET SDK 8.0 (to build)
+* .NET 6.0 / .NET Framework 4.7.2 (to test)
 * PowerShell 5.0+ (PowerShell Core on Linux/macOS)
-* Visual Studio 2019 (optional)
+* Visual Studio 2022 (optional)
 * Docker (to live test databases) (optional)
 
 ### Clone, Build and Test
