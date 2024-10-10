@@ -98,6 +98,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{6E68DF
 		eng\nuspec\Jerrycurl.Mvc.nuspec = eng\nuspec\Jerrycurl.Mvc.nuspec
 		eng\nuspec\Jerrycurl.nuspec = eng\nuspec\Jerrycurl.nuspec
 		eng\nuspec\Jerrycurl.Relations.nuspec = eng\nuspec\Jerrycurl.Relations.nuspec
+		eng\nuspec\Jerrycurl.SourceGenerator.Razor.nuspec = eng\nuspec\Jerrycurl.SourceGenerator.Razor.nuspec
 		eng\nuspec\Jerrycurl.Tools.nuspec = eng\nuspec\Jerrycurl.Tools.nuspec
 		eng\nuspec\Jerrycurl.Tools.Vendors.nuspec = eng\nuspec\Jerrycurl.Tools.Vendors.nuspec
 		eng\nuspec\Jerrycurl.Vendors.MySql.nuspec = eng\nuspec\Jerrycurl.Vendors.MySql.nuspec
