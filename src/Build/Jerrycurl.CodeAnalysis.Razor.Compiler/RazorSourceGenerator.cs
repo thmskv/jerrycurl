@@ -58,8 +58,10 @@ public class RazorSourceGenerator : IIncrementalGenerator
                 }
                 catch (Exception ex)
                 {
-                    context.AddSource("jerry.log", "/*" + ex.ToString() + "*/");
-                    context.AddSource("jerry2.log", "/*" + string.Join("\n", additionalText.Path) + "*/");
+                    var guid = $"{Guid.NewGuid()}";
+
+                    context.AddSource($"jerry+{guid}.log", "/*" + ex.ToString() + "*/");
+                    context.AddSource($"jerry+{guid}.alt.log", "/*" + string.Join("\n", additionalText.Path) + "*/");
                 }
 
 
