@@ -8,6 +8,7 @@ using Jerrycurl.Mvc.Projections;
 using Jerrycurl.Relations.Metadata;
 using Jerrycurl.Collections;
 using Jerrycurl.Cqs.Sessions;
+using System.Linq;
 
 namespace Jerrycurl.Mvc.Sql;
 

@@ -19,7 +19,7 @@ using System.Net;
 namespace Jerrycurl.SourceGenerator.Razor;
 
 [Generator]
-public class RazorGeneratorX : IIncrementalGenerator
+public class RazorSourceGenerator : IIncrementalGenerator
 {
     private const string SourceItemGroupMetadata = "build_metadata.AdditionalFiles.SourceItemGroup";
 
@@ -126,7 +126,7 @@ $endnamespace$
 
                     foreach (var razorPage in parsed)
                     {
-                        var hintName = CSharp.Identifier(razorPage.ProjectPath) + ".g.cssql";
+                        var hintName = CSharp.Identifier(razorPage.ProjectPath);
                         var projectionResult = generator.Generate(razorPage.Data);
 
                         context.AddSource(hintName, projectionResult.Content);

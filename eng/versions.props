@@ -12,13 +12,13 @@
         <SqlServerPackageVersion>5.2.2</SqlServerPackageVersion>
         <MySqlPackageVersion>8.0.31</MySqlPackageVersion>
         <PostgresPackageVersion>6.0.12</PostgresPackageVersion>
-        <SqlitePackageVersion>6.0.10</SqlitePackageVersion>
-        <EntityFrameworkCorePackageVersion>5.0.17</EntityFrameworkCorePackageVersion>
-        <JsonNetPackageVersion>13.0.2</JsonNetPackageVersion>
+        <SqlitePackageVersion>6.0.35</SqlitePackageVersion>
+        <EntityFrameworkCorePackageVersion>6.0.35</EntityFrameworkCorePackageVersion>
+        <JsonNetPackageVersion>13.0.3</JsonNetPackageVersion>
         <JsonPackageVersion>6.0.10</JsonPackageVersion>
         <MsBuildPackageVersion>16.9.0</MsBuildPackageVersion>
         <CSharpPackageVersion>4.5.0</CSharpPackageVersion>
-        <AsyncInterfacesPackageVersion>6.0.0</AsyncInterfacesPackageVersion>
+        <AsyncInterfacesPackageVersion>8.0.0</AsyncInterfacesPackageVersion>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet Package Versions (.NET Standard 2.0)">

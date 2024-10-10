@@ -6,7 +6,7 @@ function Test-Integration
         [Parameter(Mandatory=$true)]
         [String] $ConnectionString,
         [String] $Version,
-        [String] $TargetFramework = "netcoreapp3.1",
+        [String] $TargetFramework = "net6.0",
         [Parameter(Mandatory=$true)]
         [String] $PackageSource,
         [String] $Verbosity = "minimal",
@@ -75,7 +75,7 @@ function Test-Integration
 
 function Get-TargetFrameworks
 {
-    $tfm = @("netcoreapp3.1", "net6.0")
+    $tfm = @("net6.0")
     
     if ($IsWindows)
     {

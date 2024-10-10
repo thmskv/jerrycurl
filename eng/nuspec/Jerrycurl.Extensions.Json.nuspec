@@ -20,7 +20,7 @@
                 <dependency id="System.Text.Json" version="$JsonPackageVersion$" />
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
             </group>
-            <group targetFramework="netstandard2.1">
+            <group targetFramework="$NetMoniker$">
                 <dependency id="System.Text.Json" version="$JsonPackageVersion$" />
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
             </group>

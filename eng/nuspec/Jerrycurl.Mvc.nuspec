@@ -19,7 +19,7 @@
             <group targetFramework="netstandard2.0">
                 <dependency id="Jerrycurl.Cqs" version="$PackageVersion$" />
             </group>
-            <group targetFramework="netstandard2.1">
+            <group targetFramework="$NetMoniker$">
                 <dependency id="Jerrycurl.Cqs" version="$PackageVersion$" />
             </group>
         </dependencies>

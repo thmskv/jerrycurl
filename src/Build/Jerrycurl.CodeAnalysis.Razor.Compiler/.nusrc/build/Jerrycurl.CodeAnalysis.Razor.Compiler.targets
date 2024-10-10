@@ -7,10 +7,6 @@
 		<JerrycurlVerbose Condition=" '$(JerrycurlVerbose)' == '' ">false</JerrycurlVerbose>
 		<JerrycurlProjectName Condition=" '$(JerrycurlRootNamespace)' == '' ">$(MSBuildProjectName)</JerrycurlProjectName>
 		<JerrycurlUseLinks Condition=" '$(JerrycurlUseLinks)' == '' ">true</JerrycurlUseLinks>
-		<JerrycurlUseCli Condition=" '$(JerrycurlUseCli)' == '' ">false</JerrycurlUseCli>
-		<JerrycurlCliPath Condition=" '$(JerrycurlCliPath)' == '' ">jerry</JerrycurlCliPath>
-		<JerrycurlCliFileList>$(IntermediateOutputPath)Jerrycurl.AbsoluteFileList.txt</JerrycurlCliFileList>
-		<JerrycurlCliOutputImportance Condition=" '$(JerrycurlVerbose)' == 'false' ">low</JerrycurlCliOutputImportance>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -30,11 +26,5 @@
 
 	<Target Name="JerryNonSdkWarning">
 		<Warning Code="JCSDK" Text="Jerrycurl compile-time engine is only available for SDK-style projects. For more info go to https://docs.microsoft.com/en-us/dotnet/core/tools/csproj" />
-	</Target>
-
-	<Target Name="_InjectAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
-		<ItemGroup>
-			<AdditionalFiles Include="@(JerryFile)" SourceItemGroup="JerryFile" />
-		</ItemGroup>
 	</Target>
 </Project>

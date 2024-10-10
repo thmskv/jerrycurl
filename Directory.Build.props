@@ -5,7 +5,8 @@
         <NetStandardMoniker>netstandard2.0</NetStandardMoniker>
         <NetFrameworkMoniker>net472</NetFrameworkMoniker>
 		<NetMoniker>net6.0</NetMoniker>
-        <NetStandardMultiTargetMoniker>netstandard2.0;netstandard2.1</NetStandardMultiTargetMoniker>
+        <NetStandardMultiTargetMoniker>$(NetStandardMoniker);$(NetMoniker)</NetStandardMultiTargetMoniker>
+		<NetMultiTargetMoniker>$(NetStandardMoniker);$(NetMoniker)</NetMultiTargetMoniker>
         <ToolingTargetMoniker>$(NetStandardMoniker);$(NetMoniker)</ToolingTargetMoniker>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>1591;NU5105;NU5048;SYSLIB0010;IDE0090;IDE0063</NoWarn>
@@ -15,7 +16,7 @@
         <Copyright>2019 AC Dancode</Copyright>
         <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)key.snk</AssemblyOriginatorKeyFile>
         <SignAssembly>false</SignAssembly>
-        <UseCodeAnalysis>false</UseCodeAnalysis>
+        <UseCodeAnalysis>true</UseCodeAnalysis>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/thmskv/jerrycurl</RepositoryUrl>
         <DebugSymbols>true</DebugSymbols>

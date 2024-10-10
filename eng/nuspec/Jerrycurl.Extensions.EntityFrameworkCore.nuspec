@@ -20,7 +20,7 @@
                 <dependency id="Microsoft.EntityFrameworkCore.Relational" version="$EntityFrameworkCorePackageVersion_net20$" />
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
             </group>
-            <group targetFramework="netstandard2.1">
+            <group targetFramework="$NetMoniker$">
                 <dependency id="Microsoft.EntityFrameworkCore.Relational" version="$EntityFrameworkCorePackageVersion$" />
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
             </group>

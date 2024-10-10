@@ -15,8 +15,7 @@ public class RazorProject
 
     public RazorProjectItem AddItem(string path)
     {
-        if (this.Items == null)
-            this.Items = [];
+        this.Items ??= [];
 
         RazorProjectItem newItem = RazorProjectItem.Create(path, this.ProjectDirectory);
 

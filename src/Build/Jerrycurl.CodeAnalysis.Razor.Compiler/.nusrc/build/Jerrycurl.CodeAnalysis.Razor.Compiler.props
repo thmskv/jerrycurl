@@ -4,13 +4,10 @@
 		<JerrycurlProjectName>$(MSBuildProjectName)</JerrycurlProjectName>
 		<EnableDefaultJerryItems>true</EnableDefaultJerryItems>
 		<DefaultItemExcludes>$(DefaultItemExcludes);**/*.cssql</DefaultItemExcludes>
+		<AdditionalFileItemNames>$(AdditionalFileItemNames);JerryFile</AdditionalFileItemNames>
 	</PropertyGroup>
 
 	<ItemGroup Condition=" '$(EnableDefaultJerryItems)' == 'true' ">
 		<JerryFile Include="**/*.cssql" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="SourceItemGroup" />
 	</ItemGroup>
 </Project>

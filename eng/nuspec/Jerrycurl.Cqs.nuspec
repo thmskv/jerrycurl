@@ -19,7 +19,7 @@
                 <dependency id="Jerrycurl.Relations" version="$PackageVersion$" />
                 <dependency id="Microsoft.Bcl.AsyncInterfaces" version="$AsyncInterfacesPackageVersion$" />
             </group>
-            <group targetFramework="netstandard2.1">
+            <group targetFramework="$NetMoniker$">
                 <dependency id="Jerrycurl.Relations" version="$PackageVersion$" />
             </group>
         </dependencies>

@@ -24,7 +24,7 @@
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
                 <dependency id="$SqlitePackageId$" version="$SqlitePackageVersion_net20$" />
             </group>
-            <group targetFramework="netstandard2.1">
+            <group targetFramework="$NetMoniker$">
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
                 <dependency id="$SqlitePackageId$" version="$SqlitePackageVersion$" />
             </group>

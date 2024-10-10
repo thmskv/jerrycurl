@@ -2,7 +2,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\src\Build\Jerrycurl.CodeAnalysis.Razor\Jerrycurl.CodeAnalysis.Razor.csproj" OutputItemType="Analyzer" />
     <ProjectReference Include="..\..\..\..\..\src\Build\Jerrycurl.CodeAnalysis\Jerrycurl.CodeAnalysis.csproj" OutputItemType="Analyzer" />
-    <ProjectReference Include="..\..\..\..\..\src\Build\Jerrycurl.SourceGenerator.Razor\Jerrycurl.SourceGenerator.Razor.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Mvc.Abstractions\Jerrycurl.Mvc.Abstractions.csproj" />
     <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Mvc\Jerrycurl.Mvc.csproj" />
     <ProjectReference Include="..\..\..\..\..\src\Vendors\Jerrycurl.Vendors.Sqlite\Jerrycurl.Vendors.Sqlite.csproj" />

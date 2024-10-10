@@ -20,7 +20,7 @@
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
                 <dependency id="$OraclePackageId$" version="$OraclePackageVersion_net20$" />
             </group>
-            <group targetFramework="netstandard2.1">
+            <group targetFramework="$NetMoniker$">
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
                 <dependency id="$OraclePackageId$" version="$OraclePackageVersion$" />
             </group>

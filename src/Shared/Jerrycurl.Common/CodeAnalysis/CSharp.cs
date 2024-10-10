@@ -69,7 +69,7 @@ internal static class CSharp
             }
         }
 
-        return $"\"{builder.ToString()}\"";
+        return $"\"{builder}\"";
     }
 
 

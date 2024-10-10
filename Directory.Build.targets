@@ -20,15 +20,15 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(IsPackable)' == 'true'">
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
     </ItemGroup>
 
     <ItemGroup Condition="'$(UseCodeAnalysis)' == 'true'">
-        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.2" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Nerdbank.GitVersioning" Version="3.5.119" PrivateAssets="all" />
+        <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.143" PrivateAssets="all" />
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
     </ItemGroup>
 
@@ -63,6 +63,7 @@
 				TargetFramework=$(TargetFramework);
 				NetStandardMoniker=$(NetStandardMoniker);
 				NetFrameworkMoniker=$(NetFrameworkMoniker);
+				NetMoniker=$(NetMoniker);
 				AssemblyName=$(AssemblyName);
 				BinPath=$(MSBuildProjectDirectory)\$(OutputPath);
 				SqlServerPackageId=$(SqlServerPackageId);

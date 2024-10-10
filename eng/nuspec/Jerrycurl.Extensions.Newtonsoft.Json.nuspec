@@ -20,7 +20,7 @@
                 <dependency id="Newtonsoft.Json" version="$JsonNetPackageVersion$" />
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
             </group>
-            <group targetFramework="netstandard2.1">
+            <group targetFramework="$NetMoniker$">
                 <dependency id="Newtonsoft.Json" version="$JsonNetPackageVersion$" />
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
             </group>
