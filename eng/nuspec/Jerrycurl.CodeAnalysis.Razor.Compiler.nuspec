@@ -24,6 +24,7 @@
     </metadata>
     <files>
         <file src="$SourceFiles$" target="" />
+		<file src="$BinPath$**\Jerrycurl.CodeAnalysis.*" target="lib\netstandard2.0" />
         <file src="$BinPath$**\Jerrycurl.CodeAnalysis.Razor.Compiler.*" target="analyzers\dotnet\cs" />
     </files>
 </package>
