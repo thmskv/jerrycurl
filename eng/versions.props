@@ -8,14 +8,14 @@
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet Package Versions">
-		<OraclePackageVersion>3.21.80</OraclePackageVersion>
-        <SqlServerPackageVersion>5.0.1</SqlServerPackageVersion>
+		<OraclePackageVersion>23.6.0</OraclePackageVersion>
+        <SqlServerPackageVersion>5.2.2</SqlServerPackageVersion>
         <MySqlPackageVersion>8.0.31</MySqlPackageVersion>
-        <PostgresPackageVersion>6.0.7</PostgresPackageVersion>
+        <PostgresPackageVersion>6.0.12</PostgresPackageVersion>
         <SqlitePackageVersion>6.0.10</SqlitePackageVersion>
         <EntityFrameworkCorePackageVersion>5.0.17</EntityFrameworkCorePackageVersion>
         <JsonNetPackageVersion>13.0.2</JsonNetPackageVersion>
-        <JsonPackageVersion>6.0.7</JsonPackageVersion>
+        <JsonPackageVersion>6.0.10</JsonPackageVersion>
         <MsBuildPackageVersion>16.9.0</MsBuildPackageVersion>
         <CSharpPackageVersion>4.5.0</CSharpPackageVersion>
         <AsyncInterfacesPackageVersion>6.0.0</AsyncInterfacesPackageVersion>
@@ -23,10 +23,10 @@
 
     <PropertyGroup Label="NuGet Package Versions (.NET Standard 2.0)">
 		<SqlServerPackageId_net20>System.Data.SqlClient</SqlServerPackageId_net20>
-		<SqlServerPackageVersion_net20>4.6.1</SqlServerPackageVersion_net20>
+		<SqlServerPackageVersion_net20>4.8.6</SqlServerPackageVersion_net20>
 		<SqlitePackageVersion_net20>3.1.30</SqlitePackageVersion_net20>
 		<EntityFrameworkCorePackageVersion_net20>3.1.30</EntityFrameworkCorePackageVersion_net20>
-		<OraclePackageVersion_net20>2.19.101</OraclePackageVersion_net20>
+		<OraclePackageVersion_net20>2.19.250</OraclePackageVersion_net20>
     </PropertyGroup>
 
     <PropertyGroup Label="Target Versions">
