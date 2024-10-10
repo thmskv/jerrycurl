@@ -251,16 +251,6 @@ public class ProfilingReader : DbDataReader
             this.VerifyReads();
         }
     }
-
-#if NETCOREAPP3_1
-    public override Task CloseAsync() => this.InnerReader.CloseAsync();
-    public async override ValueTask DisposeAsync()
-    {
-        await this.InnerReader.DisposeAsync();
-
-        this.VerifyReads();
-    }
-#endif
     
     protected override DbDataReader GetDbDataReader(int ordinal) => throw new NotSupportedException();
     public override IEnumerator GetEnumerator() => ((IEnumerable)this.InnerReader).GetEnumerator();

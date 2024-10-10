@@ -33,7 +33,7 @@ internal static class EnumerableExtensions
     public static T FirstOfType<T>(this IEnumerable source) => source.OfType<T>().FirstOrDefault();
     public static T FirstOfType<T>(this IEnumerable source, Func<T, bool> predicate) => source.OfType<T>().FirstOrDefault(predicate);
 
-#if !NETCOREAPP3_1 && !NET5_0 && !NET6_0
+#if !NET6_0
     public static IEnumerable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(this IEnumerable<TFirst> first, IEnumerable<TSecond> second) => first.Zip(second, (First, Second) => (First, Second));
 #endif
     public static IEnumerable<(TFirst First, TSecond Second)> ZipAll<TFirst, TSecond>(this IEnumerable<TFirst> first, IEnumerable<TSecond> second)
