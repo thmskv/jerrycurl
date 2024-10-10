@@ -179,7 +179,7 @@ internal class CSharpWriter
         public AttributeModel(string typeName, IEnumerable<object> arguments)
         {
             this.TypeName = typeName ?? throw new ArgumentNullException(nameof(typeName));
-            this.Arguments = arguments ?? Array.Empty<object>();
+            this.Arguments = arguments ?? [];
         }
     }
 }

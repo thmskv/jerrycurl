@@ -47,7 +47,7 @@ public class SchemaStore : ISchemaStore
     public SchemaStore(DotNotation notation, IEnumerable<IMetadataBuilder> builders)
         : this(notation)
     {
-        this.builders.AddRange(builders ?? Array.Empty<IMetadataBuilder>());
+        this.builders.AddRange(builders ?? []);
     }
 
     public ISchema GetSchema(Type modelType)

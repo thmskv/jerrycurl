@@ -16,7 +16,7 @@ public static class ValueExtensions
             throw ProjectionException.ValueNotFound(projection.Metadata);
         else if (projection.Data.Source.Snapshot == null)
         {
-            IEnumerable<IProjection<TModel>> emptyItems = Array.Empty<IProjection<TModel>>();
+            IEnumerable<IProjection<TModel>> emptyItems = [];
 
             return new ProjectionValues<TModel>(projection.Context, projection.Identity, emptyItems, batchIndex);
         }

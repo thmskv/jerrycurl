@@ -118,6 +118,10 @@ $beginnamespace$
 		{
 			$execute$
 		}
+        public override void Throw(Exception ex)
+        {
+            $throw$
+        }
 	}
 $endnamespace$
 #pragma warning restore IDE0009",

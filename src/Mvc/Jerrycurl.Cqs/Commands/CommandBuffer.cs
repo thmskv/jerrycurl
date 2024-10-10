@@ -146,8 +146,8 @@ public sealed class CommandBuffer
     }
 
     internal FieldBuffer GetBuffer(IField target) => this.fieldBuffers.GetValueOrDefault(target);
-    internal IEnumerable<IFieldSource> GetSources(IField target) => this.GetBuffer(target)?.GetSources() ?? Array.Empty<IFieldSource>();
-    internal IEnumerable<IFieldSource> GetChanges(IField target) => this.GetBuffer(target)?.GetChanges() ?? Array.Empty<IFieldSource>();
+    internal IEnumerable<IFieldSource> GetSources(IField target) => this.GetBuffer(target)?.GetSources() ?? [];
+    internal IEnumerable<IFieldSource> GetChanges(IField target) => this.GetBuffer(target)?.GetChanges() ?? [];
 
     private int GetFieldCount(IDataReader dataReader)
     {
@@ -169,7 +169,7 @@ public sealed class CommandBuffer
 
     public void Add(IEnumerable<IParameter> parameters)
     {
-        foreach (IParameter parameter in parameters ?? Array.Empty<IParameter>())
+        foreach (IParameter parameter in parameters ?? [])
             this.Add(parameter);
     }
     public void Add(IParameter parameter)

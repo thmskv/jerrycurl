@@ -72,10 +72,10 @@ public class Projector
         return this;
     }
 
-		public ProjectionResult Generate()
-		{
-			StringBuilder builder = new StringBuilder();
-			List<ProjectionSpan> spans = [];
+	public ProjectionResult Generate()
+	{
+		StringBuilder builder = new StringBuilder();
+		List<ProjectionSpan> spans = [];
 
         for (int i = 0; i < this.tokens.Length; i++)
         {
@@ -96,12 +96,12 @@ public class Projector
             }
         }
 
-			return new ProjectionResult()
-			{
-				Content = builder.ToString(),
-				Spans = spans.OrderBy(s => s.To.Start).ToList(),
-			};
-		}
+		return new ProjectionResult()
+		{
+			Content = builder.ToString(),
+			Spans = spans.OrderBy(s => s.To.Start).ToList(),
+		};
+	}
 
     private class SourceChunk
     {

@@ -347,7 +347,7 @@ internal class ListParser : BaseParser
         if (referenceMetadata != null)
             return referenceMetadata.References.Where(IsValid).OrderBy(r => r.Priority);
 
-        return Array.Empty<IReference>();
+        return [];
 
         bool IsValid(IReference reference)
         {

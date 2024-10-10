@@ -4,4 +4,5 @@ public interface IProcResult
 {
     ISqlBuffer Buffer { get; }
     IDomainOptions Domain { get; }
+    ISqlPage Page { get; }
 }

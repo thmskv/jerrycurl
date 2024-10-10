@@ -15,12 +15,7 @@
         <repository type="git" url="$RepositoryUrl$" commit="$GitCommitId$" />
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <developmentDependency>true</developmentDependency>
-        <description>Razor SQL build targets for Jerrycurl.</description>
-		<dependencies>
-			<group>
-				<dependency id="Jerrycurl.CodeAnalysis.Razor" version="$PackageVersion$" />
-			</group>
-		</dependencies>
+        <description>Razor SQL source generator for Jerrycurl.</description>
     </metadata>
     <files>
         <file src="$SourceFiles$" target="" />

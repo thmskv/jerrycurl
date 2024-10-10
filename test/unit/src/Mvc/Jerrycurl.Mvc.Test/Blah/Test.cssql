@@ -1,4 +1,0 @@
-﻿SELECT
-    @R.Map()
-FROM
-    @R.Tbl()

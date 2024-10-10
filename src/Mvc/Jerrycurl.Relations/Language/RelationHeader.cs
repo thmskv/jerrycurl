@@ -11,7 +11,7 @@ public sealed class RelationHeader<TSource> : RelationHeader
     public IRelationMetadata Source { get; }
 
     public RelationHeader(ISchema schema)
-        : base(schema, Array.Empty<IRelationMetadata>())
+        : base(schema, [])
     {
         this.Source = schema.Model;
     }

@@ -41,7 +41,7 @@ public class DefaultRelationContractResolver : IRelationContractResolver
 
     public IEnumerable<Attribute> GetAnnotations(IRelationMetadata metadata)
     {
-        return metadata.Type.GetCustomAttributes(inherit: true).OfType<Attribute>().Concat(metadata.Member?.GetCustomAttributes() ?? Array.Empty<Attribute>());
+        return metadata.Type.GetCustomAttributes(inherit: true).OfType<Attribute>().Concat(metadata.Member?.GetCustomAttributes() ?? []);
     }
 
     private bool IsEnumerable(IRelationMetadata metadata)

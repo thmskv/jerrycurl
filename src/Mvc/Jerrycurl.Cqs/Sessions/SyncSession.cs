@@ -23,7 +23,7 @@ public partial class SyncSession : ISyncSession
         this.connection = connectionFactory.Invoke();
         this.VerifyConnection();
 
-        this.filters = filters?.Select(f => f.GetHandler(this.connection)).NotNull().ToArray() ?? Array.Empty<IFilterHandler>();
+        this.filters = filters?.Select(f => f.GetHandler(this.connection)).NotNull().ToArray() ?? [];
     }
 
     private void VerifyConnection()

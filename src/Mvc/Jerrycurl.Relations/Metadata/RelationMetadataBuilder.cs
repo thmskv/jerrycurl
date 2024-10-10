@@ -94,7 +94,7 @@ internal class RelationMetadataBuilder : Collection<IRelationContractResolver>, 
     {
         IEnumerable<IRelationContractResolver> allResolvers = new[] { this.DefaultResolver }.Concat(this);
 
-        return allResolvers.NotNull().SelectMany(cr => cr.GetAnnotations(metadata) ?? Array.Empty<Attribute>()).NotNull();
+        return allResolvers.NotNull().SelectMany(cr => cr.GetAnnotations(metadata) ?? []).NotNull();
     }
 
     private IEnumerable<RelationMetadata> CreateProperties(RelationMetadata parent)

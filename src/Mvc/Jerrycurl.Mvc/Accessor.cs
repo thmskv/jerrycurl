@@ -194,7 +194,16 @@ public abstract class Accessor
 
         QueryEngine engine = new QueryEngine(queryOptions);
 
-        return engine.Execute<IList<TItem>>(queries, QueryType.List);
+        try
+        {
+            return engine.Execute<IList<TItem>>(queries, QueryType.List);
+        }
+        catch (Exception ex)
+        {
+            result.Page.Throw(ex);
+
+            throw;
+        }
     }
 
     /// <summary>

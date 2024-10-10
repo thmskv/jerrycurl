@@ -47,7 +47,7 @@ internal class RelationQueue<TList, TItem> : IRelationQueue
             if (this.IsCached)
                 this.cacheEnumerator = this.CurrentItem.Cache.GetEnumerator();
             else
-                this.innerEnumerator = (this.CurrentItem.List ?? (IEnumerable<TItem>)Array.Empty<TItem>()).GetEnumerator();
+                this.innerEnumerator = (this.CurrentItem.List ?? (IEnumerable<TItem>)[]).GetEnumerator();
         }
     }
 

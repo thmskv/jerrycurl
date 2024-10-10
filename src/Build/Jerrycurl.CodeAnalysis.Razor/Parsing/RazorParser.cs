@@ -28,7 +28,7 @@ public class RazorParser
 
         IList<RazorPage> pages = this.ParsePages(project).ToList();
 
-        foreach (IRazorProjectConvention convention in project.Conventions ?? Array.Empty<IRazorProjectConvention>())
+        foreach (IRazorProjectConvention convention in project.Conventions ?? [])
             convention.Apply(project, pages);
 
         return pages;

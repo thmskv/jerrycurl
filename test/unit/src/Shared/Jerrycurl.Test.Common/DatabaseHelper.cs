@@ -72,7 +72,7 @@ public class DatabaseHelper
         return new CommandOptions()
         {
             ConnectionFactory = () => new ProfilingConnection(new SqliteConnection(TestDbConnectionString)),
-            Filters = filters ?? Array.Empty<IFilter>(),
+            Filters = filters ?? [],
         };
     }
 

@@ -26,6 +26,7 @@ public class ProcPage<TModel, TResult> : ISqlPage
     }
 
     public virtual void Execute() { }
+    public virtual void Throw(Exception ex) { }
 
     public void Write<T>(T value)
     {

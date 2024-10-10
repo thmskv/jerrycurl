@@ -8,8 +8,8 @@ namespace Jerrycurl.Mvc;
 
 public class SqlContent : ISqlContent
 {
-    public IEnumerable<IUpdateBinding> Bindings { get; internal set; } = Array.Empty<IUpdateBinding>();
-    public IEnumerable<IParameter> Parameters { get; internal set; } = Array.Empty<IParameter>();
+    public IEnumerable<IUpdateBinding> Bindings { get; internal set; } = [];
+    public IEnumerable<IParameter> Parameters { get; internal set; } = [];
     public string Text { get; internal set; } = "";
 
     public static SqlContent Empty { get; } = new SqlContent();

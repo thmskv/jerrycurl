@@ -19,7 +19,7 @@ internal class RelationMetadata : IRelationMetadata
     public int Depth { get; set; }
     public IRelationMetadata Relation => this;
 
-    public IReadOnlyList<Attribute> Annotations { get; set; } = Array.Empty<Attribute>();
+    public IReadOnlyList<Attribute> Annotations { get; set; } = [];
     public MemberInfo Member { get; set; }
     public Type Type { get; set; }
     public MethodInfo ReadIndex { get; set; }

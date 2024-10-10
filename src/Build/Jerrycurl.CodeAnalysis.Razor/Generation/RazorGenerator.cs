@@ -45,6 +45,11 @@ public class RazorGenerator
             }
         }
 
+        projector.Open("throw")
+            .Write($"#line 1 {CSharp.Literal(pageData.SourceName)}")
+            .WriteLine()
+            .Write("throw ex;");
+
         if (pageData.SourceChecksum != null)
         {
             projector.Open("pragmachecksum")

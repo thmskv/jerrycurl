@@ -91,8 +91,8 @@ public class SqlBuffer : ISqlBuffer
         if (content == null)
             throw new ArgumentNullException(nameof(content));
 
-        this.Bindings.AddRange(content.Bindings ?? Array.Empty<IUpdateBinding>());
-        this.Parameters.AddRange(content.Parameters ?? Array.Empty<IParameter>());
+        this.Bindings.AddRange(content.Bindings ?? []);
+        this.Parameters.AddRange(content.Parameters ?? []);
         this.Text.Append(content.Text);
     }
 

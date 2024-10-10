@@ -29,7 +29,7 @@ public class AsyncSession : IAsyncSession
         this.connection = this.connectionBase as DbConnection;
         this.VerifyConnection();
 
-        this.filters = filters?.Select(f => f.GetAsyncHandler(this.connectionBase)).NotNull().ToArray() ?? Array.Empty<IFilterAsyncHandler>();
+        this.filters = filters?.Select(f => f.GetAsyncHandler(this.connectionBase)).NotNull().ToArray() ?? [];
     }
 
     private void VerifyConnection()
