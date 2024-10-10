@@ -70,7 +70,7 @@ public static class RazorTool
 
             console.WriteLine("Parsing files...");
             RazorParser parser = new RazorParser();
-            IList<RazorPage> parserResult = parser.Parse(project).ToList();
+            IList<RazorPage> parserResult = [.. parser.Parse(project)];
 
             RazorGeneratorOptions generatorOptions = new RazorGeneratorOptions()
             {

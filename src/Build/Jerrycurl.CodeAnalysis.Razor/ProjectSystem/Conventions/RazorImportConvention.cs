@@ -14,7 +14,7 @@ public class RazorImportConvention : IRazorProjectConvention
     {
         List<RazorPage> importPages = [.. result.Where(this.IsImport)];
 
-        importPages = importPages.OrderBy(p => p.ProjectPath.Length).ToList();
+        importPages = [.. importPages.OrderBy(p => p.ProjectPath.Length)];
 
         foreach (RazorPage importPage in importPages)
             result.Remove(importPage);
@@ -38,9 +38,9 @@ public class RazorImportConvention : IRazorProjectConvention
             newInjections.AddRange(importPage.Data.Injections);
         }
 
-        resultPage.Data.Imports = newImports.Concat(resultPage.Data.Imports).ToList();
-        resultPage.Data.Projections = newProjections.Concat(resultPage.Data.Projections).ToList();
-        resultPage.Data.Injections = newInjections.Concat(resultPage.Data.Injections).ToList();
+        resultPage.Data.Imports = [.. newImports, .. resultPage.Data.Imports];
+        resultPage.Data.Projections = [.. newProjections, .. resultPage.Data.Projections];
+        resultPage.Data.Injections = [.. newInjections, .. resultPage.Data.Injections];
 
         RazorPage templateFile = validImports.Where(f => f.Data.Template != null).LastOrDefault();
 

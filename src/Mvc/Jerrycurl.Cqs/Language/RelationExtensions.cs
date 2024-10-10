@@ -72,10 +72,10 @@ public static class RelationExtensions
         => source.Select(header).AsParameters();
 
     public static IList<IParameter> AsParameters(this ITuple tuple)
-        => new ParameterStore().Add(tuple);
+        => [tuple];
 
     public static IList<IParameter> AsParameters(this IRelation relation)
-        => new ParameterStore().Add(relation);
+        => [relation];
 
     public static IList<IDbDataParameter> AddParameters(this ITuple tuple, IDbCommand dbCommand)
     {

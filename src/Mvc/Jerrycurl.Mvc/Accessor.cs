@@ -354,7 +354,7 @@ public abstract class Accessor
     {
         return new SqlOptions()
         {
-            Filters = domain.Sql.Filters.ToList(),
+            Filters = [.. domain.Sql.Filters],
             MaxParameters = domain.Sql.MaxParameters,
             MaxSql = domain.Sql.MaxSql,
         };

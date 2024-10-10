@@ -67,11 +67,11 @@ internal class RazorCommandBuilder : ICommandBuilder
         {
             RazorToolOptions options = new RazorToolOptions()
             {
-                Directories = context.GetValue(this.DirectoryOption).ToList(),
-                Files = context.GetValue(this.FileOption).ToList(),
+                Directories = [.. context.GetValue(this.DirectoryOption)],
+                Files = [.. context.GetValue(this.FileOption)],
                 OutputDirectory = context.GetValue(this.OutputOption),
                 ProjectDirectory = context.GetValue(this.ProjectOption),
-                Imports = context.GetValue(this.ImportOption).ToList(),
+                Imports = [.. context.GetValue(this.ImportOption)],
                 NoClean = context.GetValue(this.NoCleanOption),
                 RootNamespace = context.GetValue(this.RootNamespaceOption),
             };

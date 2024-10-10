@@ -124,7 +124,7 @@ public class SqlBuffer : ISqlBuffer
         {
             parameters.AddRange(buffer.Parameters);
             bindings.AddRange(buffer.Bindings);
-            text = text.Append(buffer.Text.ToString());
+            text = text.Append(buffer.Text);
         }
 
         return new SqlContent()
@@ -157,7 +157,7 @@ public class SqlBuffer : ISqlBuffer
         int maxSql = options.MaxSql <= 0 ? int.MaxValue : options.MaxSql;
         int maxParams = options.MaxParameters <= 0 ? int.MaxValue : options.MaxParameters;
 
-        SqlOffset[] offsets = buffer.Offsets.Concat([this.GetCurrentOffset()]).ToArray();
+        SqlOffset[] offsets = [.. buffer.Offsets, this.GetCurrentOffset()];
 
         for (int i = 0; i < offsets.Length - 1; i++)
         {

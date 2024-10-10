@@ -24,8 +24,9 @@ public class RazorGenerator
         ISource template = new StringSource(this.Options.TemplateCode);
 
         Projector projector = new Projector(template);
+        IList<RazorFragment> mergedContent = [.. this.MergeContent(pageData.Content)];
 
-        foreach (RazorFragment fragment in this.MergeContent(pageData.Content))
+        foreach (RazorFragment fragment in mergedContent)
         {
             switch (fragment)
             {
@@ -45,8 +46,10 @@ public class RazorGenerator
             }
         }
 
+        SqlFragment firstSql = mergedContent.OfType<SqlFragment>().FirstOrDefault();
+
         projector.Open("throw")
-            .Write($"#line 1 {CSharp.Literal(pageData.SourceName)}")
+            .Write($"#line {firstSql?.Span?.Line ?? 1} {CSharp.Literal(pageData.SourceName)}")
             .WriteLine()
             .Write("throw ex;");
 
@@ -181,7 +184,7 @@ public class RazorGenerator
 
                 continue;
             }
-            else if (sqlBatch.Any())
+            else if (sqlBatch.Count == 0)
             {
                 yield return this.MergeSql(sqlBatch);
 
@@ -191,7 +194,7 @@ public class RazorGenerator
             yield return fragment;
         }
 
-        if (sqlBatch.Any())
+        if (sqlBatch.Count == 0)
             yield return this.MergeSql(sqlBatch);
     }
 

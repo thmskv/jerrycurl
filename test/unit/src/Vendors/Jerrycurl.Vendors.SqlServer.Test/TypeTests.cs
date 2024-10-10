@@ -83,7 +83,7 @@ CREATE TABLE jerry_types(
     private void CompareTypeModels(TypeModel fromDb, TypeModel sample)
     {
         fromDb.BigInt.ShouldBe(sample.BigInt);
-        fromDb.Binary.ShouldBe(sample.Binary.Concat(new byte[fromDb.Binary.Length - sample.Binary.Length]).ToArray());
+        fromDb.Binary.ShouldBe([.. sample.Binary, .. new byte[fromDb.Binary.Length - sample.Binary.Length]]);
         fromDb.Bit.ShouldBe(sample.Bit);
         fromDb.Char.ShouldBe(sample.Char.PadRight(20));
         fromDb.Date.ShouldBe(sample.Date);

@@ -16,13 +16,11 @@ using System.Linq;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Net;
 
-namespace Jerrycurl.SourceGenerator.Razor;
+namespace Jerrycurl.CodeAnalysis.Razor.Compiler;
 
 [Generator]
 public class RazorSourceGenerator : IIncrementalGenerator
 {
-    private const string SourceItemGroupMetadata = "build_metadata.AdditionalFiles.SourceItemGroup";
-
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var sourceItems = context.AdditionalTextsProvider
@@ -90,7 +88,6 @@ public class RazorSourceGenerator : IIncrementalGenerator
                         buf.Add(it.FullPath + " / " + it.ProjectPath);
 
                     //context.AddSource("jerry3.log", "/*" + string.Join("\n", buf) + "*/");
-
 
                     var parser = new RazorParser();
                     var generator = new RazorGenerator(new RazorGeneratorOptions()

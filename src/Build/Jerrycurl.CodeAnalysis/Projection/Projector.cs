@@ -99,7 +99,7 @@ public class Projector
 		return new ProjectionResult()
 		{
 			Content = builder.ToString(),
-			Spans = spans.OrderBy(s => s.To.Start).ToList(),
+			Spans = [.. spans.OrderBy(s => s.To.Start)],
 		};
 	}
 

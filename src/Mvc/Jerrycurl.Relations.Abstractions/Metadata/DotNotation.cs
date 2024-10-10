@@ -56,7 +56,7 @@ public class DotNotation
                     current = memberExpression.Expression;
                     break;
                 case ExpressionType.Parameter:
-                    return this.Combine(stack.ToArray());
+                    return this.Combine([.. stack]);
                 default:
                     current = null;
                     break;

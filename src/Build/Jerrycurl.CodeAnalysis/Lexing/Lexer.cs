@@ -30,7 +30,7 @@ public sealed class Lexer : IEnumerable<Lexeme>
         if (rule is SymbolRule symbol && rule.Parse(lexer))
         {
             Token[] tokens = [symbol.Token];
-            Lexeme[] lexemes = lexer.ToArray();
+            Lexeme[] lexemes = [.. lexer];
 
             this.tokens.AddRange(tokens);
             this.lexemes.Add(this.CreateLexeme(rule, lexemes, [symbol.Token]));
@@ -41,7 +41,7 @@ public sealed class Lexer : IEnumerable<Lexeme>
         else if (rule.Parse(lexer))
         {
             Token[] tokens = lexer.Tokenize().ToArray();
-            Lexeme[] lexemes = lexer.ToArray();
+            Lexeme[] lexemes = [.. lexer];
 
             this.tokens.AddRange(tokens);
             this.lexemes.Add(this.CreateLexeme(rule, lexemes, tokens));

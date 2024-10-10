@@ -86,7 +86,7 @@ internal sealed class Namespace : IEquatable<Namespace>
         if (ns == null)
             throw new ArgumentNullException(nameof(ns));
 
-        return new Namespace(this.parts.Concat(ns.parts).ToArray());
+        return new Namespace([.. this.parts, .. ns.parts]);
     }
 
     public IEnumerable<Namespace> Traverse()

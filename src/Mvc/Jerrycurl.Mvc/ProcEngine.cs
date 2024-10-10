@@ -305,7 +305,7 @@ public class ProcEngine : IProcEngine
         return Expression.Lambda<PageConstructor>(newPage, model, result).Compile();
     }
 
-    private MemberBinding GetInjectionBinding(PropertyInfo property, Expression context, Expression services)
+    private MemberAssignment GetInjectionBinding(PropertyInfo property, Expression context, Expression services)
     {
         MethodInfo injectMethod = typeof(IProcServices).GetMethod(nameof(IProcServices.GetService));
         MethodInfo projectMethod = typeof(IProcServices).GetMethod(nameof(IProcServices.GetProjection));
@@ -326,7 +326,7 @@ public class ProcEngine : IProcEngine
         }
     }
 
-    private IDomainOptions GetConfiguredOptions(Type domainType)
+    private DomainOptions GetConfiguredOptions(Type domainType)
     {
         IDomain domain = this.CreateDomain(domainType);
 

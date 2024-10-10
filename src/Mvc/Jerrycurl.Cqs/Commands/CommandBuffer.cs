@@ -71,7 +71,7 @@ public sealed class CommandBuffer
         }
 
         BufferWriter writer = CommandCache.GetWriter(names);
-        FieldBuffer[] buffers = bufferList.ToArray();
+        FieldBuffer[] buffers = [.. bufferList];
 
         return dr => writer(dr, buffers);
 

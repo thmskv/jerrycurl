@@ -21,7 +21,7 @@ public static class ValueExtensions
             return new ProjectionValues<TModel>(projection.Context, projection.Identity, emptyItems, batchIndex);
         }
             
-        IProjectionMetadata[] header = new[] { projection.Metadata }.Concat(projection.Header.Select(a => a.Metadata)).ToArray();
+        IProjectionMetadata[] header = [projection.Metadata, .. projection.Header.Select(a => a.Metadata)];
         IProjectionAttribute[] attributes = header.Skip(1).Select(m => new ProjectionAttribute(projection.Identity, projection.Context, m, data: null)).ToArray();
 
         return new ProjectionValues<TModel>(projection.Context, projection.Identity, innerReader(), batchIndex);

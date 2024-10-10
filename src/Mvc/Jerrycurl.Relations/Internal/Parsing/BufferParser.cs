@@ -96,7 +96,7 @@ internal class BufferParser
         {
             FieldWriter writer = new FieldWriter(node)
             {
-                BufferIndex = node.Index.ToArray(),
+                BufferIndex = [.. node.Index],
                 NamePart = this.GetNamePart(node, queue, tree),
                 Queue = queue,
             };

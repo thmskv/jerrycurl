@@ -55,7 +55,7 @@ public class Jcst : Task
             filesToCompile.Add(razorPage.IntermediatePath);
         }
 
-        this.Compile = filesToCompile.ToArray();
+        this.Compile = [.. filesToCompile];
 
         this.PrintResultData(filesToCompile.Count, watch.ElapsedMilliseconds);
 

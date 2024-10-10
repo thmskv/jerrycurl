@@ -135,21 +135,6 @@ internal class OrmCommandBuilder : ICommandBuilder
         });
 
         return command;
-
-        string GetSqlPreviewText(string sqlText)
-        {
-            StringBuilder builder = new StringBuilder();
-
-            for (int i = 0; i < sqlText.Length && builder.Length <= 30; i++)
-            {
-                if (!char.IsWhiteSpace(sqlText[i]))
-                    builder.Append(sqlText[i]);
-                else if (builder.Length > 0 && !char.IsWhiteSpace(builder[builder.Length - 1]))
-                    builder.Append(' ');
-            }
-
-            return builder.ToString();
-        }
     }
 
     private Command GetDiffCommand()
