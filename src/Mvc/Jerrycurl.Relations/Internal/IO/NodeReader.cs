@@ -8,7 +8,7 @@ internal abstract class NodeReader
 {
     public IRelationMetadata Metadata { get; }
     public IList<PropertyReader> Properties { get; set; }
-    public IList<NodeWriter> Writers { get; } = new List<NodeWriter>();
+    public IList<NodeWriter> Writers { get; } = [];
     public QueueIndex Index { get; set; }
 
     public NodeReader(Node node)

@@ -64,7 +64,7 @@ public static class ValueExtensions
 
         IProjectionMetadata itemMetadata = projection.Metadata?.Item ?? projection.Metadata;
 
-        using ProjectionReader reader = new ProjectionReader(projection.Data.Source, new[] { itemMetadata });
+        using ProjectionReader reader = new ProjectionReader(projection.Data.Source, [itemMetadata]);
 
         IProjectionAttribute attribute = new ProjectionAttribute(projection.Identity, projection.Context, itemMetadata, data: null);
 

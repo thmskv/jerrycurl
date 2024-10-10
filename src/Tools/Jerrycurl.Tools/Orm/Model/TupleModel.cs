@@ -16,7 +16,7 @@ public class TupleModel : IEnumerable<KeyValuePair<string, object>>
         if (dataReader == null)
             throw new ArgumentNullException(nameof(dataReader));
 
-        this.map = new Dictionary<string, object>();
+        this.map = [];
 
         this.InitializeData(dataReader);
     }

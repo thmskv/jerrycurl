@@ -8,7 +8,7 @@ internal class BufferTree
 {
     public DotNotation Notation { get; set; }
     public SourceReader Source { get; set; }
-    public List<QueueReader> Queues { get; } = new List<QueueReader>();
-    public List<FieldWriter> Fields { get; } = new List<FieldWriter>();
+    public List<QueueReader> Queues { get; } = [];
+    public List<FieldWriter> Fields { get; } = [];
     public IRelationHeader Header { get; set; }
 }

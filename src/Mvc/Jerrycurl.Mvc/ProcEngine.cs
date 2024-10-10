@@ -270,7 +270,7 @@ public class ProcEngine : IProcEngine
 
     private PageConstructor CreatePageConstructor(Type pageType)
     {
-        ConstructorInfo ctor = pageType.GetConstructor(new[] { typeof(IProjection), typeof(IProjection) });
+        ConstructorInfo ctor = pageType.GetConstructor([typeof(IProjection), typeof(IProjection)]);
 
         if (ctor == null)
             throw new InvalidOperationException("Constructor not found for specified signature.");
@@ -296,7 +296,7 @@ public class ProcEngine : IProcEngine
 
             MemberInitExpression pageInit = Expression.MemberInit(newPage, injections.Select(p => this.GetInjectionBinding(p, contextVar, servicesVar)));
 
-            Expression block = Expression.Block(new[] { contextVar, servicesVar }, assignContext, assignServices, pageInit);
+            Expression block = Expression.Block([contextVar, servicesVar], assignContext, assignServices, pageInit);
 
             return Expression.Lambda<PageConstructor>(block, model, result).Compile();
         }
@@ -363,14 +363,14 @@ public class ProcEngine : IProcEngine
         return new DomainOptions()
         {
             Dialect = new IsoDialect(),
-            Schemas = new SchemaStore(new DotNotation(), new IMetadataBuilder[]
-            {
+            Schemas = new SchemaStore(new DotNotation(),
+            [
                 new BindingMetadataBuilder(),
                 new ReferenceMetadataBuilder(),
                 new TableMetadataBuilder(),
                 new ProjectionMetadataBuilder(),
                 new JsonMetadataBuilder(),
-            }),
+            ]),
             Engine = this,
             ConnectionFactory = () => throw new InvalidOperationException("No connection factory specified."),
             Services = new ProcServices(this.serviceProvider),

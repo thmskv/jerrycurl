@@ -48,7 +48,7 @@ public class SchemaBuilder
 
     public void SetFlag(string flag, string value, bool overwrite = true)
     {
-        this.Model.Flags ??= new Dictionary<string, string>();
+        this.Model.Flags ??= [];
 
         if (overwrite || !this.Model.Flags.ContainsKey(flag))
             this.Model.Flags[flag] = value;
@@ -56,7 +56,7 @@ public class SchemaBuilder
 
     public TypeModel AddType(string dbName, string clrName, bool isNullable)
     {
-        this.Model.Types ??= new List<TypeModel>();
+        this.Model.Types ??= [];
 
         TypeModel newType = new TypeModel() { DbName = dbName, ClrName = clrName, IsNullable = isNullable };
 

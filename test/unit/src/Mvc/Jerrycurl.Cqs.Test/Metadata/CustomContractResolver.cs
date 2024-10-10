@@ -67,7 +67,7 @@ public class CustomContractResolver : IBindingContractResolver, IRelationContrac
                     var assignList = Expression.Assign(variable, newList);
                     var addDefault = Expression.Call(variable, addMethod, Expression.Default(itemType));
 
-                    return Expression.Block(new[] { variable }, assignList, addDefault, variable);
+                    return Expression.Block([variable], assignList, addDefault, variable);
                 }
             };
         }

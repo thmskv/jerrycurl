@@ -13,7 +13,7 @@ public class MySqlContractResolver : IBindingContractResolver
     {
         Type reader = typeof(MySqlDataReader);
 
-        return reader.GetMethod(methodName, new[] { typeof(int) }) ?? throw new InvalidOperationException("No such method.");
+        return reader.GetMethod(methodName, [typeof(int)]) ?? throw new InvalidOperationException("No such method.");
     }
 
     private MethodInfo GetValueReaderProxy(IBindingColumnInfo columnInfo, IBindingValueContract fallback)

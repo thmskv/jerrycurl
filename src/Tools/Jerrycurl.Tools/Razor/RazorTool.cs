@@ -33,7 +33,7 @@ public static class RazorTool
         {
             ProjectDirectory = projectDirectory,
             RootNamespace = rootNamespace,
-            Items = new List<RazorProjectItem>(),
+            Items = [],
             IntermediateDirectory = outputDirectory,
         };
 
@@ -103,7 +103,7 @@ public static class RazorTool
 
         bool HasVirtualFormat(string input, out string fullPath, out string projectPath)
         {
-            string[] parts = input.Split(new[] { ':' }, 2);
+            string[] parts = input.Split([':'], 2);
 
             if (parts.Length == 2)
             {

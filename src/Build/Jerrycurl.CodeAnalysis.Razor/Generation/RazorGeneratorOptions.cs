@@ -5,7 +5,7 @@ namespace Jerrycurl.CodeAnalysis.Razor.Generation;
 
 public class RazorGeneratorOptions
 {
-    public IList<RazorFragment> Imports { get; set; } = new List<RazorFragment>();
+    public IList<RazorFragment> Imports { get; set; } = [];
     public RazorFragment Class { get; set; }
     public RazorFragment Namespace { get; set; }
 

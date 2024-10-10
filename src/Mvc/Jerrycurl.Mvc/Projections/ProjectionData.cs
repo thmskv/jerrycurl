@@ -30,7 +30,7 @@ public class ProjectionData : IProjectionData
         else if (data.Source.Metadata == metadata.Relation)
             return data;
         else
-            return ProjectionReader.Lookup(data.Source, new[] { metadata }).FirstOrDefault();
+            return ProjectionReader.Lookup(data.Source, [metadata]).FirstOrDefault();
     }
 
     internal static IProjectionData Resolve(ProjectionIdentity identity)

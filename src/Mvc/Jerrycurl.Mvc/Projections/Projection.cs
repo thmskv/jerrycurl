@@ -58,7 +58,7 @@ public class Projection : IProjection
     private IEnumerable<IProjectionMetadata> SelectAttributes(IProjectionMetadata metadata)
     {
         if (metadata.HasFlag(RelationMetadataFlags.List) && metadata.Item.HasFlag(TableMetadataFlags.Column))
-            return new[] { metadata.Item };
+            return [metadata.Item];
         else if (metadata.HasFlag(RelationMetadataFlags.List) && metadata.Item.HasFlag(TableMetadataFlags.Table))
             return metadata.Item.Properties.Where(a => a.HasFlag(TableMetadataFlags.Column));
         else if (metadata.HasFlag(TableMetadataFlags.Table))

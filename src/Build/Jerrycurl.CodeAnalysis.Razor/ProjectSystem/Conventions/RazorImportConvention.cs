@@ -12,10 +12,7 @@ public class RazorImportConvention : IRazorProjectConvention
 {
     public void Apply(RazorProject project, IList<RazorPage> result)
     {
-        List<RazorPage> importPages = new List<RazorPage>();
-
-        foreach (RazorPage page in result.Where(this.IsImport))
-            importPages.Add(page);
+        List<RazorPage> importPages = [.. result.Where(this.IsImport)];
 
         importPages = importPages.OrderBy(p => p.ProjectPath.Length).ToList();
 
@@ -30,9 +27,9 @@ public class RazorImportConvention : IRazorProjectConvention
     {
         List<RazorPage> validImports = importPages.Where(i => this.IsImportFor(i, resultPage)).ToList();
 
-        List<RazorFragment> newImports = new List<RazorFragment>();
-        List<InjectDirective> newProjections = new List<InjectDirective>();
-        List<InjectDirective> newInjections = new List<InjectDirective>();
+        List<RazorFragment> newImports = [];
+        List<InjectDirective> newProjections = [];
+        List<InjectDirective> newInjections = [];
 
         foreach (RazorPage importPage in validImports)
         {

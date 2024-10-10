@@ -23,7 +23,7 @@ public class QueryEngine
 
     #region " Execute "
     public TResult Execute<TResult>(Query query, QueryType queryType)
-        => this.Execute<TResult>(new[] { query }, queryType);
+        => this.Execute<TResult>([query], queryType);
 
     public TResult Execute<TResult>(IEnumerable<Query> queries, QueryType queryType)
     {
@@ -48,7 +48,7 @@ public class QueryEngine
     }
 
     public Task<TResult> ExecuteAsync<TResult>(Query query, QueryType queryType, CancellationToken cancellationToken = default)
-        => this.ExecuteAsync<TResult>(new[] { query }, queryType, cancellationToken);
+        => this.ExecuteAsync<TResult>([query], queryType, cancellationToken);
 
     public async Task<TResult> ExecuteAsync<TResult>(IEnumerable<Query> queries, QueryType queryType, CancellationToken cancellationToken = default)
     {
@@ -93,7 +93,7 @@ public class QueryEngine
         }
     }
 
-    public IAsyncEnumerable<TItem> EnumerateAsync<TItem>(Query query, CancellationToken cancellationToken = default) => this.EnumerateAsync<TItem>(new[] { query }, cancellationToken);
+    public IAsyncEnumerable<TItem> EnumerateAsync<TItem>(Query query, CancellationToken cancellationToken = default) => this.EnumerateAsync<TItem>([query], cancellationToken);
     public async IAsyncEnumerable<TItem> EnumerateAsync<TItem>(IEnumerable<Query> queries, [EnumeratorCancellation]CancellationToken cancellationToken = default)
     {
         await foreach (QueryReader queryReader in this.EnumerateAsync(queries, cancellationToken).ConfigureAwait(false))
@@ -103,10 +103,10 @@ public class QueryEngine
         }
     }
 
-    public IEnumerable<TItem> Enumerate<TItem>(Query query) => this.Enumerate<TItem>(new[] { query });
+    public IEnumerable<TItem> Enumerate<TItem>(Query query) => this.Enumerate<TItem>([query]);
     public IEnumerable<TItem> Enumerate<TItem>(IEnumerable<Query> queries) => this.Enumerate(queries).SelectMany(r => r.Read<TItem>());
 
-    public IEnumerable<QueryReader> Enumerate(Query query) => this.Enumerate(new[] { query });
+    public IEnumerable<QueryReader> Enumerate(Query query) => this.Enumerate([query]);
     public IEnumerable<QueryReader> Enumerate(IEnumerable<Query> queries)
     {
         if (queries == null)

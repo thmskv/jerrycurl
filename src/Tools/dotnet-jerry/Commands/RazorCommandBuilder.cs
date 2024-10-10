@@ -24,13 +24,13 @@ internal class RazorCommandBuilder : ICommandBuilder
     }
     private void CreateOptions()
     {
-        this.ProjectOption = Option<string>(new[] { "--project", "-p" }, ""); ;
-        this.RootNamespaceOption = Option<string>(new[] { "--namespace", "-ns" }, ""); ;
-        this.OutputOption = Option<string>(new[] { "--output", "-o" }, "");
-        this.DirectoryOption = Option<string[]>(new[] { "--directory", "-d" }, "", multiple: true);
-        this.FileOption = Option<string[]>(new[] { "--file", "-f" }, "", multiple: true);
-        this.ImportOption = Option<string[]>(new[] { "--import", "-i" }, "", multiple: true);
-        this.NoCleanOption = Option<bool>(new[] { "--no-clean" }, "");
+        this.ProjectOption = Option<string>(["--project", "-p"], ""); ;
+        this.RootNamespaceOption = Option<string>(["--namespace", "-ns"], ""); ;
+        this.OutputOption = Option<string>(["--output", "-o"], "");
+        this.DirectoryOption = Option<string[]>(["--directory", "-d"], "", multiple: true);
+        this.FileOption = Option<string[]>(["--file", "-f"], "", multiple: true);
+        this.ImportOption = Option<string[]>(["--import", "-i"], "", multiple: true);
+        this.NoCleanOption = Option<bool>(["--no-clean"], "");
 
         Option<T> Option<T>(string[] aliases, string description, bool multiple = false)
         {
@@ -48,9 +48,10 @@ internal class RazorCommandBuilder : ICommandBuilder
 
     public void Build(RootCommand rootCommand)
     {
-        var command = new Command("cssql", "Transpiles collections of Razor SQL files into C# classes.");
-
-        command.Add(this.ProjectOption, this.RootNamespaceOption, this.OutputOption, this.DirectoryOption, this.FileOption, this.ImportOption, this.NoCleanOption);
+        var command = new Command("cssql", "Transpiles collections of Razor SQL files into C# classes.")
+        {
+            { this.ProjectOption, this.RootNamespaceOption, this.OutputOption, this.DirectoryOption, this.FileOption, this.ImportOption, this.NoCleanOption }
+        };
 
         this.SetHandler(command, async options =>
         {

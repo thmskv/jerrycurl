@@ -49,15 +49,15 @@ public class DefaultRelationContractResolver : IRelationContractResolver
         if (!metadata.Type.IsGenericType)
             return false;
 
-        Type[] allowedTypes = new Type[]
-        {
+        Type[] allowedTypes =
+        [
             typeof(IList<>),
             typeof(List<>),
             typeof(IEnumerable<>),
             typeof(ICollection<>),
             typeof(IReadOnlyList<>),
             typeof(IReadOnlyCollection<>),
-        };
+        ];
 
         Type openType = metadata.Type.GetGenericTypeDefinition();
 
@@ -88,26 +88,26 @@ public class DefaultRelationContractResolver : IRelationContractResolver
     private MethodInfo GetListIndexReader(IRelationMetadata metadata) => this.GetListIndexer(metadata)?.GetMethod;
 
     private Type GetArrayItemType(IRelationMetadata metadata) => metadata.Type.GetElementType();
-    private MethodInfo GetArrayIndexWriter(IRelationMetadata metadata) => metadata.Type.GetMethod("Set", new[] { typeof(int), metadata.Type.GetElementType() });
-    private MethodInfo GetArrayIndexReader(IRelationMetadata metadata) => metadata.Type.GetMethod("Get", new[] { typeof(int) });
+    private MethodInfo GetArrayIndexWriter(IRelationMetadata metadata) => metadata.Type.GetMethod("Set", [typeof(int), metadata.Type.GetElementType()]);
+    private MethodInfo GetArrayIndexReader(IRelationMetadata metadata) => metadata.Type.GetMethod("Get", [typeof(int)]);
 
     private PropertyInfo GetListIndexer(IRelationMetadata metadata)
     {
-        Type[] allowedTypes = new[]
-        {
+        Type[] allowedTypes =
+        [
             typeof(IList<>),
             typeof(List<>),
             typeof(IEnumerable<>),
             typeof(ICollection<>),
             typeof(IReadOnlyList<>),
             typeof(IReadOnlyCollection<>),
-        };
-        Type[] convertTypes = new[]
-        {
+        ];
+        Type[] convertTypes =
+        [
             typeof(IEnumerable<>),
             typeof(ICollection<>),
             typeof(IReadOnlyCollection<>),
-        };
+        ];
 
         Type openType = metadata.Type.GetGenericTypeDefinition();
 

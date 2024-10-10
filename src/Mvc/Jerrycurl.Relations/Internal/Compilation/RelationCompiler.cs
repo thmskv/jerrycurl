@@ -52,7 +52,7 @@ internal class RelationCompiler
 
     private BufferInternalWriter Compile(Expression body)
     {
-        ParameterExpression[] innerArgs = new[] { Arguments.Fields, Arguments.Queues, Arguments.Source, Arguments.Model, Arguments.Notation, Arguments.Binders, Arguments.Metadata };
+        ParameterExpression[] innerArgs = [Arguments.Fields, Arguments.Queues, Arguments.Source, Arguments.Model, Arguments.Notation, Arguments.Binders, Arguments.Metadata];
 
         return Expression.Lambda<BufferInternalWriter>(body, innerArgs).Compile();
     }
@@ -61,7 +61,7 @@ internal class RelationCompiler
 
     public Expression GetInitializerExpression(SourceReader reader, IList<QueueReader> queueReaders, int metadataOffset)
     {
-        List<Expression> expressions = new List<Expression>();
+        List<Expression> expressions = [];
 
         foreach (QueueReader queue in queueReaders)
             expressions.Add(this.GetAssignNewQueueExpression(queue.Index, metadataOffset));
@@ -90,7 +90,7 @@ internal class RelationCompiler
         Expression queueIndex = this.GetQueueIndexExpression(reader.Index);
         Expression assignVariable = Expression.Assign(reader.Index.Variable, queueIndex);
 
-        return this.GetBlockOrExpression(new[] { assignVariable, body }, new[] { reader.Index.Variable });
+        return this.GetBlockOrExpression([assignVariable, body], [reader.Index.Variable]);
     }
 
     public Expression GetReadWriteExpression(NodeReader reader, Expression parentValue)
@@ -100,9 +100,9 @@ internal class RelationCompiler
         Expression value = this.GetReadExpression(reader, parentValue);
         Expression assignVariable = Expression.Assign(variable, value);
 
-        List<Expression> body = new List<Expression>();
-        List<Expression> notBody = new List<Expression>();
-        List<Expression> nullBody = new List<Expression>();
+        List<Expression> body = [];
+        List<Expression> notBody = [];
+        List<Expression> nullBody = [];
 
         body.Add(assignVariable);
         body.AddRange(this.GetWriteExpressions(reader, parentValue, variable));
@@ -121,7 +121,7 @@ internal class RelationCompiler
         else
             body.AddRange(notBody);
 
-        return this.GetBlockOrExpression(body, new[] { variable });
+        return this.GetBlockOrExpression(body, [variable]);
     }
 
     private IEnumerable<Expression> GetReadWriteExpressions(NodeReader reader, Expression value)
@@ -190,8 +190,8 @@ internal class RelationCompiler
     {
         Expression isCached = this.GetQueuePropertyExpression(queue, "IsCached");
 
-        List<Expression> writeBody = new List<Expression>() { nonCachedWrite };
-        List<Expression> readBody = new List<Expression>();
+        List<Expression> writeBody = [nonCachedWrite];
+        List<Expression> readBody = [];
 
         foreach (CacheWriter writer in queue.Cache)
         {
@@ -358,7 +358,7 @@ internal class RelationCompiler
         }
         else
         {
-            MethodInfo combineMethod = typeof(DotNotation).GetMethod(nameof(DotNotation.Combine), new[] { typeof(string), typeof(string) });
+            MethodInfo combineMethod = typeof(DotNotation).GetMethod(nameof(DotNotation.Combine), [typeof(string), typeof(string)]);
 
             Expression sourceName = this.GetSourceNameExpression();
 
@@ -520,7 +520,7 @@ internal class RelationCompiler
         else
             return null;
 
-        return Expression.Lambda(binderType, bindExpression, new[] { parentValue, index, value }).Compile();
+        return Expression.Lambda(binderType, bindExpression, [parentValue, index, value]).Compile();
     }
 
     private static class Arguments

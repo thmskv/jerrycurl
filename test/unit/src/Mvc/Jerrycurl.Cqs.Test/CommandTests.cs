@@ -106,7 +106,7 @@ public class CommandTests
         buffer.Commit();
 
         data1.ShouldBe(new[] { 1, 50, 3 });
-        data2.ShouldBe(new[] { 4, 100, 6 });
+        data2.ShouldBe([4, 100, 6]);
     }
 
     public void Test_Update_Priority()

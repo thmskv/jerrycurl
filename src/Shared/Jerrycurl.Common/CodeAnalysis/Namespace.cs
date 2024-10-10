@@ -36,7 +36,7 @@ internal sealed class Namespace : IEquatable<Namespace>
         if (path == null)
             throw new ArgumentNullException(nameof(path));
 
-        char[] c = new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
+        char[] c = [Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar];
 
         IEnumerable<string> parts = path.Split(c, StringSplitOptions.RemoveEmptyEntries);
 
@@ -69,7 +69,7 @@ internal sealed class Namespace : IEquatable<Namespace>
     public Namespace(string definition)
     {
         this.Definition = definition ?? "";
-        this.parts = this.Definition.Split(new[] { '.' }).Select(this.EscapePart).Where(p => p.Length > 0).ToArray();
+        this.parts = this.Definition.Split(['.']).Select(this.EscapePart).Where(p => p.Length > 0).ToArray();
     }
 
     private Namespace(string[] parts)

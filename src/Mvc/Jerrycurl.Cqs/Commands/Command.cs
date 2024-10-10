@@ -8,8 +8,8 @@ public class Command : IBatch
 {
     public string CommandText { get; set; }
 
-    public ICollection<IUpdateBinding> Bindings { get; set; } = new List<IUpdateBinding>();
-    public ICollection<IParameter> Parameters { get; set; } = new List<IParameter>();
+    public ICollection<IUpdateBinding> Bindings { get; set; } = [];
+    public ICollection<IParameter> Parameters { get; set; } = [];
 
     public void Build(IDbCommand adoCommand)
     {

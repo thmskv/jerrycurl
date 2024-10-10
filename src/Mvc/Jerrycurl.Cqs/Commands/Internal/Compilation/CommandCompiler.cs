@@ -74,7 +74,7 @@ internal class CommandCompiler
             Expression typedParam = Expression.Convert(helperParam, helperVariable.Type);
             Expression assignHelper = Expression.Assign(helperVariable, typedParam);
 
-            value = Expression.Block(new[] { helperVariable }, assignHelper, value);
+            value = Expression.Block([helperVariable], assignHelper, value);
         }
 
         BufferInternalConverter innerFunc = Expression.Lambda<BufferInternalConverter>(value, inputParam, helperParam).Compile();
@@ -86,7 +86,7 @@ internal class CommandCompiler
 
     public BufferWriter Compile(IEnumerable<ColumnName> columnNames)
     {
-        List<Expression> body = new List<Expression>();
+        List<Expression> body = [];
 
         int index = 0;
 
@@ -103,7 +103,7 @@ internal class CommandCompiler
         if (!body.Any())
             return (dr, buf) => { };
 
-        ParameterExpression[] arguments = new[] { Arguments.DataReader, Arguments.Buffers };
+        ParameterExpression[] arguments = [Arguments.DataReader, Arguments.Buffers];
         Expression block = Expression.Block(body);
 
         return Expression.Lambda<BufferWriter>(block, arguments).Compile();
@@ -115,7 +115,7 @@ internal class CommandCompiler
     private Expression GetValueExpression(IBindingMetadata metadata, ColumnMetadata columnInfo)
     {
         MethodInfo readMethod = this.GetValueReaderMethod(metadata, columnInfo);
-        MethodInfo nullMethod = typeof(IDataRecord).GetMethod(nameof(IDataRecord.IsDBNull), new[] { typeof(int) });
+        MethodInfo nullMethod = typeof(IDataRecord).GetMethod(nameof(IDataRecord.IsDBNull), [typeof(int)]);
 
         Expression readIndex = Expression.Constant(columnInfo.Index);
         Expression dataReader = Arguments.DataReader;
@@ -153,7 +153,7 @@ internal class CommandCompiler
         MethodInfo readMethod = metadata.Value?.Read?.Invoke(bindingInfo);
 
         if (readMethod == null)
-            readMethod = typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetValue), new Type[] { typeof(int) });
+            readMethod = typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetValue), [typeof(int)]);
 
         return readMethod;
     }

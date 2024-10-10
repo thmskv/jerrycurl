@@ -8,7 +8,7 @@ public class RazorPageData
     public string SourceName { get; set; }
     public string SourceChecksum { get; set; }
 
-    public IList<RazorFragment> Imports { get; set; } = new List<RazorFragment>();
+    public IList<RazorFragment> Imports { get; set; } = [];
 
     public RazorFragment Class { get; set; }
     public RazorFragment Model { get; set; }
@@ -16,7 +16,7 @@ public class RazorPageData
     public RazorFragment Namespace { get; set; }
     public RazorFragment Template { get; set; }
 
-    public IList<InjectDirective> Projections { get; set; } = new List<InjectDirective>();
-    public IList<InjectDirective> Injections { get; set; } = new List<InjectDirective>();
-    public IList<RazorFragment> Content { get; set; } = new List<RazorFragment>();
+    public IList<InjectDirective> Projections { get; set; } = [];
+    public IList<InjectDirective> Injections { get; set; } = [];
+    public IList<RazorFragment> Content { get; set; } = [];
 }

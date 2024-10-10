@@ -19,7 +19,7 @@ public class CommandEngine
         this.Options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
-    public void Execute(Command command) => this.Execute(new[] { command });
+    public void Execute(Command command) => this.Execute([command]);
     public void Execute(IEnumerable<Command> commands)
     {
         CommandBuffer buffer = new CommandBuffer();
@@ -35,7 +35,7 @@ public class CommandEngine
         buffer.Commit();
     }
 
-    public Task ExecuteAsync(Command command, CancellationToken cancellationToken = default) => this.ExecuteAsync(new[] { command }, cancellationToken);
+    public Task ExecuteAsync(Command command, CancellationToken cancellationToken = default) => this.ExecuteAsync([command], cancellationToken);
     public async Task ExecuteAsync(IEnumerable<Command> commands, CancellationToken cancellationToken = default)
     {
         await using IAsyncSession session = this.Options.GetAsyncSession();

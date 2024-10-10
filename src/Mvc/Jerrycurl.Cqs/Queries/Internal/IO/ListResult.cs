@@ -8,9 +8,9 @@ namespace Jerrycurl.Cqs.Queries.Internal.IO;
 internal class ListResult : BaseResult
 {
     public QueryType QueryType { get; }
-    public List<TargetWriter> Writers { get; set; } = new List<TargetWriter>();
-    public List<ListTarget> Targets { get; set; } = new List<ListTarget>();
-    public List<AggregateWriter> Aggregates { get; set; } = new List<AggregateWriter>();
+    public List<TargetWriter> Writers { get; set; } = [];
+    public List<ListTarget> Targets { get; set; } = [];
+    public List<AggregateWriter> Aggregates { get; set; } = [];
 
     public ListResult(ISchema schema, QueryType queryType)
         : base(schema)

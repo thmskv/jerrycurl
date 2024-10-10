@@ -18,7 +18,7 @@ public class PostgresContractResolver : IBindingContractResolver
     {
         Type reader = typeof(NpgsqlDataReader);
 
-        return reader.GetMethod(methodName, new[] { typeof(int) }) ?? throw new InvalidOperationException("No such method.");
+        return reader.GetMethod(methodName, [typeof(int)]) ?? throw new InvalidOperationException("No such method.");
     }
 
     private MethodInfo GetValueReaderProxy(IBindingColumnInfo columnInfo, IBindingValueContract fallback)

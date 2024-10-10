@@ -29,7 +29,7 @@ public class NewtonsoftJsonBindingContractResolver : IBindingContractResolver
     private MethodInfo GetColumnReaderProxy(IBindingColumnInfo columnInfo)
     {
         if (columnInfo.Column.Type == typeof(string))
-            return typeof(IDataRecord).GetMethod(nameof(IDataReader.GetString), new[] { typeof(int) });
+            return typeof(IDataRecord).GetMethod(nameof(IDataReader.GetString), [typeof(int)]);
 
         return null;
     }
@@ -71,7 +71,7 @@ public class NewtonsoftJsonBindingContractResolver : IBindingContractResolver
 
     private Expression GetParseJTokenExpression(IBindingMetadata metadata, Expression value)
     {
-        MethodInfo parseMethod = typeof(JToken).GetMethod(nameof(JToken.Parse), new[] { typeof(string) });
+        MethodInfo parseMethod = typeof(JToken).GetMethod(nameof(JToken.Parse), [typeof(string)]);
 
         return Expression.Call(parseMethod, value);
     }

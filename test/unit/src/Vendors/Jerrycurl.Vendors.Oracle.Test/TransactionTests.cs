@@ -160,8 +160,8 @@ public class TransactionTests
 
     private Command[] GetMultiInsertCommands()
     {
-        return new Command[]
-        {
+        return
+        [
             new Command()
             {
                 CommandText = @"BEGIN
@@ -175,6 +175,6 @@ public class TransactionTests
                                         INSERT INTO ""tran_values"" VALUES(NULL);
                                     END;",
             },
-        };
+        ];
     }
 }

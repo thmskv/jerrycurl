@@ -160,7 +160,7 @@ public partial class SyncSession : ISyncSession
 
     private void DisposeFilters()
     {
-        List<Exception> exceptions = new List<Exception>();
+        List<Exception> exceptions = [];
 
         foreach (IFilterHandler handler in this.filters)
         {

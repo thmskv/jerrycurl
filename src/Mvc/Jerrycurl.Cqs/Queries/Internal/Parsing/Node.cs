@@ -33,7 +33,7 @@ internal class Node
     public IBindingMetadata Metadata { get; }
     public DataAttribute Data { get; set; }
     public ISchema Schema => this.Metadata?.Identity.Schema ?? this.Identity?.Schema;
-    public IList<Node> Properties { get; } = new List<Node>();
+    public IList<Node> Properties { get; } = [];
     public bool IsDynamic { get; set; }
     public int Depth { get; }
 }

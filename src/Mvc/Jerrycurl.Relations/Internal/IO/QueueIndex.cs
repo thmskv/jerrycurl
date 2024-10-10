@@ -12,5 +12,5 @@ internal class QueueIndex
     public IRelationMetadata Item { get; set; }
     public ParameterExpression Variable { get; set; }
     public RelationQueueType Type { get; set; }
-    public List<CacheWriter> Cache { get; } = new List<CacheWriter>();
+    public List<CacheWriter> Cache { get; } = [];
 }

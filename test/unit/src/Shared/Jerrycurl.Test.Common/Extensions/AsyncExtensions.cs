@@ -15,7 +15,7 @@ public static class AsyncExtensions
 
     public static async Task<IList<TItem>> ToList<TItem>(this IAsyncEnumerable<TItem> enumerable)
     {
-        List<TItem> items = new List<TItem>();
+        List<TItem> items = [];
 
         await foreach (TItem item in enumerable)
             items.Add(item);

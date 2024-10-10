@@ -7,7 +7,7 @@ namespace Jerrycurl.Relations.Internal.Queues;
 internal class RelationQueueItem<TList> : NameBuffer
 {
     public TList List { get; }
-    public List<FieldArray> Cache { get; } = new List<FieldArray>();
+    public List<FieldArray> Cache { get; } = [];
 
     public RelationQueueItem(TList list, string namePart, DotNotation notation)
         : base(namePart, notation)

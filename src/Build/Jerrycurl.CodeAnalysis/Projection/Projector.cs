@@ -9,7 +9,7 @@ namespace Jerrycurl.CodeAnalysis.Projection;
 
 public class Projector
 {
-    private readonly Dictionary<string, List<(string, SourceSpan?)>> buffers = new Dictionary<string, List<(string text, SourceSpan? span)>>();
+    private readonly Dictionary<string, List<(string, SourceSpan?)>> buffers = [];
 
     private Token[] tokens;
     private string[] chunks;
@@ -55,7 +55,7 @@ public class Projector
             throw new InvalidOperationException("No type is selected.");
 
         if (!this.buffers.TryGetValue(this.currentType, out var list))
-            this.buffers[this.currentType] = list = new List<(string text, SourceSpan? span)>();
+            this.buffers[this.currentType] = list = [];
 
         list.Add((text, this.InertMode ? null : span));
 
@@ -75,7 +75,7 @@ public class Projector
 		public ProjectionResult Generate()
 		{
 			StringBuilder builder = new StringBuilder();
-			List<ProjectionSpan> spans = new List<ProjectionSpan>();
+			List<ProjectionSpan> spans = [];
 
         for (int i = 0; i < this.tokens.Length; i++)
         {

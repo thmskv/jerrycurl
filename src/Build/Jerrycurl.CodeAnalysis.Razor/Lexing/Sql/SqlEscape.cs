@@ -4,7 +4,7 @@ namespace Jerrycurl.CodeAnalysis.Razor.Lexing.Sql;
 
 public class SqlEscape : ISymbol
 {
-    public static char[] Illegal = new[] { '{', '}', '@' };
+    public static char[] Illegal = ['{', '}', '@'];
 
     public char Char { get; private set; }
 

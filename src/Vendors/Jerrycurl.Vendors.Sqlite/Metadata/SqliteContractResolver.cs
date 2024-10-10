@@ -23,7 +23,7 @@ public class SqliteContractResolver : IBindingContractResolver
         };
     }
 
-    private MethodInfo GetRecordMethod(string methodName) => typeof(IDataRecord).GetMethod(methodName, new[] { typeof(int) });
+    private MethodInfo GetRecordMethod(string methodName) => typeof(IDataRecord).GetMethod(methodName, [typeof(int)]);
 
     private MethodInfo GetRecordReaderMethod(IBindingColumnInfo columnInfo, IBindingValueContract fallback)
     {

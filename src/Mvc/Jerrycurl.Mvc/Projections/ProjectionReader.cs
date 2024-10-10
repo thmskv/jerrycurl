@@ -41,11 +41,11 @@ internal class ProjectionReader : IDisposable
 
     private RelationReader CreateReader()
     {
-        Dictionary<MetadataIdentity, int> indexMap = new Dictionary<MetadataIdentity, int>();
+        Dictionary<MetadataIdentity, int> indexMap = [];
 
-        List<IRelationMetadata> header = new List<IRelationMetadata>();
+        List<IRelationMetadata> header = [];
 
-        this.indexHeader = new List<int>();
+        this.indexHeader = [];
 
         foreach (IProjectionMetadata attribute in this.Header)
         {

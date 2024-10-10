@@ -26,8 +26,8 @@ internal class QueryCompiler
 
     private ListFactory CompileBuffer(ListResult result, Expression initialize, Expression writeOne, Expression writeAll)
     {
-        ParameterExpression[] initArgs = new[] { Arguments.Lists };
-        ParameterExpression[] writeArgs = new[] { Arguments.DataReader, Arguments.Lists, Arguments.Aggregates, Arguments.Helpers, Arguments.Schema };
+        ParameterExpression[] initArgs = [Arguments.Lists];
+        ParameterExpression[] writeArgs = [Arguments.DataReader, Arguments.Lists, Arguments.Aggregates, Arguments.Helpers, Arguments.Schema];
 
         ListInternalInitializer initializeFunc = this.Compile<ListInternalInitializer>(initialize, initArgs);
         ListInternalWriter writeOneFunc = this.Compile<ListInternalWriter>(writeOne, writeArgs);
@@ -70,13 +70,13 @@ internal class QueryCompiler
 
     public ListFactory Compile(ListResult result)
     {
-        List<ParameterExpression> variables = new List<ParameterExpression>();
+        List<ParameterExpression> variables = [];
 
-        List<Expression> initList = new List<Expression>();
-        List<Expression> oneList = new List<Expression>();
-        List<Expression> allList = new List<Expression>();
+        List<Expression> initList = [];
+        List<Expression> oneList = [];
+        List<Expression> allList = [];
 
-        List<Expression> body = new List<Expression>();
+        List<Expression> body = [];
 
         foreach (ListTarget target in result.Targets)
         {
@@ -124,7 +124,7 @@ internal class QueryCompiler
         if (result.Value != null)
             body = this.GetAggregateExpression(result.Value, result.Target);
 
-        ParameterExpression[] arguments = new[] { Arguments.Lists, Arguments.Aggregates, Arguments.Schema };
+        ParameterExpression[] arguments = [Arguments.Lists, Arguments.Aggregates, Arguments.Schema];
         AggregateInternalReader reader = this.Compile<AggregateInternalReader>(body, arguments);
 
         ISchema schema = result.Schema;
@@ -134,7 +134,7 @@ internal class QueryCompiler
 
     public EnumerateFactory<TItem> Compile<TItem>(EnumerateResult result)
     {
-        List<Expression> body = new List<Expression>();
+        List<Expression> body = [];
 
         if (result.Value == null)
             return _ => default;
@@ -144,7 +144,7 @@ internal class QueryCompiler
 
         body.Add(this.GetReaderExpression(result.Value));
 
-        ParameterExpression[] arguments = new[] { Arguments.DataReader, Arguments.Helpers, Arguments.Schema };
+        ParameterExpression[] arguments = [Arguments.DataReader, Arguments.Helpers, Arguments.Schema];
         EnumerateInternalReader<TItem> reader = this.Compile<EnumerateInternalReader<TItem>>(body, arguments);
 
         ElasticArray helpers = this.GetHelperBuffer(result.Helpers);
@@ -165,7 +165,7 @@ internal class QueryCompiler
         Expression assignList = Expression.Assign(variable, target.NewList);
         Expression addValue = Expression.Call(variable, target.AddMethod, value);
 
-        return this.GetBlockOrExpression(new[] { assignList, addValue, variable }, new[] { variable });
+        return this.GetBlockOrExpression([assignList, addValue, variable], [variable]);
     }
     #endregion
 
@@ -234,7 +234,7 @@ internal class QueryCompiler
             body = Expression.IfThen(bufferNotNull, addValue);
         }
 
-        return this.GetKeyBlockExpression(new[] { writer.PrimaryKey }, new[] { writer.Join }.Concat(writer.ForeignJoins), body);
+        return this.GetKeyBlockExpression([writer.PrimaryKey], new[] { writer.Join }.Concat(writer.ForeignJoins), body);
     }
     
     private Expression GetWriterExpression(HelperWriter writer)
@@ -324,8 +324,8 @@ internal class QueryCompiler
 
     private Expression GetKeyBlockExpression(IEnumerable<KeyReader> primaryKeys, IEnumerable<JoinTarget> joins, Expression body)
     {
-        List<Expression> expressions = new List<Expression>();
-        List<ParameterExpression> variables = new List<ParameterExpression>();
+        List<Expression> expressions = [];
+        List<ParameterExpression> variables = [];
 
         foreach (DataReader reader in joins.NotNull().SelectMany(k => k.Key.Values).Distinct())
         {
@@ -449,7 +449,7 @@ internal class QueryCompiler
             return Expression.Bind(r.Metadata.Member, value);
         }));
 
-        return this.GetKeyBlockExpression(new[] { reader.PrimaryKey }, reader.Joins, memberInit);
+        return this.GetKeyBlockExpression([reader.PrimaryKey], reader.Joins, memberInit);
     }
 
     private Expression GetReaderExpression(DynamicReader reader)
@@ -457,10 +457,10 @@ internal class QueryCompiler
         ParameterExpression variable = Expression.Variable(reader.Metadata.Composition.Construct.Type);
         NewExpression newExpression = reader.Metadata.Composition.Construct;
 
-        List<Expression> body = new List<Expression>()
-        {
+        List<Expression> body =
+        [
             Expression.Assign(variable, newExpression),
-        };
+        ];
 
         foreach (BaseReader propertyReader in reader.Properties)
         {
@@ -475,7 +475,7 @@ internal class QueryCompiler
 
         body.Add(variable);
 
-        return Expression.Block(new[] { variable }, body);
+        return Expression.Block([variable], body);
     }
 
     #endregion
@@ -494,7 +494,7 @@ internal class QueryCompiler
 
     private Expression GetIsDbNullExpression(ColumnReader reader)
     {
-        MethodInfo isNullMethod = typeof(IDataRecord).GetMethod(nameof(IDataRecord.IsDBNull), new[] { typeof(int) });
+        MethodInfo isNullMethod = typeof(IDataRecord).GetMethod(nameof(IDataRecord.IsDBNull), [typeof(int)]);
 
         return Expression.Call(Arguments.DataReader, isNullMethod, Expression.Constant(reader.Column.Index));
     }
@@ -557,7 +557,7 @@ internal class QueryCompiler
         MethodInfo readMethod = reader.Metadata.Value?.Read?.Invoke(bindingInfo);
 
         if (readMethod == null)
-            readMethod = typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetValue), new Type[] { typeof(int) });
+            readMethod = typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetValue), [typeof(int)]);
 
         return readMethod;
     }
@@ -618,7 +618,7 @@ internal class QueryCompiler
 
         Expression assignValue = Expression.Assign(variable, value);
 
-        return Expression.Block(new[] { variable }, assignValue, convertedValue);
+        return Expression.Block([variable], assignValue, convertedValue);
     }
 
     #endregion
@@ -657,7 +657,7 @@ internal class QueryCompiler
     }
 
     private TDelegate Compile<TDelegate>(Expression block, params ParameterExpression[] arguments)
-        => this.Compile<TDelegate>(new[] { block }, arguments);
+        => this.Compile<TDelegate>([block], arguments);
 
     private Expression GetDataReaderLoopExpression(IList<Expression> body)
     {

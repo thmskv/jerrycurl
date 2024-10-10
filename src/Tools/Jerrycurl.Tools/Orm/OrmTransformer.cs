@@ -39,7 +39,7 @@ internal class OrmTransformer
         ToolRunnerOptions nodeOptions = new ToolRunnerOptions()
         {
             ToolName = nodePath,
-            Arguments = new[] { hostFile, jsFile, inputFile, outputFile },
+            Arguments = [hostFile, jsFile, inputFile, outputFile],
             WorkingDirectory = workingDir,
             StdErr = console.Error,
             StdOut = s => console.Write(s),
@@ -124,7 +124,7 @@ internal class OrmTransformer
 
             foreach (var path in Environment.GetEnvironmentVariable("PATH").Split(Path.PathSeparator))
             {
-                string[] fullPaths = new[] { Path.Combine(path, "node.exe"), Path.Combine(path, "node") };
+                string[] fullPaths = [Path.Combine(path, "node.exe"), Path.Combine(path, "node")];
 
                 foreach (var fullPath in fullPaths)
                     yield return fullPath;

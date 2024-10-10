@@ -13,8 +13,8 @@ public class ProfilingReader : DbDataReader
 {
     public DbDataReader InnerReader { get; }
 
-    private readonly Dictionary<int, int> valueReads = new Dictionary<int, int>();
-    private readonly Dictionary<int, int> nullReads = new Dictionary<int, int>();
+    private readonly Dictionary<int, int> valueReads = [];
+    private readonly Dictionary<int, int> nullReads = [];
 
     public ProfilingReader(DbDataReader innerReader)
     {

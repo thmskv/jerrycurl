@@ -15,7 +15,7 @@ public static class ParameterExtensions
 {
     public static IProjection IsEq(this IProjection projection, IProjection other)
     {
-        List<IProjectionAttribute> newHeader = new List<IProjectionAttribute>();
+        List<IProjectionAttribute> newHeader = [];
 
         foreach (var (l, r) in projection.Attrs().Zip(other.Attrs()))
         {

@@ -6,9 +6,9 @@ public static class RazorProjectConventions
 {
     public const string DefaultIntermediateDirectory = "obj\\Jerrycurl";
 
-    public static IRazorProjectConvention[] Default { get; set; } = new IRazorProjectConvention[]
-    {
+    public static IRazorProjectConvention[] Default { get; set; } =
+    [
         new RazorNamingConvention(),
         new RazorImportConvention(),
-    };
+    ];
 }

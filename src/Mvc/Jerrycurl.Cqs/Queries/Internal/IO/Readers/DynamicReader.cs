@@ -11,5 +11,5 @@ internal class DynamicReader : BaseReader
         this.Identity = node.Identity;
     }
 
-    public IList<BaseReader> Properties { get; set; } = new List<BaseReader>();
+    public IList<BaseReader> Properties { get; set; } = [];
 }

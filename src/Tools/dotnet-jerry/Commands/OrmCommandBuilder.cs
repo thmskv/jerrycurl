@@ -40,12 +40,12 @@ internal class OrmCommandBuilder : ICommandBuilder
     private void CreateOptions()
     {
         this.ConfigArgument = new Argument<string>("config", description: "The .orm file to read configuration from.", getDefaultValue: () => DefaultFileName);
-        this.VendorOption = this.Option<string>(new[] { "--vendor", "-v" }, "The database vendor to target.");
-        this.ConnectionOption = this.Option<string>(new[] { "--connection", "-c" }, "The connection string to use.");
-        this.NamespaceOption = this.Option<string>(new[] { "--namespace", "-ns" }, "The namespace to place C# classes in.");
-        this.OutputOption = this.Option<string>(new[] { "--output", "-o" }, "The .cs file to place generated classes in.");
-        this.TransformOption = this.Option<string>(new[] { "--transform", "-t" }, "The .js file used for transforming output.");
-        this.FlagsOption = this.Option<string[]>(new[] { "--flags" }, "Flags to pass on to the configuration.");
+        this.VendorOption = this.Option<string>(["--vendor", "-v"], "The database vendor to target.");
+        this.ConnectionOption = this.Option<string>(["--connection", "-c"], "The connection string to use.");
+        this.NamespaceOption = this.Option<string>(["--namespace", "-ns"], "The namespace to place C# classes in.");
+        this.OutputOption = this.Option<string>(["--output", "-o"], "The .cs file to place generated classes in.");
+        this.TransformOption = this.Option<string>(["--transform", "-t"], "The .js file used for transforming output.");
+        this.FlagsOption = this.Option<string[]>(["--flags"], "Flags to pass on to the configuration.");
     }
 
     public void Build(RootCommand rootCommand)
@@ -64,8 +64,8 @@ internal class OrmCommandBuilder : ICommandBuilder
 
     private Command GetTransformCommand()
     {
-        Option<bool> openOption = this.Option<bool>(new[] { "--open" }, "Open the .js file after creating using the default editor.");
-        Option<bool> noTypesOption = this.Option<bool>(new[] { "--no-types" }, "Do not create an associated d.ts file.");
+        Option<bool> openOption = this.Option<bool>(["--open"], "Open the .js file after creating using the default editor.");
+        Option<bool> noTypesOption = this.Option<bool>(["--no-types"], "Do not create an associated d.ts file.");
 
         Command command = new Command("transform", "Create a .js transformation file for an .orm configuration.")
         {
@@ -104,9 +104,9 @@ internal class OrmCommandBuilder : ICommandBuilder
 
     private Command GetRunCommand()
     {
-        Option<string> snippetOption = this.Option<string>(new[] { "--snippet" }, "Name of a snippet to execute.");
-        Option<string> sqlOption = this.Option<string>(new[] { "--sql" }, "File to read and execute SQL from.");
-        Option<string> textOption = this.Option<string>(new[] { "--text" }, "SQL string to execute.");
+        Option<string> snippetOption = this.Option<string>(["--snippet"], "Name of a snippet to execute.");
+        Option<string> sqlOption = this.Option<string>(["--sql"], "File to read and execute SQL from.");
+        Option<string> textOption = this.Option<string>(["--text"], "SQL string to execute.");
 
         Command command = new Command("run", "Run SQL queries and commands against a database.")
         {
@@ -188,7 +188,7 @@ internal class OrmCommandBuilder : ICommandBuilder
 
     private Command GetNewCommand()
     {
-        Option<bool> syncOption = this.Option<bool>(new[] { "--sync" }, "Generate C# classes after creation.");
+        Option<bool> syncOption = this.Option<bool>(["--sync"], "Generate C# classes after creation.");
 
         Command command = new Command("new", "Create a new .orm configuration file.")
         {
@@ -308,7 +308,7 @@ internal class OrmCommandBuilder : ICommandBuilder
             options.Output = outputValue ?? options.Output;
             options.Namespace = namespaceValue ?? options.Namespace;
             options.Transform = transformValue ?? options.Transform;
-            options.Flags ??= new Dictionary<string, string>();
+            options.Flags ??= [];
             options.Verbose = verboseValue;
 
             foreach (var flag in flags)

@@ -41,8 +41,8 @@ CREATE TYPE jerry_tt AS TABLE
 
         var inputModel = new TestModel()
         {
-            Tvp = new List<TvpModel>()
-            {
+            Tvp =
+            [
                 new TvpModel()
                 {
                     Bool = true,
@@ -58,7 +58,7 @@ CREATE TYPE jerry_tt AS TABLE
                     Time = new TimeSpan(1, 2, 3),
                     String = "Long",
                     Guid = Guid.NewGuid(),
-                    Bytes = new byte[] { 1, 2, 3 },
+                    Bytes = [1, 2, 3],
                 },
                 new TvpModel()
                 {
@@ -75,9 +75,9 @@ CREATE TYPE jerry_tt AS TABLE
                     Time = new TimeSpan(1, 2, 3),
                     String = "Longer",
                     Guid = Guid.NewGuid(),
-                    Bytes = new byte[] { 1, 2, 3, 4, 5, 6 },
+                    Bytes = [1, 2, 3, 4, 5, 6],
                 },
-            }
+            ]
         };
 
         Runnable<TestModel, TestModel> select = new Runnable<TestModel, TestModel>(inputModel);

@@ -5,7 +5,7 @@ namespace Jerrycurl.Mvc;
 
 public class SqlOptions : ISqlOptions
 {
-    public List<IFilter> Filters { get; set; } = new List<IFilter>();
+    public List<IFilter> Filters { get; set; } = [];
 
     public int MaxSql { get; set; }
     public int MaxParameters { get; set; }

@@ -110,8 +110,8 @@ public class SqliteOrmTool : OrmTool
 
     private IEnumerable<string> GetSystemTableNames()
     {
-        return new[]
-        {
+        return
+        [
             "ElementaryGeometries",
             "geometry_columns",
             "geometry_columns_auth",
@@ -135,7 +135,7 @@ public class SqliteOrmTool : OrmTool
             "virts_geometry_columns_statistics",
             "sqlite_sequence",
             "sqlite_stat1",
-        };
+        ];
     }
 
     private string GetUnpingedNameFromDefinition(string def)
@@ -145,7 +145,7 @@ public class SqliteOrmTool : OrmTool
 
         def = def.Trim();
 
-        char[] pings = new[] { '"', '\'', '`' };
+        char[] pings = ['"', '\'', '`'];
 
         foreach (char ping in pings)
         {

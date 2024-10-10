@@ -17,22 +17,22 @@ public class EntityTests
 {
     public void Test_EFCore_TableMetadata()
     {
-        var store = DatabaseHelper.Default.GetStore(contracts: new[] { new EntityFrameworkCoreContractResolver(new EntityContext()) });
+        var store = DatabaseHelper.Default.GetStore(contracts: [new EntityFrameworkCoreContractResolver(new EntityContext())]);
         var address = store.GetSchema<Address>().Lookup<ITableMetadata>();
         var addressView = store.GetSchema<AddressView>().Lookup<ITableMetadata>();
 
         address.ColumnName.ShouldBeNull();
-        address.TableName.ShouldBe(new[] { "Address" });
-        address.Properties.Select(m => m.ColumnName).NotNull().ShouldBe(new[] { "Street", "Id" });
+        address.TableName.ShouldBe(["Address"]);
+        address.Properties.Select(m => m.ColumnName).NotNull().ShouldBe(["Street", "Id"]);
 
         addressView.ColumnName.ShouldBeNull();
-        addressView.TableName.ShouldBe(new[] { "Address" });
-        addressView.Properties.Select(m => m.ColumnName).NotNull().ShouldBe(new[] { "Street", "Id" });
+        addressView.TableName.ShouldBe(["Address"]);
+        addressView.Properties.Select(m => m.ColumnName).NotNull().ShouldBe(["Street", "Id"]);
     }
 
     public void Test_EfCore_ReferenceMetadata()
     {
-        var store = DatabaseHelper.Default.GetStore(contracts: new[] { new EntityFrameworkCoreContractResolver(new EntityContext()) });
+        var store = DatabaseHelper.Default.GetStore(contracts: [new EntityFrameworkCoreContractResolver(new EntityContext())]);
         var schema = store.GetSchema<List<Order>>();
 
         var orderRefs = schema.Require<IReferenceMetadata>("Item").References;

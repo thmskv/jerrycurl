@@ -35,10 +35,10 @@ public class EntityFrameworkCoreContractResolver : IRelationContractResolver, IT
     public IEnumerable<Attribute> GetAnnotations(IRelationMetadata metadata)
     {
         IProperty property = this.FindProperty(metadata);
-        IAnnotation[] propertyAnnotations = property?.GetAnnotations().ToArray() ?? new IAnnotation[0];
+        IAnnotation[] propertyAnnotations = property?.GetAnnotations().ToArray() ?? [];
 
         IKey primaryKey = this.GetPrimaryKey(property);
-        IForeignKey[] foreignKeys = property?.GetContainingForeignKeys().ToArray() ?? new IForeignKey[0];
+        IForeignKey[] foreignKeys = property?.GetContainingForeignKeys().ToArray() ?? [];
 
         if (primaryKey != null)
         {

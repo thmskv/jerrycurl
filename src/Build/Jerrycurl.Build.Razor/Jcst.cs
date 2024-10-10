@@ -38,7 +38,7 @@ public class Jcst : Task
 
         this.PrintProjectData(project);
 
-        List<string> filesToCompile = new List<string>();
+        List<string> filesToCompile = [];
 
         Stopwatch watch = Stopwatch.StartNew();
 

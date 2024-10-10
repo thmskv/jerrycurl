@@ -10,7 +10,7 @@ public class TemplateTests
         var misc = new MiscAccessor();
         var result = misc.TemplatedQuery();
 
-        result.ShouldBe(new[] { 1, 2, 3 });
+        result.ShouldBe([1, 2, 3]);
     }
 
     public void Test_Partial_Template()
@@ -18,6 +18,6 @@ public class TemplateTests
         var misc = new MiscAccessor();
         var result = misc.PartialedQuery();
 
-        result.ShouldBe(new[] { 1, 2, 3 });
+        result.ShouldBe([1, 2, 3]);
     }
 }

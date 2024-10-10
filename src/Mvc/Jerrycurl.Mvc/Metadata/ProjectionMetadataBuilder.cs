@@ -71,7 +71,7 @@ public class ProjectionMetadataBuilder : IMetadataBuilder<IProjectionMetadata>
         if (parent?.Reference != null)
         {
             IEnumerable<IReference> references = parent.Reference.References.Where(r => r.HasFlag(ReferenceFlags.Foreign) && !r.HasFlag(ReferenceFlags.Self));
-            List<IReference> validReferences = new List<IReference>();
+            List<IReference> validReferences = [];
 
             foreach (IReference reference in references.OrderBy(r => r.Priority))
             {

@@ -11,9 +11,9 @@ namespace Jerrycurl.Cqs.Queries.Internal.Caching;
 
 internal class BufferCache
 {
-    private readonly Dictionary<BufferCacheKey, int> parentMap = new Dictionary<BufferCacheKey, int>();
-    private readonly Dictionary<int, Dictionary<MetadataIdentity, int>> childMap = new Dictionary<int, Dictionary<MetadataIdentity, int>>();
-    private readonly Dictionary<MetadataIdentity, int> aggregateMap = new Dictionary<MetadataIdentity, int>();
+    private readonly Dictionary<BufferCacheKey, int> parentMap = [];
+    private readonly Dictionary<int, Dictionary<MetadataIdentity, int>> childMap = [];
+    private readonly Dictionary<MetadataIdentity, int> aggregateMap = [];
     private readonly object state = new object();
 
     public ISchema Schema { get; }

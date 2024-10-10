@@ -40,7 +40,7 @@ public sealed class QueryBuffer : IQueryBuffer
         if (this.Type == QueryType.Aggregate)
         {
             this.aggregateData = new ElasticArray();
-            this.aggregateHeader = new List<AggregateAttribute>();
+            this.aggregateHeader = [];
         }
         else if (this.Type != QueryType.List)
             throw QueryException.InvalidQueryType(this.Type);

@@ -10,7 +10,7 @@ internal class ReferenceKey : IReferenceKey
     public string Name { get; set; }
     public string Other { get; set; }
     public ReferenceKeyFlags Flags { get; set; }
-    public List<ReferenceMetadata> Properties { get; set; } = new List<ReferenceMetadata>();
+    public List<ReferenceMetadata> Properties { get; set; } = [];
 
     IReadOnlyList<IReferenceMetadata> IReferenceKey.Properties => this.Properties;
 

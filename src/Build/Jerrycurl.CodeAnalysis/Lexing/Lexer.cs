@@ -7,8 +7,8 @@ namespace Jerrycurl.CodeAnalysis.Lexing;
 
 public sealed class Lexer : IEnumerable<Lexeme>
 {
-    private readonly List<Token> tokens = new List<Token>();
-    private readonly List<Lexeme> lexemes = new List<Lexeme>();
+    private readonly List<Token> tokens = [];
+    private readonly List<Lexeme> lexemes = [];
 
     public ISource Source { get; }
 
@@ -29,11 +29,11 @@ public sealed class Lexer : IEnumerable<Lexeme>
 
         if (rule is SymbolRule symbol && rule.Parse(lexer))
         {
-            Token[] tokens = new[] { symbol.Token };
+            Token[] tokens = [symbol.Token];
             Lexeme[] lexemes = lexer.ToArray();
 
             this.tokens.AddRange(tokens);
-            this.lexemes.Add(this.CreateLexeme(rule, lexemes, new[] { symbol.Token }));
+            this.lexemes.Add(this.CreateLexeme(rule, lexemes, [symbol.Token]));
             this.lexemes.AddRange(lexemes);
 
             return true;

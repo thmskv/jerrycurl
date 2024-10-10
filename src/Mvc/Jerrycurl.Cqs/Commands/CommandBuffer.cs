@@ -17,7 +17,7 @@ namespace Jerrycurl.Cqs.Commands;
 
 public sealed class CommandBuffer
 {
-    private readonly Dictionary<IField, FieldBuffer> fieldBuffers = new Dictionary<IField, FieldBuffer>();
+    private readonly Dictionary<IField, FieldBuffer> fieldBuffers = [];
     private readonly Dictionary<string, FieldBuffer> columnHeader = new Dictionary<string, FieldBuffer>(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, FieldBuffer> paramHeader = new Dictionary<string, FieldBuffer>(StringComparer.OrdinalIgnoreCase);
 
@@ -51,8 +51,8 @@ public sealed class CommandBuffer
 
     private Action<IDataReader> GetUpdateAction(IDataReader dataReader)
     {
-        List<ColumnName> names = new List<ColumnName>();
-        List<FieldBuffer> bufferList = new List<FieldBuffer>();
+        List<ColumnName> names = [];
+        List<FieldBuffer> bufferList = [];
 
         for (int i = 0; i < this.GetFieldCount(dataReader); i++)
         {
@@ -88,7 +88,7 @@ public sealed class CommandBuffer
 
     public IList<IDbDataParameter> Prepare(Func<IDbDataParameter> parameterFactory)
     {
-        List<IDbDataParameter> parameters = new List<IDbDataParameter>();
+        List<IDbDataParameter> parameters = [];
         HashSet<string> paramSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         foreach (FieldBuffer buffer in this.paramHeader.Values)

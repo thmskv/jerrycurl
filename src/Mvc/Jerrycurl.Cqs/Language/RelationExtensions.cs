@@ -40,7 +40,7 @@ public static class RelationExtensions
 
     public static Command AsCommand(this IRelation relation, Func<IList<IParameter>, string> textBuilder)
     {
-        ParameterStore store = new ParameterStore();
+        ParameterStore store = [];
 
         Command command = new Command()
         {
@@ -79,7 +79,7 @@ public static class RelationExtensions
 
     public static IList<IDbDataParameter> AddParameters(this ITuple tuple, IDbCommand dbCommand)
     {
-        List<IDbDataParameter> dbParameters = new List<IDbDataParameter>();
+        List<IDbDataParameter> dbParameters = [];
 
         foreach (IParameter parameter in tuple.AsParameters())
         {
@@ -107,7 +107,7 @@ public static class RelationExtensions
 
         using IRelationReader reader = targets.GetReader();
 
-        List<ColumnBinding> bindings = new List<ColumnBinding>();
+        List<ColumnBinding> bindings = [];
 
         while (reader.Read())
             bindings.AddRange(reader.AsBindings());

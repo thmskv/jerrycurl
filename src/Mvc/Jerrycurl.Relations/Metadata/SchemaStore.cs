@@ -8,10 +8,10 @@ namespace Jerrycurl.Relations.Metadata;
 public class SchemaStore : ISchemaStore
 {
     private readonly ConcurrentDictionary<Type, ISchema> entries = new ConcurrentDictionary<Type, ISchema>();
-    private readonly List<IMetadataBuilder> builders = new List<IMetadataBuilder>();
+    private readonly List<IMetadataBuilder> builders = [];
 
     public DotNotation Notation { get; }
-    internal RelationMetadataBuilder RelationBuilder { get; } = new RelationMetadataBuilder();
+    internal RelationMetadataBuilder RelationBuilder { get; } = [];
 
     public IEnumerable<IMetadataBuilder> Builders => new IMetadataBuilder[] { this.RelationBuilder }.Concat(this.builders);
 

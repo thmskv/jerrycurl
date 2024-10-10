@@ -25,7 +25,7 @@ public class RefcursorTests
         Query query = new Query()
         {
             QueryText = "BEGIN OPEN :P0 FOR SELECT 1 AS Item FROM dual; OPEN :P1 FOR SELECT 2 AS Item FROM dual; END;",
-            Parameters = new IParameter[] { new Refcursor("P0"), new Refcursor("P1") },
+            Parameters = [new Refcursor("P0"), new Refcursor("P1")],
         };
 
         QueryEngine handler = new QueryEngine(options);
@@ -33,8 +33,8 @@ public class RefcursorTests
         IList<int> result1 = handler.List<int>(query);
         IList<int> result2 = await handler.ListAsync<int>(query);
 
-        result1.ShouldBe(new[] { 1, 2 });
-        result2.ShouldBe(new[] { 1, 2 });
+        result1.ShouldBe([1, 2]);
+        result2.ShouldBe([1, 2]);
     }
 
     public void Test_MultiSelect_WithRefcursorsOnRazor()
@@ -53,7 +53,7 @@ public class RefcursorTests
 
         IList<int> result1 = Runner.Query(select);
 
-        result1.ShouldBe(new[] { 1, 2 });
+        result1.ShouldBe([1, 2]);
     }
     public async Task Test_SingleSelect_WithoutRefcursor()
     {
@@ -65,7 +65,7 @@ public class RefcursorTests
         IList<int> result1 = DatabaseHelper.Default.Queries.List<int>(query);
         IList<int> result2 = await DatabaseHelper.Default.Queries.ListAsync<int>(query);
 
-        result1.ShouldBe(new[] { 1 });
-        result2.ShouldBe(new[] { 1 });
+        result1.ShouldBe([1]);
+        result2.ShouldBe([1]);
     }
 }

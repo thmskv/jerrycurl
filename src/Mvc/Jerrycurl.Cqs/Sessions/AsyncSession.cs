@@ -169,7 +169,7 @@ public class AsyncSession : IAsyncSession
 
     private async ValueTask DisposeFiltersAsync()
     {
-        List<Exception> exceptions = new List<Exception>();
+        List<Exception> exceptions = [];
 
         foreach (IFilterAsyncHandler asyncHandler in this.filters)
         {

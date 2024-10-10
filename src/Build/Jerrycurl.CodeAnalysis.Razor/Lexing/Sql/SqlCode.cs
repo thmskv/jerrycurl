@@ -5,7 +5,7 @@ namespace Jerrycurl.CodeAnalysis.Razor.Lexing.Sql;
 
 public class SqlCode : ISymbol
 {
-    public static char[] Illegal = new[] { '{', '}', '@' };
+    public static char[] Illegal = ['{', '}', '@'];
 
     public bool Parse(Tokenizer tokenizer)
     {

@@ -7,8 +7,8 @@ namespace Jerrycurl.Cqs.Queries.Internal.IO.Readers;
 internal class NewReader : BaseReader
 {
     public KeyReader PrimaryKey { get; set; }
-    public IList<JoinTarget> Joins { get; } = new List<JoinTarget>();
-    public IList<BaseReader> Properties { get; set; } = new List<BaseReader>();
+    public IList<JoinTarget> Joins { get; } = [];
+    public IList<BaseReader> Properties { get; set; } = [];
 
     public NewReader(IBindingMetadata metadata)
     {

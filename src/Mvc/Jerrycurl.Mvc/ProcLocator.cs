@@ -48,7 +48,7 @@ public class ProcLocator : IProcLocator
         IEnumerable<Namespace> typeNames;
 
         if (forPath != null)
-            typeNames = new[] { forPath.Up().Add(this.SanitizeTypeName(forPath.AsTypeName().Name)) };
+            typeNames = [forPath.Up().Add(this.SanitizeTypeName(forPath.AsTypeName().Name))];
         else
         {
             typeNames = this.GetPageNamespacesToSearch(originType).Distinct().Select(ns => ns.Add(Namespace.FromPath(procName)));

@@ -23,11 +23,11 @@ CREATE TABLE jerry_json(
 
         Runner.Command(table);
 
-        List<TestModel> testModels = new List<TestModel>()
-        {
+        List<TestModel> testModels =
+        [
             new TestModel() { Json = new JsonModel() { Value1 = 10, Value3 = 20 } },
             new TestModel() { Json = new JsonModel() { Value1 = 20, Value3 = 30 } },
-        };
+        ];
 
         Runnable<TestModel, object> insert1 = new Runnable<TestModel, object>(testModels[0]);
         Runnable<TestModel, object> insert2 = new Runnable<TestModel, object>(testModels[1]);

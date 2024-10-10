@@ -12,8 +12,8 @@ namespace Jerrycurl.Cqs.Metadata;
 
 public class DefaultBindingContractResolver : IBindingContractResolver
 {
-    private readonly Type[] intTypes = new[] { typeof(int), typeof(long), typeof(short), typeof(char), typeof(byte), typeof(sbyte), typeof(ushort), typeof(uint), typeof(ulong) };
-    private readonly Type[] decTypes = new[] { typeof(float), typeof(double), typeof(decimal) };
+    private readonly Type[] intTypes = [typeof(int), typeof(long), typeof(short), typeof(char), typeof(byte), typeof(sbyte), typeof(ushort), typeof(uint), typeof(ulong)];
+    private readonly Type[] decTypes = [typeof(float), typeof(double), typeof(decimal)];
 
     public int Priority => 0;
     public IBindingHelperContract GetHelperContract(IBindingMetadata metadata) => null;
@@ -92,15 +92,15 @@ public class DefaultBindingContractResolver : IBindingContractResolver
 
     private Type GetListElementType(IBindingMetadata metadata)
     {
-        Type[] openLists = new Type[]
-        {
+        Type[] openLists =
+        [
             typeof(List<>),
             typeof(IList<>),
             typeof(IReadOnlyList<>),
             typeof(IReadOnlyCollection<>),
             typeof(ICollection<>),
             typeof(IEnumerable<>),
-        };
+        ];
 
         Type openType = this.GetOpenType(metadata);
 
@@ -204,7 +204,7 @@ public class DefaultBindingContractResolver : IBindingContractResolver
         {
             Type dictionaryType = typeof(IDictionary<string, object>);
 
-            return dictionaryType.GetMethod("Add", new[] { typeof(string), typeof(object) });
+            return dictionaryType.GetMethod("Add", [typeof(string), typeof(object)]);
         }
 
         return null;
@@ -218,7 +218,7 @@ public class DefaultBindingContractResolver : IBindingContractResolver
 
     private Expression GetXDocumentReaderProxy(IBindingValueInfo valueInfo)
     {
-        MethodInfo parseInfo = typeof(XDocument).GetMethod("Parse", new[] { typeof(string) });
+        MethodInfo parseInfo = typeof(XDocument).GetMethod("Parse", [typeof(string)]);
 
         Expression value = valueInfo.Value;
         Expression stringValue = value.Type == typeof(string) ? value : Expression.Convert(value, typeof(string));
@@ -392,7 +392,7 @@ public class DefaultBindingContractResolver : IBindingContractResolver
     }
 
     private bool IsNotNullableValueType(Type type) => (type.IsValueType && Nullable.GetUnderlyingType(type) == null);
-    private MethodInfo GetRecordMethod(string methodName) => typeof(IDataRecord).GetMethod(methodName, new[] { typeof(int) });
+    private MethodInfo GetRecordMethod(string methodName) => typeof(IDataRecord).GetMethod(methodName, [typeof(int)]);
 
     private MethodInfo GetRecordReaderMethod(IBindingColumnInfo bindingInfo)
     {

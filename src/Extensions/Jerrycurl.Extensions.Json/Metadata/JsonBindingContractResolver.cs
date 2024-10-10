@@ -27,7 +27,7 @@ public class JsonBindingContractResolver : IBindingContractResolver
     private MethodInfo GetColumnReaderProxy(IBindingColumnInfo columnInfo)
     {
         if (columnInfo.Column.Type == typeof(string))
-            return typeof(IDataRecord).GetMethod(nameof(IDataReader.GetString), new[] { typeof(int) });
+            return typeof(IDataRecord).GetMethod(nameof(IDataReader.GetString), [typeof(int)]);
 
         return null;
     }
@@ -78,14 +78,14 @@ public class JsonBindingContractResolver : IBindingContractResolver
 
     private Expression GetParseDocumentExpression(IBindingMetadata metadata, Expression value)
     {
-        MethodInfo parseMethod = typeof(JsonDocument).GetMethod(nameof(JsonDocument.Parse), new[] { typeof(string), typeof(JsonDocumentOptions) });
+        MethodInfo parseMethod = typeof(JsonDocument).GetMethod(nameof(JsonDocument.Parse), [typeof(string), typeof(JsonDocumentOptions)]);
 
         return Expression.Call(parseMethod, value, Expression.Default(typeof(JsonDocumentOptions)));
     }
 
     private Expression GetDeserializeExpression(IBindingMetadata metadata, Expression value, Expression helper)
     {
-        MethodInfo deserializeMethod = typeof(JsonSerializer).GetMethod(nameof(JsonSerializer.Deserialize), new[] { typeof(string), typeof(Type), typeof(JsonSerializerOptions) });
+        MethodInfo deserializeMethod = typeof(JsonSerializer).GetMethod(nameof(JsonSerializer.Deserialize), [typeof(string), typeof(Type), typeof(JsonSerializerOptions)]);
 
         if (helper != null)
         {

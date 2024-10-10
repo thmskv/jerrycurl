@@ -13,9 +13,9 @@ internal class Node
 
     public MetadataIdentity Identity => this.Metadata.Identity;
     public IRelationMetadata Metadata { get; }
-    public IList<Node> Properties { get; } = new List<Node>();
+    public IList<Node> Properties { get; } = [];
     public Node Item { get; set; }
-    public IList<int> Index { get; } = new List<int>();
+    public IList<int> Index { get; } = [];
 
     public override string ToString() => this.Identity.ToString();
 }

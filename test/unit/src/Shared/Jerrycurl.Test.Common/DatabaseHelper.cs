@@ -27,16 +27,16 @@ public class DatabaseHelper
     public DatabaseHelper()
     {
         this.Store = this.GetStore();
-        this.SqliteStore = this.GetStore(contracts: new[] { new SqliteContractResolver() });
+        this.SqliteStore = this.GetStore(contracts: [new SqliteContractResolver()]);
         this.QueryOptions = this.GetQueryOptions();
         this.CommandOptions = this.GetCommandOptions();
     }
 
     public SchemaStore GetStore(DotNotation notation = null, IEnumerable<object> contracts = null)
     {
-        BindingMetadataBuilder bindingBuilder = new BindingMetadataBuilder();
+        BindingMetadataBuilder bindingBuilder = [];
         ReferenceMetadataBuilder referenceBuilder = new ReferenceMetadataBuilder();
-        TableMetadataBuilder tableBuilder = new TableMetadataBuilder();
+        TableMetadataBuilder tableBuilder = [];
 
         SchemaStore store = new SchemaStore(notation ?? new DotNotation(), bindingBuilder, referenceBuilder, tableBuilder);
 

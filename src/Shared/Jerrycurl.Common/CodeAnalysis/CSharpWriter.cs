@@ -12,7 +12,7 @@ internal class CSharpWriter
 		protected TextWriter TextWriter { get; }
 
 		private int indentation = 0;
-    private readonly List<AttributeModel> attributeBuffer = new List<AttributeModel>();
+    private readonly List<AttributeModel> attributeBuffer = [];
 
 		public CSharpWriter(TextWriter textWriter, CSharpFlags flags = CSharpFlags.AutoIndent)
 		{

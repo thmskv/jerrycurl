@@ -85,14 +85,14 @@ public class DotNotation
         if (this.Comparer.Equals(name, this.Model()) || name == null)
             return null;
 
-        string[] parts = name.Split(new[] { this.Dot });
+        string[] parts = name.Split([this.Dot]);
 
         return this.Combine(parts.Take(parts.Length - 1).ToArray());
     }
 
     public string Member(string name)
     {
-        string[] parts = name?.Split(new[] { this.Dot });
+        string[] parts = name?.Split([this.Dot]);
 
         return parts?.Last();
     }
@@ -104,7 +104,7 @@ public class DotNotation
         else if (this.Comparer.Equals(name, this.Model()))
             return 0;
 
-        string[] parts = name.Split(new[] { this.Dot });
+        string[] parts = name.Split([this.Dot]);
 
         return parts.Length;
     }

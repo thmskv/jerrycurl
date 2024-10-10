@@ -2,13 +2,13 @@
 
 internal static class RazorFacts
 {
-    public static string[] DefaultNamespaces { get; } = new[]
-    {
+    public static string[] DefaultNamespaces { get; } =
+    [
         "System",
         "System.Collections.Generic",
         "System.Linq.Expressions",
         "Jerrycurl.Mvc",
         "Jerrycurl.Mvc.Projections",
         "Jerrycurl.Mvc.Sql",
-    };
+    ];
 }

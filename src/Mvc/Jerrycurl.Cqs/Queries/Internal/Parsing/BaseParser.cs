@@ -121,7 +121,7 @@ internal abstract class BaseParser
         if (referenceKey == null)
             return null;
 
-        List<DataReader> values = new List<DataReader>();
+        List<DataReader> values = [];
 
         foreach (MetadataIdentity identity in referenceKey.Properties.Select(m => m.Identity))
         {

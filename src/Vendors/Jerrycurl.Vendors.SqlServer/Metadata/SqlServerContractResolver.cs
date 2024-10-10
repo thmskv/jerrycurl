@@ -86,7 +86,7 @@ public class SqlServerContractResolver : IBindingContractResolver
     {
         Type reader = typeof(SqlDataReader);
 
-        return reader.GetMethod(methodName, new[] { typeof(int) });
+        return reader.GetMethod(methodName, [typeof(int)]);
     }
 
     private MethodInfo GetValueReadMethod(IBindingColumnInfo columnInfo, IBindingValueContract fallback)

@@ -96,8 +96,8 @@ public class ReferenceMetadataBuilder : IMetadataBuilder<IReferenceMetadata>
         if (this.IsNativeKeylessType(parent.Type))
             return Array.Empty<ReferenceKey>();
 
-        List<(ReferenceMetadata Metadata, KeyAttribute Attribute, string KeyName)> keyMap = new List<(ReferenceMetadata, KeyAttribute, string)>();
-        List<(ReferenceMetadata Metadata, RefAttribute Attribute, string ReferenceName, string KeyName)> refMap = new List<(ReferenceMetadata, RefAttribute, string, string)>();
+        List<(ReferenceMetadata Metadata, KeyAttribute Attribute, string KeyName)> keyMap = [];
+        List<(ReferenceMetadata Metadata, RefAttribute Attribute, string ReferenceName, string KeyName)> refMap = [];
 
         foreach (ReferenceMetadata property in parent.Properties.Value)
         {
@@ -242,7 +242,7 @@ public class ReferenceMetadataBuilder : IMetadataBuilder<IReferenceMetadata>
         IEnumerable<ReferenceKey> parentKeys = parent.Keys.Value;
         IEnumerable<ReferenceKey> childKeys = this.GetPossibleChildKeys(parent);
 
-        List<Reference> references = new List<Reference>();
+        List<Reference> references = [];
 
         foreach (ReferenceKey parentKey in parentKeys)
         {

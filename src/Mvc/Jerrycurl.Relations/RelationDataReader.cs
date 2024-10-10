@@ -27,7 +27,7 @@ internal class RelationDataReader : DbDataReader
         if (this.Header.Count != this.InnerReader.Degree)
             throw RelationException.InvalidDataReaderHeader(this.InnerReader.Relation.Header, this.Header);
 
-        this.headerMap = new Dictionary<string, int>();
+        this.headerMap = [];
 
         for (int i = 0; i < this.Header.Count; i++)
         {

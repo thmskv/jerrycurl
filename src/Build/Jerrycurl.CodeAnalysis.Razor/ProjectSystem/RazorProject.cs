@@ -10,13 +10,13 @@ public class RazorProject
     public string RootNamespace { get; set; }
     public string ProjectDirectory { get; set; }
     public string IntermediateDirectory { get; set; } = RazorProjectConventions.DefaultIntermediateDirectory;
-    public IList<RazorProjectItem> Items { get; set; } = new List<RazorProjectItem>();
+    public IList<RazorProjectItem> Items { get; set; } = [];
     public IEnumerable<IRazorProjectConvention> Conventions { get; set; } = RazorProjectConventions.Default;
 
     public RazorProjectItem AddItem(string path)
     {
         if (this.Items == null)
-            this.Items = new List<RazorProjectItem>();
+            this.Items = [];
 
         RazorProjectItem newItem = RazorProjectItem.Create(path, this.ProjectDirectory);
 
@@ -31,7 +31,7 @@ public class RazorProject
 
         if (sourceInfo.Exists)
         {
-            List<RazorProjectItem> projectItems = new List<RazorProjectItem>();
+            List<RazorProjectItem> projectItems = [];
 
             foreach (string fullPath in Directory.GetFiles(sourceInfo.FullName, filePattern, SearchOption.AllDirectories))
             {

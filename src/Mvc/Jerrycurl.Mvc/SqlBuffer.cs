@@ -23,7 +23,7 @@ public class SqlBuffer : ISqlBuffer
     public SqlBuffer()
     {
         this.currentBuffer = new IndexedBuffer();
-        this.innerBuffers = new List<IndexedBuffer>() { this.currentBuffer };
+        this.innerBuffers = [this.currentBuffer];
     }
 
     public void Push(int batchIndex)
@@ -116,8 +116,8 @@ public class SqlBuffer : ISqlBuffer
 
     public ISqlContent ReadToEnd()
     {
-        List<IParameter> parameters = new List<IParameter>();
-        List<IUpdateBinding> bindings = new List<IUpdateBinding>();
+        List<IParameter> parameters = [];
+        List<IUpdateBinding> bindings = [];
         StringBuilder text = new StringBuilder();
 
         foreach (IndexedBuffer buffer in this.innerBuffers.NotNull())
@@ -157,7 +157,7 @@ public class SqlBuffer : ISqlBuffer
         int maxSql = options.MaxSql <= 0 ? int.MaxValue : options.MaxSql;
         int maxParams = options.MaxParameters <= 0 ? int.MaxValue : options.MaxParameters;
 
-        SqlOffset[] offsets = buffer.Offsets.Concat(new[] { this.GetCurrentOffset() }).ToArray();
+        SqlOffset[] offsets = buffer.Offsets.Concat([this.GetCurrentOffset()]).ToArray();
 
         for (int i = 0; i < offsets.Length - 1; i++)
         {
@@ -197,9 +197,9 @@ public class SqlBuffer : ISqlBuffer
 
     private class IndexedBuffer
     {
-        public List<IParameter> Parameters { get; } = new List<IParameter>();
-        public List<IUpdateBinding> Bindings { get; } = new List<IUpdateBinding>();
+        public List<IParameter> Parameters { get; } = [];
+        public List<IUpdateBinding> Bindings { get; } = [];
         public StringBuilder Text { get; } = new StringBuilder();
-        public List<SqlOffset> Offsets { get; } = new List<SqlOffset>();
+        public List<SqlOffset> Offsets { get; } = [];
     }
 }

@@ -146,7 +146,7 @@ public class QueryTests
         var reader = new QueryReader(store, dataReader);
         var result = reader.Read<int?>();
 
-        result.ShouldBe(new int?[] { 1, 2, null });
+        result.ShouldBe([1, 2, null]);
     }
 
     public void Test_Read_IntegerSet()
@@ -159,7 +159,7 @@ public class QueryTests
         var reader = new QueryReader(store, dataReader);
         var result = reader.Read<int>();
 
-        result.ShouldBe(new[] { 1, 2, 3, 4, 5, 6 });
+        result.ShouldBe([1, 2, 3, 4, 5, 6]);
     }
 
     public void Test_Insert_ManyToOne_List()
@@ -298,8 +298,8 @@ public class QueryTests
         var schema2 = store.GetSchema(typeof(BlogDatabaseModel));
         var data = new BlogDatabaseModel()
         {
-            Categories = new List<BlogCategory>()
-            {
+            Categories =
+            [
                 new BlogCategory()
                 {
                     Id = 1,
@@ -310,9 +310,9 @@ public class QueryTests
                     Id = 2,
                     Name = "Birds",
                 }
-            },
-            Blogs = new List<BlogDatabaseModel.BlogView>()
-            {
+            ],
+            Blogs =
+            [
                 new BlogDatabaseModel.BlogView()
                 {
                     Id = 1,
@@ -336,9 +336,9 @@ public class QueryTests
                     Title = "Blog #3",
                     CategoryId = 1,
                 }
-            },
-            Posts = new List<BlogPost>()
-            {
+            ],
+            Posts =
+            [
                 new BlogPost()
                 {
                     Id = 1,
@@ -363,7 +363,7 @@ public class QueryTests
                     Headline = "Blog post #3.1",
                     Content = "Well...",
                 },
-            },
+            ],
         };
 
         
@@ -496,7 +496,7 @@ public class QueryTests
 
         result[1].Children.ShouldNotBeNull();
         result[1].Children.Count.ShouldBe(2);
-        result[1].Children.Select(c => c.Id).ShouldBe(new[] { 7, 8 });
+        result[1].Children.Select(c => c.Id).ShouldBe([7, 8]);
 
         result[1].Children[0].Children.ShouldNotBeNull();
         result[1].Children[0].Children.Count.ShouldBe(0);
@@ -733,7 +733,7 @@ public class QueryTests
 
     public void Test_Insert_OneToMany_CustomList()
     {
-        var store = DatabaseHelper.Default.GetStore(contracts: new[] { new CustomContractResolver() });
+        var store = DatabaseHelper.Default.GetStore(contracts: [new CustomContractResolver()]);
         var schema = store.GetSchema(typeof(List<PriorityModel>));
         var buffer = new QueryBuffer(schema, QueryType.List);
 
@@ -775,7 +775,7 @@ public class QueryTests
 
     public void Test_Insert_Priority_Value()
     {
-        var store = DatabaseHelper.Default.GetStore(contracts: new[] { new CustomContractResolver() });
+        var store = DatabaseHelper.Default.GetStore(contracts: [new CustomContractResolver()]);
         var schema = store.GetSchema(typeof(List<PriorityModel>));
         var buffer = new QueryBuffer(schema, QueryType.List);
 
@@ -1306,7 +1306,7 @@ public class QueryTests
         var result2 = buffer2.Commit<IList<dynamic>>();
 
         ((object)result1).ShouldBeNull();
-        result2.Select(d => (int?)d).ShouldBe(new int?[] { 1, 2, null });
+        result2.Select(d => (int?)d).ShouldBe([1, 2, null]);
     }
 
     public void Test_Aggregate_Invalid_DataType()

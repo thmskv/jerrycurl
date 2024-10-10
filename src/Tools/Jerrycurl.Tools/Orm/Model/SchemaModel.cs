@@ -4,9 +4,9 @@ namespace Jerrycurl.Tools.Orm.Model;
 
 public class SchemaModel
 {
-    public IList<TableModel> Tables { get; set; } = new List<TableModel>();
-    public IList<TypeModel> Types { get; set; } = new List<TypeModel>();
-    public IList<string> Imports { get; set; } = new List<string>();
+    public IList<TableModel> Tables { get; set; } = [];
+    public IList<TypeModel> Types { get; set; } = [];
+    public IList<string> Imports { get; set; } = [];
     public Dictionary<string, string> Flags { get; set; }
 
     public class TableModel
@@ -16,7 +16,7 @@ public class SchemaModel
         public bool Ignore { get; set; }
         public ClassModel Clr { get; set; }
 
-        public IList<ColumnModel> Columns { get; set; } = new List<ColumnModel>();
+        public IList<ColumnModel> Columns { get; set; } = [];
     }
 
     public class ColumnModel
@@ -28,8 +28,8 @@ public class SchemaModel
         public bool Ignore { get; set; }
         public PropertyModel Clr { get; set; }
 
-        public IList<KeyModel> Keys { get; set; } = new List<KeyModel>();
-        public IList<ReferenceModel> References { get; set; } = new List<ReferenceModel>();
+        public IList<KeyModel> Keys { get; set; } = [];
+        public IList<ReferenceModel> References { get; set; } = [];
     }
 
     public class KeyModel

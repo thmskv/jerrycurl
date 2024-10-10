@@ -39,7 +39,7 @@ public class RazorParser
         if (project.Items == null || project.Items.Count == 0)
             yield break;
 
-        HashSet<string> intermediatePaths = new HashSet<string>();
+        HashSet<string> intermediatePaths = [];
 
         bool hasProjectDirectory = !string.IsNullOrWhiteSpace(project.ProjectDirectory);
 

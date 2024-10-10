@@ -8,7 +8,7 @@ namespace Jerrycurl.Cqs.Queries;
 public class Query : IBatch
 {
     public string QueryText { get; set; }
-    public ICollection<IParameter> Parameters { get; set; } = new List<IParameter>();
+    public ICollection<IParameter> Parameters { get; set; } = [];
 
     public void Build(IDbCommand adoCommand)
     {

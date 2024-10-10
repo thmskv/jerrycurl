@@ -58,7 +58,7 @@ public abstract class OrmTool
 
     private void CreateDefaultClrModel(OrmToolOptions options, SchemaModel schema)
     {
-        schema.Imports ??= new List<string>();
+        schema.Imports ??= [];
         schema.Imports.Add("global::System");
         schema.Imports.Add("global::Jerrycurl.Cqs.Metadata.Annotations");
         schema.Imports.Add("global::Jerrycurl.Mvc.Metadata.Annotations");
@@ -70,7 +70,7 @@ public abstract class OrmTool
         {
             table.Clr = new ClassModel()
             {
-                Modifiers = new[] { "public" },
+                Modifiers = ["public"],
                 Name = CSharp.Identifier(table.Name),
                 Namespace = GetNamespace(table),
             };
@@ -79,7 +79,7 @@ public abstract class OrmTool
             {
                 column.Clr = new PropertyModel()
                 {
-                    Modifiers = new[] { "public" },
+                    Modifiers = ["public"],
                     TypeName = GetColumnTypeName(column),
                     Name = CSharp.Identifier(column.Name),
                 };

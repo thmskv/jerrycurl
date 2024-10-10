@@ -76,7 +76,7 @@ public class RazorGenerator
                 .Write(")]");
         }
 
-        foreach (InjectDirective inject in pageData.Injections ?? new InjectDirective[0])
+        foreach (InjectDirective inject in pageData.Injections ?? [])
         {
             if (string.IsNullOrWhiteSpace(inject.Type.Text) || string.IsNullOrWhiteSpace(inject.Variable?.Text))
                 projector.WriteWarning(inject.Type, "Injection ignored. Please specify both type and variable name.");
@@ -91,7 +91,7 @@ public class RazorGenerator
             }
         }
 
-        foreach (InjectDirective project in pageData.Projections ?? new InjectDirective[0])
+        foreach (InjectDirective project in pageData.Projections ?? [])
         {
             projector.Open("injectiondefs");
 
@@ -108,7 +108,7 @@ public class RazorGenerator
             }
         }
 
-        foreach (RazorFragment import in this.Options.Imports ?? new RazorFragment[0])
+        foreach (RazorFragment import in this.Options.Imports ?? [])
         {
             projector.Open("globalimports")
                 .Write("using ")
@@ -116,7 +116,7 @@ public class RazorGenerator
                 .WriteLine();
         }
 
-        foreach (RazorFragment import in pageData.Imports ?? new RazorFragment[0])
+        foreach (RazorFragment import in pageData.Imports ?? [])
         {
             projector.Open("localimports")
                 .Write("using ")
@@ -150,7 +150,7 @@ public class RazorGenerator
 
     private IEnumerable<RazorFragment> MergeContent(IEnumerable<RazorFragment> fragments)
     {
-        List<SqlFragment> sqlBatch = new List<SqlFragment>();
+        List<SqlFragment> sqlBatch = [];
 
         fragments = fragments.SkipWhile(f => f is SqlFragment sql && string.IsNullOrWhiteSpace(sql.Text));
 

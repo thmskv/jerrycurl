@@ -20,11 +20,11 @@ public class RazorTests
         var data = new BlogView()
         {
             Id = 1,
-            Posts = new List<BlogPost>()
-            {
+            Posts =
+            [
                 new BlogPost() { Id = 1 },
                 new BlogPost() { Id = 2, CreatedOn = DateTime.Now },
-            }
+            ]
         };
         var model = Runnable.Command(data, separator: ",");
 
@@ -66,11 +66,11 @@ public class RazorTests
         var data = new BlogView()
         {
             Id = 1,
-            Posts = new List<BlogPost>()
-            {
+            Posts =
+            [
                 new BlogPost() { Id = 1 },
                 new BlogPost() { Id = 2, CreatedOn = DateTime.Now },
-            }
+            ]
         };
         var model = Runnable.Command(data, separator: ",");
 
@@ -112,20 +112,20 @@ public class RazorTests
         {
             new BlogView()
             {
-                Posts = new List<BlogPost>()
-                {
+                Posts =
+                [
                     new BlogPost() { Id = 1, },
                     new BlogPost() { Id = 2, },
                     new BlogPost() { Id = 3, },
-                }
+                ]
             },
             new BlogView()
             {
-                Posts = new List<BlogPost>()
-                {
+                Posts =
+                [
                     new BlogPost() { Id = 4, },
                     new BlogPost() { Id = 5, },
-                }
+                ]
             }
         };
 
@@ -145,20 +145,20 @@ public class RazorTests
         {
             new BlogView()
             {
-                Posts = new List<BlogPost>()
-                {
+                Posts =
+                [
                     new BlogPost() { Id = 1, },
                     new BlogPost() { Id = 2, },
                     new BlogPost() { Id = 3, },
-                }
+                ]
             },
             new BlogView()
             {
-                Posts = new List<BlogPost>()
-                {
+                Posts =
+                [
                     new BlogPost() { Id = 4, },
                     new BlogPost() { Id = 5, },
-                }
+                ]
             }
         };
 
@@ -177,11 +177,11 @@ public class RazorTests
         var data = new BlogView()
         {
             Id = 1,
-            Posts = new List<BlogPost>()
-            {
+            Posts =
+            [
                 new BlogPost() { Id = 1 },
                 new BlogPost() { Id = 2, CreatedOn = DateTime.Now },
-            }
+            ]
         };
         var model = Runnable.Command(data, separator: ",");
 
@@ -206,11 +206,11 @@ public class RazorTests
         var data = new BlogView()
         {
             Id = 1,
-            Posts = new List<BlogPost>()
-            {
+            Posts =
+            [
                 new BlogPost() { Id = 5 },
                 new BlogPost() { Id = 12 },
-            }
+            ]
         };
         var model = Runnable.Command(data, separator: ",");
 

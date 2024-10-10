@@ -9,7 +9,7 @@ namespace Jerrycurl.Cqs.Language;
 
 public class ParameterStore : Collection<IParameter>
 {
-    private readonly Dictionary<IField, IParameter> innerMap = new Dictionary<IField, IParameter>();
+    private readonly Dictionary<IField, IParameter> innerMap = [];
 
     public char? Prefix { get; }
 
@@ -44,7 +44,7 @@ public class ParameterStore : Collection<IParameter>
 
         using IRelationReader reader = relation.GetReader();
 
-        List<IParameter> parameters = new List<IParameter>();
+        List<IParameter> parameters = [];
 
         while (reader.Read())
             parameters.AddRange(this.Add(reader));

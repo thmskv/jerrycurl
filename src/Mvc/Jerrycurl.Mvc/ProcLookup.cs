@@ -9,8 +9,8 @@ namespace Jerrycurl.Mvc;
 
 public class ProcLookup : IProcLookup
 {
-    private readonly Dictionary<ProcLookupKey, string> nameMap = new Dictionary<ProcLookupKey, string>();
-    private readonly Dictionary<string, int> prefixCount = new Dictionary<string, int>();
+    private readonly Dictionary<ProcLookupKey, string> nameMap = [];
+    private readonly Dictionary<string, int> prefixCount = [];
 
     private string FromKey(ProcLookupKey key)
     {

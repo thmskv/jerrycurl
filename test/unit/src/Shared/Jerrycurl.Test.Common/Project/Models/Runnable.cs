@@ -8,7 +8,7 @@ namespace Jerrycurl.Test.Project.Models;
 
 public class Runnable<TModel, TResult> : IRunnable
 {
-    private readonly List<ActionItem> actions = new List<ActionItem>();
+    private readonly List<ActionItem> actions = [];
     public TModel Model { get; }
     public string Separator { get; }
 

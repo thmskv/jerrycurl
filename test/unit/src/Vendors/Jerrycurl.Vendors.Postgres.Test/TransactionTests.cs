@@ -147,10 +147,10 @@ public class TransactionTests
 
     private Command[] GetMultiInsertCommands()
     {
-        return new Command[]
-        {
+        return
+        [
             new Command() { CommandText = "INSERT INTO tran_values VALUES(1); INSERT INTO tran_values VALUES(2);" },
             new Command() { CommandText = "INSERT INTO tran_values VALUES(NULL);" },
-        };
+        ];
     }
 }

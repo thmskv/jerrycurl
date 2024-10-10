@@ -27,19 +27,19 @@ public class FieldTests
         var store = DatabaseHelper.Default.Store;
         var model1 = new RootModel()
         {
-            ComplexList = new List<RootModel.SubModel>()
-            {
+            ComplexList =
+            [
                 new RootModel.SubModel() { Value = 1 },
                 new RootModel.SubModel() { Value = 2 },
-            }
+            ]
         };
         var model2 = new RootModel()
         {
-            ComplexList = new List<RootModel.SubModel>()
-            {
+            ComplexList =
+            [
                 new RootModel.SubModel() { Value = 1 },
                 new RootModel.SubModel() { Value = 2 },
-            }
+            ]
         };
 
         var result1_1 = store.From(model1).Select("ComplexList.Item.Value").Column().ToArray();

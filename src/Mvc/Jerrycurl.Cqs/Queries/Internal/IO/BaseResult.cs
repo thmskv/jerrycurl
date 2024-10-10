@@ -10,7 +10,7 @@ namespace Jerrycurl.Cqs.Queries.Internal.IO;
 internal abstract class BaseResult
 {
     public ISchema Schema { get; }
-    public List<HelperWriter> Helpers { get; set; } = new List<HelperWriter>();
+    public List<HelperWriter> Helpers { get; set; } = [];
 
     public BaseResult(ISchema schema)
     {

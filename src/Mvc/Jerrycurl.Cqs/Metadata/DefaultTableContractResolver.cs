@@ -44,7 +44,7 @@ public class DefaultTableContractResolver : ITableContractResolver
             {
                 Type declaringType = this.GetDeclaringTypeOfAttribute(metadata.Relation.Type, table);
 
-                return new[] { declaringType?.Name ?? metadata.Relation.Type.Name };
+                return [declaringType?.Name ?? metadata.Relation.Type.Name];
             }
 
             return tableName;

@@ -20,8 +20,8 @@ public static class Facts
 
     public static char Qualifier { get; } = '.';
 
-    public static IEnumerable<string> Keywords { get; } = new[] { "if", "else", "foreach", "for", "while", "using" };
-    public static IEnumerable<string> Reserved { get; } = new[] { "{", "}" };
+    public static IEnumerable<string> Keywords { get; } = ["if", "else", "foreach", "for", "while", "using"];
+    public static IEnumerable<string> Reserved { get; } = ["{", "}"];
 
     public static bool IsIdentifier(this Tokenizer tokenizer)
     {

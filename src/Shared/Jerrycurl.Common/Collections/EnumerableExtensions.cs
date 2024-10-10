@@ -9,7 +9,7 @@ internal static class EnumerableExtensions
 {
     public static IEnumerable<T> DistinctBy<T, TDistinct>(this IEnumerable<T> source, Func<T, TDistinct> keySelector)
     {
-        HashSet<TDistinct> set = new HashSet<TDistinct>();
+        HashSet<TDistinct> set = [];
 
         foreach (T value in source)
         {
@@ -25,7 +25,7 @@ internal static class EnumerableExtensions
     public static T Second<T>(this IEnumerable<T> source) => source.Skip(1).First();
     public static T SecondOrDefault<T>(this IEnumerable<T> source) => source.Skip(1).FirstOrDefault();
 
-    public static IEnumerable<T> Except<T>(this IEnumerable<T> source, T element) => source.Except(new[] { element });
+    public static IEnumerable<T> Except<T>(this IEnumerable<T> source, T element) => source.Except([element]);
 
     public static HashSet<T> ToSet<T>(this IEnumerable<T> source) => new HashSet<T>(source);
     public static HashSet<T> ToSet<T>(this IEnumerable<T> source, IEqualityComparer<T> comparer) => new HashSet<T>(source, comparer);
@@ -77,6 +77,6 @@ internal static class EnumerableExtensions
     }
 
 #if NET20_BASE
-    public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T value) => source.Concat(new[] { value });
+    public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T value) => source.Concat([value]);
 #endif
 }
