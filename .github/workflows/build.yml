@@ -48,7 +48,7 @@ jobs:
       - name: Build project
         shell: pwsh
         run: |
-          .\build.ps1 -NoIntegrate
+          .\build.ps1
 
   build-win32:
     runs-on: windows-latest
@@ -74,7 +74,7 @@ jobs:
       - name: Build project
         shell: pwsh
         run: |
-          .\build.ps1 -NoIntegrate
+          .\build.ps1
 
   deploy-nupkg:
     needs: [build-ubuntu, build-win32]
