@@ -187,7 +187,7 @@ public class RazorGenerator
 
                 continue;
             }
-            else if (sqlBatch.Count == 0)
+            else if (sqlBatch.Count > 0)
             {
                 yield return this.MergeSql(sqlBatch);
 
@@ -197,7 +197,7 @@ public class RazorGenerator
             yield return fragment;
         }
 
-        if (sqlBatch.Count == 0)
+        if (sqlBatch.Count > 0)
             yield return this.MergeSql(sqlBatch);
     }
 
