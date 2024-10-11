@@ -102,6 +102,15 @@ public class RazorParser
         return fullName;
     }
 
+    private RazorPageData Parse(RazorProjectItem item)
+    {
+        if (item.Content == null)
+            return this.Parse(item.FullPath);
+
+        var checksum = item.Checksum ?? this.GetPageChecksum(Encoding.UTF8.GetBytes(item.Content));
+
+        return this.Parse(new StringSource(item.Content), item.FullPath, checksum);
+    }
     public RazorPageData Parse(string fullPath)
     {
         byte[] fileData = File.ReadAllBytes(fullPath);

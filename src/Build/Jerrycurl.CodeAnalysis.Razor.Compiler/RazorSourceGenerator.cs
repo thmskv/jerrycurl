@@ -15,6 +15,7 @@ using Jerrycurl.Facts;
 using System.Linq;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Net;
+using System.Xml.Serialization;
 
 namespace Jerrycurl.CodeAnalysis.Razor.Compiler;
 
@@ -24,7 +25,17 @@ public class RazorSourceGenerator : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var sourceItems = context.AdditionalTextsProvider
-            .Where(static (file) => file.Path.EndsWith(".cssql", StringComparison.OrdinalIgnoreCase))
+            .Where(static file => file.Path.EndsWith(".cssql", StringComparison.OrdinalIgnoreCase))
+            .Select(static (file, cancellationToken) =>
+            {
+                var text = file.GetText(cancellationToken);
+
+                return (
+                    file.Path,
+                    Content: text.ToString(),
+                    Checksum: string.Join("", text.GetChecksum().Select(b => $"{b:x2}"))
+                );
+            })
             .Combine(context.AnalyzerConfigOptionsProvider);
 
         var importFiles = sourceItems.Where(static file =>
@@ -74,20 +85,14 @@ public class RazorSourceGenerator : IIncrementalGenerator
 
                     var project = new RazorProject()
                     {
-                        ProjectDirectory = projectDirectory.TrimEnd('\\'),
+                        ProjectDirectory = projectDirectory,
                         RootNamespace = rootNamespace,
                     };
 
-                    foreach (var (additionalFile, _) in imports)
-                        project.AddItem(additionalFile.Path);
+                    foreach (var (importText, _) in imports)
+                        project.AddItem(importText.Path, content: importText.Content, checksum: importText.Checksum);
 
-                    project.AddItem(additionalText.Path);
-
-                    var buf = new List<string>() { Guid.NewGuid().ToString() };
-                    foreach (var it in project.Items)
-                        buf.Add(it.FullPath + " / " + it.ProjectPath);
-
-                    //context.AddSource("jerry3.log", "/*" + string.Join("\n", buf) + "*/");
+                    project.AddItem(additionalText.Path, content: additionalText.Content, checksum: additionalText.Checksum);
 
                     var parser = new RazorParser();
                     var generator = new RazorGenerator(new RazorGeneratorOptions()
@@ -129,10 +134,11 @@ $endnamespace$
 
                     foreach (var razorPage in parsed)
                     {
-                        var hintName = CSharp.Identifier(razorPage.ProjectPath);
+                        var hintName = CSharp.Identifier(razorPage.ProjectPath) + ".g";
                         var projectionResult = generator.Generate(razorPage.Data);
+                        var code = projectionResult.Content;
 
-                        context.AddSource(hintName, projectionResult.Content);
+                        context.AddSource(hintName, code);
                     }
                 }
             }
