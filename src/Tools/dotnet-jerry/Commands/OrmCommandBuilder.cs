@@ -16,6 +16,7 @@ using System.Diagnostics;
 using Jerrycurl.IO;
 using System.Xml;
 using Jerrycurl.Tools.Orm.Model;
+using System.Runtime.InteropServices;
 
 namespace Jerrycurl.Tools.DotNet.Cli.Commands;
 
@@ -24,7 +25,6 @@ internal class OrmCommandBuilder : ICommandBuilder
     public const string DefaultFileName = "Database.orm";
 
     public Argument<string> ConfigArgument { get; set; }
-    //public Option<string> InputOption { get; private set; }
     public Option<string> VendorOption { get; private set; }
     public Option<string> ConnectionOption { get; private set; }
     public Option<string> NamespaceOption { get; private set; }
@@ -97,6 +97,8 @@ internal class OrmCommandBuilder : ICommandBuilder
 
                 Process.Start(startInfo);
             }
+
+            return 0;
         });
 
         return command;
@@ -132,6 +134,8 @@ internal class OrmCommandBuilder : ICommandBuilder
 
             await foreach (var tuple in tool.QueryAsync(command))
                 Console.WriteLine(tuple.Serialize());
+
+            return 0;
         });
 
         return command;
@@ -139,14 +143,20 @@ internal class OrmCommandBuilder : ICommandBuilder
 
     private Command GetDiffCommand()
     {
+        var ciOption = this.Option<bool>(["--ci"], "Returns a non-zero exit code if files are not equal. For use with CI systems.");
+
         Command command = new Command("diff", "Run a simple diff to check that your current C# classes matches the database schema.")
         {
-            this.ConfigArgument, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption
+            this.ConfigArgument, this.ConnectionOption, this.VendorOption, this.NamespaceOption, this.OutputOption, this.TransformOption, this.FlagsOption, ciOption
         };
 
-        this.SetHandler(command, async (_, tool, options) =>
+        this.SetHandler(command, async (context, tool, options) =>
         {
-            string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName(), "diff.right.cs");
+            options.Output ??= $"{options.Input}.cs";
+            options.Transform ??= $"{options.Input}.js";
+
+            bool ciMode = context.GetValue(ciOption);
+            string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             string leftPath = Path.Combine(tempPath, "diff.left.cs");
             string rightPath = Path.Combine(tempPath, "diff.right.cs");
 
@@ -159,13 +169,43 @@ internal class OrmCommandBuilder : ICommandBuilder
 
             await this.BuildAndWriteAsync(tool, options, rightPath);
 
-            byte[] leftBytes = await File.ReadAllBytesAsync(leftPath);
-            byte[] rightBytes = await File.ReadAllBytesAsync(rightPath);
+            var leftLines = await File.ReadAllLinesAsync(leftPath, Encoding.UTF8);
+            var rightLines = await File.ReadAllLinesAsync(rightPath, Encoding.UTF8);
 
-            if (leftBytes.SequenceEqual(rightBytes))
-                DotNetHost.WriteLine("Files are equal", ConsoleColor.Green);
+            var leftText = string.Join("\n", leftLines);
+            var rightText = string.Join("\n", rightLines);
+
+            var diff = OrmDiff.DiffText(leftText, rightText, trimSpace: true, ignoreSpace: true, ignoreCase: false);
+
+            if (!ciMode)
+            {
+                foreach (var item in diff)
+                {
+                    for (var ln = item.StartA; ln < item.StartA + item.deletedA; ln++)
+                    {
+                        DotNetHost.Write($"- ", ConsoleColor.Red);
+                        DotNetHost.Write($"{ln}: ");
+                        DotNetHost.WriteLine(leftLines[ln]);
+                    }
+
+                    for (var ln = item.StartB; ln < item.StartB + item.insertedB; ln++)
+                    {
+                        DotNetHost.Write("+ ", ConsoleColor.Green);
+                        DotNetHost.Write($"{ln}: ");
+                        DotNetHost.WriteLine(rightLines[ln]);
+                    }
+                }
+            }
+            else if (diff.Any())
+            {
+                DotNetHost.WriteLine("Files are not equal.", ConsoleColor.Red);
+
+                return -48;
+            }
             else
-                DotNetHost.WriteLine("Files are not equal", ConsoleColor.Red);
+                DotNetHost.WriteLine("Files are equal.", ConsoleColor.Green);
+
+            return 0;
         });
 
         return command;
@@ -211,6 +251,8 @@ internal class OrmCommandBuilder : ICommandBuilder
 
                 await this.BuildAndWriteAsync(tool, options);
             }
+
+            return 0;
         });
 
         return command;
@@ -229,6 +271,8 @@ internal class OrmCommandBuilder : ICommandBuilder
             options.Transform ??= $"{options.Input}.js";
 
             await this.BuildAndWriteAsync(tool, options);
+
+            return 0;
         });
 
         return command;
@@ -254,9 +298,10 @@ internal class OrmCommandBuilder : ICommandBuilder
     {
         SchemaModel schema = await tool.BuildAsync(options, new ToolConsole());
 
-        await tool.WriteAsync(schema, options, new ToolConsole());
+        await tool.WriteAsync(schema, options, new ToolConsole(), outputPath);
     }
-    private void SetHandler(Command command, Func<InvocationContext, OrmTool, OrmToolOptions, Task> handler)
+
+    private void SetHandler(Command command, Func<InvocationContext, OrmTool, OrmToolOptions, Task<int>> handler)
     {
         command.SetHandler(async context =>
         {

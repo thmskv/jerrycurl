@@ -17,66 +17,69 @@ internal class OrmCodeWriter
         PathHelper.EnsureDirectory(writePath);
 
         using (StreamWriter fileWriter = new StreamWriter(writePath, append: false, Encoding.UTF8))
-        {
-            CSharpWriter writer = new CSharpWriter(fileWriter);
-
-            string noWarn = schema.Flags?.GetValueOrDefault("noWarn");
-
-            if (!string.IsNullOrWhiteSpace(noWarn))
-                await writer.WritePragmaDirectiveAsync($"warning disable {noWarn}");
-
-            if (schema.Imports.Any())
-            {
-                foreach (string import in schema.Imports)
-                    await writer.WriteImportAsync(import);
-
-                await writer.WriteLineAsync();
-            }
-
-            foreach (var namespaceGroup in schema.Tables.OrderBy(fg => fg.Clr.Namespace).GroupBy(fg => fg.Clr.Namespace).OrderBy(g => g.Key))
-            {
-                string ns = namespaceGroup.Key;
-
-                if (!string.IsNullOrWhiteSpace(ns))
-                    await writer.WriteNamespaceStartAsync(ns);
-
-                foreach (SchemaModel.TableModel table in namespaceGroup.NotNull().Where(t => !t.Ignore).OrderBy(t => t.Schema).ThenBy(t => t.Name))
-                {
-                    string warningMessage = this.GetWarningMessage(table);
-
-                    if (warningMessage != null)
-                    {
-                        await writer.WriteWarningDirectiveAsync($"Table ignored. {warningMessage}");
-
-                        continue;
-                    }
-
-                    if (table.Schema == null)
-                        writer.AddAttribute("Table", table.Name);
-                    else
-                        writer.AddAttribute("Table", table.Schema, table.Name);
-
-                    await writer.WriteAttributesAsync();
-                    await writer.WriteObjectStartAsync(table.Clr.IsStruct ? "struct" : "class", table.Clr.Name, table.Clr.Modifiers, table.Clr.BaseTypes);
-
-                    await this.WriteColumnsAsync(writer, table);
-
-                    await writer.WriteObjectEndAsync();
-                    await writer.WriteLineAsync();
-                }
-
-                if (!string.IsNullOrWhiteSpace(ns))
-                    await writer.WriteNamespaceEndAsync();
-            }
-
-            if (!string.IsNullOrWhiteSpace(noWarn))
-                await writer.WritePragmaDirectiveAsync($"warning enable {noWarn}");
-        }
+            await this.WriteAsync(fileWriter, schema);
 
         if (options.Verbose)
             this.WriteVerboseOutput(options, schema, console);
         else
             this.WriteOutput(options, schema, console);
+    }
+
+    private async Task WriteAsync(TextWriter textWriter, SchemaModel schema)
+    {
+        CSharpWriter writer = new CSharpWriter(textWriter);
+
+        string noWarn = schema.Flags?.GetValueOrDefault("noWarn");
+
+        if (!string.IsNullOrWhiteSpace(noWarn))
+            await writer.WritePragmaDirectiveAsync($"warning disable {noWarn}");
+
+        if (schema.Imports.Any())
+        {
+            foreach (string import in schema.Imports)
+                await writer.WriteImportAsync(import);
+
+            await writer.WriteLineAsync();
+        }
+
+        foreach (var namespaceGroup in schema.Tables.OrderBy(fg => fg.Clr.Namespace).GroupBy(fg => fg.Clr.Namespace).OrderBy(g => g.Key))
+        {
+            string ns = namespaceGroup.Key;
+
+            if (!string.IsNullOrWhiteSpace(ns))
+                await writer.WriteNamespaceStartAsync(ns);
+
+            foreach (SchemaModel.TableModel table in namespaceGroup.NotNull().Where(t => !t.Ignore).OrderBy(t => t.Schema).ThenBy(t => t.Name))
+            {
+                string warningMessage = this.GetWarningMessage(table);
+
+                if (warningMessage != null)
+                {
+                    await writer.WriteWarningDirectiveAsync($"Table ignored. {warningMessage}");
+
+                    continue;
+                }
+
+                if (table.Schema == null)
+                    writer.AddAttribute("Table", table.Name);
+                else
+                    writer.AddAttribute("Table", table.Schema, table.Name);
+
+                await writer.WriteAttributesAsync();
+                await writer.WriteObjectStartAsync(table.Clr.IsStruct ? "struct" : "class", table.Clr.Name, table.Clr.Modifiers, table.Clr.BaseTypes);
+
+                await this.WriteColumnsAsync(writer, table);
+
+                await writer.WriteObjectEndAsync();
+                await writer.WriteLineAsync();
+            }
+
+            if (!string.IsNullOrWhiteSpace(ns))
+                await writer.WriteNamespaceEndAsync();
+        }
+
+        if (!string.IsNullOrWhiteSpace(noWarn))
+            await writer.WritePragmaDirectiveAsync($"warning enable {noWarn}");
     }
 
     private async Task WriteColumnsAsync(CSharpWriter writer, SchemaModel.TableModel tableModel)

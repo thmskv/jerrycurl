@@ -23,9 +23,10 @@ public class DotNetHost
     public async static Task<int> Main(string[] args)
     {
 #if DEBUG
-        
+
         //Environment.CurrentDirectory = "C:\\Users\\thomas\\Desktop\\testx";
 
+        args = new[] { "orm", "diff", @"c:\users\thomas\desktop\Database.orm" };
         //args = new[] { "orm", "sync", "--flags", "useNullables" };
         //args = new[] { "orm", "new", "-v", "sqlserver", "-c", "server=.;database=gerstl_120922;trusted_connection=true;encrypt=false", "-i", @"c:\users\thomas\desktop\Database.orm", "--debug", @"c:\users\thomas\desktop\Database.log" };
         //args = new[] { "orm", "sync", "--vendor", "sqlserver", "-c", "server=.;database=gerstl_120922;trusted_connection=true;encrypt=false", "-ns", "Kaffezars", "--verbose", "--logo" };
@@ -133,6 +134,15 @@ public class DotNetHost
             Console.ForegroundColor = color.Value;
 
         Console.WriteLine(message);
+        Console.ResetColor();
+    }
+
+    public static void Write(string message, ConsoleColor? color = null)
+    {
+        if (color != null)
+            Console.ForegroundColor = color.Value;
+
+        Console.Write(message);
         Console.ResetColor();
     }
 
