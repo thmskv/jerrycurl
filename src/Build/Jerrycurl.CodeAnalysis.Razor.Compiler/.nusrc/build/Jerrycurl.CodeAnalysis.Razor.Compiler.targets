@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 	<PropertyGroup>
-		<JerrycurlSkeletonPath Condition=" '$(JerrycurlSkeletonPath)' == '' ">$(MSBuildThisFileDirectory)skeleton.jerry</JerrycurlSkeletonPath>
+		<JerrycurlSkeletonPath Condition=" '$(JerrycurlSkeletonPath)' == '' ">$(MSBuildThisFileDirectory)RazorSkeleton.cs.txt</JerrycurlSkeletonPath>
 		<JerrycurlIntermediatePath Condition=" '$(JerrycurlIntermediatePath)' == '' ">$(IntermediateOutputPath)Jerrycurl</JerrycurlIntermediatePath>
 		<JerrycurlRootNamespace Condition=" '$(JerrycurlRootNamespace)' == '' ">$(RootNamespace)</JerrycurlRootNamespace>
 		<JerrycurlVerbose Condition=" '$(JerrycurlVerbose)' == '' ">false</JerrycurlVerbose>

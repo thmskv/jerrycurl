@@ -50,12 +50,12 @@ public class RazorImportConvention : IRazorProjectConvention
 
     private bool IsImportFor(RazorPage importPage, RazorPage resultPage)
     {
-        if (resultPage.ProjectPath == null)
+        if (resultPage.Path == null)
             return false;
 
-        string importDir = Path.GetDirectoryName(importPage.ProjectPath);
+        string importDir = Path.GetDirectoryName(importPage.Path);
 
-        return PathHelper.IsRelativeTo(resultPage.ProjectPath, importDir);
+        return PathHelper.IsRelativeTo(resultPage.Path, importDir);
     }
 
     private bool IsImport(RazorPage page)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using Jerrycurl.Cqs.Commands;
 using Jerrycurl.Cqs.Queries;
 
@@ -250,7 +251,16 @@ public abstract class Accessor
 
         QueryEngine engine = new QueryEngine(queryOptions);
 
-        return await engine.ExecuteAsync<IList<TItem>>(queries, QueryType.List, cancellationToken).ConfigureAwait(false);
+        try
+        {
+            return await engine.ExecuteAsync<IList<TItem>>(queries, QueryType.List, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            result.Page.Throw(ex);
+
+            throw;
+        }
     }
 
     /// <summary>
@@ -290,7 +300,16 @@ public abstract class Accessor
 
         CommandEngine engine = new CommandEngine(commandOptions);
 
-        engine.Execute(commands);
+        try
+        {
+            engine.Execute(commands);
+        }
+        catch (Exception ex)
+        {
+            result.Page.Throw(ex);
+
+            throw;
+        }
     }
 
     /// <summary>
@@ -333,7 +352,16 @@ public abstract class Accessor
 
         CommandEngine engine = new CommandEngine(commandOptions);
 
-        await engine.ExecuteAsync(commands, cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await engine.ExecuteAsync(commands, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            result.Page.Throw(ex);
+
+            throw;
+        }
     }
 
     private IProcResult ExecuteAndGetResult(string procName, object model, ProcArgs args)
@@ -392,12 +420,21 @@ public abstract class Accessor
 
         QueryEngine engine = new QueryEngine(queryOptions);
 
-        IList<T> list = engine.Execute<IList<T>>(queries, QueryType.Aggregate);
+        try
+        {
+            IList<T> list = engine.Execute<IList<T>>(queries, QueryType.Aggregate);
 
-        if (list == null || list.Count == 0)
-            return default;
+            if (list == null || list.Count == 0)
+                return default;
 
-        return list[0];
+            return list[0];
+        }
+        catch (Exception ex)
+        {
+            result.Page.Throw(ex);
+
+            throw;
+        }
     }
 
     /// <summary>
@@ -432,12 +469,21 @@ public abstract class Accessor
 
         QueryEngine engine = new QueryEngine(queryOptions);
 
-        IList<T> list = await engine.ExecuteAsync<IList<T>>(queries, QueryType.Aggregate, cancellationToken).ConfigureAwait(false);
+        try
+        {
+            IList<T> list = await engine.ExecuteAsync<IList<T>>(queries, QueryType.Aggregate, cancellationToken).ConfigureAwait(false);
 
-        if (list == null || list.Count == 0)
-            return default;
+            if (list == null || list.Count == 0)
+                return default;
 
-        return list[0];
+            return list[0];
+        }
+        catch (Exception ex)
+        {
+            result.Page.Throw(ex);
+
+            throw;
+        }
     }
     #endregion
 }

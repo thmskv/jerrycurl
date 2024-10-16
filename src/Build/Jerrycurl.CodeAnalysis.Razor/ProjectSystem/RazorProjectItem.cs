@@ -7,8 +7,10 @@ public class RazorProjectItem
 {
     public string ProjectPath { get; set; }
     public string FullPath { get; set; }
+    public string Content { get; set; }
+    public string Checksum { get; set; }
 
-    public static RazorProjectItem Create(string path, string projectDirectory = null)
+    public static RazorProjectItem Create(string path, string projectDirectory = null, string content = null, string checksum = null)
     {
         if (string.IsNullOrEmpty(projectDirectory))
             return new RazorProjectItem() { FullPath = path };
@@ -19,6 +21,8 @@ public class RazorProjectItem
         {
             ProjectPath = relativePath,
             FullPath = absolutePath,
+            Content = content,
+            Checksum = checksum,
         };
     }
 }

@@ -13,11 +13,11 @@ public class RazorProject
     public IList<RazorProjectItem> Items { get; set; } = [];
     public IEnumerable<IRazorProjectConvention> Conventions { get; set; } = RazorProjectConventions.Default;
 
-    public RazorProjectItem AddItem(string path)
+    public RazorProjectItem AddItem(string path, string content = null, string checksum = null)
     {
         this.Items ??= [];
 
-        RazorProjectItem newItem = RazorProjectItem.Create(path, this.ProjectDirectory);
+        RazorProjectItem newItem = RazorProjectItem.Create(path, this.ProjectDirectory, content, checksum);
 
         this.Items.Add(newItem);
 

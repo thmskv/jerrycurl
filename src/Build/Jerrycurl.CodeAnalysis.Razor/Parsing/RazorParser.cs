@@ -51,7 +51,7 @@ public class RazorParser
                 throw new InvalidOperationException($"Error parsing file at index {project.Items.IndexOf(item)}. Path cannot be empty.");
             else if (!Path.IsPathRooted(item.FullPath))
                 throw new InvalidOperationException(Error("Path must be rooted."));
-            else if (!File.Exists(item.FullPath))
+            else if (!File.Exists(item.FullPath) && item.Content == null)
                 throw new FileNotFoundException(Error("File not found."));
             else if (!hasProjectDirectory && !hasProjectPath)
                 throw new InvalidOperationException(Error($"ProjectPath must be specified when no ProjectDirectory is present."));
@@ -64,7 +64,7 @@ public class RazorParser
             if (projectPath == null)
                 throw new InvalidOperationException(Error($"ProjectPath '{item.ProjectPath}' must be relative to to ProjectDirectory '{project.ProjectDirectory}'."));
 
-            RazorPageData pageData = this.Parse(item.FullPath);
+            RazorPageData pageData = this.Parse(item);
 
             yield return new RazorPage()
             {
@@ -102,6 +102,15 @@ public class RazorParser
         return fullName;
     }
 
+    private RazorPageData Parse(RazorProjectItem item)
+    {
+        if (item.Content == null)
+            return this.Parse(item.FullPath);
+
+        var checksum = item.Checksum ?? this.GetPageChecksum(Encoding.UTF8.GetBytes(item.Content));
+
+        return this.Parse(new StringSource(item.Content), item.FullPath, checksum);
+    }
     public RazorPageData Parse(string fullPath)
     {
         byte[] fileData = File.ReadAllBytes(fullPath);
