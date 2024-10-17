@@ -25,13 +25,6 @@ public class RazorSourceGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        var options = context.ParseOptionsProvider.Select((opt, _) => opt as CSharpParseOptions);
-
-        context.RegisterSourceOutput(options, (context, data) =>
-        {
-            context.AddSource("_ParseOptions", "/*" + data.Language + " " + data.LanguageVersion + " " + data.SpecifiedLanguageVersion + "*/");
-        });
-
         var sourceItems = context.AdditionalTextsProvider
             .Where(static file => file.Path.EndsWith(".cssql", StringComparison.OrdinalIgnoreCase))
             .Select(static (file, cancellationToken) =>

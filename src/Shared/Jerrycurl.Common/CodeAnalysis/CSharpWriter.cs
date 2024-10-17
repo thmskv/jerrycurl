@@ -9,16 +9,16 @@ namespace Jerrycurl.CodeAnalysis;
 internal class CSharpWriter
 {
     public CSharpFlags Flags { get; }
-		protected TextWriter TextWriter { get; }
+    protected TextWriter TextWriter { get; }
 
-		private int indentation = 0;
+    private int indentation = 0;
     private readonly List<AttributeModel> attributeBuffer = [];
 
-		public CSharpWriter(TextWriter textWriter, CSharpFlags flags = CSharpFlags.AutoIndent)
-		{
-			this.TextWriter = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
+    public CSharpWriter(TextWriter textWriter, CSharpFlags flags = CSharpFlags.AutoIndent)
+    {
+        this.TextWriter = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
         this.Flags = flags;
-		}
+    }
 
     public async Task WriteImportAsync(string definition)
     {

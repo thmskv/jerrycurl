@@ -4,8 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <IsPackable>true</IsPackable>
     <IsRoslynComponent>true</IsRoslynComponent>
-    <NoWarn>$(NoWarn);NU5100</NoWarn>
-    <!--<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>-->
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
   </PropertyGroup>
 
   <ItemGroup>
