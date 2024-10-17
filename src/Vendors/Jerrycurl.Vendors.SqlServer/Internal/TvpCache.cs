@@ -1,11 +1,7 @@
 ﻿using Jerrycurl.Relations;
 using System;
 using System.Collections.Concurrent;
-#if NET20_BASE
-using System.Data.SqlClient;
-#else
 using Microsoft.Data.SqlClient;
-#endif
 
 
 namespace Jerrycurl.Vendors.SqlServer.Internal;

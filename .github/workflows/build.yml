@@ -5,28 +5,14 @@ on:
     branches:
       - main
       - release/*
-      - feat/source-generators
+      - feat/*
 jobs:
   build-ubuntu:
     runs-on: ubuntu-latest
     env:
       JERRY_MYSQL_CONN: SERVER=localhost;DATABASE=jerry_testdb;
-      JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;Integrated Security=true;
-      JERRY_ORACLE_CONN: DATA SOURCE=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=XEPDB1)));USER ID=jerryuser;PASSWORD=jerrypass12!
-    services:
-      oracle:
-        image: gvenzl/oracle-xe:latest-faststart
-        env:
-          ORACLE_RANDOM_PASSWORD: true
-          APP_USER: jerryuser
-          APP_USER_PASSWORD: jerrypass12!
-        ports:
-          - 1521:1521
-        options: >-
-          --health-cmd healthcheck.sh
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+      JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;
+      JERRY_ORACLE_CONN: DATA SOURCE=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=FREEPDB1)));USER ID=jerryuser;PASSWORD=jerrypass12!
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
@@ -35,7 +21,6 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            3.1.x
             8.0.x
       - name: Set up MySQL
         uses: ankane/setup-mysql@v1
@@ -45,6 +30,11 @@ jobs:
         uses: ankane/setup-postgres@v1
         with:
           database: jerry_testdb
+      - name: Set up Oracle
+        uses: gvenzl/setup-oracle-free@v1
+        with:
+          app-user: jerryuser
+          app-user-password: jerrypass12!
       - name: Build project
         shell: pwsh
         run: |
@@ -62,7 +52,6 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            3.1.x
             8.0.x
       - name: Set up SQL Server
         uses: ankane/setup-sqlserver@v1

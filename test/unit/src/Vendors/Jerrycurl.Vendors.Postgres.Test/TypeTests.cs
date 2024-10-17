@@ -105,8 +105,7 @@ CREATE TABLE jerry_types(
         fromDb.Money.ShouldBe(sample.Money);
         fromDb.Xml.ToString().ShouldBe(sample.Xml.ToString());
         fromDb.Interval.ShouldBe(sample.Interval);
-        fromDb.Cidr.Item1.ShouldBe(sample.Cidr.Item1);
-        fromDb.Cidr.Item2.ShouldBe(sample.Cidr.Item2);
+        fromDb.Cidr.ShouldBe(sample.Cidr);
         fromDb.Inet.ShouldBe(sample.Inet);
         fromDb.Macaddr.ShouldBe(sample.Macaddr);
     }

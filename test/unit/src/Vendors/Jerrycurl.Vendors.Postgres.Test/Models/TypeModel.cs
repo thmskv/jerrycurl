@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Xml.Linq;
 using Jerrycurl.Cqs.Metadata.Annotations;
+using NpgsqlTypes;
 
 namespace Jerrycurl.Vendors.Postgres.Test.Models;
 
@@ -32,7 +35,7 @@ public class TypeModel
     public XDocument Xml { get; set; }
     public PhysicalAddress Macaddr { get; set; }
     public IPAddress Inet { get; set; }
-    public (IPAddress, int) Cidr { get; set; }
+    public NpgsqlCidr Cidr { get; set; }
 
     public int[] ArrayOfInt { get; set; }
     public string[] ArrayOfVarChar { get; set; }
@@ -63,7 +66,7 @@ public class TypeModel
             Bytea = Encoding.ASCII.GetBytes("Jerrycurl"),
             Xml = XDocument.Parse("<jerry>curl</jerry>"),
             Interval = new TimeSpan(-10, -9, -8),
-            Cidr = (IPAddress.Parse("172.100.50.2"), 31),
+            Cidr = new NpgsqlCidr(IPAddress.Parse("172.100.50.2"), 31),
             Inet = IPAddress.Parse("172.100.50.1"),
             Macaddr = PhysicalAddress.Parse("F0-E1-D2-C3-B4-A5"),
         };

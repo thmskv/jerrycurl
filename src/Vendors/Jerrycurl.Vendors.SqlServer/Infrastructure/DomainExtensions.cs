@@ -1,11 +1,9 @@
 ﻿using Jerrycurl.Vendors.SqlServer.Metadata;
-#if NET20_BASE
-using System.Data.SqlClient;
-#else
 using Microsoft.Data.SqlClient;
-#endif
 
+#pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace Jerrycurl.Mvc;
+#pragma warning restore IDE0130 // Namespace does not match folder structure
 
 public static class DomainExtensions
 {

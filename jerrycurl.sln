@@ -35,8 +35,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-jerry", "src\Tools\d
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{B2DC1C0A-AC90-4CC2-A779-6EB280FBFDE7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jerrycurl.Build.Razor", "src\Build\Jerrycurl.Build.Razor\Jerrycurl.Build.Razor.csproj", "{E5748293-E43D-41C0-9E8B-DF5AEC09CA6E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C19306F0-9C96-4B89-8FC6-D9B4FADD7E93}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6DBC9D88-2A8B-49BA-A95B-386C4C4DCF16}"
@@ -89,9 +87,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{6E68DF2C-4311-4371-A729-BEB90D3168E1}"
 	ProjectSection(SolutionItems) = preProject
 		eng\nuspec\dotnet-jerry.nuspec = eng\nuspec\dotnet-jerry.nuspec
-		eng\nuspec\Jerrycurl.Build.Razor.nuspec = eng\nuspec\Jerrycurl.Build.Razor.nuspec
-		eng\nuspec\Jerrycurl.CodeAnalysis.Razor.nuspec = eng\nuspec\Jerrycurl.CodeAnalysis.Razor.nuspec
 		eng\nuspec\Jerrycurl.CodeAnalysis.Razor.Compiler.nuspec = eng\nuspec\Jerrycurl.CodeAnalysis.Razor.Compiler.nuspec
+		eng\nuspec\Jerrycurl.CodeAnalysis.Razor.nuspec = eng\nuspec\Jerrycurl.CodeAnalysis.Razor.nuspec
 		eng\nuspec\Jerrycurl.Cqs.nuspec = eng\nuspec\Jerrycurl.Cqs.nuspec
 		eng\nuspec\Jerrycurl.Extensions.EntityFrameworkCore.nuspec = eng\nuspec\Jerrycurl.Extensions.EntityFrameworkCore.nuspec
 		eng\nuspec\Jerrycurl.Extensions.Json.nuspec = eng\nuspec\Jerrycurl.Extensions.Json.nuspec
@@ -135,7 +132,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jerrycurl.Test.Common", "te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jerrycurl.Tools.Vendors", "src\Tools\Jerrycurl.Tools.Vendors\Jerrycurl.Tools.Vendors.csproj", "{52CE1C72-42C4-48F8-9C9E-7997D5F0437F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jerrycurl.CodeAnalysis.Razor.Compiler", "src\Build\Jerrycurl.CodeAnalysis.Razor.Compiler\Jerrycurl.CodeAnalysis.Razor.Compiler.csproj", "{76DFABA8-DD39-4A1A-B1AF-BC91DB2DC8DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jerrycurl.CodeAnalysis.Razor.Compiler", "src\Build\Jerrycurl.CodeAnalysis.Razor.Compiler\Jerrycurl.CodeAnalysis.Razor.Compiler.csproj", "{76DFABA8-DD39-4A1A-B1AF-BC91DB2DC8DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -191,10 +188,6 @@ Global
 		{195AF90B-B4F3-441A-BD6F-333858A84FC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{195AF90B-B4F3-441A-BD6F-333858A84FC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{195AF90B-B4F3-441A-BD6F-333858A84FC5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E5748293-E43D-41C0-9E8B-DF5AEC09CA6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5748293-E43D-41C0-9E8B-DF5AEC09CA6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5748293-E43D-41C0-9E8B-DF5AEC09CA6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5748293-E43D-41C0-9E8B-DF5AEC09CA6E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6A183412-A8FA-474B-8959-EAA02D87B1A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A183412-A8FA-474B-8959-EAA02D87B1A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A183412-A8FA-474B-8959-EAA02D87B1A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -292,7 +285,6 @@ Global
 		{3CEE141F-14EF-4816-A524-3E6A42DC6895} = {24A35FDF-4168-4F4D-9CEB-CE73E428B132}
 		{195AF90B-B4F3-441A-BD6F-333858A84FC5} = {24A35FDF-4168-4F4D-9CEB-CE73E428B132}
 		{B2DC1C0A-AC90-4CC2-A779-6EB280FBFDE7} = {C19306F0-9C96-4B89-8FC6-D9B4FADD7E93}
-		{E5748293-E43D-41C0-9E8B-DF5AEC09CA6E} = {B2DC1C0A-AC90-4CC2-A779-6EB280FBFDE7}
 		{6A183412-A8FA-474B-8959-EAA02D87B1A8} = {B2DC1C0A-AC90-4CC2-A779-6EB280FBFDE7}
 		{09324D8F-15D8-4CF0-A808-7CB8B9BBC047} = {B2DC1C0A-AC90-4CC2-A779-6EB280FBFDE7}
 		{4BBB040A-7EF4-47E5-85F3-FD4FC38BCC17} = {64E7AA0B-8D96-4CA0-972F-E40BD32A7CFC}
@@ -340,7 +332,6 @@ Global
 		src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems*{a1959cf9-3b32-4b30-ad33-d6fd35f44203}*SharedItemsImports = 5
 		src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems*{d3df6be3-83eb-490f-a774-68af3adabbbd}*SharedItemsImports = 5
 		src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems*{ded3df47-4e41-4fb6-93af-bdc13098cc93}*SharedItemsImports = 13
-		src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems*{e5748293-e43d-41c0-9e8b-df5aec09ca6e}*SharedItemsImports = 5
 		src\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems*{f2d073a9-fe93-46e2-9f74-810aa72e9b8b}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

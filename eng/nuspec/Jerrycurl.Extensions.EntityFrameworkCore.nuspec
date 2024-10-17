@@ -16,10 +16,6 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Entity Framework Core integration for Jerrycurl.</description>
         <dependencies>
-            <group targetFramework="netstandard2.0">
-                <dependency id="Microsoft.EntityFrameworkCore.Relational" version="$EntityFrameworkCorePackageVersion_net20$" />
-                <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
-            </group>
             <group targetFramework="$NetMoniker$">
                 <dependency id="Microsoft.EntityFrameworkCore.Relational" version="$EntityFrameworkCorePackageVersion$" />
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />

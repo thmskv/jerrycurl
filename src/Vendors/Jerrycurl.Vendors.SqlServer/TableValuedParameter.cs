@@ -8,13 +8,8 @@ using Jerrycurl.Relations;
 using Jerrycurl.Relations.Metadata;
 using Jerrycurl.Vendors.SqlServer.Internal;
 using BindingException = Jerrycurl.Cqs.Metadata.BindingException;
-#if NET20_BASE
-using System.Data.SqlClient;
-using Microsoft.SqlServer.Server;
-#else
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.SqlClient.Server;
-#endif
 
 namespace Jerrycurl.Vendors.SqlServer;
 

@@ -67,12 +67,9 @@
 				AssemblyName=$(AssemblyName);
 				BinPath=$(MSBuildProjectDirectory)\$(OutputPath);
 				SqlServerPackageId=$(SqlServerPackageId);
-				SqlServerPackageId_net20=$(SqlServerPackageId_net20);
 				SqlServerPackageVersion=$(SqlServerPackageVersion);
-				SqlServerPackageVersion_net20=$(SqlServerPackageVersion_net20);
 				SqlitePackageId=$(SqlitePackageId);
 				SqlitePackageVersion=$(SqlitePackageVersion);
-				SqlitePackageVersion_net20=$(SqlitePackageVersion_net20);
 				OraclePackageId=$(OraclePackageId);
 				OraclePackageVersion=$(OraclePackageVersion);
 				OraclePackageVersion_net20=$(OraclePackageVersion_net20);
@@ -81,7 +78,6 @@
 				PostgresPackageId=$(PostgresPackageId);
 				PostgresPackageVersion=$(PostgresPackageVersion);
 				EntityFrameworkCorePackageVersion=$(EntityFrameworkCorePackageVersion);
-				EntityFrameworkCorePackageVersion_net20=$(EntityFrameworkCorePackageVersion_net20);
 				JsonNetPackageVersion=$(JsonNetPackageVersion);
 				JsonPackageVersion=$(JsonPackageVersion);
 				CSharpPackageVersion=$(CSharpPackageVersion);
