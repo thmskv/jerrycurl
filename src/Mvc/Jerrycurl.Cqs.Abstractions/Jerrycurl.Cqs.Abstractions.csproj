@@ -5,7 +5,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(AsyncInterfacesPackageVersion)" />
+		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(AsyncInterfacesPackageVersion)" Condition="'$(TargetFramework)' == '$(NetStandardMoniker)'" />
 	</ItemGroup>
 
 	<ItemGroup>
