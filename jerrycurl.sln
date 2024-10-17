@@ -33,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jerrycurl.Tools", "src\Tool
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-jerry", "src\Tools\dotnet-jerry\dotnet-jerry.csproj", "{195AF90B-B4F3-441A-BD6F-333858A84FC5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{B2DC1C0A-AC90-4CC2-A779-6EB280FBFDE7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeAnalysis", "CodeAnalysis", "{B2DC1C0A-AC90-4CC2-A779-6EB280FBFDE7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C19306F0-9C96-4B89-8FC6-D9B4FADD7E93}"
 EndProject
