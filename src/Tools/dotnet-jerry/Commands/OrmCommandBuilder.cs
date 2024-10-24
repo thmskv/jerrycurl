@@ -305,7 +305,7 @@ internal class OrmCommandBuilder : ICommandBuilder
     {
         command.SetHandler(async context =>
         {
-            string configValue = context.GetValue(this.ConfigArgument);
+            string configValue = GetConfigValue();
             string vendorValue = context.GetValue(this.VendorOption);
             string connectionValue = context.GetValue(this.ConnectionOption);
             string outputValue = context.GetValue(this.OutputOption);
@@ -354,6 +354,16 @@ internal class OrmCommandBuilder : ICommandBuilder
             OrmTool tool = ToolResolver.GetOrmTool(options.Vendor);
 
             await handler(context, tool, options);
+
+            string GetConfigValue()
+            {
+                var rawValue = context.GetValue(this.ConfigArgument);
+
+                if (rawValue != null && !rawValue.EndsWith(".orm"))
+                    return rawValue + ".orm";
+
+                return rawValue;
+            }
         });
     }
 }
