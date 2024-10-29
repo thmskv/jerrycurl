@@ -7,6 +7,7 @@ using System.Reflection;
 using Jerrycurl.Cqs.Metadata;
 using Jerrycurl.Cqs.Metadata.Annotations;
 using Jerrycurl.Reflection;
+using Jerrycurl.Relations.Metadata;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -95,7 +96,16 @@ public class NewtonsoftJsonBindingContractResolver : IBindingContractResolver
         }
     }
 
-    private bool HasJsonAttribute(IBindingMetadata metadata) => metadata.Relation.Annotations.OfType<JsonAttribute>().Any();
+    private bool HasJsonAttribute(IBindingMetadata metadata)
+    {
+        if (metadata.Relation.Annotations.OfType<JsonAttribute>().Any())
+            return true;
+
+        if (metadata.Relation.HasFlag(RelationMetadataFlags.List) && metadata.Relation.Item.Annotations.OfType<JsonAttribute>().Any())
+            return true;
+
+        return false;
+    }
     private bool IsNativeJToken(IBindingMetadata metadata) => (metadata.Type == typeof(JToken));
 
     public IBindingParameterContract GetParameterContract(IBindingMetadata metadata)

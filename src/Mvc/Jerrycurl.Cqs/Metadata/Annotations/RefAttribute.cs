@@ -8,6 +8,7 @@ public class RefAttribute : Attribute
     public string KeyName { get; set; }
     public int Index { get; set; }
     public string Name { get; set; }
+    public string PropName { get; set; }
 
     public RefAttribute()
     {

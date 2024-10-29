@@ -4,9 +4,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Jerrycurl.Cqs.Metadata;
 using Jerrycurl.Cqs.Metadata.Annotations;
 using Jerrycurl.Reflection;
+using Jerrycurl.Relations.Metadata;
 
 namespace Jerrycurl.Extensions.Json.Metadata;
 
@@ -54,33 +56,12 @@ public class JsonBindingContractResolver : IBindingContractResolver
         if (value.Type == typeof(object))
             value = Expression.Convert(value, typeof(string));
 
-        Expression targetValue;
-
-        if (valueInfo.TargetType == typeof(JsonDocument))
-            targetValue = this.GetParseDocumentExpression(valueInfo.Metadata, value);
-        else if (valueInfo.TargetType == typeof(JsonElement))
-            targetValue = this.GetParseElementExpression(valueInfo.Metadata, value);
-        else
-            targetValue = this.GetDeserializeExpression(valueInfo.Metadata, value, valueInfo.Helper);
+        Expression targetValue = this.GetDeserializeExpression(valueInfo.Metadata, value, valueInfo.Helper);
 
         if (nullCheck != null)
             return Expression.Condition(nullCheck, Expression.Default(targetValue.Type), targetValue);
 
         return targetValue;
-    }
-
-    private Expression GetParseElementExpression(IBindingMetadata metadata, Expression value)
-    {
-        Expression document = this.GetParseDocumentExpression(metadata, value);
-
-        return Expression.Property(document, "RootElement");
-    }
-
-    private Expression GetParseDocumentExpression(IBindingMetadata metadata, Expression value)
-    {
-        MethodInfo parseMethod = typeof(JsonDocument).GetMethod(nameof(JsonDocument.Parse), [typeof(string), typeof(JsonDocumentOptions)]);
-
-        return Expression.Call(parseMethod, value, Expression.Default(typeof(JsonDocumentOptions)));
     }
 
     private Expression GetDeserializeExpression(IBindingMetadata metadata, Expression value, Expression helper)
@@ -101,21 +82,22 @@ public class JsonBindingContractResolver : IBindingContractResolver
         }
     }
 
-    private bool HasJsonAttribute(IBindingMetadata metadata) => metadata.Relation.Annotations.OfType<JsonAttribute>().Any();
-    private bool IsNativeJsonDocument(IBindingMetadata metadata) => (metadata.Type == typeof(JsonDocument));
-    private bool IsNativeJsonElement(IBindingMetadata metadata) => (metadata.Type == typeof(JsonElement) || metadata.Type == typeof(JsonElement?));
-    private bool IsNativeJsonType(IBindingMetadata metadata) => (this.IsNativeJsonDocument(metadata) || this.IsNativeJsonElement(metadata));
+    private bool HasJsonAttribute(IBindingMetadata metadata)
+    {
+        if (metadata.Relation.Annotations.OfType<JsonAttribute>().Any())
+            return true;
+
+        if (metadata.Relation.HasFlag(RelationMetadataFlags.List) && metadata.Relation.Item.Annotations.OfType<JsonAttribute>().Any())
+            return true;
+
+        return false;
+    }
+
+    private bool IsNativeJsonNode(IBindingMetadata metadata) => (metadata.Type == typeof(JsonNode) || metadata.Type == typeof(JsonValue) || metadata.Type == typeof(JsonArray));
 
     public IBindingParameterContract GetParameterContract(IBindingMetadata metadata)
     {
-        if (this.IsNativeJsonDocument(metadata))
-        {
-            return new BindingParameterContract()
-            {
-                Convert = o => o != null ? (object)JsonSerializer.Serialize(((JsonDocument)o).RootElement, typeof(JsonElement), this.Options) : DBNull.Value,
-            };
-        }
-        else if (this.HasJsonAttribute(metadata) || this.IsNativeJsonElement(metadata))
+        if (this.HasJsonAttribute(metadata) || this.IsNativeJsonNode(metadata))
         {
             return new BindingParameterContract()
             {
@@ -129,7 +111,7 @@ public class JsonBindingContractResolver : IBindingContractResolver
     public IBindingCompositionContract GetCompositionContract(IBindingMetadata metadata) => null;
     public IBindingValueContract GetValueContract(IBindingMetadata metadata)
     {
-        if (!this.HasJsonAttribute(metadata) && !this.IsNativeJsonType(metadata))
+        if (!this.HasJsonAttribute(metadata) && !this.IsNativeJsonNode(metadata))
             return null;
 
         return new BindingValueContract()
