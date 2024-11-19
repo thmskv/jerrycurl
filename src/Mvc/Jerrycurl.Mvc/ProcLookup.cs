@@ -28,8 +28,8 @@ public class ProcLookup : IProcLookup
 
     public string Custom(string prefix, ProjectionIdentity identity = null, MetadataIdentity metadata = null, IField field = null) => this.FromKey(new ProcLookupKey(prefix, identity, metadata, field));
 
-    public string Parameter(ProjectionIdentity identity, IField field) => this.Custom("P", identity, field: field);
-    public string Parameter(ProjectionIdentity identity, MetadataIdentity metadata) => this.Custom("P", identity, metadata: metadata);
-    public string Table(ProjectionIdentity identity, MetadataIdentity metadata) => this.Custom("T", identity, metadata);
-    public string Variable(ProjectionIdentity identity, IField field) => this.Custom("V", identity, field: field);
+    public string Parameter(ProjectionIdentity identity, IField field) => this.Custom("JP", identity, field: field);
+    public string Parameter(ProjectionIdentity identity, MetadataIdentity metadata) => this.Custom("JP", identity, metadata: metadata);
+    public string Table(ProjectionIdentity identity, MetadataIdentity metadata) => this.Custom("JT", identity, metadata);
+    public string Variable(ProjectionIdentity identity, IField field) => this.Custom("JV", identity, field: field);
 }
