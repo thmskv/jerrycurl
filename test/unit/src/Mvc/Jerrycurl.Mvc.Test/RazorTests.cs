@@ -42,7 +42,7 @@ public class RazorTests
 
         var result = runner.Sql(model);
 
-        result.ShouldBe("@P0;@V0;@V1;@V2;@V3;@V0");
+        result.ShouldBe("@JP0;@JV0;@JV1;@JV2;@JV3;@JV0");
     }
 
     public void Test_Razor_Result_Props()
@@ -166,9 +166,9 @@ public class RazorTests
         var result2 = runner.Sql(model: data2, p => p.Open().Open(m => m.Posts).For(m => m.Id).ParList());
         var result3 = runner.Sql(model: data2, p => p.Open().Val().Open(m => m.Posts).For(m => m.Id).ParList());
 
-        result1.ShouldBe("@P0, @P1, @P2, @P3");
-        result2.ShouldBe("@P0, @P1, @P2, @P3, @P4");
-        result3.ShouldBe("@P0, @P1, @P2");
+        result1.ShouldBe("@JP0, @JP1, @JP2, @JP3");
+        result2.ShouldBe("@JP0, @JP1, @JP2, @JP3, @JP4");
+        result3.ShouldBe("@JP0, @JP1, @JP2");
     }
 
     public void Test_Razor_Pars()
@@ -197,7 +197,7 @@ public class RazorTests
 
         var result = runner.Sql(model);
 
-        result.ShouldBe("@P0;@P1;@P2;@P3;@P0");
+        result.ShouldBe("@JP0;@JP1;@JP2;@JP3;@JP0");
     }
 
     public void Test_Razor_Lits()
@@ -304,11 +304,11 @@ public class RazorTests
         var result4 = runner.Sql<BlogView>(p => p.Open(m => m.Posts).Cols());
         var result5 = runner.Sql(model);
 
-        result1.ShouldBe(@"T0.""Title""");
-        result2.ShouldBe(@"T0.""Id"",T0.""Title"",T0.""CategoryId""");
-        result3.ShouldBe(@"T0.""Id"",T0.""BlogId"",T0.""CreatedOn"",T0.""Headline"",T0.""Content""");
+        result1.ShouldBe(@"JT0.""Title""");
+        result2.ShouldBe(@"JT0.""Id"",JT0.""Title"",JT0.""CategoryId""");
+        result3.ShouldBe(@"JT0.""Id"",JT0.""BlogId"",JT0.""CreatedOn"",JT0.""Headline"",JT0.""Content""");
         result4.ShouldBe(result3);
-        result5.ShouldBe(@"T0.""Title"";T1.""Headline""");
+        result5.ShouldBe(@"JT0.""Title"";JT1.""Headline""");
     }
 
     public void Test_Razor_ColNames()
@@ -343,11 +343,11 @@ public class RazorTests
         var result4 = runner.Sql<BlogView>(p => p.Tbl(m => m.Id));
         var result5 = runner.Sql(model);
 
-        result1.ShouldBe(@"""dbo"".""Blog"" T0");
-        result2.ShouldBe(@"""dbo"".""BlogPost"" T0");
-        result3.ShouldBe(@"""dbo"".""BlogPost"" T0");
-        result4.ShouldBe(@"""dbo"".""Blog"" T0");
-        result5.ShouldBe(@"""dbo"".""Blog"" T0;""dbo"".""BlogPost"" T1");
+        result1.ShouldBe(@"""dbo"".""Blog"" JT0");
+        result2.ShouldBe(@"""dbo"".""BlogPost"" JT0");
+        result3.ShouldBe(@"""dbo"".""BlogPost"" JT0");
+        result4.ShouldBe(@"""dbo"".""Blog"" JT0");
+        result5.ShouldBe(@"""dbo"".""Blog"" JT0;""dbo"".""BlogPost"" JT1");
     }
 
     public void Test_Razor_TblNames()
@@ -367,7 +367,7 @@ public class RazorTests
         Should.Throw<ProjectionException>(() => runner.Sql<BlogView>(p => p.TblName(m => m.NumberOfPosts)));
     }
 
-    public void Test_Razor_Star()
+    public void Test_Razor_Map()
     {
         var runner = new Runner();
         var model = new Runnable<object, BlogView>(separator: ",");
@@ -378,9 +378,9 @@ public class RazorTests
         model.Sql(";");
         model.R(p => p.Cols().As().Props());
 
-        var expected1 = @"T0.""Id"" AS ""Item.Id"",T0.""Title"" AS ""Item.Title"",T0.""CategoryId"" AS ""Item.CategoryId""";
-        var expected2 = @"T1.""Id"" AS ""Item.Posts.Item.Id"",T1.""BlogId"" AS ""Item.Posts.Item.BlogId"",T1.""CreatedOn"" AS ""Item.Posts.Item.CreatedOn""," +
-            @"T1.""Headline"" AS ""Item.Posts.Item.Headline"",T1.""Content"" AS ""Item.Posts.Item.Content""";
+        var expected1 = @"JT0.""Id"" AS ""Item.Id"",JT0.""Title"" AS ""Item.Title"",JT0.""CategoryId"" AS ""Item.CategoryId""";
+        var expected2 = @"JT1.""Id"" AS ""Item.Posts.Item.Id"",JT1.""BlogId"" AS ""Item.Posts.Item.BlogId"",JT1.""CreatedOn"" AS ""Item.Posts.Item.CreatedOn""," +
+            @"JT1.""Headline"" AS ""Item.Posts.Item.Headline"",JT1.""Content"" AS ""Item.Posts.Item.Content""";
 
         var result = runner.Sql(model);
 
