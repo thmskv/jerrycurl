@@ -25,6 +25,9 @@ public class DebugModel
 
     public static async Task<DebugModel> FromFileAsync(string path)
     {
+        if (!File.Exists(path))
+            return null;
+
         using var stream = File.OpenRead(path);
 
         var model = await JsonSerializer.DeserializeAsync<DebugModel>(stream, Options);
