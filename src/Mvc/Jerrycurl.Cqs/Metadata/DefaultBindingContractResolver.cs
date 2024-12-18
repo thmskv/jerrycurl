@@ -152,6 +152,14 @@ public class DefaultBindingContractResolver : IBindingContractResolver
             return DbType.Binary;
         else if (dataType == typeof(XDocument))
             return DbType.String;
+        else if (dataType == typeof(TimeSpan))
+            return DbType.Time;
+#if NET6_0_OR_GREATER
+        else if (dataType == typeof(DateOnly))
+            return DbType.Date;
+        else if (dataType == typeof(TimeOnly))
+            return DbType.Time;
+#endif
 
         return null;
     }
@@ -249,7 +257,6 @@ public class DefaultBindingContractResolver : IBindingContractResolver
     private Expression GetObjectReaderProxy(IBindingValueInfo valueInfo)
     {
         Expression value = valueInfo.Value;
-        Expression testValue = value;
 
         Stack<ConditionalExpression> conditions = new Stack<ConditionalExpression>();
 
