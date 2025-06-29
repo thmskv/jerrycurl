@@ -4,7 +4,7 @@
     <PropertyGroup Label="Target Monikers">
         <NetStandardMoniker>netstandard2.0</NetStandardMoniker>
         <NetFrameworkMoniker>net472</NetFrameworkMoniker>
-		<NetMoniker>net6.0</NetMoniker>
+		<NetMoniker>net8.0</NetMoniker>
         <NetStandardMultiTargetMoniker>$(NetStandardMoniker);$(NetMoniker)</NetStandardMultiTargetMoniker>
 		<NetMultiTargetMoniker>$(NetStandardMoniker);$(NetMoniker)</NetMultiTargetMoniker>
         <ToolingTargetMoniker>$(NetStandardMoniker);$(NetMoniker)</ToolingTargetMoniker>

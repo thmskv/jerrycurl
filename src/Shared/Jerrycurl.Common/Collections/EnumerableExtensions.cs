@@ -7,7 +7,7 @@ namespace Jerrycurl.Collections;
 
 internal static class EnumerableExtensions
 {
-#if !NET6_0_OR_GREATER
+#if !NET8_0_OR_GREATER
     public static IEnumerable<T> DistinctBy<T, TDistinct>(this IEnumerable<T> source, Func<T, TDistinct> keySelector)
     {
         HashSet<TDistinct> set = [];
@@ -35,7 +35,7 @@ internal static class EnumerableExtensions
     public static T FirstOfType<T>(this IEnumerable source) => source.OfType<T>().FirstOrDefault();
     public static T FirstOfType<T>(this IEnumerable source, Func<T, bool> predicate) => source.OfType<T>().FirstOrDefault(predicate);
 
-#if !NET6_0_OR_GREATER
+#if !NET8_0_OR_GREATER
     public static IEnumerable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(this IEnumerable<TFirst> first, IEnumerable<TSecond> second) => first.Zip(second, (First, Second) => (First, Second));
 #endif
     public static IEnumerable<(TFirst First, TSecond Second)> ZipAll<TFirst, TSecond>(this IEnumerable<TFirst> first, IEnumerable<TSecond> second)
