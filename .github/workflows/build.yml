@@ -8,7 +8,7 @@ on:
       - feat/*
 jobs:
   build-ubuntu:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       JERRY_MYSQL_CONN: SERVER=localhost;DATABASE=jerry_testdb;
       JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;
@@ -48,7 +48,7 @@ jobs:
           .\build.ps1
 
   build-win32:
-    runs-on: windows-latest
+    runs-on: windows-2025
     env:
       JERRY_SQLSERVER_CONN: SERVER=localhost;DATABASE=jerry_testdb;USER ID=sa;PASSWORD=YourStrong!Passw0rd;ENCRYPT=false
     steps:
