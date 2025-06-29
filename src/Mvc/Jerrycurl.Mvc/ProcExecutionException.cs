@@ -23,11 +23,13 @@ public class ProcExecutionException : Exception
 
     }
 
+#if NETFRAMEWORK
     protected ProcExecutionException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
 
     }
+#endif
 
     internal static ProcExecutionException StackNotInitialized()
         => new ProcExecutionException("Execution stack is not initialized. Please add an IPageExecutionContext instance before accessing the stack.");

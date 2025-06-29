@@ -6,7 +6,7 @@ function Test-Integration
         [Parameter(Mandatory=$true)]
         [String] $ConnectionString,
         [String] $Version,
-        [String] $TargetFramework = "net6.0",
+        [String] $TargetFramework = "net8.0",
         [Parameter(Mandatory=$true)]
         [String] $PackageSource,
         [String] $Verbosity = "minimal",

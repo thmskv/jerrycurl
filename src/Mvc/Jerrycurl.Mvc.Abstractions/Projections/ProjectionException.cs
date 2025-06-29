@@ -25,12 +25,13 @@ public class ProjectionException : Exception
     {
 
     }
-
+#if NETFRAMEWORK
     protected ProjectionException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
 
     }
+#endif
 
     #region " Exception helpers "
 

@@ -22,9 +22,11 @@ public class PageNotFoundException : Exception
 
     }
 
+#if NETFRAMEWORK
     protected PageNotFoundException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
 
     }
+#endif
 }

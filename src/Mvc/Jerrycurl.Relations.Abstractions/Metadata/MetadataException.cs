@@ -23,11 +23,13 @@ public class MetadataException : Exception
 
     }
 
+#if NETFRAMEWORK
     protected MetadataException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
 
     }
+#endif
 
     internal static MetadataException NotFound<TMetadata>(ISchema schema, string attributeName) where TMetadata : IMetadata
         => new MetadataException($"{typeof(TMetadata).Name} not found for {schema}(\"{attributeName}\").");

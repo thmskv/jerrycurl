@@ -25,12 +25,13 @@ public class RelationException : Exception
     {
 
     }
-
+#if NETFRAMEWORK
     protected RelationException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
 
     }
+#endif
 
     #region " Exception helpers "
 

@@ -23,11 +23,13 @@ public class BindingException : Exception
 
     }
 
+#if NETFRAMEWORK
     protected BindingException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
 
     }
+#endif
 
     #region " Exception helpers "
 

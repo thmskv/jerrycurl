@@ -26,11 +26,13 @@ public class BindingException : Exception
 
     }
 
+#if NETFRAMEWORK
     protected BindingException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
 
     }
+#endif
 
 
     public static BindingException Create(IBindingMetadata metadata, string message = null, Exception innerException = null)
