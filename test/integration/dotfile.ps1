@@ -75,7 +75,7 @@ function Test-Integration
 
 function Get-TargetFrameworks
 {
-    $tfm = @("net6.0")
+    $tfm = @("net8.0")
     
     if ($IsWindows)
     {
