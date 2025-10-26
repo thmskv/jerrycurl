@@ -346,7 +346,7 @@ public class DefaultBindingContractResolver : IBindingContractResolver
 
         Expression value = valueInfo.Value;
 
-        if (valueInfo.Value.Type == typeof(object) && sourceType != typeof(object))
+        if (value.Type == typeof(object) && sourceType != typeof(object))
             value = this.GetConvertExpression(valueInfo.Metadata, value, sourceType);
 
         Type structLeft = targetType.IsValueType ? Nullable.GetUnderlyingType(targetType) ?? targetType : null;
@@ -355,7 +355,7 @@ public class DefaultBindingContractResolver : IBindingContractResolver
         if (this.IsNumberType(structLeft) && this.IsNumberType(structRight) && structLeft != structRight)
             value = this.GetConvertCheckedExpression(valueInfo.Metadata, value, targetType);
         else if (structLeft == typeof(bool) && this.IsNumberType(structRight))
-            value = Expression.NotEqual(valueInfo.Value, Expression.Default(value.Type));
+            value = Expression.NotEqual(value, Expression.Default(value.Type));
 
         if (targetType != value.Type)
             value = this.GetConvertExpression(valueInfo.Metadata, value, valueInfo.Metadata.Type);
