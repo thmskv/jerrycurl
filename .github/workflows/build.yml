@@ -12,7 +12,7 @@ jobs:
     env:
       JERRY_MYSQL_CONN: SERVER=localhost;DATABASE=jerry_testdb;
       JERRY_POSTGRES_CONN: SERVER=localhost;PORT=5432;DATABASE=jerry_testdb;
-      JERRY_ORACLE_CONN: DATA SOURCE=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=FREEPDB1)));USER ID=jerryuser;PASSWORD=jerrypass12!
+#      JERRY_ORACLE_CONN: DATA SOURCE=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=FREEPDB1)));USER ID=jerryuser;PASSWORD=jerrypass12!
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
@@ -30,11 +30,11 @@ jobs:
         uses: ankane/setup-postgres@v1
         with:
           database: jerry_testdb
-      - name: Set up Oracle
-        uses: gvenzl/setup-oracle-free@v1
-        with:
-          app-user: jerryuser
-          app-user-password: jerrypass12!
+#      - name: Set up Oracle
+#        uses: gvenzl/setup-oracle-free@v1
+#        with:
+#          app-user: jerryuser
+#          app-user-password: jerrypass12!
       - name: Set up SQL Server
         uses: ankane/setup-sqlserver@v1
         with:
