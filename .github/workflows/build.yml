@@ -74,7 +74,7 @@ jobs:
 
   deploy-nupkg:
     needs: [build-ubuntu, build-win32]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
