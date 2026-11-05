@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>$(ToolingTargetMoniker)</TargetFrameworks>
+		<TargetFramework>$(NetMoniker)</TargetFramework>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 	<ItemGroup>
@@ -20,8 +20,7 @@
 	</ItemGroup>
   
 	<ItemGroup>
-	  <PackageReference Include="editorconfig" Version="0.15.0" />
-	  <PackageReference Include="System.Text.Json" Version="$(JsonPackageVersion)" />
+	  <PackageReference Include="editorconfig" Version="0.18.0" />
 	</ItemGroup>
   
 	<ItemGroup>

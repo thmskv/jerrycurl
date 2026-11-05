@@ -7,7 +7,6 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.IO;
-using System.CommandLine.Invocation;
 using Jerrycurl.Tools.Orm;
 using System.Data.Common;
 using Jerrycurl.Tools.Vendors;
@@ -39,7 +38,7 @@ internal class OrmCommandBuilder : ICommandBuilder
 
     private void CreateOptions()
     {
-        this.ConfigArgument = new Argument<string>("config", description: "The .orm file to read configuration from.", getDefaultValue: () => DefaultFileName);
+        this.ConfigArgument = new Argument<string>("config") { Description = "The .orm file to read configuration from.", DefaultValueFactory = _ => DefaultFileName };
         this.VendorOption = this.Option<string>(["--vendor", "-v"], "The database vendor to target.");
         this.ConnectionOption = this.Option<string>(["--connection", "-c"], "The connection string to use.");
         this.NamespaceOption = this.Option<string>(["--namespace", "-ns"], "The namespace to place C# classes in.");
@@ -278,21 +277,11 @@ internal class OrmCommandBuilder : ICommandBuilder
         return command;
     }
 
-    private Option<T> Option<T>(string[] aliases, string description, string defaultValue = null, bool multiple = false)
+    private Option<T> Option<T>(string[] aliases, string description, bool multiple = false) => new Option<T>(aliases[0], aliases[1..])
     {
-        var option = new Option<T>(aliases[0], description)
-        {
-            AllowMultipleArgumentsPerToken = multiple,
-        };
-
-        if (defaultValue != null)
-            option.SetDefaultValue(defaultValue);
-
-        foreach (var alias in aliases.Skip(1))
-            option.AddAlias(alias);
-
-        return option;
-    }
+        Description = description,
+        AllowMultipleArgumentsPerToken = multiple,
+    };
 
     private async Task BuildAndWriteAsync(OrmTool tool, OrmToolOptions options, string outputPath = null)
     {
@@ -301,9 +290,9 @@ internal class OrmCommandBuilder : ICommandBuilder
         await tool.WriteAsync(schema, options, new ToolConsole(), outputPath);
     }
 
-    private void SetHandler(Command command, Func<InvocationContext, OrmTool, OrmToolOptions, Task<int>> handler)
+    private void SetHandler(Command command, Func<ParseResult, OrmTool, OrmToolOptions, Task<int>> handler)
     {
-        command.SetHandler(async context =>
+        command.SetAction(async context =>
         {
             string configValue = GetConfigValue();
             string vendorValue = context.GetValue(this.VendorOption);
@@ -312,7 +301,7 @@ internal class OrmCommandBuilder : ICommandBuilder
             string namespaceValue = context.GetValue(this.NamespaceOption);
             string transformValue = context.GetValue(this.TransformOption);
             bool verboseValue = context.GetValue(DotNetHost.VerboseOption);
-            string[] flags = context.GetValue(this.FlagsOption);
+            string[] flags = context.GetValue(this.FlagsOption) ?? [];
 
             OrmToolOptions options = new OrmToolOptions()
             {
@@ -353,7 +342,7 @@ internal class OrmCommandBuilder : ICommandBuilder
 
             OrmTool tool = ToolResolver.GetOrmTool(options.Vendor);
 
-            await handler(context, tool, options);
+            return await handler(context, tool, options);
 
             string GetConfigValue()
             {

@@ -16,10 +16,6 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>JSON support for Jerrycurl using Newtonsoft.Json.</description>
         <dependencies>
-            <group targetFramework="netstandard2.0">
-                <dependency id="Newtonsoft.Json" version="$JsonNetPackageVersion$" />
-                <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
-            </group>
             <group targetFramework="$NetMoniker$">
                 <dependency id="Newtonsoft.Json" version="$JsonNetPackageVersion$" />
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
@@ -28,6 +24,6 @@
     </metadata>
     <files>
         <file src="$IconPath$" target="" />
-        <file src="$BinPath$**\Jerrycurl.Extensions.Newtonsoft.Json.*" target="lib" />
+        <file src="$BinPath$**\Jerrycurl.Extensions.Newtonsoft.Json.*" target="lib\$TargetFramework$" />
     </files>
 </package>

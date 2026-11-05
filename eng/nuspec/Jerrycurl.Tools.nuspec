@@ -16,12 +16,11 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Tools for Jerrycurl CLI.</description>
         <dependencies>
-			<group targetFramework="netstandard2.0" />
-			<group targetFramework="net8.0" />
+			<group targetFramework="$NetMoniker$" />
         </dependencies>
     </metadata>
     <files>
         <file src="$IconPath$" target="" />
-        <file src="$BinPath$**\Jerrycurl.Tools.*" target="lib" />
+        <file src="$BinPath$**\Jerrycurl.Tools.*" target="lib\$TargetFramework$" />
     </files>
 </package>

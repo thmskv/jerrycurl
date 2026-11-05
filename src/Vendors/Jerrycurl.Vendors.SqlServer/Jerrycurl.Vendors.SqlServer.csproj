@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>$(NetStandardMultiTargetMoniker)</TargetFrameworks>
+		<TargetFramework>$(NetMoniker)</TargetFramework>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="$(SqlServerPackageId)" Version="$(SqlServerTargetVersion)" />
+		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="$(PkcsPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Jerrycurl.Relations;
 
@@ -23,13 +22,6 @@ public class BindingException : Exception
 
     }
 
-#if NETFRAMEWORK
-    protected BindingException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-
-    }
-#endif
 
     #region " Exception helpers "
 

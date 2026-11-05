@@ -16,10 +16,6 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>PostgreSQL support for Jerrycurl.</description>
         <dependencies>
-            <group targetFramework="netstandard2.0">
-                <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
-                <dependency id="$PostgresPackageId$" version="$PostgresPackageVersion$" />
-            </group>
             <group targetFramework="$NetMoniker$">
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
                 <dependency id="$PostgresPackageId$" version="$PostgresPackageVersion$" />
@@ -28,6 +24,6 @@
     </metadata>
     <files>
         <file src="$IconPath$" target="" />
-        <file src="$BinPath$**\Jerrycurl.Vendors.Postgres.*" target="lib" />
+        <file src="$BinPath$**\Jerrycurl.Vendors.Postgres.*" target="lib\$TargetFramework$" />
     </files>
 </package>

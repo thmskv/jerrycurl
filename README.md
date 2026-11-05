@@ -134,11 +134,12 @@ To learn more about Jerrycurl and how to get started, visit [our official site](
 Jerrycurl can be built on [any OS supported by .NET Core](https://docs.microsoft.com/en-us/dotnet/core/install/dependencies) and included in this repository is a [PowerShell script](build.ps1) that performs all build-related tasks.
 
 ### Prerequisites
-* .NET SDK 8.0 (to build)
-* .NET 6.0 / .NET Framework 4.7.2 (to test)
-* PowerShell 5.0+ (PowerShell Core on Linux/macOS)
-* Visual Studio 2022 (optional)
+* .NET SDK 10.0
+* PowerShell 7+
+* Visual Studio 2026 or VS Code with C# Dev Kit (optional)
 * Docker (to live test databases) (optional)
+
+A [dev container](.devcontainer/devcontainer.json) with the .NET 10 SDK, PowerShell, C# Dev Kit and Claude Code is included for VS Code and GitHub Codespaces.
 
 ### Clone, Build and Test
 Clone the repository and run our build script from PowerShell.
@@ -148,7 +149,7 @@ PS> cd jerrycurl
 PS> .\build.ps1 [-NoTest] [-NoPack]
 ```
 
-This runs the `Restore`, `Clean`, `Build`, `[Test]` and `[Pack]` targets on `jerrycurl.sln` and places NuGet packages in `/artifacts/packages`. Each target can also be run manually, and in Visual Studio if preferred.
+This runs the `Restore`, `Clean`, `Build`, `[Test]` and `[Pack]` targets on `jerrycurl.slnx` and places NuGet packages in `/artifacts/packages`. Each target can also be run manually, and in Visual Studio if preferred.
 
 By default, the `Test` target skips any unit test that requires live running database server. To help you to include these, you can run our [`docker compose` script](test/tools/boot-dbs.ps1) to boot up instances of our supported databases.
 

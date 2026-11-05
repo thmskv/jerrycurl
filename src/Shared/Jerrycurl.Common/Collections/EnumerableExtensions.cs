@@ -78,7 +78,7 @@ internal static class EnumerableExtensions
             yield return item;
     }
 
-#if NET20_BASE
+#if NETSTANDARD2_0
     public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T value) => source.Concat([value]);
 #endif
 }

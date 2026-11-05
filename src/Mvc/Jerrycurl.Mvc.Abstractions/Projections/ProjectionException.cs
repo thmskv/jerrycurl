@@ -2,7 +2,6 @@
 using Jerrycurl.Relations;
 using System;
 using System.Linq.Expressions;
-using System.Runtime.Serialization;
 
 namespace Jerrycurl.Mvc.Projections;
 
@@ -25,13 +24,6 @@ public class ProjectionException : Exception
     {
 
     }
-#if NETFRAMEWORK
-    protected ProjectionException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-
-    }
-#endif
 
     #region " Exception helpers "
 

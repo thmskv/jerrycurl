@@ -18,7 +18,7 @@ if ($NoBuild) { $args += "--no-build" }
 foreach ($path in Get-TestProjects)
 {
     Push-Location $path
-    dotnet fixie @args
+    dotnet test @args
     
     if ($LastExitCode -ne 0)
     {            

@@ -32,18 +32,11 @@ internal class RazorCommandBuilder : ICommandBuilder
         this.ImportOption = Option<string[]>(["--import", "-i"], "", multiple: true);
         this.NoCleanOption = Option<bool>(["--no-clean"], "");
 
-        Option<T> Option<T>(string[] aliases, string description, bool multiple = false)
+        static Option<T> Option<T>(string[] aliases, string description, bool multiple = false) => new Option<T>(aliases[0], aliases[1..])
         {
-            var option = new Option<T>(aliases[0], description)
-            {
-                AllowMultipleArgumentsPerToken = multiple,
-            };
-
-            foreach (var alias in aliases.Skip(1))
-                option.AddAlias(alias);
-
-            return option;
-        }
+            Description = description,
+            AllowMultipleArgumentsPerToken = multiple,
+        };
     }
 
     public void Build(RootCommand rootCommand)
@@ -63,15 +56,15 @@ internal class RazorCommandBuilder : ICommandBuilder
 
     private void SetHandler(Command command, Func<RazorToolOptions, Task> handler)
     {
-        command.SetHandler(async context =>
+        command.SetAction(async context =>
         {
             RazorToolOptions options = new RazorToolOptions()
             {
-                Directories = [.. context.GetValue(this.DirectoryOption)],
-                Files = [.. context.GetValue(this.FileOption)],
+                Directories = [.. context.GetValue(this.DirectoryOption) ?? []],
+                Files = [.. context.GetValue(this.FileOption) ?? []],
                 OutputDirectory = context.GetValue(this.OutputOption),
                 ProjectDirectory = context.GetValue(this.ProjectOption),
-                Imports = [.. context.GetValue(this.ImportOption)],
+                Imports = [.. context.GetValue(this.ImportOption) ?? []],
                 NoClean = context.GetValue(this.NoCleanOption),
                 RootNamespace = context.GetValue(this.RootNamespaceOption),
             };

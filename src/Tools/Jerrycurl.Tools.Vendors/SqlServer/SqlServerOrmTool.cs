@@ -3,11 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jerrycurl.Tools.Orm;
 using Jerrycurl.Tools.Orm.Model;
-#if NET20_BASE
-using System.Data.SqlClient;
-#else
 using Microsoft.Data.SqlClient;
-#endif
 
 namespace Jerrycurl.Tools.Vendors.SqlServer;
 

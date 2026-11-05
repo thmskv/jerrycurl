@@ -4,9 +4,6 @@ using Jerrycurl.Tools.DotNet.Cli.Commands;
 using Jerrycurl.Tools.Orm;
 using System;
 using System.CommandLine;
-using System.CommandLine.Builder;
-using System.CommandLine.Invocation;
-using System.CommandLine.Parsing;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -16,9 +13,9 @@ namespace Jerrycurl.Tools.DotNet.Cli;
 
 public class DotNetHost
 {
-    internal static Option<bool> VerboseOption { get; } = new Option<bool>("--verbose", "Show verbose output.");
-    internal static Option<bool> LogoOption { get; } = new Option<bool>("--logo", "Show fancy logo before running.");
-    internal static Option<string> DebugOption { get; } = new Option<string>("--debug", "Output exception information to a machine-readable file.") { IsHidden = true };
+    internal static Option<bool> VerboseOption { get; } = new Option<bool>("--verbose") { Description = "Show verbose output.", Recursive = true };
+    internal static Option<bool> LogoOption { get; } = new Option<bool>("--logo") { Description = "Show fancy logo before running.", Recursive = true };
+    internal static Option<string> DebugOption { get; } = new Option<string>("--debug") { Description = "Output exception information to a machine-readable file.", Recursive = true, Hidden = true };
 
     public async static Task<int> Main(string[] args)
     {
@@ -37,36 +34,34 @@ public class DotNetHost
 
 
 #endif
-        RootCommand rootCommand = new RootCommand()
-        {
-            Name = "jerry",
-        };
+        RootCommand rootCommand = new RootCommand("Jerrycurl command-line interface.");
 
-        CommandLineBuilder builder = new CommandLineBuilder(rootCommand);
-
-        builder.UseDefaults();
-        builder.UseExceptionHandler(HandleExceptionAsync);
-
-        rootCommand.AddGlobalOption(VerboseOption);
-        rootCommand.AddGlobalOption(DebugOption);
-        rootCommand.AddGlobalOption(LogoOption);
+        rootCommand.Options.Add(VerboseOption);
+        rootCommand.Options.Add(DebugOption);
+        rootCommand.Options.Add(LogoOption);
 
         new OrmCommandBuilder().Build(rootCommand);
         new RazorCommandBuilder().Build(rootCommand);
 
-        Parser parser = builder.Build();
-        ParseResult result = parser.Parse(args);
+        ParseResult result = rootCommand.Parse(args);
 
-        if (result.GetValueForOption(LogoOption))
+        if (result.GetValue(LogoOption))
             WriteLogo();
 
-        return await parser.Parse(args).InvokeAsync();
+        try
+        {
+            return await result.InvokeAsync(new InvocationConfiguration() { EnableDefaultExceptionHandler = false });
+        }
+        catch (Exception ex)
+        {
+            return await HandleExceptionAsync(ex, result);
+        }
     }
 
-    private static async void HandleExceptionAsync(Exception ex, InvocationContext context)
+    private static async Task<int> HandleExceptionAsync(Exception ex, ParseResult result)
     {
-        string debugPath = context.GetValue(DebugOption);
-        bool verbose = context.GetValue(VerboseOption);
+        string debugPath = result.GetValue(DebugOption);
+        bool verbose = result.GetValue(VerboseOption);
 
         if (debugPath != null)
             await WriteDebugInfoAsync(debugPath, ex);
@@ -76,7 +71,7 @@ public class DotNetHost
         else
             ErrorLine(ex.Message);
 
-        context.ExitCode = ex is ToolException tex ? tex.ExitCode : -1;
+        return ex is ToolException tex ? tex.ExitCode : -1;
     }
 
     private static async Task WriteDebugInfoAsync(string path, Exception ex)

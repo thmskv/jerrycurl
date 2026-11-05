@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>$(NetMoniker)</TargetFrameworks>
+		<TargetFramework>$(NetMoniker)</TargetFramework>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 

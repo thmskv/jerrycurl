@@ -106,11 +106,7 @@ public class AsyncSession : IAsyncSession
         }
         finally
         {
-#if NET21_BASE
             await reader.DisposeAsync().ConfigureAwait(false);
-#else
-            reader.Dispose();
-#endif
         }
     }
 
@@ -222,12 +218,8 @@ public class AsyncSession : IAsyncSession
                 }
                 finally
                 {
-#if NET21_BASE
                 if (this.connection != null)
                     await this.connection.DisposeAsync().ConfigureAwait(false);
-#else
-                    this.connection?.Dispose();
-#endif
                 }
             }
         }

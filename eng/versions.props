@@ -8,21 +8,21 @@
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet Package Versions">
-		<OraclePackageVersion>23.6.1</OraclePackageVersion>
-        <SqlServerPackageVersion>5.2.2</SqlServerPackageVersion>
-        <MySqlPackageVersion>9.1.0</MySqlPackageVersion>
-        <PostgresPackageVersion>8.0.5</PostgresPackageVersion>
-        <SqlitePackageVersion>8.0.10</SqlitePackageVersion>
-        <EntityFrameworkCorePackageVersion>7.0.20</EntityFrameworkCorePackageVersion>
-        <JsonNetPackageVersion>13.0.3</JsonNetPackageVersion>
-        <JsonPackageVersion>8.0.5</JsonPackageVersion>
-        <MsBuildPackageVersion>16.9.0</MsBuildPackageVersion>
-        <CSharpPackageVersion>4.5.0</CSharpPackageVersion>
-        <AsyncInterfacesPackageVersion>8.0.0</AsyncInterfacesPackageVersion>
+        <OraclePackageVersion>23.26.400</OraclePackageVersion>
+        <SqlServerPackageVersion>7.1.1</SqlServerPackageVersion>
+        <MySqlPackageVersion>26.10.0</MySqlPackageVersion>
+        <PostgresPackageVersion>10.0.3</PostgresPackageVersion>
+        <SqlitePackageVersion>10.0.14</SqlitePackageVersion>
+        <EntityFrameworkCorePackageVersion>10.0.14</EntityFrameworkCorePackageVersion>
+        <JsonNetPackageVersion>13.0.4</JsonNetPackageVersion>
+        <CSharpPackageVersion>5.0.0</CSharpPackageVersion>
+        <!-- Pinned above the vulnerable versions pulled transitively by SqlClient and Oracle (GHSA-846f-f764-76mx, GHSA-2fmv-rv2c-59x7). -->
+        <PkcsPackageVersion>10.0.14</PkcsPackageVersion>
     </PropertyGroup>
 
-    <PropertyGroup Label="NuGet Package Versions (.NET Standard 2.0)">
-		<OraclePackageVersion_net20>2.19.250</OraclePackageVersion_net20>
+    <PropertyGroup Label="Build Tooling Versions">
+        <NetAnalyzersPackageVersion>10.0.403</NetAnalyzersPackageVersion>
+        <GitVersioningPackageVersion>3.10.94</GitVersioningPackageVersion>
     </PropertyGroup>
 
     <PropertyGroup Label="Target Versions">
@@ -33,12 +33,6 @@
         <SqliteTargetVersion>$(SqlitePackageVersion)</SqliteTargetVersion>
         <EntityFrameworkCoreTargetVersion>$(EntityFrameworkCorePackageVersion)</EntityFrameworkCoreTargetVersion>
         <JsonNetTargetVersion>$(JsonNetPackageVersion)</JsonNetTargetVersion>
-        <JsonTargetVersion>$(JsonPackageVersion)</JsonTargetVersion>
-        <MsBuildTargetVersion>$(MsBuildPackageVersion)</MsBuildTargetVersion>
         <CSharpTargetVersion>$(CSharpPackageVersion)</CSharpTargetVersion>
     </PropertyGroup>
-
-    <PropertyGroup Label="Target Versions (.NET Standard 2.0)" Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net472'">
-		<OracleTargetVersion>$(OraclePackageVersion_net20)</OracleTargetVersion>
-	</PropertyGroup>
 </Project>

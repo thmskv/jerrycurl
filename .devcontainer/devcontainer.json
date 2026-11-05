@@ -1,0 +1,30 @@
+{
+  "name": "jerrycurl",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:10.0",
+  "features": {
+    "ghcr.io/devcontainers/features/powershell:2": {},
+    "ghcr.io/devcontainers/features/node:2": {},
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
+  },
+  "mounts": [
+    "source=jerrycurl-claude-config,target=/home/vscode/.claude,type=volume"
+  ],
+  "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/home/vscode/.claude",
+    "DOTNET_CLI_TELEMETRY_OPTOUT": "1",
+    "DOTNET_NOLOGO": "1"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit",
+        "anthropic.claude-code"
+      ],
+      "settings": {
+        "dotnet.defaultSolution": "jerrycurl.slnx"
+      }
+    }
+  },
+  "postCreateCommand": "sudo chown -R vscode:vscode /home/vscode/.claude && dotnet restore jerrycurl.slnx",
+  "remoteUser": "vscode"
+}

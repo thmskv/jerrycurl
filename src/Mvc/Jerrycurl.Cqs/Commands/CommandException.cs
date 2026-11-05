@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Jerrycurl.Cqs.Commands;
 
@@ -23,13 +22,6 @@ public class CommandException : Exception
 
     }
 
-#if NETFRAMEWORK
-    protected CommandException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-
-    }
-#endif
 
     internal static CommandException NoSchemaStoreAttached()
         => new CommandException("No schema store attached; use the CommandBuffer(ISchemaStore) constructor to enable language features.");

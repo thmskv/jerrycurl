@@ -9,27 +9,18 @@
         <CleanDependsOn>$(CleanDependsOn);CleanNuGet</CleanDependsOn>
     </PropertyGroup>
 
-	<PropertyGroup>
-		<DefineConstants Condition="'$(TargetFramework)' == '$(NetStandardMoniker)' or $(TargetFramework) == '$(NetFrameworkMoniker)'">$(DefineConstants);NET20_BASE</DefineConstants>
-		<DefineConstants Condition="'$(TargetFramework)' != '$(NetStandardMoniker)' and $(TargetFramework) != '$(NetFrameworkMoniker)'">$(DefineConstants);NET21_BASE</DefineConstants>
-	</PropertyGroup>
 
     <ItemGroup Condition="'$(IsPackable)' == 'true'">
         <None Include=".nusrc\**" />
         <NuGetSource Include=".nusrc\**" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(IsPackable)' == 'true'">
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
-    </ItemGroup>
-
     <ItemGroup Condition="'$(UseCodeAnalysis)' == 'true'">
-        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="$(NetAnalyzersPackageVersion)" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.146" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+        <PackageReference Include="Nerdbank.GitVersioning" Version="$(GitVersioningPackageVersion)" PrivateAssets="all" />
     </ItemGroup>
 
 	<Target Name="AddNuGetPackageVersionToThisAssembly"
@@ -62,7 +53,6 @@
 				PackageTags=$(PackageTags);
 				TargetFramework=$(TargetFramework);
 				NetStandardMoniker=$(NetStandardMoniker);
-				NetFrameworkMoniker=$(NetFrameworkMoniker);
 				NetMoniker=$(NetMoniker);
 				AssemblyName=$(AssemblyName);
 				BinPath=$(MSBuildProjectDirectory)\$(OutputPath);
@@ -72,16 +62,14 @@
 				SqlitePackageVersion=$(SqlitePackageVersion);
 				OraclePackageId=$(OraclePackageId);
 				OraclePackageVersion=$(OraclePackageVersion);
-				OraclePackageVersion_net20=$(OraclePackageVersion_net20);
 				MySqlPackageId=$(MySqlPackageId);
 				MySqlPackageVersion=$(MySqlPackageVersion);
 				PostgresPackageId=$(PostgresPackageId);
 				PostgresPackageVersion=$(PostgresPackageVersion);
 				EntityFrameworkCorePackageVersion=$(EntityFrameworkCorePackageVersion);
 				JsonNetPackageVersion=$(JsonNetPackageVersion);
-				JsonPackageVersion=$(JsonPackageVersion);
+				PkcsPackageVersion=$(PkcsPackageVersion);
 				CSharpPackageVersion=$(CSharpPackageVersion);
-				AsyncInterfacesPackageVersion=$(AsyncInterfacesPackageVersion);
 				RepositoryUrl=$(RepositoryUrl);
 				GitCommitId=$(GitCommitId);
 				PackageIconFile=$(PackageIconFile);

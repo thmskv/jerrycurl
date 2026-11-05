@@ -100,7 +100,6 @@ public class TransactionFilter : IFilter
             return Task.CompletedTask;
         }
 
-#if NET21_BASE
         public override async Task OnExceptionAsync(FilterContext context)
         {
             if (!this.handled)
@@ -130,40 +129,5 @@ public class TransactionFilter : IFilter
 
             this.transaction = null;
         }
-#else
-        public override Task OnExceptionAsync(FilterContext context)
-        {
-            if (!this.handled)
-            {
-                try
-                {
-                    this.transaction.Rollback();
-                }
-                catch { }
-            }
-
-            this.handled = true;
-
-            return Task.CompletedTask;
-        }
-
-        public override Task OnConnectionClosingAsync(FilterContext context)
-        {
-            if (!this.handled)
-                this.transaction.Commit();
-
-            this.handled = true;
-
-            return Task.CompletedTask;
-        }
-
-        public override ValueTask DisposeAsync()
-        {
-            this.transaction?.Dispose();
-            this.transaction = null;
-
-            return default;
-        }
-#endif
     }
 }

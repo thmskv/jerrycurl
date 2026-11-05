@@ -16,18 +16,15 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Oracle support for Jerrycurl.</description>
         <dependencies>
-            <group targetFramework="netstandard2.0">
-                <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
-                <dependency id="$OraclePackageId$" version="$OraclePackageVersion_net20$" />
-            </group>
             <group targetFramework="$NetMoniker$">
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
                 <dependency id="$OraclePackageId$" version="$OraclePackageVersion$" />
+                <dependency id="System.Security.Cryptography.Pkcs" version="$PkcsPackageVersion$" />
             </group>
         </dependencies>
     </metadata>
     <files>
         <file src="$IconPath$" target="" />
-        <file src="$BinPath$**\Jerrycurl.Vendors.Oracle.*" target="lib" />
+        <file src="$BinPath$**\Jerrycurl.Vendors.Oracle.*" target="lib\$TargetFramework$" />
     </files>
 </package>

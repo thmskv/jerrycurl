@@ -103,12 +103,8 @@ public class EntityFrameworkCoreContractResolver : IRelationContractResolver, IT
 
     private string GetColumnName(IProperty property)
     {
-#if NET21_BASE
-        var id = StoreObjectIdentifier.Create(property.DeclaringEntityType, StoreObjectType.Table);
+        var id = StoreObjectIdentifier.Create(property.DeclaringType, StoreObjectType.Table);
 
         return property?.GetColumnName(id.Value) ?? property?.GetDefaultColumnName(id.Value);
-#else
-        return property?.GetColumnName() ?? property?.GetDefaultColumnName();
-#endif
     }
 }

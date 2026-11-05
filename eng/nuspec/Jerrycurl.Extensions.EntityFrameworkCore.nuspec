@@ -24,6 +24,6 @@
     </metadata>
     <files>
         <file src="$IconPath$" target="" />
-        <file src="$BinPath$**\Jerrycurl.Extensions.EntityFrameworkCore.*" target="lib" />
+        <file src="$BinPath$**\Jerrycurl.Extensions.EntityFrameworkCore.*" target="lib\$TargetFramework$" />
     </files>
 </package>

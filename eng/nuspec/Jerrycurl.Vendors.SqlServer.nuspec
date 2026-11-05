@@ -16,18 +16,15 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Microsoft SQL Server support for Jerrycurl.</description>
         <dependencies>
-            <group targetFramework="netstandard2.0">
-                <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
-				<dependency id="$SqlServerPackageId$" version="$SqlServerPackageVersion$" />
-            </group>
             <group targetFramework="$NetMoniker$">
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
                 <dependency id="$SqlServerPackageId$" version="$SqlServerPackageVersion$" />
+                <dependency id="System.Security.Cryptography.Pkcs" version="$PkcsPackageVersion$" />
             </group>
         </dependencies>
     </metadata>
     <files>
         <file src="$IconPath$" target="" />
-        <file src="$BinPath$**\Jerrycurl.Vendors.SqlServer.*" target="lib" />
+        <file src="$BinPath$**\Jerrycurl.Vendors.SqlServer.*" target="lib\$TargetFramework$" />
     </files>
 </package>

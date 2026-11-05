@@ -1,16 +1,27 @@
 <Project>
 	<Import Project="$(MSBuildThisFileDirectory)..\..\eng\versions.props" />
-	
+
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
-		<TargetFrameworks>net8.0</TargetFrameworks>
-		<TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net472;net8.0</TargetFrameworks>
+		<IsPackable>false</IsPackable>
+		<TargetFramework>net10.0</TargetFramework>
+		<IsUnitTestProject>$(MSBuildProjectName.EndsWith('.Test'))</IsUnitTestProject>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Fixie" Version="2.2.2" />
-		<PackageReference Include="Shouldly" Version="4.2.1" />
-		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(AsyncInterfacesPackageVersion)" />
-		<DotNetCliToolReference Include="Fixie.Console" Version="2.2.2" />
+		<PackageReference Include="Shouldly" Version="4.3.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(IsUnitTestProject)' == 'true'">
+		<!-- Fixie's generated entry point relies on this implicit using. -->
+		<Using Include="System.Threading.Tasks" />
+		<PackageReference Include="Fixie" Version="4.2.0" />
+		<PackageReference Include="Fixie.TestAdapter" Version="4.2.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+	</ItemGroup>
+
+	<!-- Shared test library: Fixie API only, without the build assets that turn a project into a test executable. -->
+	<ItemGroup Condition="'$(IsUnitTestProject)' != 'true'">
+		<PackageReference Include="Fixie" Version="4.2.0" ExcludeAssets="build" />
 	</ItemGroup>
 </Project>

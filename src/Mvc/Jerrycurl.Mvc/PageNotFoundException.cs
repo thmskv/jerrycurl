@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Jerrycurl.Mvc;
 
@@ -22,11 +21,4 @@ public class PageNotFoundException : Exception
 
     }
 
-#if NETFRAMEWORK
-    protected PageNotFoundException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-
-    }
-#endif
 }

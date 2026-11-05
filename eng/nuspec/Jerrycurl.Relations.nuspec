@@ -16,12 +16,11 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Relational engine for Jerrycurl.</description>
         <dependencies>
-            <group targetFramework="netstandard2.0" />
             <group targetFramework="$NetMoniker$" />
         </dependencies>
     </metadata>
     <files>
         <file src="$IconPath$" target="" />
-        <file src="$BinPath$**\Jerrycurl.Relations.*" target="lib" />
+        <file src="$BinPath$**\Jerrycurl.Relations.*" target="lib\$TargetFramework$" />
     </files>
 </package>

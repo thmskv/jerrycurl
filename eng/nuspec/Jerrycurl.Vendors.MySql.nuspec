@@ -16,10 +16,6 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>MySQL support for Jerrycurl.</description>
         <dependencies>
-            <group targetFramework="netstandard2.0">
-                <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
-                <dependency id="$MySqlPackageId$" version="$MySqlPackageVersion$" />
-            </group>
             <group targetFramework="$NetMoniker$">
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
                 <dependency id="$MySqlPackageId$" version="$MySqlPackageVersion$" />
@@ -28,6 +24,6 @@
     </metadata>
     <files>
         <file src="$IconPath$" target="" />
-        <file src="$BinPath$**\Jerrycurl.Vendors.MySql.*" target="lib" />
+        <file src="$BinPath$**\Jerrycurl.Vendors.MySql.*" target="lib\$TargetFramework$" />
     </files>
 </package>

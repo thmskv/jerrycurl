@@ -12,7 +12,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$sln = Join-Path $PSScriptRoot jerrycurl.sln
+$sln = Join-Path $PSScriptRoot jerrycurl.slnx
 $packageSource = Join-Path $PSScriptRoot "artifacts\packages"
 $timer = [Diagnostics.Stopwatch]::StartNew()
 $props = @(
@@ -63,7 +63,7 @@ if (-not $NoTest)
 {
 	Write-Host "Testing..." -ForegroundColor Magenta
 
-    .\test\unit\test.ps1 -NoBuild -Configuration $Configuration
+    & (Join-Path $PSScriptRoot test/unit/test.ps1) -NoBuild -Configuration $Configuration
 
     if ($LastExitCode -ne 0)
     {
@@ -102,7 +102,7 @@ if (-not $NoPack -and (-not $NoIntegrate))
 {
     Write-Host "Integrating..." -ForegroundColor Magenta
 
-    .\test\integration\test.ps1 -Verbosity $Verbosity
+    & (Join-Path $PSScriptRoot test/integration/test.ps1) -Verbosity $Verbosity
 
     if ($LastExitCode -ne 0)
     {

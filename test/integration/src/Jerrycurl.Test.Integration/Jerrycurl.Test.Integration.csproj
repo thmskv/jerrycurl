@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFrameworks>net472;net8.0</TargetFrameworks>
+        <TargetFramework>net10.0</TargetFramework>
         <OutputType>exe</OutputType>
         <JerrycurlVerbose>true</JerrycurlVerbose>
         <WarningsAsErrors>true</WarningsAsErrors>

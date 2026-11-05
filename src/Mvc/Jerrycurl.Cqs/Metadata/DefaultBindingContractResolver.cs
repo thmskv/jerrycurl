@@ -154,12 +154,10 @@ public class DefaultBindingContractResolver : IBindingContractResolver
             return DbType.String;
         else if (dataType == typeof(TimeSpan))
             return DbType.Time;
-#if NET8_0_OR_GREATER
         else if (dataType == typeof(DateOnly))
             return DbType.Date;
         else if (dataType == typeof(TimeOnly))
             return DbType.Time;
-#endif
 
         return null;
     }

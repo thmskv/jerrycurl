@@ -2,7 +2,6 @@
 using Jerrycurl.Relations.Metadata;
 using System;
 using System.Linq;
-using System.Runtime.Serialization;
 
 namespace Jerrycurl.Cqs.Metadata;
 
@@ -26,13 +25,6 @@ public class BindingException : Exception
 
     }
 
-#if NETFRAMEWORK
-    protected BindingException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-
-    }
-#endif
 
 
     public static BindingException Create(IBindingMetadata metadata, string message = null, Exception innerException = null)

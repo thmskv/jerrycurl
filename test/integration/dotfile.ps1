@@ -6,7 +6,7 @@ function Test-Integration
         [Parameter(Mandatory=$true)]
         [String] $ConnectionString,
         [String] $Version,
-        [String] $TargetFramework = "net8.0",
+        [String] $TargetFramework = "net10.0",
         [Parameter(Mandatory=$true)]
         [String] $PackageSource,
         [String] $Verbosity = "minimal",
@@ -75,14 +75,7 @@ function Test-Integration
 
 function Get-TargetFrameworks
 {
-    $tfm = @("net8.0")
-    
-    if ($IsWindows)
-    {
-        $tfm += , "net472"
-    }
-    
-    return $tfm
+    return @("net10.0")
 }
 
 function Verify-Integration
@@ -235,11 +228,6 @@ function Run-ProjectTest
     if ($TranspileWithCli)
     {
         $buildArgs += "-p:JerrycurlUseCli=true", "-p:JerrycurlCliPath=..\jerry"
-    }
-    
-    if ($TargetFramework -eq "net472")
-    {
-        $buildArgs += "-p:PlatformTarget=x64"
     }
     
     Push-Location $projectPath

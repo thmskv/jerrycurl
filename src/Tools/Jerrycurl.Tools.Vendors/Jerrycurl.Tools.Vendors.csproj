@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>$(NetMoniker)</TargetFrameworks>
+    <TargetFramework>$(NetMoniker)</TargetFramework>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 
@@ -11,6 +11,7 @@
     <PackageReference Include="$(PostgresPackageId)" Version="$(PostgresTargetVersion)" />
     <PackageReference Include="$(SqlitePackageId)" Version="$(SqliteTargetVersion)" />
     <PackageReference Include="$(SqlServerPackageId)" Version="$(SqlServerTargetVersion)" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="$(PkcsPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>

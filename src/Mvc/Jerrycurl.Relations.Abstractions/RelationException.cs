@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 
 namespace Jerrycurl.Relations;
 
@@ -25,13 +24,6 @@ public class RelationException : Exception
     {
 
     }
-#if NETFRAMEWORK
-    protected RelationException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-
-    }
-#endif
 
     #region " Exception helpers "
 

@@ -1,12 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>$(NetStandardMultiTargetMoniker)</TargetFrameworks>
+		<TargetFramework>$(NetMoniker)</TargetFramework>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="System.Text.Json" Version="$(JsonTargetVersion)" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Mvc\Jerrycurl.Cqs\Jerrycurl.Cqs.csproj" />

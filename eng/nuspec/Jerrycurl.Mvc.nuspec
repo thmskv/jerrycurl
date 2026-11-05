@@ -16,9 +16,6 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Model-view-controller engine for Jerrycurl.</description>
         <dependencies>
-            <group targetFramework="netstandard2.0">
-                <dependency id="Jerrycurl.Cqs" version="$PackageVersion$" />
-            </group>
             <group targetFramework="$NetMoniker$">
                 <dependency id="Jerrycurl.Cqs" version="$PackageVersion$" />
             </group>
@@ -26,6 +23,6 @@
     </metadata>
     <files>
         <file src="$IconPath$" target="" />
-        <file src="$BinPath$**\Jerrycurl.Mvc.*" target="lib" />
+        <file src="$BinPath$**\Jerrycurl.Mvc.*" target="lib\$TargetFramework$" />
     </files>
 </package>

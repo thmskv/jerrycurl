@@ -16,18 +16,13 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>JSON support for Jerrycurl using System.Text.Json.</description>
         <dependencies>
-            <group targetFramework="netstandard2.0">
-                <dependency id="System.Text.Json" version="$JsonPackageVersion$" />
-                <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
-            </group>
             <group targetFramework="$NetMoniker$">
-                <dependency id="System.Text.Json" version="$JsonPackageVersion$" />
                 <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
             </group>
         </dependencies>
     </metadata>
     <files>
         <file src="$IconPath$" target="" />
-        <file src="$BinPath$**\Jerrycurl.Extensions.Json.*" target="lib" />
+        <file src="$BinPath$**\Jerrycurl.Extensions.Json.*" target="lib\$TargetFramework$" />
     </files>
 </package>

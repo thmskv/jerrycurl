@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="8.0.5" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Cqs.Abstractions\Jerrycurl.Cqs.Abstractions.csproj" />
     <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Cqs\Jerrycurl.Cqs.csproj" />
     <ProjectReference Include="..\..\..\..\..\src\Mvc\Jerrycurl.Mvc.Abstractions\Jerrycurl.Mvc.Abstractions.csproj" />

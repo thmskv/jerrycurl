@@ -1,0 +1,94 @@
+<Solution>
+  <Folder Name="/global/">
+    <File Path=".editorconfig" />
+    <File Path=".github/workflows/build.yml" />
+    <File Path="build.ps1" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="eng/orm.schema.json" />
+    <File Path="eng/versions.props" />
+    <File Path="global.json" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path="version.json" />
+  </Folder>
+  <Folder Name="/global/nuspec/">
+    <File Path="eng/nuspec/dotnet-jerry.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.CodeAnalysis.Razor.Compiler.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.CodeAnalysis.Razor.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.Cqs.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.Extensions.EntityFrameworkCore.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.Extensions.Json.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.Extensions.Newtonsoft.Json.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.Mvc.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.Relations.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.Tools.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.Tools.Vendors.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.Vendors.MySql.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.Vendors.Oracle.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.Vendors.Postgres.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.Vendors.Sqlite.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.Vendors.SqlServer.nuspec" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Mvc/Jerrycurl.Cqs.Abstractions/Jerrycurl.Cqs.Abstractions.csproj" />
+    <Project Path="src/Mvc/Jerrycurl.Cqs/Jerrycurl.Cqs.csproj" />
+    <Project Path="src/Mvc/Jerrycurl.Mvc.Abstractions/Jerrycurl.Mvc.Abstractions.csproj" />
+    <Project Path="src/Mvc/Jerrycurl.Mvc/Jerrycurl.Mvc.csproj" />
+    <Project Path="src/Mvc/Jerrycurl.Relations.Abstractions/Jerrycurl.Relations.Abstractions.csproj" />
+    <Project Path="src/Mvc/Jerrycurl.Relations/Jerrycurl.Relations.csproj" />
+  </Folder>
+  <Folder Name="/src/CodeAnalysis/">
+    <Project Path="src/Build/Jerrycurl.CodeAnalysis.Razor.Compiler/Jerrycurl.CodeAnalysis.Razor.Compiler.csproj" />
+    <Project Path="src/Build/Jerrycurl.CodeAnalysis.Razor/Jerrycurl.CodeAnalysis.Razor.csproj" />
+    <Project Path="src/Build/Jerrycurl.CodeAnalysis/Jerrycurl.CodeAnalysis.csproj" />
+  </Folder>
+  <Folder Name="/src/Extensions/">
+    <Project Path="src/Extensions/Jerrycurl.Extensions.EntityFrameworkCore/Jerrycurl.Extensions.EntityFrameworkCore.csproj" />
+    <Project Path="src/Extensions/Jerrycurl.Extensions.Json/Jerrycurl.Extensions.Json.csproj" />
+    <Project Path="src/Extensions/Jerrycurl.Extensions.Newtonsoft.Json/Jerrycurl.Extensions.Newtonsoft.Json.csproj" />
+  </Folder>
+  <Folder Name="/src/NuGet/">
+    <Project Path="src/NuGet/Jerrycurl/Jerrycurl.csproj" />
+  </Folder>
+  <Folder Name="/src/Shared/">
+    <Project Path="src/Shared/Jerrycurl.Common/Jerrycurl.Common.shproj" />
+  </Folder>
+  <Folder Name="/src/Tools/">
+    <Project Path="src/Tools/dotnet-jerry/dotnet-jerry.csproj" />
+    <Project Path="src/Tools/Jerrycurl.Tools.Vendors/Jerrycurl.Tools.Vendors.csproj" />
+    <Project Path="src/Tools/Jerrycurl.Tools/Jerrycurl.Tools.csproj" />
+  </Folder>
+  <Folder Name="/src/Vendors/">
+    <Project Path="src/Vendors/Jerrycurl.Vendors.MySql/Jerrycurl.Vendors.MySql.csproj" />
+    <Project Path="src/Vendors/Jerrycurl.Vendors.Oracle/Jerrycurl.Vendors.Oracle.csproj" />
+    <Project Path="src/Vendors/Jerrycurl.Vendors.Postgres/Jerrycurl.Vendors.Postgres.csproj" />
+    <Project Path="src/Vendors/Jerrycurl.Vendors.Sqlite/Jerrycurl.Vendors.Sqlite.csproj" />
+    <Project Path="src/Vendors/Jerrycurl.Vendors.SqlServer/Jerrycurl.Vendors.SqlServer.csproj" />
+  </Folder>
+  <Folder Name="/test/" />
+  <Folder Name="/test/global/">
+    <File Path="test/unit/Directory.Build.props" />
+    <File Path="test/unit/Directory.Build.targets" />
+    <File Path="test/unit/README.md" />
+  </Folder>
+  <Folder Name="/test/src/">
+    <Project Path="test/unit/src/Mvc/Jerrycurl.Cqs.Test/Jerrycurl.Cqs.Test.csproj" />
+    <Project Path="test/unit/src/Mvc/Jerrycurl.Mvc.Test/Jerrycurl.Mvc.Test.csproj" />
+    <Project Path="test/unit/src/Mvc/Jerrycurl.Relations.Test/Jerrycurl.Relations.Test.csproj" />
+  </Folder>
+  <Folder Name="/test/src/Extensions/">
+    <Project Path="test/unit/src/Extensions/Jerrycurl.Extensions.EntityFrameworkCore.Test/Jerrycurl.Extensions.EntityFrameworkCore.Test.csproj" />
+  </Folder>
+  <Folder Name="/test/src/Shared/">
+    <Project Path="test/unit/src/Shared/Jerrycurl.Test.Common/Jerrycurl.Test.Common.csproj" />
+  </Folder>
+  <Folder Name="/test/src/Vendors/">
+    <Project Path="test/unit/src/Vendors/Jerrycurl.Vendors.MySql.Test/Jerrycurl.Vendors.MySql.Test.csproj" />
+    <Project Path="test/unit/src/Vendors/Jerrycurl.Vendors.Oracle.Test/Jerrycurl.Vendors.Oracle.Test.csproj" />
+    <Project Path="test/unit/src/Vendors/Jerrycurl.Vendors.Postgres.Test/Jerrycurl.Vendors.Postgres.Test.csproj" />
+    <Project Path="test/unit/src/Vendors/Jerrycurl.Vendors.Sqlite.Test/Jerrycurl.Vendors.Sqlite.Test.csproj" />
+    <Project Path="test/unit/src/Vendors/Jerrycurl.Vendors.SqlServer.Test/Jerrycurl.Vendors.SqlServer.Test.csproj" />
+  </Folder>
+</Solution>

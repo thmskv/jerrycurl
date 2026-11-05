@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Jerrycurl.Relations.Metadata;
 
@@ -23,13 +22,6 @@ public class MetadataBuilderException : Exception
 
     }
 
-#if NETFRAMEWORK
-    protected MetadataBuilderException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-
-    }
-#endif
 
     internal static MetadataBuilderException InvalidContract(IRelationMetadata metadata, string message)
         => new MetadataBuilderException($"Invalid contract for {metadata.Identity}: {message}");
