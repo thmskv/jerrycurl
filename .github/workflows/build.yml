@@ -15,10 +15,10 @@ jobs:
 #      JERRY_ORACLE_CONN: DATA SOURCE=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=FREEPDB1)));USER ID=jerryuser;PASSWORD=jerrypass12!
     steps:
       - name: Check out repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             10.0.x
@@ -41,7 +41,7 @@ jobs:
           accept-eula: true
       - name: Create databases
         run: |
-          sqlcmd -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE jerry_testdb'
+          sqlcmd -C -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE jerry_testdb'
       - name: Build project
         shell: pwsh
         run: |
@@ -53,10 +53,10 @@ jobs:
       JERRY_SQLSERVER_CONN: SERVER=localhost;DATABASE=jerry_testdb;USER ID=sa;PASSWORD=YourStrong!Passw0rd;ENCRYPT=false
     steps:
       - name: Check out repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             10.0.x
@@ -66,7 +66,7 @@ jobs:
           accept-eula: true
       - name: Create databases
         run: |
-          sqlcmd -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE jerry_testdb'
+          sqlcmd -C -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE jerry_testdb'
       - name: Build project
         shell: pwsh
         run: |
@@ -77,10 +77,10 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Check out repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             10.0.x
