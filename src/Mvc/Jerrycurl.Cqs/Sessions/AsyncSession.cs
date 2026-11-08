@@ -67,46 +67,53 @@ public class AsyncSession : IAsyncSession
             throw;
         }
 
-        await this.ApplyFilters(h => h.OnCommandCreatedAsync, dbCommand: dbCommand, batch: batch).ConfigureAwait(false);
-
-        DbDataReader reader = null;
-
         try
         {
-            reader = dbCommand.ExecuteReader();
-        }
-        catch (Exception ex)
-        {
-            await applyException(ex).ConfigureAwait(false);
+            await this.ApplyFilters(h => h.OnCommandCreatedAsync, dbCommand: dbCommand, batch: batch).ConfigureAwait(false);
 
-            throw;
-        }
+            DbDataReader reader = null;
 
-        try
-        {
-            bool nextResult = true;
-
-            while (nextResult)
+            try
             {
-                yield return reader;
+                reader = await dbCommand.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                await applyException(ex).ConfigureAwait(false);
 
-                try
-                {
-                    nextResult = await reader.NextResultAsync().ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    await applyException(ex).ConfigureAwait(false);
-
-                    throw;
-                }
+                throw;
             }
 
-            await this.ApplyFilters(h => h.OnCommandExecutedAsync, dbCommand: dbCommand, batch: batch).ConfigureAwait(false);
+            try
+            {
+                bool nextResult = true;
+
+                while (nextResult)
+                {
+                    yield return reader;
+
+                    try
+                    {
+                        nextResult = await reader.NextResultAsync(cancellationToken).ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        await applyException(ex).ConfigureAwait(false);
+
+                        throw;
+                    }
+                }
+
+                await this.ApplyFilters(h => h.OnCommandExecutedAsync, dbCommand: dbCommand, batch: batch).ConfigureAwait(false);
+            }
+            finally
+            {
+                await reader.DisposeAsync().ConfigureAwait(false);
+            }
         }
         finally
         {
-            await reader.DisposeAsync().ConfigureAwait(false);
+            await dbCommand.DisposeAsync().ConfigureAwait(false);
         }
     }
 

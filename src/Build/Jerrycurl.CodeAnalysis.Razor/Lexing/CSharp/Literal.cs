@@ -10,7 +10,7 @@ public class Literal : ISymbol
         {
             while (!tokenizer.IsBreak() && !tokenizer.Eof)
             {
-                if (tokenizer[0] == '\\' && tokenizer[1] == '\'')
+                if (tokenizer[0] == '\\' && tokenizer[1] != null)
                     tokenizer.Move(2);
                 else if (tokenizer[0] == '\'')
                 {
@@ -28,7 +28,7 @@ public class Literal : ISymbol
         {
             while (!tokenizer.IsBreak() && !tokenizer.Eof)
             {
-                if (tokenizer[0] == '\\' && tokenizer[1] == '"')
+                if (tokenizer[0] == '\\' && tokenizer[1] != null)
                     tokenizer.Move(2);
                 else if (tokenizer[0] == '"')
                 {
@@ -64,9 +64,11 @@ public class Literal : ISymbol
         {
             while (!tokenizer.IsBreak() && !tokenizer.Eof)
             {
-                if (tokenizer[0] == '\\' && tokenizer[1] == '"')
+                if (tokenizer[0] == '\\' && tokenizer[1] != null)
                     tokenizer.Move(2);
                 else if (tokenizer[0] == '{' && tokenizer[1] == '{')
+                    tokenizer.Move(2);
+                else if (tokenizer[0] == '}' && tokenizer[1] == '}')
                     tokenizer.Move(2);
                 else if (tokenizer[0] == '{')
                     this.ParseInterpolation(tokenizer);
@@ -89,6 +91,8 @@ public class Literal : ISymbol
                 if (tokenizer[0] == '"' && tokenizer[1] == '"')
                     tokenizer.Move(2);
                 else if (tokenizer[0] == '{' && tokenizer[1] == '{')
+                    tokenizer.Move(2);
+                else if (tokenizer[0] == '}' && tokenizer[1] == '}')
                     tokenizer.Move(2);
                 else if (tokenizer[0] == '{')
                     this.ParseInterpolation(tokenizer);
@@ -113,14 +117,14 @@ public class Literal : ISymbol
 
         int balance = 1;
 
-        while (!tokenizer.Eof && (balance > 0 || tokenizer[0] != '"'))
+        while (!tokenizer.Eof && balance > 0)
         {
             if (tokenizer.Sym(Facts.Statement.Start))
                 balance++;
             else if (tokenizer.Sym(Facts.Statement.End))
                 balance--;
-
-            tokenizer.Move();
+            else if (!this.Parse(tokenizer))
+                tokenizer.Move();
         }
 
         return true;

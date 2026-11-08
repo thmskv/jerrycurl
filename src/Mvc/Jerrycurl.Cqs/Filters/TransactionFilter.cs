@@ -30,6 +30,7 @@ public class TransactionFilter : IFilter
         private readonly Func<IDbConnection, IDbTransaction> factory;
         private IDbTransaction transaction;
         private bool handled = false;
+        private int pendingCommands = 0;
 
         public Handler(Func<IDbConnection, IDbTransaction> factory)
         {
@@ -44,6 +45,12 @@ public class TransactionFilter : IFilter
         public override void OnCommandCreated(FilterContext context)
         {
             context.Command.Transaction = this.transaction;
+            this.pendingCommands++;
+        }
+
+        public override void OnCommandExecuted(FilterContext context)
+        {
+            this.pendingCommands--;
         }
 
         public override void OnException(FilterContext context)
@@ -63,7 +70,14 @@ public class TransactionFilter : IFilter
         public override void OnConnectionClosing(FilterContext context)
         {
             if (!this.handled)
-                this.transaction.Commit();
+            {
+                // A command whose results were not fully consumed means execution was aborted
+                // (e.g. an exception while reading results), so the transaction must not be committed.
+                if (this.pendingCommands > 0)
+                    this.transaction.Rollback();
+                else
+                    this.transaction.Commit();
+            }
 
             this.handled = true;
         }
@@ -80,6 +94,7 @@ public class TransactionFilter : IFilter
         private readonly Func<IDbConnection, IDbTransaction> factory;
         private DbTransaction transaction;
         private bool handled = false;
+        private int pendingCommands = 0;
 
         public AsyncHandler(Func<IDbConnection, IDbTransaction> factory)
         {
@@ -96,6 +111,14 @@ public class TransactionFilter : IFilter
         public override Task OnCommandCreatedAsync(FilterContext context)
         {
             context.Command.Transaction = this.transaction;
+            this.pendingCommands++;
+
+            return Task.CompletedTask;
+        }
+
+        public override Task OnCommandExecutedAsync(FilterContext context)
+        {
+            this.pendingCommands--;
 
             return Task.CompletedTask;
         }
@@ -117,7 +140,13 @@ public class TransactionFilter : IFilter
         public override async Task OnConnectionClosingAsync(FilterContext context)
         {
             if (!this.handled)
-                await this.transaction.CommitAsync().ConfigureAwait(false);
+            {
+                // See Handler.OnConnectionClosing.
+                if (this.pendingCommands > 0)
+                    await this.transaction.RollbackAsync().ConfigureAwait(false);
+                else
+                    await this.transaction.CommitAsync().ConfigureAwait(false);
+            }
 
             this.handled = true;
         }

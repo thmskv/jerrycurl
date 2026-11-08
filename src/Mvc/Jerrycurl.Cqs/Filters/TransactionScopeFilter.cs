@@ -38,11 +38,15 @@ public class TransactionScopeFilter : IFilter
     {
         private TransactionScope transaction;
         private bool handled = false;
+        private int pendingCommands = 0;
 
         public Handler(Func<TransactionScope> factory)
         {
             this.transaction = factory();
         }
+
+        public override void OnCommandCreated(FilterContext context) => this.pendingCommands++;
+        public override void OnCommandExecuted(FilterContext context) => this.pendingCommands--;
 
         public override void OnException(FilterContext context)
         {
@@ -52,7 +56,8 @@ public class TransactionScopeFilter : IFilter
 
         public override void OnConnectionClosed(FilterContext context)
         {
-            if (!this.handled)
+            // Only complete the scope if every command ran to completion; see TransactionFilter.
+            if (!this.handled && this.pendingCommands == 0)
                 this.transaction.Complete();
 
             this.handled = true;
@@ -69,10 +74,25 @@ public class TransactionScopeFilter : IFilter
     {
         private TransactionScope transaction;
         private bool handled = false;
+        private int pendingCommands = 0;
 
         public AsyncHandler(Func<TransactionScope> factory)
         {
             this.transaction = factory();
+        }
+
+        public override Task OnCommandCreatedAsync(FilterContext context)
+        {
+            this.pendingCommands++;
+
+            return Task.CompletedTask;
+        }
+
+        public override Task OnCommandExecutedAsync(FilterContext context)
+        {
+            this.pendingCommands--;
+
+            return Task.CompletedTask;
         }
 
         public override Task OnExceptionAsync(FilterContext context)
@@ -85,7 +105,8 @@ public class TransactionScopeFilter : IFilter
 
         public override Task OnConnectionClosedAsync(FilterContext context)
         {
-            if (!this.handled)
+            // Only complete the scope if every command ran to completion; see TransactionFilter.
+            if (!this.handled && this.pendingCommands == 0)
                 this.transaction.Complete();
 
             this.handled = true;

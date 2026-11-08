@@ -19,7 +19,7 @@ public class PostgresOrmTool : OrmTool
 
         using (DbCommand tablesAndColumns = connection.CreateCommand())
         {
-            tablesAndColumns.CommandText = @"SELECT *
+            tablesAndColumns.CommandText = @"SELECT *, pg_get_serial_sequence(quote_ident(T2.TABLE_SCHEMA) || '.' || quote_ident(T2.TABLE_NAME), T2.COLUMN_NAME) AS serial_seq
                                                  FROM INFORMATION_SCHEMA.TABLES T1
                                                  INNER JOIN INFORMATION_SCHEMA.COLUMNS T2 ON T2.TABLE_SCHEMA = T1.TABLE_SCHEMA AND T2.TABLE_NAME = T1.TABLE_NAME
                                                  WHERE T1.TABLE_TYPE = 'BASE TABLE' AND T1.TABLE_SCHEMA NOT IN ('information_schema','pg_catalog')

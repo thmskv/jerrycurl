@@ -26,14 +26,19 @@ public class ProjectionValues<TItem> : IProjectionValues<TItem>
     {
         this.Context.Execution.Buffer.Push(this.BatchIndex);
 
-        foreach (IProjection<TItem> item in this.Items)
+        try
         {
-            yield return item;
+            foreach (IProjection<TItem> item in this.Items)
+            {
+                yield return item;
 
-            this.Context.Execution.Buffer.Mark();
+                this.Context.Execution.Buffer.Mark();
+            }
         }
-
-        this.Context.Execution.Buffer.Pop();
+        finally
+        {
+            this.Context.Execution.Buffer.Pop();
+        }
     }
 
     IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();

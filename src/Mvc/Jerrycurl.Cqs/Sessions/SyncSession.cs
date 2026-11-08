@@ -57,17 +57,26 @@ public partial class SyncSession : ISyncSession
             throw;
         }
 
-        this.ApplyFilters(h => h.OnCommandCreated, dbCommand: dbCommand, batch: batch);
-
         IDataReader reader = null;
 
         try
         {
-            reader = dbCommand.ExecuteReader();
+            this.ApplyFilters(h => h.OnCommandCreated, dbCommand: dbCommand, batch: batch);
+
+            try
+            {
+                reader = dbCommand.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                applyException(ex);
+
+                throw;
+            }
         }
-        catch (Exception ex)
+        catch
         {
-            applyException(ex);
+            dbCommand.Dispose();
 
             throw;
         }
@@ -101,6 +110,7 @@ public partial class SyncSession : ISyncSession
             finally
             {
                 reader.Dispose();
+                dbCommand.Dispose();
             }
         }
     }

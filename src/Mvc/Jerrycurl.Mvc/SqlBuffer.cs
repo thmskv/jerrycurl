@@ -11,7 +11,7 @@ namespace Jerrycurl.Mvc;
 public class SqlBuffer : ISqlBuffer
 {
     private readonly List<IndexedBuffer> innerBuffers;
-    private readonly Stack<int> bufferStack = new Stack<int>();
+    private readonly Stack<IndexedBuffer> bufferStack = new Stack<IndexedBuffer>();
 
     private IndexedBuffer currentBuffer;
 
@@ -28,7 +28,7 @@ public class SqlBuffer : ISqlBuffer
 
     public void Push(int batchIndex)
     {
-        this.bufferStack.Push(batchIndex);
+        this.bufferStack.Push(this.currentBuffer);
 
         if (batchIndex >= 0)
         {
@@ -40,17 +40,7 @@ public class SqlBuffer : ISqlBuffer
     public void Pop()
     {
         if (this.bufferStack.Count > 0)
-        {
-            int batchIndex = this.bufferStack.Pop();
-
-            if (batchIndex >= 0)
-            {
-                if (this.bufferStack.Count > 0)
-                    this.currentBuffer = this.innerBuffers[this.bufferStack.Peek()];
-                else
-                    this.currentBuffer = this.innerBuffers[0];
-            }
-        }
+            this.currentBuffer = this.bufferStack.Pop();
     }
 
     public void Mark()
@@ -104,13 +94,15 @@ public class SqlBuffer : ISqlBuffer
         this.Text.Append(text);
     }
 
-    private SqlOffset GetCurrentOffset()
+    private SqlOffset GetCurrentOffset() => GetEndOffset(this.currentBuffer);
+
+    private static SqlOffset GetEndOffset(IndexedBuffer buffer)
     {
         return new SqlOffset()
         {
-            NumberOfParams = this.Parameters.Count,
-            NumberOfBindings = this.Bindings.Count,
-            Text = this.Text.Length,
+            NumberOfParams = buffer.Parameters.Count,
+            NumberOfBindings = buffer.Bindings.Count,
+            Text = buffer.Text.Length,
         };
     }
 
@@ -144,9 +136,14 @@ public class SqlBuffer : ISqlBuffer
 
     private IEnumerable<ISqlContent> Read(IndexedBuffer buffer, ISqlOptions options)
     {
-        if (options == null || (options.MaxParameters <= 0 && options.MaxSql <= 0) || (options.MaxParameters >= this.Parameters.Count && options.MaxSql >= this.Text.Length))
+        if (options == null || (options.MaxParameters <= 0 && options.MaxSql <= 0) || (options.MaxParameters >= buffer.Parameters.Count && options.MaxSql >= buffer.Text.Length))
         {
-            yield return this.ReadToEnd();
+            yield return new SqlContent()
+            {
+                Bindings = [.. buffer.Bindings],
+                Parameters = [.. buffer.Parameters],
+                Text = buffer.Text.ToString(),
+            };
             yield break;
         }
 
@@ -157,7 +154,7 @@ public class SqlBuffer : ISqlBuffer
         int maxSql = options.MaxSql <= 0 ? int.MaxValue : options.MaxSql;
         int maxParams = options.MaxParameters <= 0 ? int.MaxValue : options.MaxParameters;
 
-        SqlOffset[] offsets = [.. buffer.Offsets, this.GetCurrentOffset()];
+        SqlOffset[] offsets = [.. buffer.Offsets, GetEndOffset(buffer)];
 
         for (int i = 0; i < offsets.Length - 1; i++)
         {

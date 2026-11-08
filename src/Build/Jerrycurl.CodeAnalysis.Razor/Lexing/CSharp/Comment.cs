@@ -15,7 +15,7 @@ public class Comment : ISymbol
         }
         else if (tokenizer.String("/*"))
         {
-            while (!tokenizer.Eof && tokenizer[0] != '*' || tokenizer[1] != '/')
+            while (!tokenizer.Eof && !(tokenizer[0] == '*' && tokenizer[1] == '/'))
                 tokenizer.Move();
 
             if (!tokenizer.Eof)

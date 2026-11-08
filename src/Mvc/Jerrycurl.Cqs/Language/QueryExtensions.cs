@@ -159,7 +159,7 @@ public static class QueryExtensions
         {
             await buffer.InsertAsync(dataReader, cancellationToken).ConfigureAwait(false);
         }
-        while (await dataReader.NextResultAsync().ConfigureAwait(false));
+        while (await dataReader.NextResultAsync(cancellationToken).ConfigureAwait(false));
     }
 
     public static Task<QueryBuffer> InsertAsync(this QueryBuffer buffer, IRelation relation, params string[] targetHeader)

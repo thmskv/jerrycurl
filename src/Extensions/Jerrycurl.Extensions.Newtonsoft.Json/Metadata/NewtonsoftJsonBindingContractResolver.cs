@@ -51,7 +51,7 @@ public class NewtonsoftJsonBindingContractResolver : IBindingContractResolver
         {
             Expression isNull = Expression.ReferenceEqual(value, Expression.Constant(null, value.Type));
 
-            nullCheck = nullCheck == null ? isNull : Expression.AndAlso(nullCheck, isNull);
+            nullCheck = nullCheck == null ? isNull : Expression.OrElse(nullCheck, isNull);
         }
 
         if (value.Type == typeof(object))
@@ -114,7 +114,7 @@ public class NewtonsoftJsonBindingContractResolver : IBindingContractResolver
         {
             return new BindingParameterContract()
             {
-                Convert = o => (object)((JObject)o)?.ToString() ?? DBNull.Value,
+                Convert = o => (object)((JToken)o)?.ToString(Formatting.Indented) ?? DBNull.Value,
             };
         }
         else if (this.HasJsonAttribute(metadata))

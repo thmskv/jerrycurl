@@ -25,7 +25,7 @@ public class RazorNamingConvention : IRazorProjectConvention
     {
         return new RazorFragment()
         {
-            Text = CSharp.Identifier(Path.GetFileName(razorPage.ProjectPath ?? razorPage.Path)),
+            Text = CSharp.EscapeKeyword(CSharp.Identifier(Path.GetFileName(razorPage.ProjectPath ?? razorPage.Path))),
         };
     }
 
@@ -38,7 +38,7 @@ public class RazorNamingConvention : IRazorProjectConvention
 
         return new RazorFragment()
         {
-            Text = ns.ToString(),
+            Text = CSharp.QualifiedName(ns.Definition),
         };
     }
 }

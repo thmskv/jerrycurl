@@ -162,7 +162,7 @@ public static class CommandExtensions
         {
             await buffer.UpdateAsync(dataReader, cancellationToken).ConfigureAwait(false);
         }
-        while (await dataReader.NextResultAsync().ConfigureAwait(false));
+        while (await dataReader.NextResultAsync(cancellationToken).ConfigureAwait(false));
     }
 
     public static Task<CommandBuffer> UpdateAsync(this CommandBuffer buffer, IRelation relation, params string[] targetHeader)

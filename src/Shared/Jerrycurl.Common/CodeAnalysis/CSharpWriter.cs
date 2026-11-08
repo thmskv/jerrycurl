@@ -90,7 +90,7 @@ internal class CSharpWriter
 
         await this.TextWriter.WriteAsync(type);
         await this.TextWriter.WriteAsync(" ");
-        await this.TextWriter.WriteAsync(name);
+        await this.TextWriter.WriteAsync(CSharp.EscapeKeyword(name));
         await this.TextWriter.WriteLineAsync(" { get; set; }");
     }
 
@@ -106,7 +106,7 @@ internal class CSharpWriter
 
         await this.TextWriter.WriteAsync(type);
         await this.TextWriter.WriteAsync(" ");
-        await this.TextWriter.WriteAsync(CSharp.Identifier(name));
+        await this.TextWriter.WriteAsync(CSharp.EscapeKeyword(CSharp.Identifier(name)));
 
         if (baseTypes?.Length > 0)
         {
@@ -153,7 +153,7 @@ internal class CSharpWriter
     public async Task WriteNamespaceStartAsync(string ns)
     {
         await this.WriteIndentAsync();
-        await this.TextWriter.WriteLineAsync($"namespace {ns}");
+        await this.TextWriter.WriteLineAsync($"namespace {CSharp.QualifiedName(ns)}");
         await this.WriteIndentAsync();
         await this.TextWriter.WriteLineAsync("{");
 

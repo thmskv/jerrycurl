@@ -28,7 +28,7 @@ public static class ProjectorExtensions
 
         return projector
                 .WriteLine()
-                .Write($"#line {span.Value.Line} {CSharp.Literal(sourceName)}")
+                .Write($"#line {span.Value.Line} {CSharp.FileName(sourceName)}")
                 .WriteLine()
                 .Write(new string(' ', span.Value.Column - 1))
                 .Write(text, span.Value)

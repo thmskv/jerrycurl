@@ -43,7 +43,7 @@ public class RazorSourceGenerator : IIncrementalGenerator
         {
             var path = file.Left.Path;
 
-            if (Path.GetFileNameWithoutExtension(path) == "_imports")
+            if (string.Equals(Path.GetFileNameWithoutExtension(path), "_imports", StringComparison.OrdinalIgnoreCase))
                 return true;
 
             return false;

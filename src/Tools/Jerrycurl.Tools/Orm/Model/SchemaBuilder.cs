@@ -98,7 +98,7 @@ public class SchemaBuilder
 
         if (key != null)
             return key;
-        else if (column != null)
+        else if (column == null)
             column = this.AddColumn(tableSchema, tableName, columnName);
 
         column.Keys.Add(key = new KeyModel()
@@ -118,7 +118,7 @@ public class SchemaBuilder
 
         if (reference != null)
             return reference;
-        else if (column != null)
+        else if (column == null)
             column = this.AddColumn(tableSchema, tableName, columnName);
 
         column.References.Add(reference = new ReferenceModel()

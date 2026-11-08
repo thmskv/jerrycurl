@@ -50,7 +50,7 @@ public class JsonBindingContractResolver : IBindingContractResolver
         {
             Expression isNull = Expression.ReferenceEqual(value, Expression.Constant(null, value.Type));
 
-            nullCheck = nullCheck == null ? isNull : Expression.AndAlso(nullCheck, isNull);
+            nullCheck = nullCheck == null ? isNull : Expression.OrElse(nullCheck, isNull);
         }
 
         if (value.Type == typeof(object))

@@ -75,7 +75,7 @@ public class QueryEngine
 
     #region " Enumerate "
 
-    public IAsyncEnumerable<QueryReader> EnumerateAsync(Query query, CancellationToken cancellationToken = default) => this.EnumerateAsync(query, cancellationToken);
+    public IAsyncEnumerable<QueryReader> EnumerateAsync(Query query, CancellationToken cancellationToken = default) => this.EnumerateAsync([query], cancellationToken);
     public async IAsyncEnumerable<QueryReader> EnumerateAsync(IEnumerable<Query> queries, [EnumeratorCancellation]CancellationToken cancellationToken = default)
     {
         if (queries == null)

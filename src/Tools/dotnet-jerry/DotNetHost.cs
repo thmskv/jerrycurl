@@ -23,7 +23,7 @@ public class DotNetHost
 
         //Environment.CurrentDirectory = "C:\\Users\\thomas\\Desktop\\testx";
 
-        args = new[] { "orm", "diff", @"c:\users\thomas\desktop\Database.orm" };
+        //args = new[] { "orm", "diff", @"c:\users\thomas\desktop\Database.orm" };
         //args = new[] { "orm", "sync", "--flags", "useNullables" };
         //args = new[] { "orm", "new", "-v", "sqlserver", "-c", "server=.;database=gerstl_120922;trusted_connection=true;encrypt=false", "-i", @"c:\users\thomas\desktop\Database.orm", "--debug", @"c:\users\thomas\desktop\Database.log" };
         //args = new[] { "orm", "sync", "--vendor", "sqlserver", "-c", "server=.;database=gerstl_120922;trusted_connection=true;encrypt=false", "-ns", "Kaffezars", "--verbose", "--logo" };

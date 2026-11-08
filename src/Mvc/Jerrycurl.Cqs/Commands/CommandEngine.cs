@@ -45,7 +45,7 @@ public class CommandEngine
         foreach (IBatch batch in this.GetBufferedCommands(commands, buffer))
         {
             await foreach (DbDataReader dataReader in session.ExecuteAsync(batch, cancellationToken).ConfigureAwait(false))
-                buffer.Update(dataReader);
+                await buffer.UpdateAsync(dataReader, cancellationToken).ConfigureAwait(false);
         }
 
         buffer.Commit();
