@@ -163,7 +163,7 @@ internal class OrmCodeWriter
         {
             string tableName = !string.IsNullOrEmpty(table.Schema) ? $"{table.Schema}.{table.Name}" : $"{table.Name}";
             string className = !string.IsNullOrEmpty(table.Clr.Namespace) ? $"{table.Clr.Namespace}.{table.Clr.Name}" : table.Clr.Name;
-            string[] propertyNames = table.Columns.Where(c => !c.Ignore).Select(c => $"{c.Clr.Name}").ToArray();
+            string[] propertyNames = [.. table.Columns.Where(c => !c.Ignore).Select(c => $"{c.Clr.Name}")];
             string propertyMoniker = string.Join(", ", propertyNames.Take(5));
 
             if (table.Ignore)

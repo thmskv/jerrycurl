@@ -15,7 +15,7 @@ public class CrudTests
         crud.Sql(@"CREATE TABLE IF NOT EXISTS CrudItem ( Id integer PRIMARY KEY AUTOINCREMENT, Counter integer NOT NULL, String nvarchar(50) NULL );");
         crud.Sql(@"DELETE FROM CrudItem;");
 
-        IList<CrudItem> newItems = Enumerable.Range(0, 20).Select(i => new CrudItem() { Counter = i, String = $"String {i}" }).ToList();
+        IList<CrudItem> newItems = [.. Enumerable.Range(0, 20).Select(i => new CrudItem() { Counter = i, String = $"String {i}" })];
 
         crud.CreateWithLiterals(newItems);
 
@@ -29,7 +29,7 @@ public class CrudTests
         crud.Sql(@"CREATE TABLE IF NOT EXISTS CrudItem ( Id integer PRIMARY KEY AUTOINCREMENT, Counter integer NOT NULL, String nvarchar(50) NULL );");
         crud.Sql(@"DELETE FROM CrudItem;");
 
-        IList<CrudItem> newItems = Enumerable.Range(0, 20).Select(i => new CrudItem() { Counter = i }).ToList();
+        IList<CrudItem> newItems = [.. Enumerable.Range(0, 20).Select(i => new CrudItem() { Counter = i })];
 
         crud.Create(newItems);
 

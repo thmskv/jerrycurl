@@ -78,14 +78,14 @@ internal abstract class BaseParser
         {
             return new DynamicReader(node)
             {
-                Properties = node.Properties.Select(n => this.CreateReader(result, n)).ToList(),
+                Properties = [.. node.Properties.Select(n => this.CreateReader(result, n))],
             };
         }
         else
         {
             NewReader reader = new NewReader(node.Metadata)
             {
-                Properties = node.Properties.Select(n => this.CreateReader(result, n)).ToList(),
+                Properties = [.. node.Properties.Select(n => this.CreateReader(result, n))],
             };
 
             this.AddPrimaryKey(reader);

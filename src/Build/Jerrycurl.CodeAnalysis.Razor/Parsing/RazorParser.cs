@@ -26,7 +26,7 @@ public class RazorParser
         if (project == null)
             throw new ArgumentNullException(nameof(project));
 
-        IList<RazorPage> pages = this.ParsePages(project).ToList();
+        IList<RazorPage> pages = [.. this.ParsePages(project)];
 
         foreach (IRazorProjectConvention convention in project.Conventions ?? [])
             convention.Apply(project, pages);
@@ -159,7 +159,7 @@ public class RazorParser
                     break;
                 case CSharpBlock cs when cs.RazorType == RazorType.Injection || cs.RazorType == RazorType.Projection:
                     {
-                        Token[] arguments = lex.Tokens.Where(t => t.Symbol is Argument).ToArray();
+                        Token[] arguments = [.. lex.Tokens.Where(t => t.Symbol is Argument)];
 
                         InjectDirective directive = new InjectDirective();
 

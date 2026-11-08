@@ -27,7 +27,7 @@ public class EntityFrameworkCoreContractResolver : IRelationContractResolver, IT
 
     private void InitializeEntities(DbContext dbContext)
     {
-        this.entities = dbContext.Model.GetEntityTypes().ToArray();
+        this.entities = [.. dbContext.Model.GetEntityTypes()];
     }
 
     public IRelationContract GetContract(IRelationMetadata metadata) => null;
@@ -71,7 +71,7 @@ public class EntityFrameworkCoreContractResolver : IRelationContractResolver, IT
         if (tableName == null)
             return null;
 
-        return new[] { schemaName, tableName }.NotNull().ToArray();
+        return [.. new[] { schemaName, tableName }.NotNull()];
     }
 
     public string GetColumnName(ITableMetadata metadata)

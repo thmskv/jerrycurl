@@ -260,7 +260,7 @@ public class DefaultBindingContractResolver : IBindingContractResolver
 
         if (this.IsNumberType(valueInfo.Metadata.Type))
         {
-            List<Type> testTypes = this.GetNumberTypes().Where(t => t != valueInfo.Metadata.Type).ToList();
+            List<Type> testTypes = [.. this.GetNumberTypes().Where(t => t != valueInfo.Metadata.Type)];
 
             testTypes.Insert(0, valueInfo.Metadata.Type);
 
@@ -274,7 +274,7 @@ public class DefaultBindingContractResolver : IBindingContractResolver
         }
         else if (valueInfo.Metadata.Type == typeof(bool))
         {
-            List<Type> testTypes = this.GetNumberTypes().Where(t => t != valueInfo.Metadata.Type).ToList();
+            List<Type> testTypes = [.. this.GetNumberTypes().Where(t => t != valueInfo.Metadata.Type)];
 
             testTypes.Insert(0, typeof(bool));
 

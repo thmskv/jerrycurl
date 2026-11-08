@@ -12,7 +12,7 @@ internal static class CSharp
         if (string.IsNullOrEmpty(s))
             throw new ArgumentException("Identifier cannot be empty.", nameof(s));
 
-        string identifier = new string(s.Select(c => IsIdentifierPart(c) ? c : '_').ToArray());
+        string identifier = new string([.. s.Select(c => IsIdentifierPart(c) ? c : '_')]);
 
         if (!IsIdentifierStart(s[0]))
             identifier = $"_{identifier}";

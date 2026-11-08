@@ -38,7 +38,7 @@ internal class QueryCompiler
 
         if (result.QueryType == QueryType.Aggregate)
         {
-            AggregateAttribute[] header = result.Aggregates.Select(a => a.Attribute).NotNull().ToArray();
+            AggregateAttribute[] header = [.. result.Aggregates.Select(a => a.Attribute).NotNull()];
 
             return new ListFactory()
             {

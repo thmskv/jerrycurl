@@ -95,7 +95,7 @@ public static class RelationExtensions
     }
 
     public static IList<IDbDataParameter> AddParameters(this IRelation relation, IDbCommand dbCommand)
-        => relation.Body.SelectMany(t => t.AddParameters(dbCommand)).ToList();
+        => [.. relation.Body.SelectMany(t => t.AddParameters(dbCommand))];
 
     public static IParameter AsParameter(this IField field, string parameterName)
         => new Parameter(parameterName, field);

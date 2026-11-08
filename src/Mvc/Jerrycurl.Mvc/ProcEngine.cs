@@ -139,8 +139,8 @@ public class ProcEngine : IProcEngine
     {
         IDomainOptions options = this.Options(descriptor.DomainType);
 
-        PageDescriptor[] template = this.GetTemplateHierarchy(descriptor).Reverse().ToArray();
-        PageConstructor[] factories = template.Select(t => this.CreatePageConstructor(t.PageType)).Concat(new PageConstructor[1]).ToArray();
+        PageDescriptor[] template = [.. this.GetTemplateHierarchy(descriptor).Reverse()];
+        PageConstructor[] factories = [.. template.Select(t => this.CreatePageConstructor(t.PageType)), .. new PageConstructor[1]];
 
         IProjectionMetadata resultMetadata = this.GetMetadataForResult(descriptor, args, options);
         IProjectionMetadata modelMetadata = this.GetMetadataForModel(descriptor, args, options);
@@ -162,7 +162,7 @@ public class ProcEngine : IProcEngine
             IProjection modelProjection = new Projection(modelIdentity, context, modelMetadata);
             IProjection resultProjection = new Projection(resultIdentity, context, resultMetadata);
 
-            PageExecutionContext[] execution = template.Select(t => new PageExecutionContext() { Page = t }).ToArray();
+            PageExecutionContext[] execution = [.. template.Select(t => new PageExecutionContext() { Page = t })];
 
             execution[0].Buffer = new ProcBuffer();
 

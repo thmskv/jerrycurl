@@ -69,7 +69,7 @@ internal sealed class Namespace : IEquatable<Namespace>
     public Namespace(string definition)
     {
         this.Definition = definition ?? "";
-        this.parts = this.Definition.Split(['.']).Select(this.EscapePart).Where(p => p.Length > 0).ToArray();
+        this.parts = [.. this.Definition.Split(['.']).Select(this.EscapePart).Where(p => p.Length > 0)];
     }
 
     private Namespace(string[] parts)
@@ -106,7 +106,7 @@ internal sealed class Namespace : IEquatable<Namespace>
         if (this.Level <= 1)
             return Global;
 
-        return new Namespace(this.parts.Take(this.parts.Length - 1).ToArray());
+        return new Namespace([.. this.parts.Take(this.parts.Length - 1)]);
     }
 
     public bool IsParentOf(Namespace ns)

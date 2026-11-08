@@ -87,11 +87,11 @@ public class ProcLocator : IProcLocator
         if (this.IsDomainType(originType))
             return originType;
 
-        Type[] allTypes = originType.Assembly.DefinedTypes.Select(ti => ti.AsType()).ToArray();
+        Type[] allTypes = [.. originType.Assembly.DefinedTypes.Select(ti => ti.AsType())];
 
         foreach (Namespace ns in Namespace.FromType(originType).Traverse())
         {
-            Type[] domainTypes = allTypes.Where(t => t.Namespace == ns.Definition && this.IsDomainType(t)).ToArray();
+            Type[] domainTypes = [.. allTypes.Where(t => t.Namespace == ns.Definition && this.IsDomainType(t))];
 
             if (domainTypes.Length == 1)
                 return domainTypes[0];

@@ -10,7 +10,7 @@ internal static class CompositeKey
 {
     public static Type Create(IEnumerable<Type> types)
     {
-        Type[] typeArray = types.ToArray();
+        Type[] typeArray = [.. types];
 
         if (typeArray.Length == 0)
             return null;

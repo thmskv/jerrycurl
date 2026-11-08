@@ -39,8 +39,8 @@ public class TableValuedParameter : IParameter
             ITableMetadata tableMetadata = columnMetadata[0].HasFlag(TableMetadataFlags.Table) ? columnMetadata[0] : columnMetadata[0].Owner;
 
             string tvpName = string.Join(".", tableMetadata.TableName);
-            string[] columnNames = columnMetadata.Select(m => m.ColumnName).ToArray();
-            BindingParameterConverter[] converters = bindingMetadata.Select(m => m?.Parameter?.Convert).ToArray();
+            string[] columnNames = [.. columnMetadata.Select(m => m.ColumnName)];
+            BindingParameterConverter[] converters = [.. bindingMetadata.Select(m => m?.Parameter?.Convert)];
 
             return (sp, r) => BindParameter(sp, tvpName, columnNames,  converters, bindingMetadata, r);
         });

@@ -75,7 +75,7 @@ public static class RazorTool
             RazorGeneratorOptions generatorOptions = new RazorGeneratorOptions()
             {
                 TemplateCode = ResourceHelper.GetRazorSkeletonString(),
-                Imports = RazorFacts.DefaultNamespaces.Select(ns => new RazorFragment() { Text = ns }).ToList(),
+                Imports = [.. RazorFacts.DefaultNamespaces.Select(ns => new RazorFragment() { Text = ns })],
             };
             RazorGenerator generator = new RazorGenerator(generatorOptions);
 

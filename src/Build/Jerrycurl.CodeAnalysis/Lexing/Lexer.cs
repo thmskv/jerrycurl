@@ -40,7 +40,7 @@ public sealed class Lexer : IEnumerable<Lexeme>
         }
         else if (rule.Parse(lexer))
         {
-            Token[] tokens = lexer.Tokenize().ToArray();
+            Token[] tokens = [.. lexer.Tokenize()];
             Lexeme[] lexemes = [.. lexer];
 
             this.tokens.AddRange(tokens);

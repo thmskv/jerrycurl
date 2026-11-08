@@ -33,6 +33,6 @@ public class Tokenizer
 
     public override string ToString()
     {
-        return new string(Enumerable.Range(0, this.Length).Select(i => this.Source[i].Value).ToArray());
+        return new string([.. Enumerable.Range(0, this.Length).Select(i => this.Source[i].Value)]);
     }
 }

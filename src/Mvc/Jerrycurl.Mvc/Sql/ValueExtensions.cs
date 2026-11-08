@@ -32,7 +32,7 @@ public static class ValueExtensions
 
             while (reader.Read())
             {
-                IProjectionData[] dataSet = reader.GetData().ToArray();
+                IProjectionData[] dataSet = [.. reader.GetData()];
 
                 if (dataSet[0].Source.Snapshot != null)
                 {

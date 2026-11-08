@@ -87,7 +87,7 @@ internal class BufferParser
 
     private void AddProperties(Node node, NodeReader reader, BufferTree tree, QueueIndex queue)
     {
-        reader.Properties = node.Properties.Select(n => this.CreateProperty(n, tree, queue)).ToList();
+        reader.Properties = [.. node.Properties.Select(n => this.CreateProperty(n, tree, queue))];
     }
 
     private void AddWriters(Node node, NodeReader reader, BufferTree tree, QueueIndex queue)

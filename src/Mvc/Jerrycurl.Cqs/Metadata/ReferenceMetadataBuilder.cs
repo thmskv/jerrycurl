@@ -121,7 +121,7 @@ public class ReferenceMetadataBuilder : IMetadataBuilder<IReferenceMetadata>
         {
             Flags = g.All(t => t.Attribute.IsPrimary) ? ReferenceKeyFlags.Primary : ReferenceKeyFlags.Candidate,
             Name = g.First().KeyName,
-            Properties = g.OrderBy(t => t.Attribute.Index).Select(t => t.Metadata).ToList(),
+            Properties = [.. g.OrderBy(t => t.Attribute.Index).Select(t => t.Metadata)],
         });
 
         IEnumerable<ReferenceKey> foreignKeys = refMap.GroupBy(t => (t.ReferenceName, t.KeyName)).Select(g => new ReferenceKey()
@@ -129,7 +129,7 @@ public class ReferenceMetadataBuilder : IMetadataBuilder<IReferenceMetadata>
             Flags = ReferenceKeyFlags.Foreign,
             Name = g.First().ReferenceName,
             Other = g.First().KeyName,
-            Properties = g.OrderBy(t => t.Attribute.Index).Select(t => t.Metadata).ToList(),
+            Properties = [.. g.OrderBy(t => t.Attribute.Index).Select(t => t.Metadata)],
         });
 
         return candidateKeys.Concat(foreignKeys);

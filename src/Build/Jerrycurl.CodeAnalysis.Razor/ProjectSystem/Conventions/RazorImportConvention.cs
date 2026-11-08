@@ -25,7 +25,7 @@ public class RazorImportConvention : IRazorProjectConvention
 
     private void ApplyFileImports(RazorPage resultPage, List<RazorPage> importPages)
     {
-        List<RazorPage> validImports = importPages.Where(i => this.IsImportFor(i, resultPage)).ToList();
+        List<RazorPage> validImports = [.. importPages.Where(i => this.IsImportFor(i, resultPage))];
 
         List<RazorFragment> newImports = [];
         List<InjectDirective> newProjections = [];

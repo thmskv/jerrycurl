@@ -39,8 +39,8 @@ public class Projector
 
         lexer.Yield(new Chunks());
 
-        this.tokens = lexer.Tokenize().ToArray();
-        this.chunks = this.tokens.Select(t => template.GetText(t.Span)).ToArray();
+        this.tokens = [.. lexer.Tokenize()];
+        this.chunks = [.. this.tokens.Select(t => template.GetText(t.Span))];
     }
 
     public Projector WriteLine() => this.Write(Environment.NewLine);

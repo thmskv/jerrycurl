@@ -14,8 +14,8 @@ public class ProcBuffer : SqlBuffer, ISqlSerializer<Command>, ISqlSerializer<Que
             yield return new Command()
             {
                 CommandText = content.Text,
-                Parameters = content.Parameters.ToList(),
-                Bindings = content.Bindings.ToList(),
+                Parameters = [.. content.Parameters],
+                Bindings = [.. content.Bindings],
             };
         }
 
@@ -28,7 +28,7 @@ public class ProcBuffer : SqlBuffer, ISqlSerializer<Command>, ISqlSerializer<Que
             yield return new Query()
             {
                 QueryText = content.Text,
-                Parameters = content.Parameters.ToList(),
+                Parameters = [.. content.Parameters],
             };
         }
     }

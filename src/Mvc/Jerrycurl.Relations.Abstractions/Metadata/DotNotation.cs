@@ -87,7 +87,7 @@ public class DotNotation
 
         string[] parts = name.Split([this.Dot]);
 
-        return this.Combine(parts.Take(parts.Length - 1).ToArray());
+        return this.Combine([.. parts.Take(parts.Length - 1)]);
     }
 
     public string Member(string name)

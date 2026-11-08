@@ -24,12 +24,12 @@ internal class RelationCompiler
         IRelationMetadata[] metadata = this.GetMetadataArgument(tree);
 
         BufferInternalWriter initializer = this.Compile(tree.Source, tree.Queues, tree.Header.Degree);
-        List<BufferInternalWriter> writers = tree.Queues.Select(this.Compile).ToList();
+        List<BufferInternalWriter> writers = [.. tree.Queues.Select(this.Compile)];
 
         return new BufferWriter()
         {
             Initializer = this.Recompile(initializer, notation, binders, metadata),
-            Queues = writers.Select(w => this.Recompile(w, notation, binders, metadata)).ToArray(),
+            Queues = [.. writers.Select(w => this.Recompile(w, notation, binders, metadata))],
         };
     }
 

@@ -240,7 +240,7 @@ internal class ListParser : BaseParser
 
     private void AddChildKey(ListResult result, TargetWriter writer)
     {
-        IList<IReference> references = this.GetChildReferences(writer.Source.Metadata).ToList();
+        IList<IReference> references = [.. this.GetChildReferences(writer.Source.Metadata)];
         KeyReader childKey = references.Select(r => this.FindChildKey(writer.Source, r)).NotNull().FirstOrDefault();
 
         if (childKey != null && this.IsValidJoinKey(childKey, throwOnInvalid: true))

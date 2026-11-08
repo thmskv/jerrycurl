@@ -125,7 +125,7 @@ $beginnamespace$
 	}
 $endnamespace$
 #pragma warning restore IDE0009",
-                        Imports = RazorFacts.DefaultNamespaces.Select(ns => new RazorFragment() { Text = ns }).ToList(),
+                        Imports = [.. RazorFacts.DefaultNamespaces.Select(ns => new RazorFragment() { Text = ns })],
                     });
 
                     var parsed = parser.Parse(project);
