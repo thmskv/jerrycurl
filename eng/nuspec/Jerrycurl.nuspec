@@ -23,6 +23,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="$IconPath$" target="" />
+        <file src="$SourceFiles$" target="" />
     </files>
 </package>
