@@ -6,6 +6,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="$(PostgresPackageId)" Version="$(PostgresTargetVersion)" />
+		<PackageReference Include="$(PgvectorPackageId)" Version="$(PgvectorTargetVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>

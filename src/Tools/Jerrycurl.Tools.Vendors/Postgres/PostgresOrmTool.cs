@@ -59,6 +59,11 @@ public class PostgresOrmTool : OrmTool
             string tableName = tuple["table_name"] as string;
             string columnName = tuple["column_name"] as string;
             string typeName = tuple["data_type"] as string;
+
+            // extension types (e.g. pgvector) are reported as 'USER-DEFINED' with their actual name in udt_name
+            if (typeName == "USER-DEFINED")
+                typeName = tuple["udt_name"] as string;
+
             bool isNullable = (tuple["is_nullable"] as string == "YES");
             bool isIdentity = (tuple["is_identity"] as string == "YES" || tuple["serial_seq"] != null);
             bool ignoreTable = false;
@@ -120,13 +125,13 @@ public class PostgresOrmTool : OrmTool
         builder.AddType("cidr", "(System.Net.IPAddress, int)", true);
         builder.AddType("inet", "System.Net.IPAddress", false);
         builder.AddType("macaddr", "System.Net.NetworkInformation.PhysicalAddress", true);
-        builder.AddType("date", "DateTime", true);
+        builder.AddType("date", "DateOnly", true);
         builder.AddType("timestamp", "DateTime", true);
         builder.AddType("timestamp with time zone", "DateTimeOffset", true);
         builder.AddType("timestamp without time zone", "DateTime", true);
-        builder.AddType("time", "TimeSpan", true);
+        builder.AddType("time", "TimeOnly", true);
         builder.AddType("time with time zone", "DateTimeOffset", true);
-        builder.AddType("time without time zone", "TimeSpan", true);
+        builder.AddType("time without time zone", "TimeOnly", true);
         builder.AddType("interval", "TimeSpan", true);
         builder.AddType("bytea", "byte[]", false);
         builder.AddType("oid", "uint", true);
@@ -134,5 +139,8 @@ public class PostgresOrmTool : OrmTool
         builder.AddType("cid", "uint", true);
         builder.AddType("oidvector", "uint[]", false);
         builder.AddType("ARRAY", "Array", false);
+        builder.AddType("vector", "Pgvector.Vector", false);
+        builder.AddType("halfvec", "Pgvector.HalfVector", false);
+        builder.AddType("sparsevec", "Pgvector.SparseVector", false);
     }
 }

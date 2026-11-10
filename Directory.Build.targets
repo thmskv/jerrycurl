@@ -66,6 +66,8 @@
 				MySqlPackageVersion=$(MySqlPackageVersion);
 				PostgresPackageId=$(PostgresPackageId);
 				PostgresPackageVersion=$(PostgresPackageVersion);
+				PgvectorPackageId=$(PgvectorPackageId);
+				PgvectorPackageVersion=$(PgvectorPackageVersion);
 				EntityFrameworkCorePackageVersion=$(EntityFrameworkCorePackageVersion);
 				JsonNetPackageVersion=$(JsonNetPackageVersion);
 				PkcsPackageVersion=$(PkcsPackageVersion);

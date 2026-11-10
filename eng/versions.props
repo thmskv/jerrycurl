@@ -4,6 +4,7 @@
         <SqlServerPackageId>Microsoft.Data.SqlClient</SqlServerPackageId>
         <MySqlPackageId>MySql.Data</MySqlPackageId>
         <PostgresPackageId>Npgsql</PostgresPackageId>
+        <PgvectorPackageId>Pgvector</PgvectorPackageId>
         <SqlitePackageId>Microsoft.Data.Sqlite</SqlitePackageId>
     </PropertyGroup>
 
@@ -12,6 +13,7 @@
         <SqlServerPackageVersion>7.1.1</SqlServerPackageVersion>
         <MySqlPackageVersion>26.10.0</MySqlPackageVersion>
         <PostgresPackageVersion>10.0.3</PostgresPackageVersion>
+        <PgvectorPackageVersion>0.3.2</PgvectorPackageVersion>
         <SqlitePackageVersion>10.0.14</SqlitePackageVersion>
         <EntityFrameworkCorePackageVersion>10.0.14</EntityFrameworkCorePackageVersion>
         <JsonNetPackageVersion>13.0.4</JsonNetPackageVersion>
@@ -30,6 +32,7 @@
         <SqlServerTargetVersion>$(SqlServerPackageVersion)</SqlServerTargetVersion>
         <MySqlTargetVersion>$(MySqlPackageVersion)</MySqlTargetVersion>
         <PostgresTargetVersion>$(PostgresPackageVersion)</PostgresTargetVersion>
+        <PgvectorTargetVersion>$(PgvectorPackageVersion)</PgvectorTargetVersion>
         <SqliteTargetVersion>$(SqlitePackageVersion)</SqliteTargetVersion>
         <EntityFrameworkCoreTargetVersion>$(EntityFrameworkCorePackageVersion)</EntityFrameworkCoreTargetVersion>
         <JsonNetTargetVersion>$(JsonNetPackageVersion)</JsonNetTargetVersion>

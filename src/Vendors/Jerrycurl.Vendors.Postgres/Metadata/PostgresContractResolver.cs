@@ -7,6 +7,7 @@ using Jerrycurl.Cqs.Metadata;
 using Jerrycurl.Cqs.Metadata.Annotations;
 using Npgsql;
 using NpgsqlTypes;
+using Pgvector;
 
 namespace Jerrycurl.Vendors.Postgres.Metadata;
 
@@ -23,7 +24,17 @@ public class PostgresContractResolver : IBindingContractResolver
 
     private MethodInfo GetValueReaderProxy(IBindingColumnInfo columnInfo, IBindingValueContract fallback)
     {
-        if (columnInfo.Column.Type == typeof(TimeSpan))
+        Type columnType = columnInfo.Column.Type;
+        Type targetType = Nullable.GetUnderlyingType(columnInfo.Metadata.Type) ?? columnInfo.Metadata.Type;
+
+        if (columnType == typeof(TimeSpan))
+            return this.GetNpgsqlReaderMethod(nameof(NpgsqlDataReader.GetTimeSpan));
+
+        // Npgsql reports 'date' and 'time' columns as DateOnly/TimeOnly, which GetValue() returns boxed
+        // and cannot be cast to DateTime/TimeSpan properties; Npgsql reads them natively as either type
+        if (columnType == typeof(DateOnly) && targetType == typeof(DateTime))
+            return this.GetNpgsqlReaderMethod(nameof(NpgsqlDataReader.GetDateTime));
+        else if (columnType == typeof(TimeOnly) && targetType == typeof(TimeSpan))
             return this.GetNpgsqlReaderMethod(nameof(NpgsqlDataReader.GetTimeSpan));
 
         return fallback?.Read(columnInfo);
@@ -65,6 +76,40 @@ public class PostgresContractResolver : IBindingContractResolver
                 }
             };
         }
+        else if (metadata.Type == typeof(TimeSpan) || metadata.Type == typeof(TimeSpan?))
+        {
+            // DbType.Time maps to 'time' (time of day), which rejects negative or 24h+ values;
+            // 'interval' covers the full TimeSpan range and casts implicitly to 'time' on assignment
+            return new BindingParameterContract()
+            {
+                Convert = fallback.Convert,
+                Write = pi =>
+                {
+                    fallback?.Write?.Invoke(pi);
+
+                    if (pi.Parameter is NpgsqlParameter npgParam)
+                        npgParam.NpgsqlDbType = NpgsqlDbType.Interval;
+
+                    this.SetInputParameter(pi);
+                }
+            };
+        }
+        else if (this.GetVectorTypeName(metadata.Type) is string vectorTypeName)
+        {
+            return new BindingParameterContract()
+            {
+                Convert = fallback.Convert,
+                Write = pi =>
+                {
+                    fallback?.Write?.Invoke(pi);
+
+                    if (pi.Parameter is NpgsqlParameter npgParam)
+                        npgParam.DataTypeName = vectorTypeName;
+
+                    this.SetInputParameter(pi);
+                }
+            };
+        }
         else if (metadata.Type == typeof(DateTime) || metadata.Type == typeof(DateTime?) || metadata.Type == typeof(DateTimeOffset) || metadata.Type == typeof(DateTimeOffset?))
         {
             return new BindingParameterContract()
@@ -101,6 +146,18 @@ public class PostgresContractResolver : IBindingContractResolver
                 }
             };
         }
+    }
+
+    private string GetVectorTypeName(Type type)
+    {
+        if (type == typeof(Vector))
+            return "vector";
+        else if (type == typeof(HalfVector))
+            return "halfvec";
+        else if (type == typeof(SparseVector))
+            return "sparsevec";
+
+        return null;
     }
 
     private void SetInputParameter(IBindingParameterInfo paramInfo)
