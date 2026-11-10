@@ -139,6 +139,8 @@ public class PostgresOrmTool : OrmTool
         builder.AddType("cid", "uint", true);
         builder.AddType("oidvector", "uint[]", false);
         builder.AddType("ARRAY", "Array", false);
+        builder.AddType("tsvector", "NpgsqlTypes.NpgsqlTsVector", false);
+        builder.AddType("tsquery", "NpgsqlTypes.NpgsqlTsQuery", false);
         builder.AddType("vector", "Pgvector.Vector", false);
         builder.AddType("halfvec", "Pgvector.HalfVector", false);
         builder.AddType("sparsevec", "Pgvector.SparseVector", false);
