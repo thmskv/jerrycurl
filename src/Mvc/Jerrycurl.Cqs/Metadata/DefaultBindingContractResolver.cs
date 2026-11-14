@@ -15,6 +15,7 @@ public class DefaultBindingContractResolver : IBindingContractResolver
 {
     private readonly Type[] intTypes = [typeof(int), typeof(long), typeof(short), typeof(char), typeof(byte), typeof(sbyte), typeof(ushort), typeof(uint), typeof(ulong)];
     private readonly Type[] decTypes = [typeof(float), typeof(double), typeof(decimal)];
+    private readonly Type[] dateTimeTypes = [typeof(DateTime), typeof(DateOnly), typeof(TimeSpan), typeof(TimeOnly)];
 
     public int Priority => 0;
     public IBindingHelperContract GetHelperContract(IBindingMetadata metadata) => null;
@@ -300,6 +301,7 @@ public class DefaultBindingContractResolver : IBindingContractResolver
         Expression value = valueInfo.Value;
 
         Stack<ConditionalExpression> conditions = new Stack<ConditionalExpression>();
+        Type targetStruct = Nullable.GetUnderlyingType(valueInfo.Metadata.Type) ?? valueInfo.Metadata.Type;
 
         if (this.IsNumberType(valueInfo.Metadata.Type))
         {
@@ -327,6 +329,17 @@ public class DefaultBindingContractResolver : IBindingContractResolver
                 Expression boolValue = Expression.NotEqual(unboxedValue, Expression.Default(numberType));
 
                 AddTypeIsExpression(numberType, boolValue);
+            }
+        }
+
+        else if (this.IsDateTimeType(targetStruct))
+        {
+            foreach (Type sourceType in this.dateTimeTypes.Where(t => t != targetStruct))
+            {
+                Expression unboxedValue = this.GetConvertExpression(valueInfo.Metadata, value, sourceType);
+
+                if (this.GetDateTimeConversion(unboxedValue, targetStruct) is Expression convertedValue)
+                    AddTypeIsExpression(sourceType, convertedValue);
             }
         }
 
@@ -358,6 +371,26 @@ public class DefaultBindingContractResolver : IBindingContractResolver
 
             conditions.Push(Expression.Condition(typeIs, newValue, value));
         }
+    }
+
+    private bool IsDateTimeType(Type type) => this.dateTimeTypes.Contains(type);
+
+    /// <summary>
+    /// Converts between DateTime/DateOnly and TimeSpan/TimeOnly, as drivers often report 'date' and 'time' columns
+    /// as DateTime/TimeSpan while models may use DateOnly/TimeOnly (or vice versa).
+    /// </summary>
+    private Expression GetDateTimeConversion(Expression value, Type targetType)
+    {
+        if (value.Type == typeof(DateTime) && targetType == typeof(DateOnly))
+            return Expression.Call(typeof(DateOnly).GetMethod(nameof(DateOnly.FromDateTime), [typeof(DateTime)]), value);
+        else if (value.Type == typeof(DateOnly) && targetType == typeof(DateTime))
+            return Expression.Call(value, typeof(DateOnly).GetMethod(nameof(DateOnly.ToDateTime), [typeof(TimeOnly)]), Expression.Constant(TimeOnly.MinValue));
+        else if (value.Type == typeof(TimeSpan) && targetType == typeof(TimeOnly))
+            return Expression.Call(typeof(TimeOnly).GetMethod(nameof(TimeOnly.FromTimeSpan), [typeof(TimeSpan)]), value);
+        else if (value.Type == typeof(TimeOnly) && targetType == typeof(TimeSpan))
+            return Expression.Call(value, typeof(TimeOnly).GetMethod(nameof(TimeOnly.ToTimeSpan), Type.EmptyTypes));
+
+        return null;
     }
 
     private Expression GetIsNullExpression(IBindingValueInfo valueInfo)
@@ -397,6 +430,8 @@ public class DefaultBindingContractResolver : IBindingContractResolver
             value = this.GetConvertCheckedExpression(valueInfo.Metadata, value, targetType);
         else if (structLeft == typeof(bool) && this.IsNumberType(structRight))
             value = Expression.NotEqual(value, Expression.Default(value.Type));
+        else if (value.Type == structRight && this.GetDateTimeConversion(value, structLeft) is Expression dateTimeValue)
+            value = dateTimeValue;
 
         if (targetType != value.Type)
             value = this.GetConvertExpression(valueInfo.Metadata, value, valueInfo.Metadata.Type);

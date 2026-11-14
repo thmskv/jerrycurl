@@ -135,11 +135,11 @@ public class SqlServerOrmTool : OrmTool
         builder.AddType("smallint", "short", true);
         builder.AddType("tinyint", "byte", true);
         builder.AddType("bit", "bool", true);
-        builder.AddType("date", "DateTime", true);
+        builder.AddType("date", "DateOnly", true);
         builder.AddType("datetime", "DateTime", true);
         builder.AddType("datetime2", "DateTime", true);
         builder.AddType("smalldatetime", "DateTime", true);
-        builder.AddType("time", "TimeSpan", true);
+        builder.AddType("time", "TimeOnly", true);
         builder.AddType("datetimeoffset", "DateTimeOffset", true);
         builder.AddType("nvarchar", "string", false);
         builder.AddType("varchar", "string", false);

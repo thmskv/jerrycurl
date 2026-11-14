@@ -114,7 +114,7 @@ public class MySqlOrmTool : OrmTool
         builder.AddType("set", "string", false);
         builder.AddType("json", JsonTypeName, false);
         builder.AddType("datetime", "DateTime", true);
-        builder.AddType("date", "DateTime", true);
+        builder.AddType("date", "DateOnly", true);
         builder.AddType("time", "TimeSpan", true);
         builder.AddType("timestamp", "DateTimeOffset", true);
         builder.AddType("tinyblob", "byte[]", false);

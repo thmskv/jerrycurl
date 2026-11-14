@@ -91,6 +91,14 @@ public class TableValuedParameter : IParameter
                         if (converters[i] != null)
                             value = converters[i](value);
 
+                        // SqlDataRecord only accepts the classic CLR types for 'date' and 'time' columns
+                        value = value switch
+                        {
+                            DateOnly date => date.ToDateTime(TimeOnly.MinValue),
+                            TimeOnly time => time.ToTimeSpan(),
+                            _ => value,
+                        };
+
                         dataRecord.SetValue(i, value);
                     }
 

@@ -237,6 +237,6 @@ public class SqliteOrmTool : OrmTool
         builder.AddType("decimal", "decimal", true);
         builder.AddType("boolean", "bool", true);
         builder.AddType("datetime", "DateTime", true);
-        builder.AddType("date", "DateTime", true);
+        builder.AddType("date", "DateOnly", true);
     }
 }
