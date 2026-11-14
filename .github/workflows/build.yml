@@ -45,6 +45,7 @@ jobs:
         uses: ankane/setup-sqlserver@v1
         with:
           accept-eula: true
+          sqlserver-version: 2025
       - name: Create databases
         run: |
           sqlcmd -C -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE jerry_testdb'
@@ -70,6 +71,7 @@ jobs:
         uses: ankane/setup-sqlserver@v1
         with:
           accept-eula: true
+          sqlserver-version: 2025
       - name: Create databases
         run: |
           sqlcmd -C -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE jerry_testdb'
