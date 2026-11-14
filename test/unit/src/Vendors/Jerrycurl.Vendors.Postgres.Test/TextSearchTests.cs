@@ -2,7 +2,6 @@
 using Jerrycurl.Test.Project.Accessors;
 using Jerrycurl.Test.Project.Models;
 using Jerrycurl.Vendors.Postgres.Test.Models;
-using NpgsqlTypes;
 using Shouldly;
 using System.Linq;
 
@@ -24,12 +23,21 @@ CREATE TABLE jerry_textsearch(
 
         Runner.Command(table);
 
-        TextSearchModel sample = new TextSearchModel()
-        {
-            Document = NpgsqlTsVector.Parse("jerry:1 curl:2"),
-            NullDocument = null,
-            Query = NpgsqlTsQuery.Parse("jerry & curl"),
-        };
+        // NpgsqlTsVector cannot be constructed client-side without the obsolete Parse methods, so the sample values are produced by the server
+        Runnable<object, TextSearchModel> values = new Runnable<object, TextSearchModel>();
+
+        values.Sql(@"SELECT 'jerry:1 curl:2'::tsvector AS ");
+        values.R(p => p.Prop(m => m.Document));
+        values.Sql(@", 'jerry & curl'::tsquery AS ");
+        values.R(p => p.Prop(m => m.Query));
+        values.Sql(";");
+
+        TextSearchModel sample = Runner.Query(values).FirstOrDefault();
+
+        sample.ShouldNotBeNull();
+        sample.Document.ShouldNotBeNull();
+        sample.NullDocument.ShouldBeNull();
+        sample.Query.ShouldNotBeNull();
 
         Runnable<TextSearchModel, object> insert = new Runnable<TextSearchModel, object>(sample);
 
