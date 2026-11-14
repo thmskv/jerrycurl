@@ -34,7 +34,22 @@ public class OracleContractResolver : IBindingContractResolver
     {
         IBindingParameterContract fallback = metadata.Parameter;
 
-        if (metadata.Type == typeof(OracleVector))
+        if (metadata.Type == typeof(TimeSpan) || metadata.Type == typeof(TimeSpan?))
+        {
+            // DbType.Time maps to OracleDbType.TimeStamp, which cannot bind TimeSpan values ("ORA-50028: Invalid parameter binding")
+            return new BindingParameterContract()
+            {
+                Convert = fallback.Convert,
+                Write = pi =>
+                {
+                    fallback?.Write?.Invoke(pi);
+
+                    if (pi.Parameter is OracleParameter oraParam)
+                        oraParam.OracleDbType = OracleDbType.IntervalDS;
+                }
+            };
+        }
+        else if (metadata.Type == typeof(OracleVector))
         {
             return new BindingParameterContract()
             {
