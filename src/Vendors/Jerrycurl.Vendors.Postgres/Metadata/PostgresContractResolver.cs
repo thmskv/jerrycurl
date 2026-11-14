@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json.Nodes;
 using System.Xml.Linq;
 using Jerrycurl.Cqs.Metadata;
 using Jerrycurl.Cqs.Metadata.Annotations;
@@ -44,7 +45,8 @@ public class PostgresContractResolver : IBindingContractResolver
     {
         IBindingParameterContract fallback = metadata.Parameter;
 
-        if (metadata.Relation.Annotations.OfType<JsonAttribute>().Any())
+        // json parameters are assignable to both 'json' and 'jsonb' columns
+        if (metadata.Relation.Annotations.OfType<JsonAttribute>().Any() || typeof(JsonNode).IsAssignableFrom(metadata.Type))
         {
             return new BindingParameterContract()
             {

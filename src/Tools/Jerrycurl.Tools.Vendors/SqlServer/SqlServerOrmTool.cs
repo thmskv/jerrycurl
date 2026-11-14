@@ -163,6 +163,6 @@ public class SqlServerOrmTool : OrmTool
         builder.AddType("sql_variant", "object", false);
         builder.AddType("xml", "System.Xml.Linq.XDocument", false);
         builder.AddType("vector", "Microsoft.Data.SqlTypes.SqlVector<float>", true);
-        builder.AddType("json", "System.Text.Json.Nodes.JsonNode", false);
+        builder.AddType("json", JsonTypeName, false);
     }
 }

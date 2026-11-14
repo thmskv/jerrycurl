@@ -15,6 +15,11 @@ namespace Jerrycurl.Tools.Orm;
 
 public abstract class OrmTool
 {
+    /// <summary>
+    /// CLR type generated for columns of a native JSON type; replaced by <see cref="string"/> when the <c>jsonAsStrings</c> flag is set.
+    /// </summary>
+    protected const string JsonTypeName = "System.Text.Json.Nodes.JsonNode";
+
     protected abstract DbConnection GetConnection(OrmToolOptions options);
     protected abstract Task BuildSchemaAsync(DbConnection connection, SchemaBuilder builder, CancellationToken cancellationToken = default);
 
@@ -66,6 +71,7 @@ public abstract class OrmTool
         string defaultSchema = schema.Flags?.GetValueOrDefault("defaultSchema");
         bool useNullables = (options.Flags?.GetValueOrDefault("useNullables") != "false");
         bool useRequired = (options.Flags?.GetValueOrDefault("useRequired") == "true");
+        bool jsonAsStrings = (options.Flags?.GetValueOrDefault("jsonAsStrings") == "true");
 
         foreach (TableModel table in schema.Tables)
         {
@@ -108,7 +114,9 @@ public abstract class OrmTool
         {
             TypeModel mapping = schema.Types?.FirstOrDefault(t => t.DbName.Equals(column.TypeName, StringComparison.OrdinalIgnoreCase));
 
-            if (mapping != null)
+            if (mapping != null && jsonAsStrings && mapping.ClrName == JsonTypeName)
+                return "string";
+            else if (mapping != null)
                 return ((mapping.IsNullable || useNullables) && column.IsNullable) ? mapping.ClrName + "?" : mapping.ClrName;
 
             return column.TypeName;

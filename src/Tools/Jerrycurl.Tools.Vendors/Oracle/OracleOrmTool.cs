@@ -137,5 +137,8 @@ public class OracleOrmTool : OrmTool
         builder.AddType("UNSIGNED INTEGER", "decimal", true);
         builder.AddType("VARCHAR2", "string", false);
         builder.AddType("ANYDATA", "object", false);
+        builder.AddType("BOOLEAN", "bool", true);
+        builder.AddType("JSON", JsonTypeName, false);
+        builder.AddType("VECTOR", "Oracle.ManagedDataAccess.Types.OracleVector", false);
     }
 }

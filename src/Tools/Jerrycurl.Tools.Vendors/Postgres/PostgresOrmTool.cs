@@ -115,8 +115,8 @@ public class PostgresOrmTool : OrmTool
         builder.AddType("character varying", "string", false);
         builder.AddType("character", "string", false);
         builder.AddType("citext", "string", false);
-        builder.AddType("json", "string", false);
-        builder.AddType("jsonb", "string", false);
+        builder.AddType("json", JsonTypeName, false);
+        builder.AddType("jsonb", JsonTypeName, false);
         builder.AddType("xml", "string", false);
         builder.AddType("name", "string", false);
         builder.AddType("bit", "System.Collections.BitArray", false);

@@ -112,7 +112,7 @@ public class MySqlOrmTool : OrmTool
         builder.AddType("string", "string", false);
         builder.AddType("enum", "string", false);
         builder.AddType("set", "string", false);
-        builder.AddType("json", "string", false);
+        builder.AddType("json", JsonTypeName, false);
         builder.AddType("datetime", "DateTime", true);
         builder.AddType("date", "DateTime", true);
         builder.AddType("time", "TimeSpan", true);
@@ -124,5 +124,6 @@ public class MySqlOrmTool : OrmTool
         builder.AddType("binary", "byte[]", false);
         builder.AddType("varbinary", "byte[]", false);
         builder.AddType("geometry", "byte[]", false);
+        builder.AddType("vector", "float[]", false);
     }
 }

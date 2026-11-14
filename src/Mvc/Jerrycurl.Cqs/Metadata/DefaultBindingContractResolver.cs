@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Dynamic;
+using System.Text.Json.Nodes;
 using System.Xml.Linq;
 using Jerrycurl.Relations;
 
@@ -22,6 +23,8 @@ public class DefaultBindingContractResolver : IBindingContractResolver
     {
         if (metadata.Type == typeof(XDocument))
             return this.GetXDocumentParameterContract();
+        else if (this.IsJsonNodeType(metadata.Type))
+            return this.GetJsonNodeParameterContract();
 
         return new BindingParameterContract()
         {
@@ -48,6 +51,15 @@ public class DefaultBindingContractResolver : IBindingContractResolver
 
     public IBindingValueContract GetValueContract(IBindingMetadata metadata)
     {
+        if (this.IsJsonNodeType(metadata.Type))
+        {
+            return new BindingValueContract()
+            {
+                Read = _ => this.GetRecordMethod(nameof(IDataReader.GetString)),
+                Convert = this.GetJsonNodeReaderProxy,
+            };
+        }
+
         return new BindingValueContract()
         {
             Read = this.GetRecordReaderMethod,
@@ -251,6 +263,37 @@ public class DefaultBindingContractResolver : IBindingContractResolver
             }
         };
     }
+
+    private bool IsJsonNodeType(Type type) => typeof(JsonNode).IsAssignableFrom(type);
+
+    private BindingParameterContract GetJsonNodeParameterContract()
+    {
+        return new BindingParameterContract()
+        {
+            Convert = o => o is JsonNode node ? node.ToJsonString() : DBNull.Value,
+            Write = info =>
+            {
+                info.Parameter.DbType = DbType.String;
+            }
+        };
+    }
+
+    private Expression GetJsonNodeReaderProxy(IBindingValueInfo valueInfo)
+    {
+        MethodInfo parseInfo = typeof(DefaultBindingContractResolver).GetMethod(nameof(ParseJsonNode), BindingFlags.NonPublic | BindingFlags.Static);
+
+        Expression value = Expression.Convert(valueInfo.Value, typeof(object));
+        Expression parsedValue = Expression.Call(parseInfo, value);
+
+        return this.GetConvertExpression(valueInfo.Metadata, parsedValue, valueInfo.Metadata.Type);
+    }
+
+    private static JsonNode ParseJsonNode(object value) => value switch
+    {
+        null or DBNull => null,
+        string json => JsonNode.Parse(json),
+        _ => throw new InvalidCastException($"Cannot parse JSON from type '{value.GetType().Name}'."),
+    };
 
     private Expression GetObjectReaderProxy(IBindingValueInfo valueInfo)
     {

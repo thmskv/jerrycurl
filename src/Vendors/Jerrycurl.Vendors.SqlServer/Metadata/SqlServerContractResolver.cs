@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json.Nodes;
 using Jerrycurl.Cqs.Metadata;
@@ -68,14 +67,17 @@ public class SqlServerContractResolver : IBindingContractResolver
         }
         else if (this.IsJsonType(metadata.Type))
         {
+            IBindingParameterContract fallback = metadata.Parameter;
+
             // JSON is sent as nvarchar(max), which converts implicitly to the 'json' type in SQL Server 2025
             // while remaining compatible with JSON stored in nvarchar columns on earlier versions
             return new BindingParameterContract()
             {
-                Convert = o => o is JsonNode node ? node.ToJsonString() : DBNull.Value,
+                Convert = fallback.Convert,
                 Write = pi =>
                 {
-                    pi.Parameter.DbType = DbType.String;
+                    fallback?.Write?.Invoke(pi);
+
                     pi.Parameter.Size = -1;
                 }
             };
@@ -103,15 +105,6 @@ public class SqlServerContractResolver : IBindingContractResolver
     public IBindingValueContract GetValueContract(IBindingMetadata metadata)
     {
         IBindingValueContract fallback = metadata.Value;
-
-        if (this.IsJsonType(metadata.Type))
-        {
-            return new BindingValueContract()
-            {
-                Convert = this.GetJsonValueProxy,
-                Read = _ => typeof(IDataRecord).GetMethod(nameof(IDataRecord.GetString), [typeof(int)]),
-            };
-        }
 
         return new BindingValueContract()
         {
@@ -142,39 +135,6 @@ public class SqlServerContractResolver : IBindingContractResolver
     }
 
     private bool IsJsonType(Type type) => typeof(JsonNode).IsAssignableFrom(type);
-
-    private Expression GetJsonValueProxy(IBindingValueInfo valueInfo)
-    {
-        Expression value = valueInfo.Value;
-
-        if (value.Type != typeof(object) && value.Type != typeof(string))
-            throw BindingException.Create(valueInfo.Metadata, $"Cannot parse JSON from type '{value.Type.Name}'.");
-
-        Expression nullCheck = null;
-
-        if (valueInfo.CanBeDbNull)
-            nullCheck = Expression.TypeIs(value, typeof(DBNull));
-
-        if (valueInfo.CanBeNull)
-        {
-            Expression isNull = Expression.ReferenceEqual(value, Expression.Constant(null, value.Type));
-
-            nullCheck = nullCheck == null ? isNull : Expression.OrElse(nullCheck, isNull);
-        }
-
-        if (value.Type == typeof(object))
-            value = Expression.Convert(value, typeof(string));
-
-        MethodInfo parseMethod = typeof(SqlServerContractResolver).GetMethod(nameof(ParseJson), BindingFlags.NonPublic | BindingFlags.Static);
-        Expression parsedValue = Expression.Convert(Expression.Call(parseMethod, value), valueInfo.Metadata.Type);
-
-        if (nullCheck != null)
-            return Expression.Condition(nullCheck, Expression.Default(parsedValue.Type), parsedValue);
-
-        return parsedValue;
-    }
-
-    private static JsonNode ParseJson(string json) => JsonNode.Parse(json);
 
     private MethodInfo GetValueReadMethod(IBindingColumnInfo columnInfo, IBindingValueContract fallback)
     {

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Reflection;
+using System.Text.Json.Nodes;
 using Jerrycurl.Cqs.Metadata;
 using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 
 namespace Jerrycurl.Vendors.Oracle.Metadata;
 
@@ -18,7 +20,9 @@ public class OracleContractResolver : IBindingContractResolver
 
     private MethodInfo GetValueReaderProxy(IBindingColumnInfo columnInfo, IBindingValueContract fallback)
     {
-        if (columnInfo.Column.Type == typeof(TimeSpan))
+        if (columnInfo.Metadata.Type == typeof(OracleVector))
+            return this.GetOracleReaderMethod(nameof(OracleDataReader.GetOracleVector));
+        else if (columnInfo.Column.Type == typeof(TimeSpan))
             return this.GetOracleReaderMethod(nameof(OracleDataReader.GetTimeSpan));
         else if (columnInfo.Column.Type == typeof(DateTimeOffset) || columnInfo.Column.TypeName == "TimeStampTZ")
             return this.GetOracleReaderMethod(nameof(OracleDataReader.GetDateTimeOffset));
@@ -26,7 +30,44 @@ public class OracleContractResolver : IBindingContractResolver
         return fallback?.Read(columnInfo);
     }
 
-    public IBindingParameterContract GetParameterContract(IBindingMetadata metadata) => null;
+    public IBindingParameterContract GetParameterContract(IBindingMetadata metadata)
+    {
+        IBindingParameterContract fallback = metadata.Parameter;
+
+        if (metadata.Type == typeof(OracleVector))
+        {
+            return new BindingParameterContract()
+            {
+                Convert = o => o is OracleVector { IsNull: false } vector ? vector : DBNull.Value,
+                Write = pi =>
+                {
+                    fallback?.Write?.Invoke(pi);
+
+                    if (pi.Parameter is OracleParameter oraParam && oraParam.Value is OracleVector)
+                        oraParam.OracleDbType = OracleDbType.Vector;
+                }
+            };
+        }
+        else if (typeof(JsonNode).IsAssignableFrom(metadata.Type))
+        {
+            // JSON is sent as CLOB text, which converts implicitly to the 'JSON' type; VARCHAR2 binds
+            // are limited to 4000 bytes on databases with the default MAX_STRING_SIZE
+            return new BindingParameterContract()
+            {
+                Convert = fallback.Convert,
+                Write = pi =>
+                {
+                    fallback?.Write?.Invoke(pi);
+
+                    if (pi.Parameter is OracleParameter oraParam)
+                        oraParam.OracleDbType = OracleDbType.Clob;
+                }
+            };
+        }
+
+        return null;
+    }
+
     public IBindingCompositionContract GetCompositionContract(IBindingMetadata metadata) => null;
     public IBindingHelperContract GetHelperContract(IBindingMetadata metadata) => null;
 
