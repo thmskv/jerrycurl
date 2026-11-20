@@ -90,6 +90,19 @@ public class RazorGenerator
                 .Write(")]");
         }
 
+        if (pageData.Input?.Text != null)
+        {
+            string[] arguments = pageData.Input.Text.Split([','], StringSplitOptions.RemoveEmptyEntries);
+            string[] properties = [.. arguments.Select(arg => $"public {arg} {{ get; set; }}")];
+
+            projector.Open("inputtype")
+                .WriteLine("public class InputType")
+                .WriteLine("{")
+                .WriteLine(string.Join("\n", properties))
+                .WriteLine("}");
+        }
+
+    
         foreach (InjectDirective inject in pageData.Injections ?? [])
         {
             if (string.IsNullOrWhiteSpace(inject.Type.Text) || string.IsNullOrWhiteSpace(inject.Variable?.Text))

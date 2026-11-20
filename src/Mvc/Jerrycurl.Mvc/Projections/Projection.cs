@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Jerrycurl.Collections;
 using Jerrycurl.Cqs.Commands;
 using Jerrycurl.Cqs.Metadata;
 using Jerrycurl.Cqs.Sessions;

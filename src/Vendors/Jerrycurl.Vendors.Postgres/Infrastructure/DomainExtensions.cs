@@ -2,7 +2,6 @@
 using Jerrycurl.Vendors.Postgres;
 using Jerrycurl.Vendors.Postgres.Metadata;
 using Npgsql;
-using Pgvector.Npgsql;
 
 namespace Jerrycurl.Mvc;
 

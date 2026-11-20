@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Jerrycurl.Cqs.Commands;
 using Microsoft.Data.Sqlite;
 using Shouldly;

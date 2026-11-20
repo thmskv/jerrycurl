@@ -1,22 +1,11 @@
 ﻿using System;
-using Jerrycurl.CodeAnalysis.Projection;
 using Jerrycurl.CodeAnalysis.Razor.Generation;
-using Jerrycurl.CodeAnalysis.Razor.Lexing.CSharp;
 using Jerrycurl.CodeAnalysis.Razor.Parsing;
 using Jerrycurl.CodeAnalysis.Razor.ProjectSystem;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using Microsoft.CodeAnalysis;
-using Jerrycurl.IO;
 using System.IO;
-using Jerrycurl.CodeAnalysis;
 using Jerrycurl.Facts;
 using System.Linq;
-using Microsoft.CodeAnalysis.Diagnostics;
-using System.Net;
-using System.Xml.Serialization;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace Jerrycurl.CodeAnalysis.Razor.Compiler;
 
@@ -122,6 +111,8 @@ $beginnamespace$
         {
             $throw$
         }
+
+        $inputtype$
 	}
 $endnamespace$
 #pragma warning restore IDE0009",

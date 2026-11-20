@@ -1,5 +1,4 @@
-﻿using System;
-using Jerrycurl.IO;
+﻿using Jerrycurl.IO;
 
 namespace Jerrycurl.CodeAnalysis.Razor.ProjectSystem;
 

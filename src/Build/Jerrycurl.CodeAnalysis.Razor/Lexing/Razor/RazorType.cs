@@ -18,4 +18,5 @@ public enum RazorType
     Class = 10,
     Namespace = 11,
     Import = 12,
+    Input = 14,
 }

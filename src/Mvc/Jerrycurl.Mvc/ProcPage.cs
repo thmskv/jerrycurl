@@ -16,7 +16,7 @@ public class ProcPage<TModel, TResult> : ISqlPage
 
     public IProcContext Context { get; }
     public IProcRenderer Render => this.Context.Renderer;
-
+    
     public ProcPage(IProjection model, IProjection result)
     {
         this.M = model?.Cast<TModel>() ?? throw new ArgumentNullException(nameof(model));

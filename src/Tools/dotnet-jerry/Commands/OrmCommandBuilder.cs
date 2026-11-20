@@ -13,9 +13,7 @@ using Jerrycurl.Tools.Vendors;
 using Jerrycurl.Tools.Resources;
 using System.Diagnostics;
 using Jerrycurl.IO;
-using System.Xml;
 using Jerrycurl.Tools.Orm.Model;
-using System.Runtime.InteropServices;
 
 namespace Jerrycurl.Tools.DotNet.Cli.Commands;
 

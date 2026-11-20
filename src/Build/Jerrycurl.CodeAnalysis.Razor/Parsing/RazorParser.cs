@@ -186,6 +186,9 @@ public class RazorParser
                 case CSharpBlock cs when cs.RazorType == RazorType.Class:
                     pageData.Class = this.CreateFragment(source, lex.Span, sourceName);
                     break;
+                case CSharpBlock cs when cs.RazorType == RazorType.Input:
+                    pageData.Input = this.CreateFragment(source, lex.Span, sourceName);
+                    break;
                 case SqlBlock sql:
                     pageData.Content.Add(this.CreateSqlFragment(source, lex, sourceName));
                     break;

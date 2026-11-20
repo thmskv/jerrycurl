@@ -1,5 +1,4 @@
 ﻿using Jerrycurl.Diagnostics;
-using Jerrycurl.Text;
 using System;
 using System.Collections;
 using System.Collections.Generic;

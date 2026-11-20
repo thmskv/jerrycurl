@@ -8,7 +8,6 @@ using Jerrycurl.Test.Profiling;
 using Jerrycurl.Vendors.Sqlite.Metadata;
 using Microsoft.Data.Sqlite;
 using Jerrycurl.Cqs.Language;
-using System;
 using System.Collections.Generic;
 
 namespace Jerrycurl.Test;

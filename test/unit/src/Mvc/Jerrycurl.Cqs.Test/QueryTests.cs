@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Shouldly;
+﻿using Shouldly;
 using Jerrycurl.Test;
 using Jerrycurl.Cqs.Queries;
 using Jerrycurl.Cqs.Language;

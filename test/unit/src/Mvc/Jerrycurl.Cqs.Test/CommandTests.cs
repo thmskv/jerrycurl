@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Jerrycurl.Cqs.Commands;
 using Jerrycurl.Cqs.Language;
 using Shouldly;

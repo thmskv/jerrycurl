@@ -6,7 +6,6 @@ using Jerrycurl.Cqs.Commands;
 using Jerrycurl.Mvc.Metadata;
 using Jerrycurl.Mvc.Projections;
 using Jerrycurl.Relations.Metadata;
-using Jerrycurl.Collections;
 using Jerrycurl.Cqs.Sessions;
 using System.Linq;
 

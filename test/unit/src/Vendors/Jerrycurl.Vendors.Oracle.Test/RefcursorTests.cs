@@ -1,5 +1,4 @@
 ﻿using Jerrycurl.Cqs.Queries;
-using Jerrycurl.Cqs.Sessions;
 using Jerrycurl.Mvc.Sql;
 using Jerrycurl.Mvc.Sql.Oracle;
 using Jerrycurl.Test;
@@ -8,7 +7,6 @@ using Jerrycurl.Test.Project.Models;
 using Jerrycurl.Cqs.Language;
 using Shouldly;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Jerrycurl.Vendors.Oracle.Test;
 

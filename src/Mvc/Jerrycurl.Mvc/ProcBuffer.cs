@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Jerrycurl.Cqs.Commands;
 using Jerrycurl.Cqs.Queries;
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Jerrycurl.Collections;
 using Jerrycurl.Mvc.Metadata;
 using Jerrycurl.Mvc.Projections;
 

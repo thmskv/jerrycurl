@@ -1,5 +1,4 @@
 ﻿using System.Data.Common;
-using System.Threading.Tasks;
 using Jerrycurl.Cqs.Commands;
 using Jerrycurl.Cqs.Filters;
 using Jerrycurl.Test;

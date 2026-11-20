@@ -5,7 +5,6 @@ using Jerrycurl.Test.Project.Accessors;
 using Jerrycurl.Test.Project.Models;
 using Jerrycurl.Vendors.SqlServer.Test.Models;
 using System;
-using System.Collections.Generic;
 
 namespace Jerrycurl.Vendors.SqlServer.Test;
 

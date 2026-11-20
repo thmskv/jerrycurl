@@ -4,7 +4,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using Jerrycurl.Cqs.Commands;
 using Jerrycurl.Cqs.Queries;
 
