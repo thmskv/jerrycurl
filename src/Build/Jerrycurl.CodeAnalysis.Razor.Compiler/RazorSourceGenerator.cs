@@ -92,7 +92,7 @@ $beginnamespace$
 	#line hidden
 	$localimports$
 	$template$
-	internal class $class$ : global::Jerrycurl.Mvc.ProcPage<$model$,$result$>
+	public class $class$ : global::Jerrycurl.Mvc.ProcPage<$model$,$result$>
 	{
 		#pragma warning disable IDE1006
 		$injectiondefs$
