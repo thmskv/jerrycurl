@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jerrycurl.Cqs.Queries;
 using Jerrycurl.Mvc.Metadata;
 using Jerrycurl.Mvc.Projections;
 using Jerrycurl.Mvc.Sql;
@@ -46,4 +50,59 @@ public class ProcPage<TModel, TResult> : ISqlPage
 
     public void Write(object o) => this.Write<object>(o);
     public void WriteLiteral(string s) => this.Context.Execution.Buffer.Append(s);
+
+#region " Page shenanigans "
+    private static IProcResult ExecuteAndGetResult(Type pageType, object model, ProcArgs args)
+    {
+        IProcLocator locator = new ProcLocator();
+        IProcEngine engine = new ProcEngine(null);
+
+        PageDescriptor descriptor = locator.Create(pageType);
+        ProcFactory factory = engine.Proc(descriptor, args);
+
+        return factory(model);
+    }
+
+    private static SqlOptions GetDefaultOptions(IDomainOptions domain)
+    {
+        return new SqlOptions()
+        {
+            Filters = [.. domain.Sql.Filters],
+            MaxParameters = domain.Sql.MaxParameters,
+            MaxSql = domain.Sql.MaxSql,
+        };
+    }
+
+    public static async Task<IList<TResult>> Query(Type pageType, TModel model, Action<SqlOptions> configure = null, CancellationToken cancellationToken = default)
+    {
+        ProcArgs args = new ProcArgs(typeof(TModel), typeof(TResult));
+        IProcResult result = ExecuteAndGetResult(pageType, model, args);
+
+        SqlOptions options = GetDefaultOptions(result.Domain);
+        configure?.Invoke(options);
+
+        ISqlSerializer<Query> serializer = result.Buffer as ISqlSerializer<Query>;
+        IEnumerable<Query> queries = serializer?.Serialize(options);
+
+        QueryOptions queryOptions = new QueryOptions()
+        {
+            ConnectionFactory = result.Domain.ConnectionFactory,
+            Store = result.Domain.Schemas,
+            Filters = options.Filters,
+        };
+
+        QueryEngine engine = new QueryEngine(queryOptions);
+
+        try
+        {
+            return await engine.ExecuteAsync<IList<TResult>>(queries, QueryType.List, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            result.Page.Throw(ex);
+
+            throw;
+        }
+    }
+#endregion
 }

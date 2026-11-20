@@ -9,6 +9,24 @@ namespace Jerrycurl.Mvc;
 
 public class ProcLocator : IProcLocator
 {
+    public PageDescriptor Create(Type pageType)
+    {
+        Type domainType = this.GetDomainType(pageType);
+
+        if (typeof(ISqlPage).IsAssignableFrom(pageType))
+        {
+            return new PageDescriptor()
+            {
+                OriginType = pageType,
+                PageType = pageType,
+                DomainType = domainType,
+                Locator = this,
+            };
+        }
+
+        throw new PageNotFoundException($"Invalid page '{pageType.Name}'.");
+    }
+    
     public PageDescriptor FindPage(string procName, Type originType)
     {
         if (string.IsNullOrWhiteSpace(procName))
