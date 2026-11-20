@@ -19,4 +19,5 @@ public enum RazorType
     Namespace = 11,
     Import = 12,
     Input = 14,
+    Output = 15,
 }

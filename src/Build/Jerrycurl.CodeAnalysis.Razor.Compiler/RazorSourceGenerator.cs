@@ -113,6 +113,7 @@ $beginnamespace$
         }
 
         $inputtype$
+        $outputtype$
 	}
 $endnamespace$
 #pragma warning restore IDE0009",

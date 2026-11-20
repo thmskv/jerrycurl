@@ -25,7 +25,7 @@ public class RazorNamingConvention : IRazorProjectConvention
     {
         return new RazorFragment()
         {
-            Text = CSharp.EscapeKeyword(CSharp.Identifier(Path.GetFileName(razorPage.ProjectPath ?? razorPage.Path))),
+            Text = CSharp.EscapeKeyword(CSharp.Identifier(Path.GetFileNameWithoutExtension(razorPage.ProjectPath ?? razorPage.Path))),
         };
     }
 

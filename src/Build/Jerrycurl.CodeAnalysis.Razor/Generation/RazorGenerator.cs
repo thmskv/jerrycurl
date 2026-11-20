@@ -70,12 +70,14 @@ public class RazorGenerator
         if (pageData.Model?.Text != null)
             projector.Open("model").WritePragma(pageData.Model);
         else if (pageData.Input != null)
-            projector.Open("model").Write($"{className}.InputType");
+            projector.Open("model").Write($"{className}.Input");
         else
             projector.Open("model").Write("dynamic");
 
         if (pageData.Result?.Text != null)
             projector.Open("result").WritePragma(pageData.Result);
+        else if (pageData.Input != null)
+            projector.Open("result").Write($"{className}.Output");
         else
             projector.Open("result").Write("object");
 
@@ -95,26 +97,11 @@ public class RazorGenerator
         }
 
         if (pageData.Input?.Text != null)
-        {
-            string[] arguments = pageData.Input.Text.Split([','], StringSplitOptions.RemoveEmptyEntries);
-            string[] properties = [
-                ..arguments.Select(arg =>
-                {
-                    string[] withDef = arg.Split(['='], 2);
-                    string valueDef = withDef.Length == 2 ? withDef[1] : "";
+            WriteType("inputtype", "Input", pageData.Input);
 
-                    return $"public {arg} {{ get; set; }}{valueDef}";
-                })
-            ];
+        if (pageData.Output?.Text != null)
+            WriteType("ouputtype", "Output", pageData.Output);
 
-            projector.Open("inputtype")
-                .WriteLine("public class InputType")
-                .WriteLine("{")
-                .WriteLine(string.Join("\n", properties))
-                .WriteLine("}");
-        }
-
-    
         foreach (InjectDirective inject in pageData.Injections ?? [])
         {
             if (string.IsNullOrWhiteSpace(inject.Type.Text) || string.IsNullOrWhiteSpace(inject.Variable?.Text))
@@ -185,6 +172,26 @@ public class RazorGenerator
         }
 
         return projector.Generate();
+
+        void WriteType(string target, string typeName, RazorFragment fragment)
+        {
+            string[] arguments = pageData.Input.Text.Split([','], StringSplitOptions.RemoveEmptyEntries);
+            string[] properties = [
+                ..arguments.Select(arg =>
+                {
+                    string[] withDef = arg.Split(['='], 2);
+                    string valueDef = withDef.Length == 2 ? withDef[1] : "";
+
+                    return $"public {arg} {{ get; set; }}{valueDef}";
+                })
+            ];
+
+            projector.Open(target)
+                .WriteLine($"public class {typeName}")
+                .WriteLine("{")
+                .WriteLine(string.Join("\n", properties))
+                .WriteLine("}");
+        }
     }
 
     private IEnumerable<RazorFragment> MergeContent(IEnumerable<RazorFragment> fragments)

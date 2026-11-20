@@ -12,6 +12,7 @@ public class RazorPageData
 
     public RazorFragment Class { get; set; }
     public RazorFragment Input { get; set; }
+    public RazorFragment Output { get; set; }
     public RazorFragment Model { get; set; }
     public RazorFragment Result { get; set; }
     public RazorFragment Namespace { get; set; }
