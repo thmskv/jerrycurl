@@ -97,7 +97,15 @@ public class RazorGenerator
         if (pageData.Input?.Text != null)
         {
             string[] arguments = pageData.Input.Text.Split([','], StringSplitOptions.RemoveEmptyEntries);
-            string[] properties = [.. arguments.Select(arg => $"public {arg} {{ get; set; }}")];
+            string[] properties = [
+                ..arguments.Select(arg =>
+                {
+                    string[] withDef = arg.Split(['='], 2);
+                    string valueDef = withDef.Length == 2 ? withDef[1] : "";
+
+                    return $"public {arg} {{ get; set; }}{valueDef}";
+                })
+            ];
 
             projector.Open("inputtype")
                 .WriteLine("public class InputType")
