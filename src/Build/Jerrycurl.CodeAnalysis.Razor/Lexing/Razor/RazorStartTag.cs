@@ -49,6 +49,8 @@ public class RazorStartTag : ISymbol
             this.Type = RazorType.Template;
         else if (tokenizer.Func(t => this.ParseDirective(t, "input")))
             this.Type = RazorType.Input;
+        else if (tokenizer.Func(t => this.ParseDirective(t, "output")))
+            this.Type = RazorType.Output;
         else
             this.Type = RazorType.Inline;
 
