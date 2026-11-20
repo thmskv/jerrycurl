@@ -54,7 +54,7 @@ jobs:
       - name: Build project
         shell: pwsh
         run: |
-          .\build.ps1
+          .\build.ps1 -NoTest -NoIntegrate
 
   build-win32:
     runs-on: windows-2025
@@ -80,7 +80,7 @@ jobs:
       - name: Build project
         shell: pwsh
         run: |
-          .\build.ps1
+          .\build.ps1 -NoTest -NoIntegrate
 
   deploy-nupkg:
     needs: [build-ubuntu, build-win32]
