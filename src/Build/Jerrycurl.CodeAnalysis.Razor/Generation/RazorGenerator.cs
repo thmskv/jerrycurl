@@ -175,7 +175,7 @@ public class RazorGenerator
 
         void WriteType(string target, string typeName, RazorFragment fragment)
         {
-            string[] arguments = pageData.Input.Text.Split([','], StringSplitOptions.RemoveEmptyEntries);
+            string[] arguments = fragment.Text.Split([','], StringSplitOptions.RemoveEmptyEntries);
             string[] properties = [
                 ..arguments.Select(arg =>
                 {
