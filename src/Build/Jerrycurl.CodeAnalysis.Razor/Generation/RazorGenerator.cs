@@ -100,7 +100,7 @@ public class RazorGenerator
             WriteType("inputtype", "Input", pageData.Input);
 
         if (pageData.Output?.Text != null)
-            WriteType("ouputtype", "Output", pageData.Output);
+            WriteType("outputtype", "Output", pageData.Output);
 
         foreach (InjectDirective inject in pageData.Injections ?? [])
         {
