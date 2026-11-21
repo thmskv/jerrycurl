@@ -1,10 +1,9 @@
 {
   "name": "jerrycurl",
-  "image": "mcr.microsoft.com/devcontainers/dotnet:10.0",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:11.0",
   "features": {
     "ghcr.io/devcontainers/features/powershell:2": {},
-    "ghcr.io/devcontainers/features/node:2": {},
-    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
+    "ghcr.io/devcontainers/features/node:2": {}
   },
   "containerEnv": {
     "DOTNET_CLI_TELEMETRY_OPTOUT": "1",
@@ -13,8 +12,7 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-dotnettools.csdevkit",
-        "anthropic.claude-code"
+        "ms-dotnettools.csdevkit"
       ],
       "settings": {
         "dotnet.defaultSolution": "jerrycurl.slnx"

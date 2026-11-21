@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
-            10.0.x
+            11.0.x
       - name: Set up MySQL
         uses: ankane/setup-mysql@v1
         with:
@@ -68,7 +68,7 @@ jobs:
       - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
-            10.0.x
+            11.0.x
       - name: Set up SQL Server
         uses: ankane/setup-sqlserver@v1
         with:
@@ -93,7 +93,7 @@ jobs:
       - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
-            10.0.x
+            11.0.x
       - name: Build project
         shell: pwsh
         run: |

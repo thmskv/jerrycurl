@@ -12,18 +12,18 @@
         <OraclePackageVersion>23.26.400</OraclePackageVersion>
         <SqlServerPackageVersion>7.1.1</SqlServerPackageVersion>
         <MySqlPackageVersion>26.10.0</MySqlPackageVersion>
-        <PostgresPackageVersion>10.0.3</PostgresPackageVersion>
+        <PostgresPackageVersion>11.0.0</PostgresPackageVersion>
         <PgvectorPackageVersion>0.3.2</PgvectorPackageVersion>
-        <SqlitePackageVersion>10.0.14</SqlitePackageVersion>
-        <EntityFrameworkCorePackageVersion>10.0.14</EntityFrameworkCorePackageVersion>
+        <SqlitePackageVersion>11.0.0</SqlitePackageVersion>
+        <EntityFrameworkCorePackageVersion>11.0.0</EntityFrameworkCorePackageVersion>
         <JsonNetPackageVersion>13.0.4</JsonNetPackageVersion>
         <CSharpPackageVersion>5.0.0</CSharpPackageVersion>
         <!-- Pinned above the vulnerable versions pulled transitively by SqlClient and Oracle (GHSA-846f-f764-76mx, GHSA-2fmv-rv2c-59x7). -->
-        <PkcsPackageVersion>10.0.14</PkcsPackageVersion>
+        <PkcsPackageVersion>11.0.0</PkcsPackageVersion>
     </PropertyGroup>
 
     <PropertyGroup Label="Build Tooling Versions">
-        <NetAnalyzersPackageVersion>10.0.403</NetAnalyzersPackageVersion>
+        <NetAnalyzersPackageVersion>11.0.100</NetAnalyzersPackageVersion>
         <GitVersioningPackageVersion>3.10.94</GitVersioningPackageVersion>
     </PropertyGroup>
 
