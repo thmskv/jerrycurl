@@ -73,9 +73,10 @@ public class ProcPage<TModel, TResult> : ISqlPage
         };
     }
 
-    public static async Task<IList<TResult>> Query(Type pageType, TModel model, Action<SqlOptions> configure = null, CancellationToken cancellationToken = default)
+    public static async Task<IList<TFinal>> Query<TFinal>(Type pageType, TModel model, Action<SqlOptions> configure = null, CancellationToken cancellationToken = default)
+        where TFinal : TResult
     {
-        ProcArgs args = new ProcArgs(typeof(TModel), typeof(TResult));
+        ProcArgs args = new ProcArgs(typeof(TModel), typeof(TFinal));
         IProcResult result = ExecuteAndGetResult(pageType, model, args);
 
         SqlOptions options = GetDefaultOptions(result.Domain);
@@ -95,7 +96,7 @@ public class ProcPage<TModel, TResult> : ISqlPage
 
         try
         {
-            return await engine.ExecuteAsync<IList<TResult>>(queries, QueryType.List, cancellationToken).ConfigureAwait(false);
+            return await engine.ExecuteAsync<IList<TFinal>>(queries, QueryType.List, cancellationToken).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
