@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Jerrycurl.Cqs.Metadata;
 
-public interface IBindingMetadataBuilder : IMetadataBuilder<IBindingMetadata>, ICollection<IBindingContractResolver>
+public interface IBindingMetadataBuilder : IMetadataBuilder<IBindingMetadata>, ICollection<IBindingConvention>
 {
-    IBindingContractResolver DefaultResolver { get; set; }
+    IBindingConvention DefaultConvention { get; set; }
 }

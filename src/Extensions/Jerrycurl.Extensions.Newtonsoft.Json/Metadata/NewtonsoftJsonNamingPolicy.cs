@@ -6,11 +6,11 @@ using System.Reflection;
 
 namespace Jerrycurl.Extensions.Newtonsoft.Json.Metadata;
 
-public class NewtonsoftJsonContractResolver : IJsonContractResolver
+public class NewtonsoftJsonNamingPolicy : IJsonNamingPolicy
 {
     public JsonSerializerSettings Settings { get; }
 
-    public NewtonsoftJsonContractResolver(JsonSerializerSettings settings)
+    public NewtonsoftJsonNamingPolicy(JsonSerializerSettings settings)
     {
         this.Settings = settings ?? throw new ArgumentNullException(nameof(settings));
     }

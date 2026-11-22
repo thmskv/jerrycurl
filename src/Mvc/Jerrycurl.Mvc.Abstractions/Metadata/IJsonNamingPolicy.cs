@@ -1,6 +1,6 @@
 ﻿namespace Jerrycurl.Mvc.Metadata;
 
-public interface IJsonContractResolver
+public interface IJsonNamingPolicy
 {
     string GetPropertyName(IJsonMetadata metadata);
 }

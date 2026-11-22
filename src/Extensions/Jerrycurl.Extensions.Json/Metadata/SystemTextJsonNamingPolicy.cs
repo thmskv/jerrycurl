@@ -5,11 +5,11 @@ using System.Text.Json;
 
 namespace Jerrycurl.Extensions.Json.Metadata;
 
-public class JsonContractResolver : IJsonContractResolver
+public class SystemTextJsonNamingPolicy : IJsonNamingPolicy
 {
     public JsonSerializerOptions Options { get; }
 
-    public JsonContractResolver(JsonSerializerOptions options)
+    public SystemTextJsonNamingPolicy(JsonSerializerOptions options)
     {
         this.Options = options ?? throw new ArgumentNullException(nameof(options));
     }

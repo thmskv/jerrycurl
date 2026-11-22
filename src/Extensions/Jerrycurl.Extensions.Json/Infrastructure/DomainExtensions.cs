@@ -11,8 +11,8 @@ public static class DomainExtensions
     {
         serializerOptions ??= new JsonSerializerOptions();
 
-        options.Use(new JsonBindingContractResolver(serializerOptions));
-        options.Use(new JsonContractResolver(serializerOptions));
+        options.Use(new JsonBindingConvention(serializerOptions));
+        options.Use(new SystemTextJsonNamingPolicy(serializerOptions));
 
         return options;
     }

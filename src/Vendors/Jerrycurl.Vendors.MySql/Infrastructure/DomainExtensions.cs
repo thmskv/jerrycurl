@@ -14,7 +14,7 @@ public static class DomainExtensions
     public static DomainOptions UseMySql(this DomainOptions options, string connectionString)
     {
         options.ConnectionFactory = () => new MySqlConnection(connectionString);
-        options.Use(new MySqlContractResolver());
+        options.Use(new MySqlBindingConvention());
         options.Dialect = new MySqlDialect();
 
         return options;

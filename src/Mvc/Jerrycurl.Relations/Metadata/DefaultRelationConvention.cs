@@ -6,7 +6,7 @@ using Jerrycurl.Reflection;
 
 namespace Jerrycurl.Relations.Metadata;
 
-public class DefaultRelationContractResolver : IRelationContractResolver
+public class DefaultRelationConvention : IRelationConvention
 {
     public IRelationContract GetContract(IRelationMetadata metadata)
     {

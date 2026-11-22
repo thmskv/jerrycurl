@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Jerrycurl.Relations.Test.Metadata;
 
-public class CustomContractResolver : IRelationContractResolver
+public class CustomConvention : IRelationConvention
 {
     public IEnumerable<Attribute> GetAnnotations(IRelationMetadata metadata)
     {

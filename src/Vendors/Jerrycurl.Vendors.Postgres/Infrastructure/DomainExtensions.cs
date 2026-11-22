@@ -34,7 +34,7 @@ public static class DomainExtensions
 
         options.ConnectionFactory = () => dataSource.CreateConnection();
         options.Dialect = new PostgresDialect();
-        options.Use(new PostgresContractResolver());
+        options.Use(new PostgresBindingConvention());
 
         return options;
     }

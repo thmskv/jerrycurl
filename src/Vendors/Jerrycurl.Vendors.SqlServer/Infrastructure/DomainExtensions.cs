@@ -15,7 +15,7 @@ public static class DomainExtensions
     public static DomainOptions UseSqlServer(this DomainOptions options, string connectionString)
     {
         options.ConnectionFactory = () => new SqlConnection(connectionString);
-        options.Use(new SqlServerContractResolver());
+        options.Use(new SqlServerBindingConvention());
         options.Sql ??= new SqlOptions();
         options.Sql.MaxParameters = 2098;
 

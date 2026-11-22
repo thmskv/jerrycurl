@@ -1,15 +1,14 @@
-﻿using Jerrycurl.Collections;
-using Jerrycurl.Cqs.Metadata;
-using Jerrycurl.Cqs.Metadata.Annotations;
+﻿using Jerrycurl.Cqs.Metadata.Annotations;
 using Jerrycurl.Relations.Metadata;
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Jerrycurl.Mvc.Metadata;
 
-internal class JsonMetadataBuilder : Collection<IJsonContractResolver>, IMetadataBuilder<IJsonMetadata>
+internal class JsonMetadataBuilder : IMetadataBuilder<IJsonMetadata>
 {
+    public IJsonNamingPolicy NamingPolicy { get; set; }
+
     public IJsonMetadata GetMetadata(IMetadataBuilderContext context) => this.GetMetadata(context, context.Relation);
 
     private IJsonMetadata GetMetadata(IMetadataBuilderContext context, IRelationMetadata relation)
@@ -53,7 +52,7 @@ internal class JsonMetadataBuilder : Collection<IJsonContractResolver>, IMetadat
     private bool HasJsonAttribute(IRelationMetadata relation) => relation.Annotations.OfType<JsonAttribute>().Any();
     private string GetPropertyNameFromContract(IJsonMetadata metadata)
     {
-        string propertyName = this.Reverse().NotNull(c => c.GetPropertyName(metadata)).FirstOrDefault();
+        string propertyName = this.NamingPolicy?.GetPropertyName(metadata);
 
         return propertyName ?? metadata.Relation.Member?.Name ?? throw new InvalidOperationException("No member found.");
     }

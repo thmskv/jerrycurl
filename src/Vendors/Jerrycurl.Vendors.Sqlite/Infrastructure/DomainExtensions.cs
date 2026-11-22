@@ -13,7 +13,7 @@ public static class DomainExtensions
     public static DomainOptions UseSqlite(this DomainOptions options, string connectionString)
     {
         options.ConnectionFactory = () => new SqliteConnection(connectionString);
-        options.Use(new SqliteContractResolver());
+        options.Use(new SqliteBindingConvention());
 
         return options;
     }

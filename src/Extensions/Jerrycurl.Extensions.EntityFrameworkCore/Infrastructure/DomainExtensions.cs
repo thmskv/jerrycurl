@@ -17,10 +17,10 @@ public static class DomainExtensions
 
     public static DomainOptions UseEntityFrameworkCore(this DomainOptions options, DbContext dbContext)
     {
-        EntityFrameworkCoreContractResolver resolver = new EntityFrameworkCoreContractResolver(dbContext);
+        EntityFrameworkCoreConvention convention = new EntityFrameworkCoreConvention(dbContext);
 
-        options.Use((IRelationContractResolver)resolver);
-        options.Use((ITableContractResolver)resolver);
+        options.Use((IRelationConvention)convention);
+        options.Use((ITableNamingPolicy)convention);
 
         return options;
 

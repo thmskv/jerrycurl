@@ -732,7 +732,7 @@ public class QueryTests
 
     public void Test_Insert_OneToMany_CustomList()
     {
-        var store = DatabaseHelper.Default.GetStore(contracts: [new CustomContractResolver()]);
+        var store = DatabaseHelper.Default.GetStore(contracts: [new CustomConvention()]);
         var schema = store.GetSchema(typeof(List<PriorityModel>));
         var buffer = new QueryBuffer(schema, QueryType.List);
 
@@ -774,7 +774,7 @@ public class QueryTests
 
     public void Test_Insert_Priority_Value()
     {
-        var store = DatabaseHelper.Default.GetStore(contracts: [new CustomContractResolver()]);
+        var store = DatabaseHelper.Default.GetStore(contracts: [new CustomConvention()]);
         var schema = store.GetSchema(typeof(List<PriorityModel>));
         var buffer = new QueryBuffer(schema, QueryType.List);
 

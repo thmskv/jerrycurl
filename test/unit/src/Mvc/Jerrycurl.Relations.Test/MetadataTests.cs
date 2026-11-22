@@ -77,7 +77,7 @@ public class MetadataTests
     {
         var store = new SchemaStore(new DotNotation());
 
-        store.Use(new CustomContractResolver());
+        store.Use(new CustomConvention());
 
         var schema1 = DatabaseHelper.Default.Store.GetSchema(typeof(CustomModel));
         var schema2 = store.GetSchema(typeof(CustomModel));
@@ -94,7 +94,7 @@ public class MetadataTests
     public void Test_Metadata_Invalid_Constract()
     {
         var customStore = new SchemaStore(new DotNotation());
-        customStore.Use(new InvalidContractResolver());
+        customStore.Use(new InvalidConvention());
 
         var schema = customStore.GetSchema(typeof(CustomModel));
 

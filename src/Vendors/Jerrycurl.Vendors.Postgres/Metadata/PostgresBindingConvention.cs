@@ -12,7 +12,7 @@ using Pgvector;
 
 namespace Jerrycurl.Vendors.Postgres.Metadata;
 
-public class PostgresContractResolver : IBindingContractResolver
+public class PostgresBindingConvention : IBindingConvention
 {
     public int Priority => 1000;
 

@@ -7,7 +7,7 @@ using Oracle.ManagedDataAccess.Types;
 
 namespace Jerrycurl.Vendors.Oracle.Metadata;
 
-public class OracleContractResolver : IBindingContractResolver
+public class OracleBindingConvention : IBindingConvention
 {
     public int Priority => 1000;
 

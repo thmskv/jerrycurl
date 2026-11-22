@@ -15,7 +15,7 @@ public static class DomainExtensions
     public static DomainOptions UseOracle(this DomainOptions options, string connectionString)
     {
         options.ConnectionFactory = () => new OracleConnection(connectionString);
-        options.Use(new OracleContractResolver());
+        options.Use(new OracleBindingConvention());
         options.Sql.Filters.Add(new OracleLongFilter());
         options.Dialect = new OracleDialect();
 

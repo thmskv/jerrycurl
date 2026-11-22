@@ -11,13 +11,16 @@ using System.Linq;
 
 namespace Jerrycurl.Extensions.EntityFrameworkCore.Metadata;
 
-public class EntityFrameworkCoreContractResolver : IRelationContractResolver, ITableContractResolver
+public class EntityFrameworkCoreConvention : IRelationConvention, ITableNamingPolicy
 {
-    public int Priority { get; } = 1000;
+    /// <summary>
+    /// Naming policy used for tables and columns not mapped by the EF Core model. Defaults to <see cref="DefaultTableNamingPolicy"/> (attribute-based).
+    /// </summary>
+    public ITableNamingPolicy Fallback { get; set; } = new DefaultTableNamingPolicy();
 
     private IEntityType[] entities;
 
-    public EntityFrameworkCoreContractResolver(DbContext dbContext)
+    public EntityFrameworkCoreConvention(DbContext dbContext)
     {
         if (dbContext == null)
             throw new ArgumentNullException(nameof(dbContext));
@@ -69,7 +72,7 @@ public class EntityFrameworkCoreContractResolver : IRelationContractResolver, IT
         string tableName = this.GetTableName(entity);
 
         if (tableName == null)
-            return null;
+            return this.Fallback?.GetTableName(metadata);
 
         return [.. new[] { schemaName, tableName }.NotNull()];
     }
@@ -81,7 +84,7 @@ public class EntityFrameworkCoreContractResolver : IRelationContractResolver, IT
         if (property != null && metadata.Relation.Member != null && metadata.Relation.Member.DeclaringType.IsAssignableFrom(property.DeclaringType.ClrType))
             return this.GetColumnName(property);
 
-        return null;
+        return this.Fallback?.GetColumnName(metadata);
     }
 
 

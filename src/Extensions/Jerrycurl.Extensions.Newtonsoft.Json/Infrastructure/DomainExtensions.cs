@@ -11,8 +11,8 @@ public static class DomainExtensions
     {
         settings ??= JsonConvert.DefaultSettings?.Invoke() ?? new JsonSerializerSettings();
 
-        options.Use(new NewtonsoftJsonBindingContractResolver(settings));
-        options.Use(new NewtonsoftJsonContractResolver(settings));
+        options.Use(new NewtonsoftJsonBindingConvention(settings));
+        options.Use(new NewtonsoftJsonNamingPolicy(settings));
 
         return options;
     }

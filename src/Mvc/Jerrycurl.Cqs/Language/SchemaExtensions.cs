@@ -7,32 +7,33 @@ namespace Jerrycurl.Cqs.Language;
 
 public static class SchemaExtensions
 {
-    public static ISchemaStore Use(this ISchemaStore store, IBindingContractResolver resolver)
+    public static ISchemaStore Use(this ISchemaStore store, IBindingConvention convention)
     {
         if (store == null)
             throw new ArgumentNullException(nameof(store));
 
-        if (resolver == null)
-            throw new ArgumentNullException(nameof(resolver));
+        if (convention == null)
+            throw new ArgumentNullException(nameof(convention));
 
         BindingMetadataBuilder builder = store.Builders.FirstOfType<BindingMetadataBuilder>();
 
-        builder?.Add(resolver);
+        builder?.Add(convention);
 
         return store;
     }
 
-    public static ISchemaStore Use(this ISchemaStore store, ITableContractResolver resolver)
+    public static ISchemaStore Use(this ISchemaStore store, ITableNamingPolicy policy)
     {
         if (store == null)
             throw new ArgumentNullException(nameof(store));
 
-        if (resolver == null)
-            throw new ArgumentNullException(nameof(resolver));
+        if (policy == null)
+            throw new ArgumentNullException(nameof(policy));
 
         TableMetadataBuilder builder = store.Builders.FirstOfType<TableMetadataBuilder>();
 
-        builder?.Add(resolver);
+        if (builder != null)
+            builder.NamingPolicy = policy;
 
         return store;
     }

@@ -8,9 +8,9 @@ using Jerrycurl.Reflection;
 
 namespace Jerrycurl.Relations.Metadata;
 
-internal class RelationMetadataBuilder : Collection<IRelationContractResolver>, IMetadataBuilder<IRelationMetadata>
+internal class RelationMetadataBuilder : Collection<IRelationConvention>, IMetadataBuilder<IRelationMetadata>
 {
-    public IRelationContractResolver DefaultResolver { get; set; } = new DefaultRelationContractResolver();
+    public IRelationConvention DefaultConvention { get; set; } = new DefaultRelationConvention();
 
     public void Initialize(IMetadataBuilderContext context) { }
     public IRelationMetadata GetMetadata(IMetadataBuilderContext context) => context.Relation;
@@ -57,9 +57,9 @@ internal class RelationMetadataBuilder : Collection<IRelationContractResolver>, 
 
     private IRelationContract GetContract(RelationMetadata metadata)
     {
-        IEnumerable<IRelationContractResolver> allResolvers = new[] { this.DefaultResolver }.Concat(this);
+        IEnumerable<IRelationConvention> allConventions = new[] { this.DefaultConvention }.Concat(this);
 
-        IRelationContract contract = allResolvers.Reverse().NotNull(cr => cr.GetContract(metadata)).FirstOrDefault();
+        IRelationContract contract = allConventions.Reverse().NotNull(cr => cr.GetContract(metadata)).FirstOrDefault();
 
         if (contract != null)
             this.ValidateContract(metadata, contract);
@@ -92,9 +92,9 @@ internal class RelationMetadataBuilder : Collection<IRelationContractResolver>, 
 
     private IEnumerable<Attribute> CreateAnnotations(RelationMetadata metadata)
     {
-        IEnumerable<IRelationContractResolver> allResolvers = new[] { this.DefaultResolver }.Concat(this);
+        IEnumerable<IRelationConvention> allConventions = new[] { this.DefaultConvention }.Concat(this);
 
-        return allResolvers.NotNull().SelectMany(cr => cr.GetAnnotations(metadata) ?? []).NotNull();
+        return allConventions.NotNull().SelectMany(cr => cr.GetAnnotations(metadata) ?? []).NotNull();
     }
 
     private IEnumerable<RelationMetadata> CreateProperties(RelationMetadata parent)

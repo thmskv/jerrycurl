@@ -11,7 +11,7 @@ using Jerrycurl.Relations;
 
 namespace Jerrycurl.Cqs.Metadata;
 
-public class DefaultBindingContractResolver : IBindingContractResolver
+public class DefaultBindingConvention : IBindingConvention
 {
     private readonly Type[] intTypes = [typeof(int), typeof(long), typeof(short), typeof(char), typeof(byte), typeof(sbyte), typeof(ushort), typeof(uint), typeof(ulong)];
     private readonly Type[] decTypes = [typeof(float), typeof(double), typeof(decimal)];
@@ -281,7 +281,7 @@ public class DefaultBindingContractResolver : IBindingContractResolver
 
     private Expression GetJsonNodeReaderProxy(IBindingValueInfo valueInfo)
     {
-        MethodInfo parseInfo = typeof(DefaultBindingContractResolver).GetMethod(nameof(ParseJsonNode), BindingFlags.NonPublic | BindingFlags.Static);
+        MethodInfo parseInfo = typeof(DefaultBindingConvention).GetMethod(nameof(ParseJsonNode), BindingFlags.NonPublic | BindingFlags.Static);
 
         Expression value = Expression.Convert(valueInfo.Value, typeof(object));
         Expression parsedValue = Expression.Call(parseInfo, value);

@@ -17,7 +17,7 @@ public class EntityTests
 {
     public void Test_EFCore_TableMetadata()
     {
-        var store = DatabaseHelper.Default.GetStore(contracts: [new EntityFrameworkCoreContractResolver(new EntityContext())]);
+        var store = DatabaseHelper.Default.GetStore(contracts: [new EntityFrameworkCoreConvention(new EntityContext())]);
         var address = store.GetSchema<Address>().Lookup<ITableMetadata>();
         var addressView = store.GetSchema<AddressView>().Lookup<ITableMetadata>();
 
@@ -32,7 +32,7 @@ public class EntityTests
 
     public void Test_EfCore_ReferenceMetadata()
     {
-        var store = DatabaseHelper.Default.GetStore(contracts: [new EntityFrameworkCoreContractResolver(new EntityContext())]);
+        var store = DatabaseHelper.Default.GetStore(contracts: [new EntityFrameworkCoreConvention(new EntityContext())]);
         var schema = store.GetSchema<List<Order>>();
 
         var orderRefs = schema.Require<IReferenceMetadata>("Item").References;

@@ -10,22 +10,23 @@ namespace Jerrycurl.Mvc;
 
 public static class DomainExtensions
 {
-    public static void Use(this IDomainOptions options, ITableContractResolver resolver)
-        => options.Schemas?.Use(resolver);
+    public static void Use(this IDomainOptions options, ITableNamingPolicy policy)
+        => options.Schemas?.Use(policy);
 
-    public static void Use(this IDomainOptions options, IBindingContractResolver resolver)
-        => options.Schemas?.Use(resolver);
+    public static void Use(this IDomainOptions options, IBindingConvention convention)
+        => options.Schemas?.Use(convention);
 
-    public static void Use(this IDomainOptions options, IJsonContractResolver resolver)
+    public static void Use(this IDomainOptions options, IJsonNamingPolicy policy)
     {
-        if (resolver == null)
-            throw new ArgumentNullException(nameof(resolver));
+        if (policy == null)
+            throw new ArgumentNullException(nameof(policy));
 
         JsonMetadataBuilder builder = options?.Schemas.Builders.FirstOfType<JsonMetadataBuilder>();
 
-        builder?.Add(resolver);
+        if (builder != null)
+            builder.NamingPolicy = policy;
     }
 
-    public static void Use(this IDomainOptions options, IRelationContractResolver resolver)
-        => options.Schemas?.Use(resolver);
+    public static void Use(this IDomainOptions options, IRelationConvention convention)
+        => options.Schemas?.Use(convention);
 }

@@ -9,9 +9,9 @@ using Jerrycurl.Relations.Metadata;
 
 namespace Jerrycurl.Cqs.Metadata;
 
-public class BindingMetadataBuilder : Collection<IBindingContractResolver>, IBindingMetadataBuilder
+public class BindingMetadataBuilder : Collection<IBindingConvention>, IBindingMetadataBuilder
 {
-    public IBindingContractResolver DefaultResolver { get; set; } = new DefaultBindingContractResolver();
+    public IBindingConvention DefaultConvention { get; set; } = new DefaultBindingConvention();
 
     public IBindingMetadata GetMetadata(IMetadataBuilderContext context) => this.GetMetadata(context, context.Relation.Identity);
 
@@ -20,13 +20,13 @@ public class BindingMetadataBuilder : Collection<IBindingContractResolver>, IBin
 
     }
 
-    public BindingMetadataBuilder(IEnumerable<IBindingContractResolver> resolvers)
+    public BindingMetadataBuilder(IEnumerable<IBindingConvention> conventions)
     {
-        if (resolvers == null)
-            throw new ArgumentNullException(nameof(resolvers));
+        if (conventions == null)
+            throw new ArgumentNullException(nameof(conventions));
 
-        foreach (IBindingContractResolver resolver in resolvers)
-            this.Add(resolver);
+        foreach (IBindingConvention convention in conventions)
+            this.Add(convention);
     }
 
     private IBindingMetadata GetMetadata(IMetadataBuilderContext context, MetadataIdentity identity)
@@ -112,17 +112,17 @@ public class BindingMetadataBuilder : Collection<IBindingContractResolver>, IBin
 
     private void ApplyContracts(BindingMetadata metadata)
     {
-        IEnumerable<IBindingContractResolver> allResolvers = this;
+        IEnumerable<IBindingConvention> allConventions = this;
 
-        if (this.DefaultResolver != null)
-            allResolvers = new[] { this.DefaultResolver }.Concat(allResolvers);
+        if (this.DefaultConvention != null)
+            allConventions = new[] { this.DefaultConvention }.Concat(allConventions);
 
-        foreach (IBindingContractResolver resolver in allResolvers.NotNull().OrderBy(r => r.Priority))
+        foreach (IBindingConvention convention in allConventions.NotNull().OrderBy(r => r.Priority))
         {
-            IBindingParameterContract parameter = resolver.GetParameterContract(metadata);
-            IBindingCompositionContract composition = resolver.GetCompositionContract(metadata);
-            IBindingValueContract value = resolver.GetValueContract(metadata);
-            IBindingHelperContract helper = resolver.GetHelperContract(metadata);
+            IBindingParameterContract parameter = convention.GetParameterContract(metadata);
+            IBindingCompositionContract composition = convention.GetCompositionContract(metadata);
+            IBindingValueContract value = convention.GetValueContract(metadata);
+            IBindingHelperContract helper = convention.GetHelperContract(metadata);
 
             metadata.Parameter = parameter ?? metadata.Parameter;
             metadata.Composition = composition ?? metadata.Composition;

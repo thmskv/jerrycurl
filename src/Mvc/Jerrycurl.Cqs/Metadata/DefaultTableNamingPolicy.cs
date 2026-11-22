@@ -5,10 +5,8 @@ using Jerrycurl.Cqs.Metadata.Annotations;
 
 namespace Jerrycurl.Cqs.Metadata;
 
-public class DefaultTableContractResolver : ITableContractResolver
+public class DefaultTableNamingPolicy : ITableNamingPolicy
 {
-    public int Priority => 0;
-
     public string GetColumnName(ITableMetadata metadata)
     {
         TableAttribute table = metadata.Relation.Parent?.Annotations?.FirstOfType<TableAttribute>();

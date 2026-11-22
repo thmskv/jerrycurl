@@ -5,7 +5,7 @@ using Jerrycurl.Cqs.Metadata;
 
 namespace Jerrycurl.Vendors.Sqlite.Metadata;
 
-public class SqliteContractResolver : IBindingContractResolver
+public class SqliteBindingConvention : IBindingConvention
 {
     public int Priority => 1000;
 

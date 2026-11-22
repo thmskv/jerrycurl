@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 
 namespace Jerrycurl.Cqs.Test.Metadata;
 
-public class CustomContractResolver : IBindingContractResolver, IRelationContractResolver
+public class CustomConvention : IBindingConvention, IRelationConvention
 {
     public int Priority => 10;
 

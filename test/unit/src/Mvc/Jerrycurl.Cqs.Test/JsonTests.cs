@@ -23,7 +23,7 @@ public class JsonTests
     {
         var store = DatabaseHelper.Default.GetStore();
 
-        store.Use(new JsonBindingContractResolver(new JsonSerializerOptions()));
+        store.Use(new JsonBindingConvention(new JsonSerializerOptions()));
 
         var json = "{ \"Id\": 12, \"Title\": \"Hello World!\" }";
         var data1 = new BlogJsonView();
@@ -59,7 +59,7 @@ public class JsonTests
     {
         var options = new JsonSerializerOptions();
         var store = DatabaseHelper.Default.GetStore();
-        store.Use(new JsonBindingContractResolver(options));
+        store.Use(new JsonBindingConvention(options));
 
         var data = "{ \"Id\": 12, \"Title\": \"Hello World!\" }";
         var schema = store.GetSchema(typeof(BlogJsonView));
@@ -102,7 +102,7 @@ public class JsonTests
         };
         var store = DatabaseHelper.Default.GetStore();
 
-        store.Use(new JsonBindingContractResolver(options));
+        store.Use(new JsonBindingConvention(options));
 
         var data = new BlogJsonView() { Blog = new Blog() { Id = 12 } };
         var model = store.From(data).Lookup("Blog");
@@ -124,7 +124,7 @@ public class JsonTests
         };
         var store = DatabaseHelper.Default.GetStore();
 
-        store.Use(new JsonBindingContractResolver(options));
+        store.Use(new JsonBindingConvention(options));
 
         var json = "{\"Hello\":\"World!\"}";
         var data1 = JsonNode.Parse(json);
@@ -140,7 +140,7 @@ public class JsonTests
     {
         var options = new JsonSerializerOptions();
         var store = DatabaseHelper.Default.GetStore();
-        store.Use(new JsonBindingContractResolver(options));
+        store.Use(new JsonBindingConvention(options));
 
         var data = "{ \"Id\": 12, \"Title\": \"Hello World!\" }";
         var schema = store.GetSchema(typeof(JsonNode));

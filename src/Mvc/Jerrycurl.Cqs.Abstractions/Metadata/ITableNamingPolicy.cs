@@ -1,9 +1,7 @@
 ﻿namespace Jerrycurl.Cqs.Metadata;
 
-public interface ITableContractResolver
+public interface ITableNamingPolicy
 {
-    int Priority { get; }
-
     string[] GetTableName(ITableMetadata metadata);
     string GetColumnName(ITableMetadata metadata);
 }

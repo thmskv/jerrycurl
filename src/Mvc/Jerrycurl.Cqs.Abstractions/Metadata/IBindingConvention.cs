@@ -1,6 +1,6 @@
 ﻿namespace Jerrycurl.Cqs.Metadata;
 
-public interface IBindingContractResolver
+public interface IBindingConvention
 {
     int Priority { get; }
 

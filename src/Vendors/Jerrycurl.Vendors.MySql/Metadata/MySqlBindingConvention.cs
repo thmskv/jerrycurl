@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 
 namespace Jerrycurl.Vendors.MySql.Metadata;
 
-public class MySqlContractResolver : IBindingContractResolver
+public class MySqlBindingConvention : IBindingConvention
 {
     public int Priority => 1000;
 
@@ -76,7 +76,7 @@ public class MySqlContractResolver : IBindingContractResolver
 
     private Expression GetVectorReaderProxy(IBindingValueInfo valueInfo)
     {
-        MethodInfo convertInfo = typeof(MySqlContractResolver).GetMethod(nameof(FromVectorValue), BindingFlags.NonPublic | BindingFlags.Static);
+        MethodInfo convertInfo = typeof(MySqlBindingConvention).GetMethod(nameof(FromVectorValue), BindingFlags.NonPublic | BindingFlags.Static);
 
         return Expression.Call(convertInfo, Expression.Convert(valueInfo.Value, typeof(object)));
     }

@@ -9,7 +9,7 @@ using Microsoft.Data.SqlTypes;
 
 namespace Jerrycurl.Vendors.SqlServer.Metadata;
 
-public class SqlServerContractResolver : IBindingContractResolver
+public class SqlServerBindingConvention : IBindingConvention
 {
     public const int DefaultStringSize = 4000;
 

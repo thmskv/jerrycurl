@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using Jerrycurl.Collections;
 using Jerrycurl.Relations.Metadata;
 
 namespace Jerrycurl.Cqs.Metadata;
 
-public class TableMetadataBuilder : Collection<ITableContractResolver>, ITableMetadataBuilder
+public class TableMetadataBuilder : ITableMetadataBuilder
 {
-    public ITableContractResolver DefaultResolver { get; set; } = new DefaultTableContractResolver();
+    public ITableNamingPolicy NamingPolicy { get; set; } = new DefaultTableNamingPolicy();
 
     public ITableMetadata GetMetadata(IMetadataBuilderContext context) => this.GetMetadata(context, context.Relation);
 
@@ -58,15 +56,10 @@ public class TableMetadataBuilder : Collection<ITableContractResolver>, ITableMe
 
     private void ApplyContracts(TableMetadata metadata, TableMetadata parent)
     {
-        IEnumerable<ITableContractResolver> allResolvers = this;
-
-        if (this.DefaultResolver != null)
-            allResolvers = new[] { this.DefaultResolver }.Concat(allResolvers);
-
-        foreach (ITableContractResolver resolver in allResolvers.NotNull().OrderBy(r => r.Priority))
+        if (this.NamingPolicy != null)
         {
-            metadata.TableName = resolver.GetTableName(metadata)?.ToList() ?? metadata.TableName;
-            metadata.ColumnName = resolver.GetColumnName(metadata) ?? metadata.ColumnName;
+            metadata.TableName = this.NamingPolicy.GetTableName(metadata)?.ToList();
+            metadata.ColumnName = this.NamingPolicy.GetColumnName(metadata);
         }
 
         if (metadata.TableName != null)

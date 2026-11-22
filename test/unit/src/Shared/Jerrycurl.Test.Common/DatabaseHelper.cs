@@ -26,7 +26,7 @@ public class DatabaseHelper
     public DatabaseHelper()
     {
         this.Store = this.GetStore();
-        this.SqliteStore = this.GetStore(contracts: [new SqliteContractResolver()]);
+        this.SqliteStore = this.GetStore(contracts: [new SqliteBindingConvention()]);
         this.QueryOptions = this.GetQueryOptions();
         this.CommandOptions = this.GetCommandOptions();
     }
@@ -35,7 +35,7 @@ public class DatabaseHelper
     {
         BindingMetadataBuilder bindingBuilder = [];
         ReferenceMetadataBuilder referenceBuilder = new ReferenceMetadataBuilder();
-        TableMetadataBuilder tableBuilder = [];
+        TableMetadataBuilder tableBuilder = new TableMetadataBuilder();
 
         SchemaStore store = new SchemaStore(notation ?? new DotNotation(), bindingBuilder, referenceBuilder, tableBuilder);
 
@@ -43,14 +43,14 @@ public class DatabaseHelper
         {
             foreach (var contract in contracts)
             {
-                if (contract is IRelationContractResolver relationResolver)
-                    store.Use(relationResolver);
+                if (contract is IRelationConvention relationConvention)
+                    store.Use(relationConvention);
 
-                if (contract is IBindingContractResolver bindingResolver)
-                    store.Use(bindingResolver);
+                if (contract is IBindingConvention bindingConvention)
+                    store.Use(bindingConvention);
 
-                if (contract is ITableContractResolver tableResolver)
-                    store.Use(tableResolver);
+                if (contract is ITableNamingPolicy namingPolicy)
+                    store.Use(namingPolicy);
             }
         }
 

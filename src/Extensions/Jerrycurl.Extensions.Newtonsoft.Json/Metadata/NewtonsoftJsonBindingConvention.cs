@@ -1,29 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using Jerrycurl.Cqs.Metadata;
 using Jerrycurl.Cqs.Metadata.Annotations;
 using Jerrycurl.Reflection;
 using Jerrycurl.Relations.Metadata;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace Jerrycurl.Extensions.Json.Metadata;
+namespace Jerrycurl.Extensions.Newtonsoft.Json.Metadata;
 
-public class JsonBindingContractResolver : IBindingContractResolver
+public class NewtonsoftJsonBindingConvention : IBindingConvention
 {
     public int Priority => 1;
 
-    public JsonSerializerOptions Options { get; }
+    public JsonSerializerSettings Settings { get; }
 
-    private readonly JsonBindingHelperContract helper;
+    private readonly NewtonsoftJsonBindingHelperContract helper;
 
-    public JsonBindingContractResolver(JsonSerializerOptions options)
+    public NewtonsoftJsonBindingConvention(JsonSerializerSettings settings)
     {
-        this.Options = options ?? throw new ArgumentNullException(nameof(options));
-        this.helper = new JsonBindingHelperContract(options);
+        this.Settings = settings ?? throw new ArgumentNullException(nameof(settings));
+        this.helper = new NewtonsoftJsonBindingHelperContract(settings);
     }
 
     private MethodInfo GetColumnReaderProxy(IBindingColumnInfo columnInfo)
@@ -56,7 +57,12 @@ public class JsonBindingContractResolver : IBindingContractResolver
         if (value.Type == typeof(object))
             value = Expression.Convert(value, typeof(string));
 
-        Expression targetValue = this.GetDeserializeExpression(valueInfo.Metadata, value, valueInfo.Helper);
+        Expression targetValue;
+
+        if (valueInfo.TargetType == typeof(JToken))
+            targetValue = this.GetParseJTokenExpression(valueInfo.Metadata, value);
+        else
+            targetValue = this.GetDeserializeExpression(valueInfo.Metadata, value, valueInfo.Helper);
 
         if (nullCheck != null)
             return Expression.Condition(nullCheck, Expression.Default(targetValue.Type), targetValue);
@@ -64,21 +70,29 @@ public class JsonBindingContractResolver : IBindingContractResolver
         return targetValue;
     }
 
+    private Expression GetParseJTokenExpression(IBindingMetadata metadata, Expression value)
+    {
+        MethodInfo parseMethod = typeof(JToken).GetMethod(nameof(JToken.Parse), [typeof(string)]);
+
+        return Expression.Call(parseMethod, value);
+    }
+
+
     private Expression GetDeserializeExpression(IBindingMetadata metadata, Expression value, Expression helper)
     {
-        MethodInfo deserializeMethod = typeof(JsonSerializer).GetMethod(nameof(JsonSerializer.Deserialize), [typeof(string), typeof(Type), typeof(JsonSerializerOptions)]);
+        IEnumerable<MethodInfo> methods = typeof(JsonConvert).GetMethods().Where(m => m.Name == "DeserializeObject" && m.ContainsGenericParameters);
 
         if (helper != null)
         {
-            Expression methodCall = Expression.Call(deserializeMethod, value, Expression.Constant(metadata.Type), helper);
+            MethodInfo deserializeObject = methods.Select(mi => mi.MakeGenericMethod(metadata.Type)).FirstOrDefault(mi => mi.HasParameters(typeof(string), helper.Type));
 
-            return Expression.Convert(methodCall, metadata.Type);
+            return Expression.Call(deserializeObject, value, helper);
         }
         else
         {
-            Expression methodCall = Expression.Call(deserializeMethod, value, Expression.Constant(metadata.Type), Expression.Default(typeof(JsonSerializerOptions)));
+            MethodInfo deserializeObject = methods.Select(mi => mi.MakeGenericMethod(metadata.Type)).FirstOrDefault(mi => mi.HasParameters(typeof(string)));
 
-            return Expression.Convert(methodCall, metadata.Type);
+            return Expression.Call(deserializeObject, value);
         }
     }
 
@@ -92,26 +106,31 @@ public class JsonBindingContractResolver : IBindingContractResolver
 
         return false;
     }
-
-    private bool IsNativeJsonNode(IBindingMetadata metadata) => (metadata.Type == typeof(JsonNode) || metadata.Type == typeof(JsonValue) || metadata.Type == typeof(JsonArray));
+    private bool IsNativeJToken(IBindingMetadata metadata) => (metadata.Type == typeof(JToken));
 
     public IBindingParameterContract GetParameterContract(IBindingMetadata metadata)
     {
-        if (this.HasJsonAttribute(metadata) || this.IsNativeJsonNode(metadata))
+        if (this.IsNativeJToken(metadata))
         {
             return new BindingParameterContract()
             {
-                Convert = o => o != null ? (object)JsonSerializer.Serialize(o, metadata.Type, this.Options) : DBNull.Value,
+                Convert = o => (object)((JToken)o)?.ToString(Formatting.Indented) ?? DBNull.Value,
+            };
+        }
+        else if (this.HasJsonAttribute(metadata))
+        {
+            return new BindingParameterContract()
+            {
+                Convert = o => o != null ? (object)JsonConvert.SerializeObject(o, this.Settings) : DBNull.Value,
             };
         }
 
         return null;
     }
-
     public IBindingCompositionContract GetCompositionContract(IBindingMetadata metadata) => null;
     public IBindingValueContract GetValueContract(IBindingMetadata metadata)
     {
-        if (!this.HasJsonAttribute(metadata) && !this.IsNativeJsonNode(metadata))
+        if (!this.HasJsonAttribute(metadata) && !this.IsNativeJToken(metadata))
             return null;
 
         return new BindingValueContract()
