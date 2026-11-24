@@ -36,10 +36,16 @@
         <RemoveDir Directories="$(NuGetIntermediatePath)" Condition="Exists($(NuGetIntermediatePath))" />
     </Target>
 
-    <Target Name="PrepareNuGet" BeforeTargets="GenerateNuspec" DependsOnTargets="CleanNuGet" Condition="'$(IsPackable)' == 'true'">
+    <Target Name="PrepareNuGet" BeforeTargets="GenerateNuspec" DependsOnTargets="CleanNuGet;SetNuspecProperties" Condition="'$(IsPackable)' == 'true'">
         <Copy SourceFiles="@(NuGetSource)" DestinationFolder="$(NuGetIntermediatePath)%(RecursiveDir)" />
         <Copy SourceFiles="$(MSBuildThisFileDirectory)gfx\icon.png" DestinationFolder="$(NuGetIntermediatePath)" />
-        
+    </Target>
+
+    <!--
+        NuGet (SDK 11+) reads the package id/version from the .nuspec in _GetOutputItemsFromPack, before GenerateNuspec,
+        so the $tokens$ must be resolvable by then. GetBuildVersion (Nerdbank.GitVersioning) provides PackageVersion.
+    -->
+    <Target Name="SetNuspecProperties" BeforeTargets="_GetOutputItemsFromPack;GenerateNuspec" DependsOnTargets="GetBuildVersion" Condition="'$(IsPackable)' == 'true'">
         <PropertyGroup>
             <NuspecProperties>
 				PackageId=$(PackageId);
