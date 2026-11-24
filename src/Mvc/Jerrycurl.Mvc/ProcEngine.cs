@@ -10,8 +10,10 @@ using System.Linq;
 using Jerrycurl.Mvc.Metadata.Annotations;
 using Jerrycurl.Reflection;
 using Jerrycurl.Cqs.Metadata;
+using Jerrycurl.Cqs.Metadata.Json;
 using Jerrycurl.Mvc.Sql;
 using Jerrycurl.Mvc.Internal;
+using System.Text.Json;
 
 namespace Jerrycurl.Mvc;
 
@@ -366,11 +368,17 @@ public class ProcEngine : IProcEngine
             Dialect = new IsoDialect(),
             Schemas = new SchemaStore(new DotNotation(),
             [
-                new BindingMetadataBuilder(),
+                new BindingMetadataBuilder()
+                {
+                    Conventions = { new JsonBindingConvention(JsonSerializerOptions.Default) },
+                },
                 new ReferenceMetadataBuilder(),
                 new TableMetadataBuilder(),
                 new ProjectionMetadataBuilder(),
-                new JsonMetadataBuilder(),
+                new JsonMetadataBuilder()
+                {
+                    NamingPolicy = new DefaultJsonNamingPolicy(JsonSerializerOptions.Default)
+                }
             ]),
             Engine = this,
             ConnectionFactory = () => throw new InvalidOperationException("No connection factory specified."),

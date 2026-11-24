@@ -1,6 +1,6 @@
 ﻿using Jerrycurl.Relations.Metadata;
 
-namespace Jerrycurl.Mvc.Metadata;
+namespace Jerrycurl.Cqs.Metadata.Json;
 
 public interface IJsonMetadata : IMetadata
 {

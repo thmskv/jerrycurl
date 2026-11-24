@@ -57,7 +57,7 @@ public class BlogDomain : IDomain
     public void Configure(DomainOptions options)
     {
         options.UseSqlServer("SERVER=.;DATABASE=blogdb;TRUSTED_CONNECTION=true");
-        // options.UseJson();               // Jerrycurl.Extensions.Json: enables [Json] properties
+        // options.UseJson(myOptions);      // [Json] uses System.Text.Json by default; this replaces its options
         // options.Sql.Filters.Add(...);    // default filters for every query/command
     }
 }

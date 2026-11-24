@@ -3,9 +3,9 @@ using Jerrycurl.Relations.Metadata;
 using System;
 using System.Linq;
 
-namespace Jerrycurl.Mvc.Metadata;
+namespace Jerrycurl.Cqs.Metadata.Json;
 
-internal class JsonMetadataBuilder : IMetadataBuilder<IJsonMetadata>
+public class JsonMetadataBuilder : IMetadataBuilder<IJsonMetadata>
 {
     public IJsonNamingPolicy NamingPolicy { get; set; }
 

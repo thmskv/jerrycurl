@@ -8,5 +8,9 @@
 		<ProjectReference Include="..\Jerrycurl.Relations.Abstractions\Jerrycurl.Relations.Abstractions.csproj"></ProjectReference>
 	</ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="Jerrycurl.Cqs" />
+	</ItemGroup>
+
 	<Import Project="..\..\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems" Label="Shared" />
 </Project>

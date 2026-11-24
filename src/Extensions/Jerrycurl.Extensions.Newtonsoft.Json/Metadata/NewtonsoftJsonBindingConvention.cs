@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.Json.Nodes;
 using Jerrycurl.Cqs.Metadata;
 using Jerrycurl.Cqs.Metadata.Annotations;
 using Jerrycurl.Reflection;
@@ -15,7 +15,11 @@ namespace Jerrycurl.Extensions.Newtonsoft.Json.Metadata;
 
 public class NewtonsoftJsonBindingConvention : IBindingConvention
 {
-    public int Priority => 1;
+    /// <summary>
+    /// Runs after the built-in System.Text.Json convention (100), so Newtonsoft owns [Json] properties
+    /// regardless of registration order, and before vendor conventions (1000), which decorate its contracts.
+    /// </summary>
+    public int Priority => 200;
 
     public JsonSerializerSettings Settings { get; }
 
@@ -59,7 +63,7 @@ public class NewtonsoftJsonBindingConvention : IBindingConvention
 
         Expression targetValue;
 
-        if (valueInfo.TargetType == typeof(JToken))
+        if (IsNativeJToken(valueInfo.Metadata.Type))
             targetValue = this.GetParseJTokenExpression(valueInfo.Metadata, value);
         else
             targetValue = this.GetDeserializeExpression(valueInfo.Metadata, value, valueInfo.Helper);
@@ -70,33 +74,24 @@ public class NewtonsoftJsonBindingConvention : IBindingConvention
         return targetValue;
     }
 
-    private Expression GetParseJTokenExpression(IBindingMetadata metadata, Expression value)
+    private Expression GetParseJTokenExpression(IBindingMetadata metadata, Expression json)
     {
         MethodInfo parseMethod = typeof(JToken).GetMethod(nameof(JToken.Parse), [typeof(string)]);
 
-        return Expression.Call(parseMethod, value);
+        return Expression.Convert(Expression.Call(parseMethod, json), metadata.Type);
     }
 
-
-    private Expression GetDeserializeExpression(IBindingMetadata metadata, Expression value, Expression helper)
+    private Expression GetDeserializeExpression(IBindingMetadata metadata, Expression json, Expression helper)
     {
-        IEnumerable<MethodInfo> methods = typeof(JsonConvert).GetMethods().Where(m => m.Name == "DeserializeObject" && m.ContainsGenericParameters);
+        MethodInfo deserializeMethod = typeof(JsonConvert).GetMethod(nameof(JsonConvert.DeserializeObject), [typeof(string), typeof(Type), typeof(JsonSerializerSettings)]);
 
-        if (helper != null)
-        {
-            MethodInfo deserializeObject = methods.Select(mi => mi.MakeGenericMethod(metadata.Type)).FirstOrDefault(mi => mi.HasParameters(typeof(string), helper.Type));
+        Expression settings = helper ?? Expression.Default(typeof(JsonSerializerSettings));
+        Expression methodCall = Expression.Call(deserializeMethod, json, Expression.Constant(metadata.Type), settings);
 
-            return Expression.Call(deserializeObject, value, helper);
-        }
-        else
-        {
-            MethodInfo deserializeObject = methods.Select(mi => mi.MakeGenericMethod(metadata.Type)).FirstOrDefault(mi => mi.HasParameters(typeof(string)));
-
-            return Expression.Call(deserializeObject, value);
-        }
+        return Expression.Convert(methodCall, metadata.Type);
     }
 
-    private bool HasJsonAttribute(IBindingMetadata metadata)
+    private static bool HasJsonAttribute(IBindingMetadata metadata)
     {
         if (metadata.Relation.Annotations.OfType<JsonAttribute>().Any())
             return true;
@@ -106,18 +101,24 @@ public class NewtonsoftJsonBindingConvention : IBindingConvention
 
         return false;
     }
-    private bool IsNativeJToken(IBindingMetadata metadata) => (metadata.Type == typeof(JToken));
+
+    private static bool IsNativeJToken(Type type) => typeof(JToken).IsAssignableFrom(type);
+
+    // System.Text.Json nodes are left to the built-in convention, even when marked [Json]
+    private static bool IsForeignNative(Type type) => typeof(JsonNode).IsAssignableFrom(type);
+
+    private static bool IsJsonObject(IBindingMetadata metadata) => HasJsonAttribute(metadata) && !IsNativeJToken(metadata.Type) && !IsForeignNative(metadata.Type);
 
     public IBindingParameterContract GetParameterContract(IBindingMetadata metadata)
     {
-        if (this.IsNativeJToken(metadata))
+        if (IsNativeJToken(metadata.Type))
         {
             return new BindingParameterContract()
             {
                 Convert = o => (object)((JToken)o)?.ToString(Formatting.Indented) ?? DBNull.Value,
             };
         }
-        else if (this.HasJsonAttribute(metadata))
+        else if (IsJsonObject(metadata))
         {
             return new BindingParameterContract()
             {
@@ -127,10 +128,12 @@ public class NewtonsoftJsonBindingConvention : IBindingConvention
 
         return null;
     }
+
     public IBindingCompositionContract GetCompositionContract(IBindingMetadata metadata) => null;
+
     public IBindingValueContract GetValueContract(IBindingMetadata metadata)
     {
-        if (!this.HasJsonAttribute(metadata) && !this.IsNativeJToken(metadata))
+        if (!IsNativeJToken(metadata.Type) && !IsJsonObject(metadata))
             return null;
 
         return new BindingValueContract()
@@ -140,5 +143,5 @@ public class NewtonsoftJsonBindingConvention : IBindingConvention
         };
     }
 
-    public IBindingHelperContract GetHelperContract(IBindingMetadata metadata) => this.HasJsonAttribute(metadata) ? this.helper : null;
+    public IBindingHelperContract GetHelperContract(IBindingMetadata metadata) => IsJsonObject(metadata) ? this.helper : null;
 }

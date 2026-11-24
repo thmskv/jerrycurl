@@ -1,7 +1,7 @@
 ﻿using System;
 using Jerrycurl.Relations.Metadata;
 
-namespace Jerrycurl.Mvc.Metadata;
+namespace Jerrycurl.Cqs.Metadata.Json;
 
 internal class JsonMetadata : IJsonMetadata
 {

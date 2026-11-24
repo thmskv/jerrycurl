@@ -5,16 +5,15 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using Jerrycurl.Cqs.Metadata;
 using Jerrycurl.Cqs.Metadata.Annotations;
 using Jerrycurl.Reflection;
 using Jerrycurl.Relations.Metadata;
 
-namespace Jerrycurl.Extensions.Json.Metadata;
+namespace Jerrycurl.Cqs.Metadata.Json;
 
 public class JsonBindingConvention : IBindingConvention
 {
-    public int Priority => 1;
+    public int Priority => 100;
 
     public JsonSerializerOptions Options { get; }
 
@@ -68,18 +67,10 @@ public class JsonBindingConvention : IBindingConvention
     {
         MethodInfo deserializeMethod = typeof(JsonSerializer).GetMethod(nameof(JsonSerializer.Deserialize), [typeof(string), typeof(Type), typeof(JsonSerializerOptions)]);
 
-        if (helper != null)
-        {
-            Expression methodCall = Expression.Call(deserializeMethod, value, Expression.Constant(metadata.Type), helper);
+        Expression options = helper ?? Expression.Default(typeof(JsonSerializerOptions));
+        Expression methodCall = Expression.Call(deserializeMethod, value, Expression.Constant(metadata.Type), options);
 
-            return Expression.Convert(methodCall, metadata.Type);
-        }
-        else
-        {
-            Expression methodCall = Expression.Call(deserializeMethod, value, Expression.Constant(metadata.Type), Expression.Default(typeof(JsonSerializerOptions)));
-
-            return Expression.Convert(methodCall, metadata.Type);
-        }
+        return Expression.Convert(methodCall, metadata.Type);
     }
 
     private bool HasJsonAttribute(IBindingMetadata metadata)
@@ -93,7 +84,7 @@ public class JsonBindingConvention : IBindingConvention
         return false;
     }
 
-    private bool IsNativeJsonNode(IBindingMetadata metadata) => (metadata.Type == typeof(JsonNode) || metadata.Type == typeof(JsonValue) || metadata.Type == typeof(JsonArray));
+    private bool IsNativeJsonNode(IBindingMetadata metadata) => typeof(JsonNode).IsAssignableFrom(metadata.Type);
 
     public IBindingParameterContract GetParameterContract(IBindingMetadata metadata)
     {

@@ -1,4 +1,7 @@
-﻿using Jerrycurl.Extensions.Newtonsoft.Json.Metadata;
+﻿using Jerrycurl.Collections;
+using Jerrycurl.Cqs.Metadata;
+using Jerrycurl.Cqs.Metadata.Json;
+using Jerrycurl.Extensions.Newtonsoft.Json.Metadata;
 using Newtonsoft.Json;
 
 namespace Jerrycurl.Mvc;

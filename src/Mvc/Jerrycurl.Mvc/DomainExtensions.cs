@@ -2,31 +2,47 @@
 using Jerrycurl.Cqs.Language;
 using Jerrycurl.Cqs.Metadata;
 using Jerrycurl.Mvc.Metadata;
+using Jerrycurl.Cqs.Metadata.Json;
 using Jerrycurl.Relations.Language;
 using Jerrycurl.Relations.Metadata;
 using System;
+using System.Linq;
+using System.Text.Json;
 
 namespace Jerrycurl.Mvc;
 
 public static class DomainExtensions
 {
-    public static void Use(this IDomainOptions options, ITableNamingPolicy policy)
-        => options.Schemas?.Use(policy);
-
-    public static void Use(this IDomainOptions options, IBindingConvention convention)
-        => options.Schemas?.Use(convention);
-
-    public static void Use(this IDomainOptions options, IJsonNamingPolicy policy)
+    extension(IDomainOptions options)
     {
-        if (policy == null)
-            throw new ArgumentNullException(nameof(policy));
+        public void Use(ITableNamingPolicy policy)
+            => options.Schemas?.Use(policy);
 
-        JsonMetadataBuilder builder = options?.Schemas.Builders.FirstOfType<JsonMetadataBuilder>();
+        public void Use(IBindingConvention convention)
+            => options.Schemas?.Use(convention);
 
-        if (builder != null)
-            builder.NamingPolicy = policy;
+        public void Use(IJsonNamingPolicy policy)
+            => options.Schemas?.Use(policy);
+
+        public void Use(IRelationConvention convention)
+            => options.Schemas?.Use(convention);
+
+        public void UseJson() => options.UseJson(null);
+
+        public void UseJson(JsonSerializerOptions serializerOptions)
+        {
+            serializerOptions ??= JsonSerializerOptions.Default;
+
+            foreach (BindingMetadataBuilder builder in options?.Schemas?.Builders.OfType<BindingMetadataBuilder>() ?? [])
+                builder.Conventions.Remove<JsonBindingConvention>();
+
+            options.Use(new JsonBindingConvention(serializerOptions));
+
+            // keep a naming policy set by another serializer (e.g. UseNewtonsoftJson), which owns [Json] properties
+            JsonMetadataBuilder jsonBuilder = options?.Schemas?.Builders.FirstOfType<JsonMetadataBuilder>();
+
+            if (jsonBuilder != null && (jsonBuilder.NamingPolicy == null || jsonBuilder.NamingPolicy is DefaultJsonNamingPolicy))
+                jsonBuilder.NamingPolicy = new DefaultJsonNamingPolicy(serializerOptions);
+        }
     }
-
-    public static void Use(this IDomainOptions options, IRelationConvention convention)
-        => options.Schemas?.Use(convention);
 }

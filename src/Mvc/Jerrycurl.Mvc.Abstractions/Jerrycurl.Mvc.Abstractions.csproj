@@ -9,5 +9,9 @@
 		<ProjectReference Include="..\Jerrycurl.Relations.Abstractions\Jerrycurl.Relations.Abstractions.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="Jerrycurl.Mvc" />
+	</ItemGroup>
+
 	<Import Project="..\..\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems" Label="Shared" />
 </Project>

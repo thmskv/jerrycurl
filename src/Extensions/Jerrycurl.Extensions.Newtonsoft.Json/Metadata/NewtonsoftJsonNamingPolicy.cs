@@ -1,4 +1,4 @@
-﻿using Jerrycurl.Mvc.Metadata;
+﻿using Jerrycurl.Cqs.Metadata.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;

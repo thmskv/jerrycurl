@@ -18,7 +18,6 @@
     <File Path="eng/nuspec/Jerrycurl.CodeAnalysis.Razor.nuspec" />
     <File Path="eng/nuspec/Jerrycurl.Cqs.nuspec" />
     <File Path="eng/nuspec/Jerrycurl.Extensions.EntityFrameworkCore.nuspec" />
-    <File Path="eng/nuspec/Jerrycurl.Extensions.Json.nuspec" />
     <File Path="eng/nuspec/Jerrycurl.Extensions.Newtonsoft.Json.nuspec" />
     <File Path="eng/nuspec/Jerrycurl.Mvc.nuspec" />
     <File Path="eng/nuspec/Jerrycurl.nuspec" />
@@ -46,7 +45,6 @@
   </Folder>
   <Folder Name="/src/Extensions/">
     <Project Path="src/Extensions/Jerrycurl.Extensions.EntityFrameworkCore/Jerrycurl.Extensions.EntityFrameworkCore.csproj" />
-    <Project Path="src/Extensions/Jerrycurl.Extensions.Json/Jerrycurl.Extensions.Json.csproj" />
     <Project Path="src/Extensions/Jerrycurl.Extensions.Newtonsoft.Json/Jerrycurl.Extensions.Newtonsoft.Json.csproj" />
   </Folder>
   <Folder Name="/src/NuGet/">

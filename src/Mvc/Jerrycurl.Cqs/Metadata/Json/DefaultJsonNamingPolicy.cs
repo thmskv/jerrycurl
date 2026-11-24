@@ -1,15 +1,14 @@
-﻿using Jerrycurl.Mvc.Metadata;
-using System;
+﻿using System;
 using System.Reflection;
 using System.Text.Json;
 
-namespace Jerrycurl.Extensions.Json.Metadata;
+namespace Jerrycurl.Cqs.Metadata.Json;
 
-public class SystemTextJsonNamingPolicy : IJsonNamingPolicy
+public class DefaultJsonNamingPolicy : IJsonNamingPolicy
 {
     public JsonSerializerOptions Options { get; }
 
-    public SystemTextJsonNamingPolicy(JsonSerializerOptions options)
+    public DefaultJsonNamingPolicy(JsonSerializerOptions options)
     {
         this.Options = options ?? throw new ArgumentNullException(nameof(options));
     }

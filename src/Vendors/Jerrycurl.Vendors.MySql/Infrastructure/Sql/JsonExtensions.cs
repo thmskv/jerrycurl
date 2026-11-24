@@ -1,6 +1,7 @@
 ﻿using Jerrycurl.Mvc.Projections;
 using System;
 using System.Linq.Expressions;
+using Jerrycurl.Cqs.Metadata.Json;
 using Jerrycurl.Mvc.Metadata;
 
 namespace Jerrycurl.Mvc.Sql.MySql;

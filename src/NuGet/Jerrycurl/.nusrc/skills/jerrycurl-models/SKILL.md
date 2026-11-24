@@ -40,7 +40,7 @@ public class BlogPost
 | `[Id]` | Database-generated identity. Excluded from `In()` (inserts/updates) and included in `Out()`; `Id()` returns it. |
 | `[Key]`, `[Key("Name")]`, `[Key("Name", index)]` | Member of a key. The name defaults to the **property name**. Same name plus `Index` makes a composite key. `IsPrimary` defaults to `true`, so set `IsPrimary = false` for alternate/candidate keys. `Key()` selects primary-key columns. |
 | `[Ref]`, `[Ref("KeyName")]`, `[Ref("KeyName", index, "FkName")]` | Foreign key to the key whose name **equals** `KeyName` (ordinal). `KeyName` defaults to the property name. `FkName` distinguishes several references to the same key. |
-| `[Json]` | Property (or class) is stored as JSON in one column. Requires `options.UseJson()` (Jerrycurl.Extensions.Json) or `options.UseNewtonsoftJson()` in the domain. |
+| `[Json]` | Property (or class) is stored as JSON in one column. Serialized with System.Text.Json by default (`options.UseJson(serializerOptions)` changes its options). `options.UseNewtonsoftJson()` (Jerrycurl.Extensions.Newtonsoft.Json) takes over `[Json]` properties. `JsonNode`-family and `JToken`-family properties always bind with their own library, with or without `[Json]`. |
 | `[In]` / `[Out]` | Override input/output classification: `[Out]` alone excludes a column from INSERT/UPDATE but keeps it readable (e.g. DB defaults). `[In, Out]` makes an `[Id]` insertable. |
 
 **Which properties are columns:** properties declared on the class that carries `[Table]`, plus anything marked `[Column]`. Properties added by a subclass (a view) are **not** columns. Navigation properties are never columns.
@@ -123,4 +123,4 @@ The `dotnet-jerry` CLI can generate `[Table]` classes with `[Id]`, `[Key]` and `
 - [ ] Every parent of a list has a named `[Key]`, and the child's FK has `[Ref]` with the **same name**.
 - [ ] Views inherit table classes rather than redeclaring columns.
 - [ ] Extra view properties are mapped with `Prop()` in queries, not added as `[Column]`. A `[Column]` property becomes part of `In()`, so inserts would include it.
-- [ ] `[Json]` properties have a JSON serializer registered in the domain.
+- [ ] `[Json]` properties use the intended serializer (System.Text.Json by default, Newtonsoft after `UseNewtonsoftJson()`).

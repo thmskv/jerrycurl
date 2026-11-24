@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
 using Jerrycurl.Collections;
@@ -9,8 +8,9 @@ using Jerrycurl.Relations.Metadata;
 
 namespace Jerrycurl.Cqs.Metadata;
 
-public class BindingMetadataBuilder : Collection<IBindingConvention>, IBindingMetadataBuilder
+public class BindingMetadataBuilder : IBindingMetadataBuilder
 {
+    public ConventionList<IBindingConvention> Conventions { get; } = new();
     public IBindingConvention DefaultConvention { get; set; } = new DefaultBindingConvention();
 
     public IBindingMetadata GetMetadata(IMetadataBuilderContext context) => this.GetMetadata(context, context.Relation.Identity);
@@ -22,11 +22,7 @@ public class BindingMetadataBuilder : Collection<IBindingConvention>, IBindingMe
 
     public BindingMetadataBuilder(IEnumerable<IBindingConvention> conventions)
     {
-        if (conventions == null)
-            throw new ArgumentNullException(nameof(conventions));
-
-        foreach (IBindingConvention convention in conventions)
-            this.Add(convention);
+        this.Conventions = new ConventionList<IBindingConvention>(conventions);
     }
 
     private IBindingMetadata GetMetadata(IMetadataBuilderContext context, MetadataIdentity identity)
@@ -112,7 +108,7 @@ public class BindingMetadataBuilder : Collection<IBindingConvention>, IBindingMe
 
     private void ApplyContracts(BindingMetadata metadata)
     {
-        IEnumerable<IBindingConvention> allConventions = this;
+        IEnumerable<IBindingConvention> allConventions = this.Conventions;
 
         if (this.DefaultConvention != null)
             allConventions = new[] { this.DefaultConvention }.Concat(allConventions);

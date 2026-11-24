@@ -1,40 +1,69 @@
 ﻿using System;
+using System.Text.Json;
 using Jerrycurl.Collections;
 using Jerrycurl.Cqs.Metadata;
+using Jerrycurl.Cqs.Metadata.Json;
 using Jerrycurl.Relations.Metadata;
 
 namespace Jerrycurl.Cqs.Language;
 
 public static class SchemaExtensions
 {
-    public static ISchemaStore Use(this ISchemaStore store, IBindingConvention convention)
+    extension(ISchemaStore store)
     {
-        if (store == null)
-            throw new ArgumentNullException(nameof(store));
+        public ISchemaStore Use(IBindingConvention convention)
+        {
+            ArgumentNullException.ThrowIfNull(store);
+            ArgumentNullException.ThrowIfNull(convention);
 
-        if (convention == null)
-            throw new ArgumentNullException(nameof(convention));
+            BindingMetadataBuilder builder = store.Builders.FirstOfType<BindingMetadataBuilder>();
 
-        BindingMetadataBuilder builder = store.Builders.FirstOfType<BindingMetadataBuilder>();
+            builder?.Conventions.Add(convention);
 
-        builder?.Add(convention);
+            return store;
+        }
 
-        return store;
+        public void Use(IJsonNamingPolicy policy)
+        {
+            ArgumentNullException.ThrowIfNull(policy);
+
+            JsonMetadataBuilder builder = store.Builders.FirstOfType<JsonMetadataBuilder>();
+
+            builder?.NamingPolicy = policy;
+        }
+
+        public ISchemaStore Use(ITableNamingPolicy policy)
+        {
+            ArgumentNullException.ThrowIfNull(store);
+            ArgumentNullException.ThrowIfNull(policy);
+
+            TableMetadataBuilder builder = store.Builders.FirstOfType<TableMetadataBuilder>();
+
+            builder?.NamingPolicy = policy;
+
+            return store;
+        }
     }
 
-    public static ISchemaStore Use(this ISchemaStore store, ITableNamingPolicy policy)
+    extension(SchemaStore store)
     {
-        if (store == null)
-            throw new ArgumentNullException(nameof(store));
-
-        if (policy == null)
-            throw new ArgumentNullException(nameof(policy));
-
-        TableMetadataBuilder builder = store.Builders.FirstOfType<TableMetadataBuilder>();
-
-        if (builder != null)
-            builder.NamingPolicy = policy;
-
-        return store;
+        public static SchemaStore Default => DefaultSchemaStore.Value;
     }
+
+    private static Lazy<SchemaStore> DefaultSchemaStore { get;} = new(() =>
+    {
+        return new SchemaStore(new DotNotation(),
+        [
+            new BindingMetadataBuilder()
+            {
+                Conventions = { new JsonBindingConvention(JsonSerializerOptions.Default) },
+            },
+            new ReferenceMetadataBuilder(),
+            new TableMetadataBuilder(),
+            new JsonMetadataBuilder()
+            {
+                NamingPolicy = new DefaultJsonNamingPolicy(JsonSerializerOptions.Default)
+            }
+        ]);
+    });
 }

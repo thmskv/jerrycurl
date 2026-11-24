@@ -16,7 +16,7 @@ public static class SchemaExtensions
 
         RelationMetadataBuilder builder = store.Builders.FirstOfType<RelationMetadataBuilder>();
 
-        builder?.Add(convention);
+        builder?.Conventions.Add(convention);
 
         return store;
     }

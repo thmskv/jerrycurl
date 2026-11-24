@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
-using Jerrycurl.Cqs.Metadata;
 
-namespace Jerrycurl.Extensions.Json.Metadata;
+namespace Jerrycurl.Cqs.Metadata.Json;
 
 internal class JsonBindingHelperContract : BindingHelperContract<JsonSerializerOptions>
 {

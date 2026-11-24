@@ -8,7 +8,7 @@ using Jerrycurl.Mvc;
 using System.Text.Json;
 using Jerrycurl.Relations.Language;
 using Microsoft.Data.Sqlite;
-using Jerrycurl.Extensions.Json.Metadata;
+using Jerrycurl.Cqs.Metadata.Json;
 using Jerrycurl.Cqs.Commands;
 using Jerrycurl.Test.Models.Database;
 using Jerrycurl.Cqs.Test.Models.Views;

@@ -33,7 +33,7 @@ public class DatabaseHelper
 
     public SchemaStore GetStore(DotNotation notation = null, IEnumerable<object> contracts = null)
     {
-        BindingMetadataBuilder bindingBuilder = [];
+        BindingMetadataBuilder bindingBuilder = new();
         ReferenceMetadataBuilder referenceBuilder = new ReferenceMetadataBuilder();
         TableMetadataBuilder tableBuilder = new TableMetadataBuilder();
 

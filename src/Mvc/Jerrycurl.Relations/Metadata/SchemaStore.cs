@@ -11,7 +11,7 @@ public class SchemaStore : ISchemaStore
     private readonly List<IMetadataBuilder> builders = [];
 
     public DotNotation Notation { get; }
-    internal RelationMetadataBuilder RelationBuilder { get; } = [];
+    internal RelationMetadataBuilder RelationBuilder { get; } = new();
 
     public IEnumerable<IMetadataBuilder> Builders => new IMetadataBuilder[] { this.RelationBuilder }.Concat(this.builders);
 
@@ -55,15 +55,13 @@ public class SchemaStore : ISchemaStore
         if (modelType == null)
             throw new ArgumentNullException(nameof(modelType));
 
-        return this.entries.GetOrAdd(modelType, this.CreateSchema);
-    }
+        return this.entries.GetOrAdd(modelType, t =>
+        {
+            Schema schema = new Schema(this, modelType);
 
-    private Schema CreateSchema(Type modelType)
-    {
-        Schema schema = new Schema(this, modelType);
+            schema.Initialize();
 
-        schema.Initialize();
-
-        return schema;
+            return schema;
+        });
     }
 }

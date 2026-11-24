@@ -1,9 +1,9 @@
 ﻿using Jerrycurl.Relations.Metadata;
-using System.Collections.Generic;
 
 namespace Jerrycurl.Cqs.Metadata;
 
-public interface IBindingMetadataBuilder : IMetadataBuilder<IBindingMetadata>, ICollection<IBindingConvention>
+public interface IBindingMetadataBuilder : IMetadataBuilder<IBindingMetadata>
 {
+    ConventionList<IBindingConvention> Conventions { get; }
     IBindingConvention DefaultConvention { get; set; }
 }

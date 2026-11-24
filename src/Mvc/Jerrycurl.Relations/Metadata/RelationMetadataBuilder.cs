@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using Jerrycurl.Collections;
@@ -8,8 +7,9 @@ using Jerrycurl.Reflection;
 
 namespace Jerrycurl.Relations.Metadata;
 
-internal class RelationMetadataBuilder : Collection<IRelationConvention>, IMetadataBuilder<IRelationMetadata>
+internal class RelationMetadataBuilder : IMetadataBuilder<IRelationMetadata>
 {
+    public ConventionList<IRelationConvention> Conventions { get; } = new();
     public IRelationConvention DefaultConvention { get; set; } = new DefaultRelationConvention();
 
     public void Initialize(IMetadataBuilderContext context) { }
@@ -57,7 +57,7 @@ internal class RelationMetadataBuilder : Collection<IRelationConvention>, IMetad
 
     private IRelationContract GetContract(RelationMetadata metadata)
     {
-        IEnumerable<IRelationConvention> allConventions = new[] { this.DefaultConvention }.Concat(this);
+        IEnumerable<IRelationConvention> allConventions = new[] { this.DefaultConvention }.Concat(this.Conventions);
 
         IRelationContract contract = allConventions.Reverse().NotNull(cr => cr.GetContract(metadata)).FirstOrDefault();
 
@@ -92,7 +92,7 @@ internal class RelationMetadataBuilder : Collection<IRelationConvention>, IMetad
 
     private IEnumerable<Attribute> CreateAnnotations(RelationMetadata metadata)
     {
-        IEnumerable<IRelationConvention> allConventions = new[] { this.DefaultConvention }.Concat(this);
+        IEnumerable<IRelationConvention> allConventions = new[] { this.DefaultConvention }.Concat(this.Conventions);
 
         return allConventions.NotNull().SelectMany(cr => cr.GetAnnotations(metadata) ?? []).NotNull();
     }

@@ -4,5 +4,9 @@
 		<RootNamespace>Jerrycurl.Relations</RootNamespace>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="Jerrycurl.Relations" />
+	</ItemGroup>
+
 	<Import Project="..\..\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems" Label="Shared" />
 </Project>

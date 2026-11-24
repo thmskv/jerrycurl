@@ -1,4 +1,5 @@
 ﻿using Jerrycurl.Cqs.Metadata;
+using Jerrycurl.Cqs.Metadata.Json;
 using Jerrycurl.Mvc.Metadata;
 using System;
 using System.Linq.Expressions;
