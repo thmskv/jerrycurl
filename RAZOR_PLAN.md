@@ -213,3 +213,19 @@ This is a mechanical rename, with no logic changes in the same commit.
   Call the generated statics against Sqlite. Add a small Roslyn `CSharpGeneratorDriver` test for each diagnostic `JC0001`–`JC0005`. Assert the emitted modifier in the visibility cases.
 - **Final grep.** No `Jerrycurl.Mvc`, `Accessor`, `_cssql` or `FindPage` remains in `src/`, `test/`, `eng/`, the README or the skills.
 - **Packaging.** `dotnet pack`, then check that the produced nupkg ids are `Jerrycurl.Razor` and that vendor packages depend on it.
+
+---
+
+## Implementation notes
+
+Where the implementation differs from or adds to the plan above:
+
+- **`IProcEngine`, not `ProcEngine`.** The optional per-call engine parameter and `ProcEngine.Default` are typed as `IProcEngine`. `IProcEngine.Describe(Type)` was added for this. `ProcEngine.Default` creates a fresh `ProcEngine` per access unless it was set explicitly, so a later `ProcEngine.Services` assignment still takes effect (all caches are static).
+- **Unconstrained `<T>` overloads.** The generated `Query<T>` etc. and the `*Core` helpers have no `where T : TResult` constraint. That constraint can't be emitted for sealed or struct results (`@result string`, `@result int`) by a text-only generator. Incompatible types fail at runtime, as before.
+- **Commands accept lists.** A `@command` with a typed model also gets `Execute<TList>(TList model) where TList : IEnumerable<TModel>`, so the documented `@model Blog` + `Execute(blogs)` pattern still compiles. It is generic so `Execute(new() { ... })` stays unambiguous. Queries don't get list overloads.
+- **`JC0006`.** A page named after one of its own entry points (`Query.cssql` with `@query`) would hit CS0542 inside generated code, so the generator reports `JC0006` instead and emits no entry points.
+- **`RenderBody()`.** Renaming `Render` → `Renderer` would have turned `@Render.Body()` into `@Renderer.Body()`, so `ProcPage.RenderBody()` was added (as in ASP.NET Razor). The docs use it.
+- **Template cycles.** A page that inherits itself as `@template` (via `_imports.cssql`) skips it. A real cycle throws `ProcExecutionException`.
+- **Generator tests.** They live in a separate `test/unit/src/Build/Jerrycurl.CodeAnalysis.Razor.Test` project (generator unit tests, Roslyn-compile checks and `CSharpGeneratorDriver` tests). The end-to-end `.cssql` fixtures run inside `Jerrycurl.Razor.Test`.
+- **Test `Runner`.** Its hand-written pages are `RunnerQuery` / `RunnerCommand`, not `Query` / `Command`, because a class can't have a static method named after itself.
+- **Dropped accessor features.** `One<T>` (use `.SingleOrDefault()`) and the `QueryReader` overloads of `Enumerate` have no generated equivalent yet.

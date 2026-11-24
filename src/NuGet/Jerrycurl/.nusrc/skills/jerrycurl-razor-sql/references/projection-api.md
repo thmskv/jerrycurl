@@ -1,6 +1,6 @@
-# Projection API reference (`Jerrycurl.Mvc.Sql`)
+﻿# Projection API reference (`Jerrycurl.Razor.Sql`)
 
-All methods are extension methods in namespace `Jerrycurl.Mvc.Sql`, which every `.cssql` page imports by default. Projections and attributes are **immutable**. Each call returns a new value whose SQL buffer has text, parameters or bindings appended.
+All methods are extension methods in namespace `Jerrycurl.Razor.Sql`, which every `.cssql` page imports by default. Projections and attributes are **immutable**. Each call returns a new value whose SQL buffer has text, parameters or bindings appended.
 
 - `IProjection<T>` / `IProjection`: a list of attributes (the *header*), one per mapped property of `T`. Writing it emits each attribute's buffer joined by the separator (default `,` + newline; `IsEq()` switches to `AND`, `Eq()` back to `,`).
 - `IProjectionAttribute`: a single property, column or value.
@@ -103,20 +103,20 @@ DELETE FROM @v.TblName() WHERE @v.Key().ColNames().IsEq().Pars()
 
 | Method | Description |
 |---|---|
-| `R.Subquery("Name", model)` / `R.Subquery(m => m.Nav, "Name", model)` | Render another query page inline, with the current `R` as its result and `model` as its `M`. |
-| `M.Subcommand("Name")` / `M.Subcommand(m => m.Nav, "Name")` | Render another command page inline, with the current `M` as its model. |
+| `R.Subquery<TPage>(model)` / `R.Subquery(typeof(TPage), model)` / `R.Subquery(m => m.Nav, typeof(TPage), model)` | Render another page inline, with the current `R` as its result and `model` as its `M`. |
+| `M.Subcommand<TPage>()` / `M.Subcommand(typeof(TPage))` / `M.Subcommand(m => m.Nav, typeof(TPage))` | Render another page inline, with the current `M` as its model. |
 
 ## JSON
 
 | Method | Output |
 |---|---|
 | `JsonPath()` / `JsonPath(m => m.X)` | JSON path literal for a property inside a `[Json]` column, e.g. `'$.my.value'`. |
-| Vendor `Json(...)` | Vendor-specific JSON extraction. Import `Jerrycurl.Mvc.Sql.SqlServer`, `.Oracle` or `.MySql`. |
+| Vendor `Json(...)` | Vendor-specific JSON extraction. Import `Jerrycurl.Razor.Sql.SqlServer`, `.Oracle` or `.MySql`. |
 
 ## Vendor-specific (import the vendor namespace)
 
 | Namespace | Methods |
 |---|---|
-| `Jerrycurl.Mvc.Sql.SqlServer` | `Tvp(m => m.List)`, `TvpName(...)` for table-valued parameters; `Json(...)` |
-| `Jerrycurl.Mvc.Sql.Oracle` | `Refcursor()` for `OPEN ... FOR` result sets; `Json(...)` |
-| `Jerrycurl.Mvc.Sql.MySql` | `Json(...)` |
+| `Jerrycurl.Razor.Sql.SqlServer` | `Tvp(m => m.List)`, `TvpName(...)` for table-valued parameters; `Json(...)` |
+| `Jerrycurl.Razor.Sql.Oracle` | `Refcursor()` for `OPEN ... FOR` result sets; `Json(...)` |
+| `Jerrycurl.Razor.Sql.MySql` | `Json(...)` |

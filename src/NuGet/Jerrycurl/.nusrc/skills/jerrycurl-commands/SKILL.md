@@ -1,24 +1,25 @@
----
+﻿---
 name: jerrycurl-commands
-description: How to write Jerrycurl command pages (.cssql files under Commands/) for INSERT, UPDATE, DELETE, upserts and DDL, executed with Accessor.Execute/ExecuteAsync. Covers iterating model values with M.Vals(), In()/Out()/Key() column sets, writing generated identity values back into the model (SELECT ... AS Prop(), OUTPUT/RETURNING), parent/child inserts with foreign-key cascade, batching limits and transactions. Use when adding or changing any write operation in a Jerrycurl project.
+description: How to write Jerrycurl @command pages (.cssql files, usually under Commands/) for INSERT, UPDATE, DELETE, upserts and DDL, run with the generated Execute/ExecuteAsync methods. Covers iterating model values with M.Vals(), In()/Out()/Key() column sets, writing generated identity values back into the model (SELECT ... AS Prop(), OUTPUT/RETURNING), parent/child inserts with foreign-key cascade, batching limits and transactions. Use when adding or changing any write operation in a Jerrycurl project.
 ---
 
 # Jerrycurl commands
 
-A command is a `.cssql` page under `Commands/` executed by `this.Execute(model)` (or `ExecuteAsync`) in an accessor. The page iterates the model's values and writes one statement per value. Any result columns aliased with a value's `Prop()` are **written back into the model objects** after execution. Read **jerrycurl-razor-sql** first for syntax and escaping.
+A command is a `.cssql` page that declares `@command`, run with its generated static `Execute(model)` (or `ExecuteAsync`). The page iterates the model's values and writes one statement per value. Any result columns aliased with a value's `Prop()` are **written back into the model objects** after execution. Read **jerrycurl-razor-sql** first for syntax and escaping.
 
 ## Workflow
 
-1. Create `Commands/<AccessorPrefix>/<MethodName>.cssql` with `@model TEntity`, the *item* type, even if the accessor passes a list.
+1. Create `Commands/<Area>/<Name>.cssql` with `@command` and `@model TEntity`, the *item* type. `Execute` accepts a single item or a list of them.
 2. Loop with `@foreach (var v in M.Vals()) { ... }`. This works for a single object or a list.
 3. Build statements from `v` with `TblName()`, `In()`, `Key()`, `ColNames()`, `Pars()`.
 4. If the database generates values (identity, defaults), select them back aliased with `Prop()`.
-5. Accessor: `public void Create(IList<Blog> blogs) => this.Execute(blogs);`
+5. Call it: `Create.Execute(blogs);`, directly or from an accessor class wrapping it.
 
 ## CRUD templates
 
 ```sql
 -- Commands/Blogs/Create.cssql   (SQLite: identity via last_insert_rowid)
+@command
 @model Blog
 @foreach (var v in M.Vals())
 {
@@ -29,6 +30,7 @@ A command is a `.cssql` page under `Commands/` executed by `this.Execute(model)`
 
 ```sql
 -- Commands/Blogs/Update.cssql
+@command
 @model Blog
 @foreach (var v in M.Vals())
 {
@@ -40,6 +42,7 @@ A command is a `.cssql` page under `Commands/` executed by `this.Execute(model)`
 
 ```sql
 -- Commands/Blogs/Delete.cssql
+@command
 @model Blog
 @foreach (var v in M.Vals())
 {
@@ -56,7 +59,7 @@ INSERT INTO "Blog" ( "Title", "Rating" ) VALUES ( @JP2, @JP3 );
 SELECT last_insert_rowid() AS "Item[1].Id";
 ```
 
-After `Execute(blogs)` returns, `blogs[0].Id` and `blogs[1].Id` hold the generated keys.
+After `Create.Execute(blogs)` returns, `blogs[0].Id` and `blogs[1].Id` hold the generated keys.
 
 ## Which columns each filter selects
 
@@ -67,7 +70,7 @@ After `Execute(blogs)` returns, `blogs[0].Id` and `blogs[1].Id` hold the generat
 | `Key()` | Primary `[Key]` columns | WHERE clauses for UPDATE/DELETE |
 | `Id()` | The single `[Id]` attribute | Identity write-back |
 
-Override per property with `[In]` / `[Out]` from `Jerrycurl.Mvc.Metadata.Annotations`. For example, mark a database-defaulted `CreatedOn` with `[Out]` so it's excluded from INSERTs but can be read back. A `[Key]` that isn't `[Id]` (a natural key) is part of `In()`, so it's inserted, and an UPDATE's SET list includes it (setting it to its current value).
+Override per property with `[In]` / `[Out]` from `Jerrycurl.Razor.Metadata.Annotations`. For example, mark a database-defaulted `CreatedOn` with `[Out]` so it's excluded from INSERTs but can be read back. A `[Key]` that isn't `[Id]` (a natural key) is part of `In()`, so it's inserted, and an UPDATE's SET list includes it (setting it to its current value).
 
 ## Writing generated values back
 
@@ -95,6 +98,7 @@ When a child's `[Ref]` property points at a parent `[Key]` in the **same model g
 
 ```sql
 -- Commands/Blogs/CreateWithPosts.cssql
+@command
 @model BlogView
 @foreach (var v in M.Vals())
 {
@@ -110,34 +114,35 @@ When a child's `[Ref]` property points at a parent `[Key]` in the **same model g
 
 ```csharp
 // MaxSql = 1 forces a new batch at every Vals() item, so parents execute before children.
-public void CreateWithPosts(BlogView blog) => this.Execute(blog, o => o.MaxSql = 1);
+CreateWithPosts.Execute(blog, o => o.MaxSql = 1);
 ```
 
-Afterwards both `blog.Id` and each `post.BlogId` / `post.Id` are populated. If everything runs in one batch, the children are inserted with the FK's **old** value (e.g. `0`). The alternative is two `Execute` calls, assigning FKs in C# in between.
+Afterwards both `blog.Id` and each `post.BlogId` / `post.Id` are populated. If everything runs in one batch, the children are inserted with the FK's **old** value (e.g. `0`). The alternative is two `Execute` calls (two pages), assigning FKs in C# in between.
 
 ## Batching
 
 The SQL buffer can be split into several database round-trips:
 
 - **Split points** come after each item of a `Vals()` loop (and manual `Context.Execution.Buffer.Mark()` calls).
-- A split happens when a batch would exceed `SqlOptions.MaxParameters` or `MaxSql` (characters). Vendors set sensible defaults (SQL Server: 2098 parameters). Configure globally in the domain (`options.Sql.MaxParameters = ...`) or per call (`Execute(model, o => o.MaxParameters = 500)`).
+- A split happens when a batch would exceed `SqlOptions.MaxParameters` or `MaxSql` (characters). Vendors set sensible defaults (SQL Server: 2098 parameters). Configure globally in the domain (`options.Sql.MaxParameters = ...`) or per call (`Create.Execute(model, o => o.MaxParameters = 500)`).
 - Each loop iteration must therefore be a **complete statement**. Do not open a block before the loop and close it after (e.g. `BEGIN ... END;`, an open transaction, or a temp table that later statements rely on) unless you're sure no split can occur, for example by raising the limits.
 - Use `o => o.UseTransaction()` to make all batches of one `Execute` atomic.
 
 ## Transactions
 
 ```csharp
-this.Execute(model, o => o.UseTransaction());                         // ADO.NET transaction
-this.Execute(model, o => o.UseTransaction(IsolationLevel.Serializable));
-this.Execute(model, o => o.UseTransactionScope());                    // System.Transactions
+Create.Execute(model, o => o.UseTransaction());                       // ADO.NET transaction
+Create.Execute(model, o => o.UseTransaction(IsolationLevel.Serializable));
+Create.Execute(model, o => o.UseTransactionScope());                  // System.Transactions
 ```
 
-To span several accessor calls, wrap them in your own `TransactionScope` and pass `UseTransactionScope()` on each call.
+To span several page calls, wrap them in your own `TransactionScope` and pass `UseTransactionScope()` on each call.
 
 ## Other command patterns
 
-- **No model** (DDL, maintenance): `this.Execute();` with `@project` for table names:
+- **No model** (DDL, maintenance): `Clear.Execute();` with `@project` for table names:
   ```sql
+  @command
   @project Blog b
   @project BlogPost p
   DELETE FROM @p.TblName();
@@ -145,12 +150,12 @@ To span several accessor calls, wrap them in your own `TransactionScope` and pas
   ```
 - **Conditional SET parts**: `@if (v.HasVal(m => m.Title)) { , @v.ColName(m => m.Title) = @v.Par(m => m.Title) } @else { ... }`.
 - **Specific columns**: `@v.ColName(m => m.Rating) = @v.Par(m => m.Rating)`, or `@v.In().Filter(a => ...)`.
-- **Reuse**: `@M.Subcommand("Shared/AuditLog")` renders another command page with the current model.
+- **Reuse**: `@M.Subcommand<Shared.AuditLog>()` renders another page with the current model (the shared page usually has no `@command` of its own).
 - **Upsert**: write vendor syntax (`ON CONFLICT`, `MERGE`) from the same projection pieces, e.g. `ON CONFLICT (@v.Key().ColNames()) DO UPDATE SET @v.In().ColNames().Eq().Pars()`. (`NonKey()` would also drop `[Ref]` foreign-key columns.)
 
 ## Review checklist
 
-- [ ] `@model` is the item type, and the page iterates `M.Vals()` (never `Model` directly) to emit values.
+- [ ] The page declares `@command`, `@model` is the item type, and the page iterates `M.Vals()` (never `Model` directly) to emit values.
 - [ ] INSERTs use `In()` so identity columns are excluded, and generated ids are selected back with `Prop()`.
 - [ ] UPDATE/DELETE filter with `Key()`. A model without a `[Key]` produces an empty WHERE, so check the model.
 - [ ] Each loop body is a self-contained statement, and multi-statement atomicity uses `UseTransaction()`.

@@ -5,7 +5,7 @@ description: How to define Jerrycurl model classes and views: [Table], [Column],
 
 # Jerrycurl models
 
-Models are plain C# classes. Annotations from `Jerrycurl.Cqs.Metadata.Annotations` tell projections which **table and columns** a class maps to and which **keys** relate classes to each other. `[In]` / `[Out]` come from `Jerrycurl.Mvc.Metadata.Annotations`. Pages never hard-code table or column names: they read them from these annotations through projections (see **jerrycurl-razor-sql**).
+Models are plain C# classes. Annotations from `Jerrycurl.Cqs.Metadata.Annotations` tell projections which **table and columns** a class maps to and which **keys** relate classes to each other. `[In]` / `[Out]` come from `Jerrycurl.Razor.Metadata.Annotations`. Pages never hard-code table or column names: they read them from these annotations through projections (see **jerrycurl-razor-sql**).
 
 ## Table classes
 

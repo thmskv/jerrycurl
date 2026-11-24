@@ -1,15 +1,15 @@
-![Jerrycurl](gfx/icon.png)
+﻿![Jerrycurl](gfx/icon.png)
 
 [![NuGet](https://img.shields.io/nuget/v/Jerrycurl)](https://nuget.org/packages/Jerrycurl)
 [![Build status](https://github.com/thmskv/jerrycurl/actions/workflows/build.yml/badge.svg)](https://github.com/thmskv/jerrycurl/actions)
 [![Test status](https://img.shields.io/appveyor/tests/rhodosaur/jerrycurl/dev)](https://ci.appveyor.com/project/rhodosaur/jerrycurl/branch/master/tests)
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/jerrycurl-mvc/community)
 
-## Jerrycurl - High-performance ORM and MVC framework for .NET
-**Jerrycurl** is an object-relational mapper, MVC framework and Razor SQL implementation that allows developers to build data access for .NET using tools and features inspired by those of ASP.NET.
+## Jerrycurl - High-performance ORM and Razor SQL for .NET
+**Jerrycurl** is an object-relational mapper and Razor SQL implementation that lets you write data access for .NET as typed SQL pages, using tools and features inspired by ASP.NET Razor Pages.
 
 ### Installation
-Jerrycurl is available on NuGet and can be installed into any [SDK-style](https://docs.microsoft.com/en-us/nuget/resources/check-project-format) C# project. Its main package contains support for compiling `.cssql` files into your project and executing them via the built-in MVC engine. Additionally you can install support for [one of our supported databases](https://nuget.org/packages?q=Jerrycurl.Vendors) from NuGet as well.
+Jerrycurl is available on NuGet and can be installed into any [SDK-style](https://docs.microsoft.com/en-us/nuget/resources/check-project-format) C# project. Its main package compiles `.cssql` files into your project and runs them with the built-in Razor SQL engine. Install support for [one of our supported databases](https://nuget.org/packages?q=Jerrycurl.Vendors) as well.
 
 ```shell
 > dotnet add package Jerrycurl
@@ -27,11 +27,11 @@ Generated 7 tables and 21 columns in Database.cs.
 ```
 To learn more about the CLI, type in `jerry help`.
 
-### MVC setup
-Jerrycurl features a variant of the model-view-controller pattern made specifically for the relational world and its most prized asset: the SQL language. Each project consists of a selection of models, accessors and queries/commands, as per the CQS pattern.
+### Getting started
+A Jerrycurl project has three parts: **models** describing your tables, **pages** (`.cssql` files) containing your SQL, and a **domain** that configures the database connection.
 
-#### Model layer
-The model is rooted in the classes we generated with the CLI above and represented in the familiar class-per-table way.
+#### Models
+Models are the classes generated with the CLI above, in the familiar class-per-table style.
 
 ```csharp
 // Database.cs
@@ -46,10 +46,10 @@ class Blog
 //...
 ```
 
-You can use and combine these classes in any way you want to create customized views. This is done with simple composition and supports both unary properties (one-to-one mapping) or n-ary lists (one-to-many mapping).
+Combine them into *views* with plain composition: unary properties map one-to-one and lists map one-to-many.
 
 ```csharp
-// Views/Blogs/BlogView.cs
+// Views/BlogView.cs
 class BlogView : Blog
 {
     public BlogAuthor Author { get; set; }
@@ -57,23 +57,26 @@ class BlogView : Blog
 }
 ```
 
-#### Command/query (view) layer
-The command/query layer is where you write your SQL statements, and like ASP.NET it supports Razor syntax through the `.cssql` file extension. Each file consists of a header where you can declare *projections* of your model, and a body where you combine those projections with your own plain SQL code.
+#### Pages
+Pages are where you write SQL, with Razor syntax, in `.cssql` files. Like a Razor Page with `@page`, a page becomes callable from C# by declaring what it is:
 
-Razor SQL supports two special directives that represents the *input data* (`@model` directive) and *output data* (`@result` directive)
-They are placed in either the `Queries` or `Commands` folders based on whether they *read* or *write* data in the underlying database.
+> Add `@query` or `@command` to make a page callable from C#. Without one, it's a building block for other pages.
+
+`@model` (or `@input`) declares the page's input and `@result` (or `@output`) its output:
+
 ```sql
 -- Queries/Blogs/GetAll.cssql
+@query
 @result BlogView
-@model BlogFilter
+@input DateTime FromDate
 @{
     var p = R.Open(m => m.Posts);
 }
 
 SELECT      @R.Map(),
             @R.Map(m => m.Author)
-INNER JOIN  @R.Tbl(m => m.Author) ON @R.Col(m => m.Author.BlogId) = @R.Col(m => m.Id)
 FROM        @R.Tbl()
+INNER JOIN  @R.Tbl(m => m.Author) ON @R.Col(m => m.Author.BlogId) = @R.Col(m => m.Id)
 WHERE       @R.Col(m => m.CreatedOn) >= @M.Par(m => m.FromDate)
 
 SELECT      @p.Map()
@@ -83,9 +86,10 @@ WHERE       @R.Col(m => m.CreatedOn) >= @M.Par(m => m.FromDate)
 ```
 ```sql
 -- Commands/Blogs/AddBlogs.cssql
+@command
 @model Blog
 
-@foreach (var v in this.M.Vals())
+@foreach (var v in M.Vals())
 {
     INSERT INTO @v.TblName() ( @v.In().ColNames() )
     OUTPUT      @v.Out().Cols("INSERTED").As().Props()
@@ -93,22 +97,31 @@ WHERE       @R.Col(m => m.CreatedOn) >= @M.Par(m => m.FromDate)
 }
 ```
 
-#### Accessor (controller) layer
-Accessors prepare *input data* for `@model` and executes an associated Razor query or command using one of its base methods. This invokes the MVC engine which in turn generates the final SQL statements, dispatches it to the database and returns its output as either a series of new `@result` objects (queries) or modifications to existing `@model` data (commands).
+Each file compiles into a class named after the file, in your root namespace plus its folder path, with static methods for running it:
+
 ```csharp
-// Accessors/BlogsAccessor.cs
-public class BlogsAccessor : Accessor
+IList<BlogView> blogs = await GetAll.QueryAsync(new() { FromDate = DateTime.Today.AddDays(-7) });
+
+AddBlogs.Execute(newBlogs); // generated ids are written back into newBlogs
+```
+
+`Queries/` and `Commands/` are only a recommended layout. Pages refer to each other by type (`@template Shared.Paged`, `@R.Subquery<Shared.Filter>(...)`), so renames are refactor-safe and typos are compile errors.
+
+#### Visibility and the accessor pattern
+Pages are `internal` by default. Call them directly inside your assembly. To expose data access from a library, write a public class that wraps them, using public `@result` models:
+
+```csharp
+public class BlogAccessor(IProcEngine engine = null)
 {
-    public IList<BlogView> GetAll(DateTime fromDate) // -> Queries/Blogs/GetAll.cssql
-        => this.Query<BlogView>(model: new BlogFilter { FromDate = fromDate });
-    
-    public void AddBlogs(IList<Blog> newBlogs) // -> Commands/Blogs/AddBlogs.cssql
-        => this.Execute(model: newMovies);
+    public async Task<IList<BlogView>> GetRecentAsync(CancellationToken ct = default)
+        => await GetAll.QueryAsync(new() { FromDate = DateTime.Today.AddDays(-7) }, engine: engine, cancellationToken: ct);
 }
 ```
 
-#### Domain (application) layer
-A domain should be created in a parent namespace and presents a shared place for adding the required configuration for all associated commands or queries executions.
+Alternatively, make pages public with `@visibility public` on a page or in an `_imports.cssql`, or for a whole project with `<JerrycurlPageVisibility>public</JerrycurlPageVisibility>`.
+
+#### Domain
+A domain configures the database connection for every page in its namespace and below.
 ```csharp
 // BlogsDomain.cs
 class BlogsDomain : IDomain
@@ -118,14 +131,6 @@ class BlogsDomain : IDomain
         options.UseSqlServer("SERVER=.;DATABASE=blogdb;TRUSTED_CONNECTION=true");
     }
 }
-```
-
-#### Usage
-To use your newly minted accessor, you need nothing more then to simply fire up an instance, and get a-queryin'.
-
-```csharp
-var accessor = new BlogsAccessor();
-var blogs = accessor.GetAll();
 ```
 
 To learn more about Jerrycurl and how to get started, visit [our official site](https://jerrycurl.net).
