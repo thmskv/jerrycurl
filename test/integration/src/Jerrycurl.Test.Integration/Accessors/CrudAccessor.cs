@@ -1,34 +1,38 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Jerrycurl.Mvc;
+using Jerrycurl.Test.Integration.Commands.Shared;
+using Jerrycurl.Test.Integration.Queries.Shared;
 using Jerrycurl.Test.Integration.Views;
 
 namespace Jerrycurl.Test.Integration.Accessors
 {
-    public class CrudAccessor : Accessor
+    /// <summary>
+    /// The accessor pattern: a plain public class with domain-shaped methods wrapping the (internal) pages.
+    /// </summary>
+    public class CrudAccessor
     {
-        private string GetProcName(string procName)
-        {
+        public IList<T> Get<T>() => Queries.Shared.Get.Query<T>();
+
 #if VENDOR_ORACLE
-            return procName + ".Oracle";
+        public void Create<T>(T model) => Create_Oracle.Execute(model);
+        public void Update<T>(T model) => Update_Oracle.Execute(model);
+        public void Delete<T>(T model) => Delete_Oracle.Execute(model);
+        public void Clear() => Clear_Oracle.Execute();
+        public IList<DatabaseView> GetDatabaseView() => GetDatabaseView_Oracle.Query();
 #else
-            return procName;
+        public void Create<T>(T model) => Commands.Shared.Create.Execute(model);
+        public void Update<T>(T model) => Commands.Shared.Update.Execute(model);
+        public void Delete<T>(T model) => Commands.Shared.Delete.Execute(model);
+        public void Clear() => Commands.Shared.Clear.Execute();
+        public IList<DatabaseView> GetDatabaseView() => Queries.Shared.GetDatabaseView.Query();
 #endif
-        }
-        public IList<T> Get<T>() => this.Query<T>();
-        public void Create<T>(T model) => this.Execute(model, commandName: this.GetProcName("Create"));
-        public void Update<T>(T model) => this.Execute(model, commandName: this.GetProcName("Update"));
-        public void Delete<T>(T model) => this.Execute(model, commandName: this.GetProcName("Delete"));
-        public void Clear() => this.Execute(commandName: this.GetProcName("Clear"));
+
         public void VerifyImport()
         {
-            var result = this.Query<int>();
+            var result = Queries.Shared.VerifyImport.Query<int>();
 
             if (result.Count == 0)
                 throw new InvalidOperationException();
         }
-
-        public IList<DatabaseView> GetDatabaseView() => this.Query<DatabaseView>(queryName: this.GetProcName("GetDatabaseView"));
     }
 }

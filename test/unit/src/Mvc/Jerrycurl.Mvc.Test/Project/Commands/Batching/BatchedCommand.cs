@@ -2,9 +2,9 @@
 
 namespace Jerrycurl.Mvc.Test.Project.Commands.Batching;
 
-public class BatchedCommand_cssql : ProcPage<object, object>
+public class BatchedCommand : ProcPage<object, object>
 {
-    public BatchedCommand_cssql(IProjection model, IProjection result)
+    public BatchedCommand(IProjection model, IProjection result)
         : base(model, result)
     {
 

@@ -3,12 +3,12 @@ using Jerrycurl.Mvc.Projections;
 
 namespace Jerrycurl.Mvc.Test.Project.Queries.Misc;
 
-public class ProjectedQuery_cssql : ProcPage<object, object>
+public class ProjectedQuery : ProcPage<object, object>
 {
     [Inject]
     public IProjection<int> p1 { get; set; }
 
-    public ProjectedQuery_cssql(IProjection model, IProjection result)
+    public ProjectedQuery(IProjection model, IProjection result)
         : base(model, result)
     {
 

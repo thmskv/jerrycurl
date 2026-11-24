@@ -1,32 +1,23 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Jerrycurl.Mvc;
 using Jerrycurl.Mvc.Projections;
+using Jerrycurl.Test.Project.Commands;
 using Jerrycurl.Test.Project.Models;
+using Jerrycurl.Test.Project.Queries;
 
 namespace Jerrycurl.Test.Project.Accessors;
 
-public class Runner : Accessor
+/// <summary>
+/// Runs ad-hoc <see cref="Runnable{TModel, TResult}"/> pages through <see cref="RunnerQuery"/> and <see cref="RunnerCommand"/>.
+/// </summary>
+public class Runner
 {
-    private TResult AggregateInternal<TModel, TResult>(Runnable<TModel, TResult> runner) => this.Aggregate<TResult>(runner, queryName: "Query");
-    private IList<TResult> QueryInternal<TModel, TResult>(Runnable<TModel, TResult> runner) => this.Query<TResult>(runner, queryName: "Query");
-    private void CommandInternal<TModel, TResult>(Runnable<TModel, TResult> runner) => this.Execute(runner, commandName: "Command");
+    public static TResult Aggregate<TModel, TResult>(Runnable<TModel, TResult> runner) => RunnerQuery.Aggregate<TResult>(runner);
+    public static IList<TResult> Query<TModel, TResult>(Runnable<TModel, TResult> runner) => RunnerQuery.Query<TResult>(runner);
+    public static void Command<TModel, TResult>(Runnable<TModel, TResult> runner) => RunnerCommand.Execute(runner);
 
-    public static TResult Aggregate<TModel, TResult>(Runnable<TModel, TResult> runner) => new Runner().AggregateInternal(runner);
-    public static IList<TResult> Query<TModel, TResult>(Runnable<TModel, TResult> runner) => new Runner().QueryInternal(runner);
-    public static void Command<TModel, TResult>(Runnable<TModel, TResult> runner) => new Runner().CommandInternal(runner);
-
-    public string Sql<TModel, TResult>(Runnable<TModel, TResult> model)
-    {
-        IProcLocator locator = this.Context?.Locator ?? new ProcLocator();
-        IProcEngine engine = this.Context?.Engine ?? new ProcEngine(null);
-
-        PageDescriptor descriptor = locator.FindPage("Query", this.GetType());
-        ProcArgs args = new ProcArgs(typeof(Runnable<TModel, TResult>), typeof(List<TResult>));
-        ProcFactory factory = engine.Proc(descriptor, args);
-
-        return factory(model).Buffer.ReadToEnd().Text.Trim();
-    }
+    public string Sql<TModel, TResult>(Runnable<TModel, TResult> model) => RunnerQuery.Sql(model, typeof(List<TResult>));
 
     public string Sql<TModel>(TModel model, Func<IProjection<TModel>, ISqlWritable> func)
     {

@@ -22,13 +22,13 @@ internal class ProcRenderer : IProcRenderer
         return SqlContent.Empty;
     }
 
-    public ISqlContent Partial(string procName, IProjection model, IProjection result)
+    public ISqlContent Partial(Type pageType, IProjection model, IProjection result)
     {
-        ArgumentNullException.ThrowIfNull(procName);
+        ArgumentNullException.ThrowIfNull(pageType);
         ArgumentNullException.ThrowIfNull(model);
         ArgumentNullException.ThrowIfNull(result);
 
-        PageDescriptor descriptor = this.Context.Locator.FindPage(procName, model.Context.Execution.Page.PageType);
+        PageDescriptor descriptor = this.Context.Domain.Engine.Describe(pageType);
         PageFactory factory = this.Context.Domain.Engine.Page(descriptor.PageType);
 
         this.Context.Stack.Push(new PageExecutionContext() { Page = descriptor });

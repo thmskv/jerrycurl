@@ -1,4 +1,5 @@
-﻿@project MovieCast c
+﻿@command
+@project MovieCast c
 @project MovieDetails d
 @project Movie m
 DELETE FROM @c.TblName();

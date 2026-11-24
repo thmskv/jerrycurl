@@ -1,19 +1,17 @@
-﻿using System;
+using System;
 
 namespace Jerrycurl.Mvc.Metadata.Annotations;
 
+/// <summary>
+/// Renders the annotated page inside the template page <see cref="PageType"/>, which writes it through <c>RenderBody()</c>.
+/// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 public class TemplateAttribute : Attribute
 {
-    public string ProcName { get; set; }
+    public Type PageType { get; }
 
-    public TemplateAttribute()
+    public TemplateAttribute(Type pageType)
     {
-
-    }
-
-    public TemplateAttribute(string procName)
-    {
-        this.ProcName = procName;
+        this.PageType = pageType ?? throw new ArgumentNullException(nameof(pageType));
     }
 }

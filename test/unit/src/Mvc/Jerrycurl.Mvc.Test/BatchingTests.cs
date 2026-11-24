@@ -1,5 +1,5 @@
 ﻿using Jerrycurl.Cqs.Commands;
-using Jerrycurl.Mvc.Test.Project.Accessors;
+using Jerrycurl.Mvc.Test.Project.Commands.Batching;
 using Shouldly;
 using System.Linq;
 
@@ -7,12 +7,11 @@ namespace Jerrycurl.Mvc.Test;
 
 public class BatchingTests
 {
-    private readonly ProcLocator locator = new ProcLocator();
     private readonly ProcEngine engine = new ProcEngine(null);
 
     public void Test_SqlBuffer_Batching()
     {
-        var page = this.locator.FindPage("../Commands/Batching/BatchedCommand.cssql", typeof(LocatorAccessor));
+        var page = this.engine.Describe(typeof(BatchedCommand));
         var factory = this.engine.Proc(page, new ProcArgs(typeof(object), typeof(object)));
 
         var result = factory(null);

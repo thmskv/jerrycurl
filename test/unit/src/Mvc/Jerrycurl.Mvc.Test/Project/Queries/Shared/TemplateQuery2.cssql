@@ -1,0 +1,3 @@
+@template TemplateQuery1
+SELECT 2 AS `Item` UNION
+@RenderBody()

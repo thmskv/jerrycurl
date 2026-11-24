@@ -53,13 +53,7 @@ public class ProcEngine : IProcEngine
             if (!typeof(ISqlPage).IsAssignableFrom(pageType))
                 throw new ProcExecutionException($"Type '{pageType.GetSanitizedFullName()}' is not a page. Pages must implement {nameof(ISqlPage)}.");
 
-            return new PageDescriptor()
-            {
-                PageType = pageType,
-                DomainType = DomainResolver.GetDomainType(pageType),
-                OriginType = pageType,
-                Locator = new ProcLocator(),
-            };
+            return new PageDescriptor(pageType, DomainResolver.GetDomainType(pageType));
         });
     }
 
@@ -135,32 +129,26 @@ public class ProcEngine : IProcEngine
 
     private IEnumerable<PageDescriptor> GetTemplateHierarchy(PageDescriptor descriptor)
     {
-        yield return descriptor;
+        HashSet<Type> visited = [];
 
-        PageDescriptor template = this.GetTemplateDescriptor(descriptor);
-
-        if (template != null)
+        for (PageDescriptor current = descriptor; current != null; current = this.GetTemplateDescriptor(current))
         {
-            foreach (PageDescriptor template2 in this.GetTemplateHierarchy(template))
-                yield return template2;
+            if (!visited.Add(current.PageType))
+                throw new ProcExecutionException($"Template cycle detected: page '{current.PageType.GetSanitizedFullName()}' is (indirectly) its own template.");
+
+            yield return current;
         }
     }
 
     private PageDescriptor GetTemplateDescriptor(PageDescriptor descriptor)
     {
-        if (this.HasTemplateAnnotation(descriptor.PageType, out string procName))
-            return descriptor.Locator.FindPage(procName, descriptor.PageType);
+        Type templateType = descriptor.PageType.GetCustomAttribute<TemplateAttribute>()?.PageType;
 
-        return null;
-    }
+        // A template page inherits @template from its own _imports.cssql; it can't be its own template, so skip it.
+        if (templateType == null || templateType == descriptor.PageType)
+            return null;
 
-    private bool HasTemplateAnnotation(Type pageType, out string templateName)
-    {
-        TemplateAttribute annotation = pageType.GetCustomAttribute<TemplateAttribute>();
-
-        templateName = annotation?.ProcName;
-
-        return !string.IsNullOrWhiteSpace(templateName);
+        return this.Describe(templateType);
     }
 
     private ProcFactory CreateProcFactory(PageDescriptor descriptor, ProcArgs args)
@@ -175,10 +163,6 @@ public class ProcEngine : IProcEngine
 
         ISchema resultSchema = resultMetadata.Identity.Schema;
         ISchema modelSchema = modelMetadata.Identity.Schema;
-
-        IProcLocator locator = descriptor.Locator;
-
-        Type originType = descriptor.OriginType;
 
         IProcResult procFactory(object model)
         {

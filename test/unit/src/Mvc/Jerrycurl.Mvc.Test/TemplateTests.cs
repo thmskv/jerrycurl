@@ -1,4 +1,4 @@
-﻿using Jerrycurl.Mvc.Test.Project.Accessors;
+using Jerrycurl.Mvc.Test.Project.Queries.Misc;
 using Shouldly;
 
 namespace Jerrycurl.Mvc.Test;
@@ -7,17 +7,16 @@ public class TemplateTests
 {
     public void Test_Procedure_Template()
     {
-        var misc = new MiscAccessor();
-        var result = misc.TemplatedQuery();
-
-        result.ShouldBe([1, 2, 3]);
+        TemplatedQuery.Query<int>().ShouldBe([1, 2, 3]);
     }
 
     public void Test_Partial_Template()
     {
-        var misc = new MiscAccessor();
-        var result = misc.PartialedQuery();
+        PartialedQuery.Query<int>().ShouldBe([1, 2, 3]);
+    }
 
-        result.ShouldBe([1, 2, 3]);
+    public void Test_Template_Cycle_Throws()
+    {
+        Should.Throw<ProcExecutionException>(() => new ProcEngine(null).Proc(new ProcEngine(null).Describe(typeof(CycleA)), new ProcArgs(typeof(object), typeof(object))));
     }
 }

@@ -108,4 +108,29 @@ public class PageKindTests
         diagnostic.Span.ShouldNotBeNull();
         diagnostic.Span.Value.Line.ShouldBe(3);
     }
+
+    public void Test_Template_IsTyped()
+    {
+        var result = GeneratorHelper.Generate(
+            ("Queries/Shared/Layout.cssql", "SELECT * FROM (@RenderBody()) X"),
+            ("Queries/Blogs/Get.cssql", "@query\n@template Shared.Layout\nSELECT 1"));
+
+        result["Queries/Blogs/Get.cssql"].ShouldContain("Template(typeof(");
+        GeneratorHelper.Compile([.. result.Values]).ShouldBeEmpty();
+    }
+
+    public void Test_Template_UnknownType_IsCompileError()
+    {
+        string code = GeneratorHelper.GenerateOne("@query\n@template Shared.Missing\nSELECT 1");
+
+        GeneratorHelper.Compile(code).ShouldContain(d => d.Id == "CS0246");
+    }
+
+    public void Test_Diagnostics_StringTemplate()
+    {
+        RazorDiagnostic diagnostic = GeneratorHelper.Diagnose("@query\n@template \"Shared/Paged.cssql\"\nSELECT 1").Single();
+
+        diagnostic.Id.ShouldBe(RazorDiagnostics.InvalidSyntax);
+        diagnostic.Message.ShouldContain("@template Shared.Paged");
+    }
 }

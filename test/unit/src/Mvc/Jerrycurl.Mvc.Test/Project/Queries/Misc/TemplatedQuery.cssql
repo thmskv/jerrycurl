@@ -1,0 +1,3 @@
+@query
+@template Shared.TemplateQuery2
+SELECT 3 AS `Item`

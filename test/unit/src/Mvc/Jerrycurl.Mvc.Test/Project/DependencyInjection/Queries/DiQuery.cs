@@ -4,7 +4,7 @@ using Jerrycurl.Mvc.Test.Project.DependencyInjection.Services;
 
 namespace Jerrycurl.Mvc.Test.Project.DependencyInjection.Queries;
 
-public class DiQuery_cssql : ProcPage<object, object>
+public class DiQuery : ProcPage<object, object>
 {
     [Inject]
     public MyService ms { get; set; }
@@ -12,7 +12,7 @@ public class DiQuery_cssql : ProcPage<object, object>
     [Inject]
     public IProjection<int> p1 { get; set; }
 
-    public DiQuery_cssql(IProjection model, IProjection result)
+    public DiQuery(IProjection model, IProjection result)
         : base(model, result)
     {
 

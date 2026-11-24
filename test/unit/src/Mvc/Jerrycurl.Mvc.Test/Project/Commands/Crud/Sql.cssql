@@ -1,0 +1,3 @@
+@command
+@model string
+@{ WriteLiteral(Model); }

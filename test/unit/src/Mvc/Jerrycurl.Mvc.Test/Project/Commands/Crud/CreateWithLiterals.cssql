@@ -1,0 +1,5 @@
+@command
+@foreach (var v in M.Vals())
+{
+    INSERT INTO @v.TblName() ( @v.In().ColNames() ) VALUES ( @v.In().Lits() ); SELECT last_insert_rowid() AS @v.Id().Prop();
+}

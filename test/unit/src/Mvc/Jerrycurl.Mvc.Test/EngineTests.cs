@@ -1,18 +1,16 @@
-﻿using Jerrycurl.Mvc.Test.Project.Accessors;
-using Jerrycurl.Mvc.Test.Project2.NoDomain;
+using Jerrycurl.Mvc.Test.Project.Commands.Batching;
+using Jerrycurl.Mvc.Test.Project2.NoDomain.Queries;
 using Shouldly;
 
 namespace Jerrycurl.Mvc.Test;
 
 public class EngineTests
 {
-    private readonly ProcLocator locator = new ProcLocator();
     private readonly ProcEngine engine = new ProcEngine(null);
 
-    public void Test_Page_CanLookup_NoDomain()
+    public void Test_Page_CanDescribe_NoDomain()
     {
-        var descriptor = this.locator.FindPage("NoDomainQuery", typeof(NoDomainAccessor));
-        var args = new ProcArgs(typeof(object), typeof(object));
+        var descriptor = this.engine.Describe(typeof(NoDomainQuery));
 
         descriptor.ShouldNotBeNull();
         descriptor.DomainType.ShouldBeNull();
@@ -22,35 +20,34 @@ public class EngineTests
         factory.ShouldNotBeNull();
     }
 
-    public void Test_Procedure_CannotLookup_NoDomain()
+    public void Test_Procedure_CannotRun_NoDomain()
     {
-        var descriptor = this.locator.FindPage("NoDomainQuery", typeof(NoDomainAccessor));
+        var descriptor = this.engine.Describe(typeof(NoDomainQuery));
         var args = new ProcArgs(typeof(object), typeof(object));
-
-        descriptor.ShouldNotBeNull();
-        descriptor.DomainType.ShouldBeNull();
 
         Should.Throw<ProcExecutionException>(() => this.engine.Proc(descriptor, args));
     }
 
-    public void Test_Procedure_CanLookup()
+    public void Test_Procedure_CanDescribe()
     {
-        var descriptor = this.FindPage("LocatorQuery2");
+        var descriptor = this.engine.Describe(typeof(BatchedCommand));
         var args = new ProcArgs(typeof(int), typeof(object));
-        var factory = this.engine.Proc(descriptor, args);
 
-        factory.ShouldNotBeNull();
+        this.engine.Proc(descriptor, args).ShouldNotBeNull();
+    }
+
+    public void Test_Describe_IsCached()
+    {
+        this.engine.Describe(typeof(BatchedCommand)).ShouldBeSameAs(new ProcEngine(null).Describe(typeof(BatchedCommand)));
     }
 
     public void Test_Page_ResultVariance()
     {
-        var descriptor = this.FindPage("LocatorQuery2");
+        var descriptor = this.engine.Describe(typeof(BatchedCommand));
         var args1 = new ProcArgs(typeof(object), typeof(int));
         var args2 = new ProcArgs(typeof(object), typeof(string));
 
         this.engine.Proc(descriptor, args1).ShouldNotBeNull();
         this.engine.Proc(descriptor, args2).ShouldNotBeNull();
     }
-
-    private PageDescriptor FindPage(string procName) => this.locator.FindPage(procName, typeof(LocatorAccessor));
 }

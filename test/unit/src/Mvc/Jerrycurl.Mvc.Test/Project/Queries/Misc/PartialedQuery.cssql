@@ -1,0 +1,2 @@
+@query
+SELECT 1 AS `Item` UNION @R.Subquery<SubQuery>(2) UNION @R.Subquery(typeof(SubQuery), 3)

@@ -1,4 +1,5 @@
-﻿BEGIN
+﻿@command
+BEGIN
 @foreach (var v in this.M.Vals())
 {
 	UPDATE

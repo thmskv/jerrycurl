@@ -3,7 +3,6 @@
 internal class ProcContext : IProcContext
 {
     public IDomainOptions Domain { get; }
-    public IProcLocator Locator { get; }
     public IProcRenderer Renderer { get; }
     public IProcLookup Lookup { get; }
     public IPageExecutionContext Execution => this.Stack.Current;
@@ -11,7 +10,6 @@ internal class ProcContext : IProcContext
 
     public ProcContext(PageDescriptor descriptor, IDomainOptions domain)
     {
-        this.Locator = descriptor.Locator;
         this.Domain = domain;
         this.Renderer = new ProcRenderer(this);
         this.Lookup = new ProcLookup();

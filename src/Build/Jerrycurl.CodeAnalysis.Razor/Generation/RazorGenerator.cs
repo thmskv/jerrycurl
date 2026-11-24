@@ -92,12 +92,21 @@ public class RazorGenerator
         else
             projector.Open("class").Write("MyRazorPage");
 
-        if (pageData.Template?.Text != null)
+        if (!string.IsNullOrWhiteSpace(pageData.Template?.Text))
         {
-            projector.Open("template")
-                .Write("[global::Jerrycurl.Mvc.Metadata.Annotations.Template(")
-                .WritePragma(pageData.Template)
-                .Write(")]");
+            string templateText = pageData.Template.Text.Trim();
+
+            if (templateText.StartsWith("\"") || templateText.StartsWith("@\"") || templateText.StartsWith("$\""))
+            {
+                pageData.Diagnostics.Add(RazorDiagnostics.Error(RazorDiagnostics.InvalidSyntax, "Invalid directive syntax", $"@template takes a page type, not a string: use '@template {templateText.Trim('@', '$', '"').Replace(".cssql", "").Replace('/', '.')}'.", pageData.Template, pageData.SourceName));
+            }
+            else
+            {
+                projector.Open("template")
+                    .Write("[global::Jerrycurl.Mvc.Metadata.Annotations.Template(typeof(")
+                    .WritePragma(pageData.Template)
+                    .Write("))]");
+            }
         }
 
         if (pageData.Input?.Text != null)

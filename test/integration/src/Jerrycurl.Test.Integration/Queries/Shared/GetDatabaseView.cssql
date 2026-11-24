@@ -1,4 +1,5 @@
-﻿@result Jerrycurl.Test.Integration.Views.DatabaseView
+﻿@query
+@result Jerrycurl.Test.Integration.Views.DatabaseView
 @{
     var c = this.R.Open(m => m.Cast);
 }
