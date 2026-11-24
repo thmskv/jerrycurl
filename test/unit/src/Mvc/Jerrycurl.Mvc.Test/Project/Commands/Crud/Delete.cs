@@ -11,7 +11,7 @@ public class Delete_cssql : ProcPage<dynamic, object>
 
     }
 
-    public override void Execute()
+    public override void Render()
     {
         foreach (var v in this.M.Vals())
         {

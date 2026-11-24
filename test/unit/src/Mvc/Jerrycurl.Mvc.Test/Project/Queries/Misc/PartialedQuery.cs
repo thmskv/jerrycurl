@@ -11,7 +11,7 @@ public class PartialedQuery_cssql : ProcPage<object, object>
 
     }
 
-    public override void Execute()
+    public override void Render()
     {
         this.WriteLiteral("SELECT 1 AS `Item` UNION ");
         this.R.Subquery("SubQuery", 2);

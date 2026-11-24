@@ -10,7 +10,7 @@ public class SubQuery_cssql : ProcPage<object, object>
 
     }
 
-    public override void Execute()
+    public override void Render()
     {
         this.WriteLiteral("SELECT ");
         this.Write(this.Model);

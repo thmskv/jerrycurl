@@ -10,7 +10,7 @@ public class BatchedCommand_cssql : ProcPage<object, object>
 
     }
 
-    public override void Execute()
+    public override void Render()
     {
         for (int i = 0; i < 20; i++)
         {

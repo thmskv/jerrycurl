@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Jerrycurl.Cqs.Commands;
 using Jerrycurl.Cqs.Queries;
 using Jerrycurl.Mvc.Metadata;
 using Jerrycurl.Mvc.Projections;
@@ -19,8 +19,8 @@ public class ProcPage<TModel, TResult> : ISqlPage
     public TModel Model { get; }
 
     public IProcContext Context { get; }
-    public IProcRenderer Render => this.Context.Renderer;
-    
+    public IProcRenderer Renderer => this.Context.Renderer;
+
     public ProcPage(IProjection model, IProjection result)
     {
         this.M = model?.Cast<TModel>() ?? throw new ArgumentNullException(nameof(model));
@@ -29,8 +29,13 @@ public class ProcPage<TModel, TResult> : ISqlPage
         this.Model = (TModel)(this.M.Attr().Data?.Source.Snapshot ?? default);
     }
 
-    public virtual void Execute() { }
+    public virtual void Render() { }
     public virtual void Throw(Exception ex) { }
+
+    /// <summary>
+    /// Renders the body of the page using this page as its template. Only valid in template pages.
+    /// </summary>
+    public ISqlContent RenderBody() => this.Renderer.Body();
 
     public void Write<T>(T value)
     {
@@ -51,36 +56,40 @@ public class ProcPage<TModel, TResult> : ISqlPage
     public void Write(object o) => this.Write<object>(o);
     public void WriteLiteral(string s) => this.Context.Execution.Buffer.Append(s);
 
-#region " Page shenanigans "
-    private static IProcResult ExecuteAndGetResult(Type pageType, object model, ProcArgs args)
-    {
-        IProcLocator locator = new ProcLocator();
-        IProcEngine engine = new ProcEngine(null);
+    #region " Entry points "
+    // Called by the static Query/Execute/... methods generated for @query and @command pages.
 
-        PageDescriptor descriptor = locator.Create(pageType);
+    private static IProcResult Run(Type pageType, object model, Type resultType, IProcEngine engine)
+    {
+        ArgumentNullException.ThrowIfNull(pageType);
+
+        engine ??= ProcEngine.Default;
+
+        PageDescriptor descriptor = engine.Describe(pageType);
+        ProcArgs args = new ProcArgs(model?.GetType() ?? typeof(TModel), resultType);
         ProcFactory factory = engine.Proc(descriptor, args);
 
         return factory(model);
     }
 
-    private static SqlOptions GetDefaultOptions(IDomainOptions domain)
+    private static SqlOptions GetOptions(IDomainOptions domain, Action<SqlOptions> configure)
     {
-        return new SqlOptions()
+        SqlOptions options = new SqlOptions()
         {
             Filters = [.. domain.Sql.Filters],
             MaxParameters = domain.Sql.MaxParameters,
             MaxSql = domain.Sql.MaxSql,
         };
+
+        configure?.Invoke(options);
+
+        return options;
     }
 
-    public static async Task<IList<TFinal>> Query<TFinal>(Type pageType, TModel model, Action<SqlOptions> configure = null, CancellationToken cancellationToken = default)
-        where TFinal : TResult
+    private static (QueryEngine Engine, IEnumerable<Query> Queries, IProcResult Result) PrepareQuery<TItem>(Type pageType, TModel model, Action<SqlOptions> configure, IProcEngine engine)
     {
-        ProcArgs args = new ProcArgs(typeof(TModel), typeof(TFinal));
-        IProcResult result = ExecuteAndGetResult(pageType, model, args);
-
-        SqlOptions options = GetDefaultOptions(result.Domain);
-        configure?.Invoke(options);
+        IProcResult result = Run(pageType, model, typeof(IList<TItem>), engine);
+        SqlOptions options = GetOptions(result.Domain, configure);
 
         ISqlSerializer<Query> serializer = result.Buffer as ISqlSerializer<Query>;
         IEnumerable<Query> queries = serializer?.Serialize(options);
@@ -92,11 +101,40 @@ public class ProcPage<TModel, TResult> : ISqlPage
             Filters = options.Filters,
         };
 
-        QueryEngine engine = new QueryEngine(queryOptions);
+        return (new QueryEngine(queryOptions), queries, result);
+    }
+
+    private static (CommandEngine Engine, IEnumerable<Command> Commands, IProcResult Result) PrepareCommand(Type pageType, TModel model, Action<SqlOptions> configure, IProcEngine engine)
+    {
+        IProcResult result = Run(pageType, model, typeof(object), engine);
+        SqlOptions options = GetOptions(result.Domain, configure);
+
+        ISqlSerializer<Command> serializer = result.Buffer as ISqlSerializer<Command>;
+        IEnumerable<Command> commands = serializer.Serialize(options);
+
+        CommandOptions commandOptions = new CommandOptions()
+        {
+            ConnectionFactory = result.Domain.ConnectionFactory,
+            Filters = options.Filters,
+        };
+
+        return (new CommandEngine(commandOptions), commands, result);
+    }
+
+    /// <summary>
+    /// Renders <paramref name="pageType"/> with <paramref name="model"/> and returns its SQL without executing it.
+    /// </summary>
+    protected static ISqlContent SqlCore(Type pageType, TModel model, Type resultType = null, IProcEngine engine = null)
+        => Run(pageType, model, resultType ?? typeof(IList<TResult>), engine).Buffer.ReadToEnd();
+
+    protected static IList<TItem> QueryCore<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null)
+        where TItem : TResult
+    {
+        var (queryEngine, queries, result) = PrepareQuery<TItem>(pageType, model, configure, engine);
 
         try
         {
-            return await engine.ExecuteAsync<IList<TFinal>>(queries, QueryType.List, cancellationToken).ConfigureAwait(false);
+            return queryEngine.Execute<IList<TItem>>(queries, QueryType.List);
         }
         catch (Exception ex)
         {
@@ -105,5 +143,108 @@ public class ProcPage<TModel, TResult> : ISqlPage
             throw;
         }
     }
-#endregion
+
+    protected static async Task<IList<TItem>> QueryCoreAsync<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
+        where TItem : TResult
+    {
+        var (queryEngine, queries, result) = PrepareQuery<TItem>(pageType, model, configure, engine);
+
+        try
+        {
+            return await queryEngine.ExecuteAsync<IList<TItem>>(queries, QueryType.List, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            result.Page.Throw(ex);
+
+            throw;
+        }
+    }
+
+    protected static TItem AggregateCore<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null)
+        where TItem : TResult
+    {
+        var (queryEngine, queries, result) = PrepareQuery<TItem>(pageType, model, configure, engine);
+
+        try
+        {
+            IList<TItem> list = queryEngine.Execute<IList<TItem>>(queries, QueryType.Aggregate);
+
+            return list == null || list.Count == 0 ? default : list[0];
+        }
+        catch (Exception ex)
+        {
+            result.Page.Throw(ex);
+
+            throw;
+        }
+    }
+
+    protected static async Task<TItem> AggregateCoreAsync<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
+        where TItem : TResult
+    {
+        var (queryEngine, queries, result) = PrepareQuery<TItem>(pageType, model, configure, engine);
+
+        try
+        {
+            IList<TItem> list = await queryEngine.ExecuteAsync<IList<TItem>>(queries, QueryType.Aggregate, cancellationToken).ConfigureAwait(false);
+
+            return list == null || list.Count == 0 ? default : list[0];
+        }
+        catch (Exception ex)
+        {
+            result.Page.Throw(ex);
+
+            throw;
+        }
+    }
+
+    protected static IEnumerable<TItem> EnumerateCore<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null)
+        where TItem : TResult
+    {
+        var (queryEngine, queries, _) = PrepareQuery<TItem>(pageType, model, configure, engine);
+
+        return queryEngine.Enumerate<TItem>(queries);
+    }
+
+    protected static IAsyncEnumerable<TItem> EnumerateCoreAsync<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
+        where TItem : TResult
+    {
+        var (queryEngine, queries, _) = PrepareQuery<TItem>(pageType, model, configure, engine);
+
+        return queryEngine.EnumerateAsync<TItem>(queries, cancellationToken);
+    }
+
+    protected static void ExecuteCore(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null)
+    {
+        var (commandEngine, commands, result) = PrepareCommand(pageType, model, configure, engine);
+
+        try
+        {
+            commandEngine.Execute(commands);
+        }
+        catch (Exception ex)
+        {
+            result.Page.Throw(ex);
+
+            throw;
+        }
+    }
+
+    protected static async Task ExecuteCoreAsync(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
+    {
+        var (commandEngine, commands, result) = PrepareCommand(pageType, model, configure, engine);
+
+        try
+        {
+            await commandEngine.ExecuteAsync(commands, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            result.Page.Throw(ex);
+
+            throw;
+        }
+    }
+    #endregion
 }

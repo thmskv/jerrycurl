@@ -25,7 +25,7 @@ $beginnamespace$
 		{
 
 		}
-		public override void Execute()
+		public override void Render()
 		{
 			$execute$
 		}

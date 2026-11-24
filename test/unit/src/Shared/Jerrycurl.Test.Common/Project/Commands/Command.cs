@@ -12,5 +12,5 @@ public class Command_cssql : ProcPage<IRunnable, object>
 
     }
 
-    public override void Execute() => this.Model.Execute(this);
+    public override void Render() => this.Model.Execute(this);
 }

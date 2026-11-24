@@ -11,7 +11,7 @@ public class Get_cssql : ProcPage<dynamic, object>
 
     }
 
-    public override void Execute()
+    public override void Render()
     {
         this.WriteLiteral("SELECT ");
         this.Write(this.R.Map());

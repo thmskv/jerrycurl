@@ -98,25 +98,7 @@ public class ProcLocator : IProcLocator
         return new PageNotFoundException($"Page not found from procedure name '{procName}'. Looked in: {lookedIn}.");
     }
 
-    private Type GetDomainType(Type originType)
-    {
-        if (this.IsDomainType(originType))
-            return originType;
-
-        Type[] allTypes = [.. originType.Assembly.DefinedTypes.Select(ti => ti.AsType())];
-
-        foreach (Namespace ns in Namespace.FromType(originType).Traverse())
-        {
-            Type[] domainTypes = [.. allTypes.Where(t => t.Namespace == ns.Definition && this.IsDomainType(t))];
-
-            if (domainTypes.Length == 1)
-                return domainTypes[0];
-            else if (domainTypes.Length > 1)
-                throw new InvalidOperationException($"Multiple domains found in namespace '{ns}'.");
-        }
-
-        return null;
-    }
+    private Type GetDomainType(Type originType) => DomainResolver.GetDomainType(originType);
 
     private Namespace GetPathNamespace(string procName, Type originType, Type domainType)
     {

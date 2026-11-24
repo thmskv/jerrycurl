@@ -27,9 +27,40 @@ public class ProcEngine : IProcEngine
     /// </summary>
     public static IServiceProvider Services { get; set; }
 
+    private static IProcEngine defaultEngine;
+
+    /// <summary>
+    /// The engine used by generated page entry points (e.g. <c>MyQuery.Query(...)</c>) when no engine is passed explicitly.
+    /// Defaults to a <see cref="ProcEngine"/> that resolves services from <see cref="Services"/>.
+    /// </summary>
+    public static IProcEngine Default
+    {
+        get => defaultEngine ?? new ProcEngine(null);
+        set => defaultEngine = value;
+    }
+
     public ProcEngine(IServiceProvider serviceProvider)
     {
         this.serviceProvider = serviceProvider ?? Services;
+    }
+
+    public PageDescriptor Describe(Type pageType)
+    {
+        ArgumentNullException.ThrowIfNull(pageType);
+
+        return ProcCache.Descriptors.GetOrAdd(pageType, _ =>
+        {
+            if (!typeof(ISqlPage).IsAssignableFrom(pageType))
+                throw new ProcExecutionException($"Type '{pageType.GetSanitizedFullName()}' is not a page. Pages must implement {nameof(ISqlPage)}.");
+
+            return new PageDescriptor()
+            {
+                PageType = pageType,
+                DomainType = DomainResolver.GetDomainType(pageType),
+                OriginType = pageType,
+                Locator = new ProcLocator(),
+            };
+        });
     }
 
     public ProcFactory Proc(PageDescriptor descriptor, ProcArgs args)
@@ -76,7 +107,7 @@ public class ProcEngine : IProcEngine
 
             ISqlPage page = constructor(newModel, newResult);
 
-            page.Execute();
+            page.Render();
         }
 
         return pageFactory;
@@ -177,7 +208,7 @@ public class ProcEngine : IProcEngine
 
                         context.Stack.Push(nextContext);
 
-                        bodyPage.Execute();
+                        bodyPage.Render();
 
                         context.Stack.Pop();
                     };
@@ -188,7 +219,7 @@ public class ProcEngine : IProcEngine
 
             context.Stack.Push(execution[0]);
 
-            page.Execute();
+            page.Render();
 
             return new ProcResult()
             {

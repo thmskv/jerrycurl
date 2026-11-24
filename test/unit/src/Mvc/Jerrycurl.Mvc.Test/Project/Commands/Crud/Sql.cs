@@ -10,5 +10,5 @@ public class Sql_cssql : ProcPage<string, object>
 
     }
 
-    public override void Execute() => this.WriteLiteral(this.Model);
+    public override void Render() => this.WriteLiteral(this.Model);
 }

@@ -12,9 +12,9 @@ public class TemplateQuery2_cssql : ProcPage<object, object>
 
     }
 
-    public override void Execute()
+    public override void Render()
     {
         this.WriteLiteral("SELECT 2 AS `Item` UNION\r\n");
-        this.Write(this.Render.Body());
+        this.Write(this.RenderBody());
     }
 }

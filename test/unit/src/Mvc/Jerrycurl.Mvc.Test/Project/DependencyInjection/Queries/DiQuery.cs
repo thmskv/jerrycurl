@@ -18,7 +18,7 @@ public class DiQuery_cssql : ProcPage<object, object>
 
     }
 
-    public override void Execute()
+    public override void Render()
     {
         this.WriteLiteral(this.ms.SomeValue);
 

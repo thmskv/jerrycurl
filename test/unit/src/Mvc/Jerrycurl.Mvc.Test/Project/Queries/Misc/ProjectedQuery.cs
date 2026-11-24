@@ -14,7 +14,7 @@ public class ProjectedQuery_cssql : ProcPage<object, object>
 
     }
 
-    public override void Execute()
+    public override void Render()
     {
         if (this.p1 != null)
             this.WriteLiteral("PROJEXISTS");

@@ -14,7 +14,7 @@ public class InjectedQuery_cssql : ProcPage<object, object>
 
     }
 
-    public override void Execute()
+    public override void Render()
     {
 
     }

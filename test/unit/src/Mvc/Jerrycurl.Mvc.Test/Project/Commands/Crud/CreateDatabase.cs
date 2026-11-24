@@ -11,7 +11,7 @@ public class CreateDatabase_cssql : ProcPage<dynamic, object>
 
     }
 
-    public override void Execute()
+    public override void Render()
     {
         throw new NotImplementedException();
     }

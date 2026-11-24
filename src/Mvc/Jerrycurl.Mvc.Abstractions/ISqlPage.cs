@@ -4,6 +4,6 @@ namespace Jerrycurl.Mvc;
 
 public interface ISqlPage
 {
-    public void Execute();
+    public void Render();
     public void Throw(Exception ex);
 }
