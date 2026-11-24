@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Jerrycurl.Diagnostics;
-using HashCode = Jerrycurl.Diagnostics.HashCode;
 
 namespace Jerrycurl.Cqs.Queries.Internal;
 

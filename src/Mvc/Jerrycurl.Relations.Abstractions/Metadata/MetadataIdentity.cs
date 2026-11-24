@@ -1,6 +1,5 @@
 ﻿using System;
 using Jerrycurl.Diagnostics;
-using HashCode = Jerrycurl.Diagnostics.HashCode;
 
 namespace Jerrycurl.Relations.Metadata;
 

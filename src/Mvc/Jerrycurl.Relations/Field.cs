@@ -3,7 +3,6 @@ using Jerrycurl.Relations.Internal;
 using Jerrycurl.Relations.Metadata;
 using System;
 using System.Diagnostics;
-using HashCode = Jerrycurl.Diagnostics.HashCode;
 
 namespace Jerrycurl.Relations;
 

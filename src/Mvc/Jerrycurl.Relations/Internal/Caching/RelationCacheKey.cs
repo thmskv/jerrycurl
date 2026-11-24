@@ -1,7 +1,6 @@
 ﻿using Jerrycurl.Diagnostics;
 using Jerrycurl.Relations.Metadata;
 using System;
-using HashCode = Jerrycurl.Diagnostics.HashCode;
 
 namespace Jerrycurl.Relations.Internal.Caching;
 

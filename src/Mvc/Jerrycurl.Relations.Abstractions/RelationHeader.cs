@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Jerrycurl.Diagnostics;
 using Jerrycurl.Relations.Metadata;
-using HashCode = Jerrycurl.Diagnostics.HashCode;
 
 namespace Jerrycurl.Relations;
 

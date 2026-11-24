@@ -1,5 +1,5 @@
-﻿using Jerrycurl.Diagnostics;
-using HashCode = Jerrycurl.Diagnostics.HashCode;
+﻿using System;
+using Jerrycurl.Diagnostics;
 
 namespace Jerrycurl.Cqs.Metadata;
 

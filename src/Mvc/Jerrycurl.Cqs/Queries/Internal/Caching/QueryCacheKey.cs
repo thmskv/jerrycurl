@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Jerrycurl.Diagnostics;
 using Jerrycurl.Relations.Metadata;
-using HashCode = Jerrycurl.Diagnostics.HashCode;
 
 namespace Jerrycurl.Cqs.Queries.Internal.Caching;
 
