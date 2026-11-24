@@ -86,7 +86,7 @@ public class ProcPage<TModel, TResult> : ISqlPage
         return options;
     }
 
-    private static (QueryEngine Engine, IEnumerable<Query> Queries, IProcResult Result) PrepareQuery<TItem>(Type pageType, TModel model, Action<SqlOptions> configure, IProcEngine engine)
+    private static (QueryEngine Engine, IEnumerable<Query> Queries, IProcResult Result) PrepareQuery<TItem>(Type pageType, object model, Action<SqlOptions> configure, IProcEngine engine)
     {
         IProcResult result = Run(pageType, model, typeof(IList<TItem>), engine);
         SqlOptions options = GetOptions(result.Domain, configure);
@@ -104,7 +104,7 @@ public class ProcPage<TModel, TResult> : ISqlPage
         return (new QueryEngine(queryOptions), queries, result);
     }
 
-    private static (CommandEngine Engine, IEnumerable<Command> Commands, IProcResult Result) PrepareCommand(Type pageType, TModel model, Action<SqlOptions> configure, IProcEngine engine)
+    private static (CommandEngine Engine, IEnumerable<Command> Commands, IProcResult Result) PrepareCommand(Type pageType, object model, Action<SqlOptions> configure, IProcEngine engine)
     {
         IProcResult result = Run(pageType, model, typeof(object), engine);
         SqlOptions options = GetOptions(result.Domain, configure);
@@ -124,10 +124,10 @@ public class ProcPage<TModel, TResult> : ISqlPage
     /// <summary>
     /// Renders <paramref name="pageType"/> with <paramref name="model"/> and returns its SQL without executing it.
     /// </summary>
-    protected static ISqlContent SqlCore(Type pageType, TModel model, Type resultType = null, IProcEngine engine = null)
+    protected static ISqlContent SqlCore(Type pageType, object model, Type resultType = null, IProcEngine engine = null)
         => Run(pageType, model, resultType ?? typeof(IList<TResult>), engine).Buffer.ReadToEnd();
 
-    protected static IList<TItem> QueryCore<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null)
+    protected static IList<TItem> QueryCore<TItem>(Type pageType, object model, Action<SqlOptions> configure = null, IProcEngine engine = null)
     {
         var (queryEngine, queries, result) = PrepareQuery<TItem>(pageType, model, configure, engine);
 
@@ -143,7 +143,7 @@ public class ProcPage<TModel, TResult> : ISqlPage
         }
     }
 
-    protected static async Task<IList<TItem>> QueryCoreAsync<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
+    protected static async Task<IList<TItem>> QueryCoreAsync<TItem>(Type pageType, object model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
     {
         var (queryEngine, queries, result) = PrepareQuery<TItem>(pageType, model, configure, engine);
 
@@ -159,7 +159,7 @@ public class ProcPage<TModel, TResult> : ISqlPage
         }
     }
 
-    protected static TItem AggregateCore<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null)
+    protected static TItem AggregateCore<TItem>(Type pageType, object model, Action<SqlOptions> configure = null, IProcEngine engine = null)
     {
         var (queryEngine, queries, result) = PrepareQuery<TItem>(pageType, model, configure, engine);
 
@@ -177,7 +177,7 @@ public class ProcPage<TModel, TResult> : ISqlPage
         }
     }
 
-    protected static async Task<TItem> AggregateCoreAsync<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
+    protected static async Task<TItem> AggregateCoreAsync<TItem>(Type pageType, object model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
     {
         var (queryEngine, queries, result) = PrepareQuery<TItem>(pageType, model, configure, engine);
 
@@ -195,21 +195,21 @@ public class ProcPage<TModel, TResult> : ISqlPage
         }
     }
 
-    protected static IEnumerable<TItem> EnumerateCore<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null)
+    protected static IEnumerable<TItem> EnumerateCore<TItem>(Type pageType, object model, Action<SqlOptions> configure = null, IProcEngine engine = null)
     {
         var (queryEngine, queries, _) = PrepareQuery<TItem>(pageType, model, configure, engine);
 
         return queryEngine.Enumerate<TItem>(queries);
     }
 
-    protected static IAsyncEnumerable<TItem> EnumerateCoreAsync<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
+    protected static IAsyncEnumerable<TItem> EnumerateCoreAsync<TItem>(Type pageType, object model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
     {
         var (queryEngine, queries, _) = PrepareQuery<TItem>(pageType, model, configure, engine);
 
         return queryEngine.EnumerateAsync<TItem>(queries, cancellationToken);
     }
 
-    protected static void ExecuteCore(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null)
+    protected static void ExecuteCore(Type pageType, object model, Action<SqlOptions> configure = null, IProcEngine engine = null)
     {
         var (commandEngine, commands, result) = PrepareCommand(pageType, model, configure, engine);
 
@@ -225,7 +225,7 @@ public class ProcPage<TModel, TResult> : ISqlPage
         }
     }
 
-    protected static async Task ExecuteCoreAsync(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
+    protected static async Task ExecuteCoreAsync(Type pageType, object model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
     {
         var (commandEngine, commands, result) = PrepareCommand(pageType, model, configure, engine);
 

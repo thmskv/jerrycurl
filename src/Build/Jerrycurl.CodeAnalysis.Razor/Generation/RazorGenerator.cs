@@ -270,6 +270,20 @@ public class RazorGenerator
                 .WriteLine($"public static global::System.Threading.Tasks.Task ExecuteAsync({asyncArgs})")
                 .WriteLine($"    => ExecuteCoreAsync({type}, model, configure, engine, cancellationToken);");
 
+            // A typed command also accepts a list of models ('@model Blog' + Execute(blogs), iterating M.Vals()).
+            // Generic so that a target-typed 'new() { ... }' argument can't bind to it and make Execute(new() { ... }) ambiguous.
+            if (model != "object" && model != "dynamic")
+            {
+                string listArgs = $"TList model, {Configure}, {Engine}";
+                string constraint = $"where TList : global::System.Collections.Generic.IEnumerable<{model}>";
+
+                projector
+                    .WriteLine($"public static void Execute<TList>({listArgs}) {constraint}")
+                    .WriteLine($"    => ExecuteCore({type}, model, configure, engine);")
+                    .WriteLine($"public static global::System.Threading.Tasks.Task ExecuteAsync<TList>({listArgs}, {Token}) {constraint}")
+                    .WriteLine($"    => ExecuteCoreAsync({type}, model, configure, engine, cancellationToken);");
+            }
+
             return;
         }
 

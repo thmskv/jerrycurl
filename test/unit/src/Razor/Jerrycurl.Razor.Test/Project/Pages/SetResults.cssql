@@ -1,0 +1,6 @@
+@command
+@input int Id, string Result
+@foreach (var v in M.Vals())
+{
+    SELECT 'done ' || @v.Par(m => m.Id) AS @v.Prop(m => m.Result);
+}

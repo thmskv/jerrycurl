@@ -1,0 +1,6 @@
+@command
+@model Jerrycurl.Razor.Test.Project.Models.CrudItem
+@foreach (var v in M.Vals())
+{
+    INSERT INTO @v.TblName() ( @v.In().ColNames() ) VALUES ( @v.In().Pars() ); SELECT last_insert_rowid() AS @v.Id().Prop();
+}

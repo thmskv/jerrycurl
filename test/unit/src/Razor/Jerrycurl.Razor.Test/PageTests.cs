@@ -1,3 +1,4 @@
+﻿using System.Collections.Generic;
 using System.Linq;
 using Jerrycurl.Razor.Test.Project.Pages;
 using Jerrycurl.Razor.Test.Project.Pages.Public;
@@ -68,5 +69,30 @@ public class PageTests
         typeof(GetBlog).IsPublic.ShouldBeFalse();
         typeof(PublicQuery).IsPublic.ShouldBeTrue();
         typeof(StillInternal).IsPublic.ShouldBeFalse();
+    }
+
+    public void Test_Command_TypedModel_AcceptsItemOrList()
+    {
+        var crud = new Project.Accessors.CrudAccessor();
+
+        crud.Sql(@"CREATE TABLE IF NOT EXISTS CrudItem ( Id integer PRIMARY KEY AUTOINCREMENT, Counter integer NOT NULL, String nvarchar(50) NULL );");
+
+        var one = new Project.Models.CrudItem() { Counter = 1 };
+        var many = new List<Project.Models.CrudItem>() { new() { Counter = 2 }, new() { Counter = 3 } };
+
+        Project.Commands.Crud.CreateTyped.Execute(one);
+        Project.Commands.Crud.CreateTyped.Execute(many);
+
+        one.Id.ShouldBeGreaterThan(0);
+        many.ShouldAllBe(m => m.Id > 0);
+    }
+
+    public void Test_Command_InputList()
+    {
+        var models = new[] { new SetResults.Input() { Id = 1 }, new SetResults.Input() { Id = 2 } };
+
+        SetResults.Execute(models);
+
+        models.Select(m => m.Result).ShouldBe(["done 1", "done 2"]);
     }
 }

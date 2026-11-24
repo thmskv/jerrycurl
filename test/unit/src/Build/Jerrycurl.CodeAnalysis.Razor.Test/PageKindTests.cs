@@ -133,4 +133,30 @@ public class PageKindTests
         diagnostic.Id.ShouldBe(RazorDiagnostics.InvalidSyntax);
         diagnostic.Message.ShouldContain("@template Shared.Paged");
     }
+
+    public void Test_Command_TypedModel_AcceptsItemListAndTargetTypedNew()
+    {
+        string code = GeneratorHelper.GenerateOne("@command\n@input int Id\nUPDATE x", "Commands/Touch.cssql");
+        string user = @"namespace TestApp.Commands {
+            class Usage {
+                void Run() {
+                    Touch.Execute();
+                    Touch.Execute(new() { Id = 1 });
+                    Touch.Execute(new Touch.Input[2]);
+                    Touch.Execute(new System.Collections.Generic.List<Touch.Input>());
+                    Touch.ExecuteAsync(new() { Id = 1 });
+                }
+            }
+        }";
+
+        GeneratorHelper.Compile(code, user).ShouldBeEmpty();
+    }
+
+    public void Test_Query_TargetTypedNew_IsNotAmbiguous()
+    {
+        string code = GeneratorHelper.GenerateOne("@query\n@input int Id\n@output int Id\nSELECT 1", "Queries/Get.cssql");
+        string user = "namespace TestApp.Queries { class Usage { void Run() { Get.Query(new() { Id = 1 }); Get.Query(); Get.Query<Get.Output>(new() { Id = 1 }); } } }";
+
+        GeneratorHelper.Compile(code, user).ShouldBeEmpty();
+    }
 }
