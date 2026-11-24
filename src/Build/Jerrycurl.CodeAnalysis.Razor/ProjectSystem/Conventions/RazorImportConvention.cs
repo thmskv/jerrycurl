@@ -46,7 +46,30 @@ public class RazorImportConvention : IRazorProjectConvention
 
         if (resultPage.Data.Template == null && templateFile != null)
             resultPage.Data.Template = templateFile.Data.Template;
+
+        // Unlike @query/@command, @visibility is inherited: the nearest _imports wins and the page overrides it.
+        RazorPage visibilityFile = validImports.Where(f => f.Data.Visibility != null).LastOrDefault();
+
+        if (resultPage.Data.Visibility == null && visibilityFile != null)
+            resultPage.Data.Visibility = visibilityFile.Data.Visibility;
     }
+
+    /// <summary>
+    /// Returns the diagnostics for an <c>_imports.cssql</c> file: a page's kind must be declared on the page itself.
+    /// </summary>
+    public static IEnumerable<RazorDiagnostic> Validate(RazorPageData importData)
+    {
+        foreach (RazorDiagnostic diagnostic in importData.Diagnostics)
+            yield return diagnostic;
+
+        foreach (var (directive, fragment) in new[] { ("@query", importData.Query), ("@command", importData.Command) })
+        {
+            if (fragment != null)
+                yield return RazorDiagnostics.Error(RazorDiagnostics.KindInImports, "Page kind in _imports", $"{directive} can't be used in _imports.cssql. Declare it on each page that should be callable.", fragment, importData.SourceName);
+        }
+    }
+
+    public static bool IsImportPath(string path) => Path.GetFileName(path ?? "").Equals("_imports.cssql", StringComparison.OrdinalIgnoreCase);
 
     private bool IsImportFor(RazorPage importPage, RazorPage resultPage)
     {
@@ -63,6 +86,6 @@ public class RazorImportConvention : IRazorProjectConvention
         if (page.ProjectPath == null)
             return false;
 
-        return Path.GetFileName(page.ProjectPath).Equals("_imports.cssql", StringComparison.OrdinalIgnoreCase);
+        return IsImportPath(page.ProjectPath);
     }
 }

@@ -87,6 +87,9 @@ public static class RazorTool
             {
                 ProjectionResult result = generator.Generate(razorPage.Data);
 
+                foreach (RazorDiagnostic diagnostic in razorPage.Data.Diagnostics.Where(d => d.Severity != RazorDiagnosticSeverity.Info))
+                    console.WriteLine(diagnostic.ToString(), diagnostic.Severity == RazorDiagnosticSeverity.Error ? ConsoleColor.Red : ConsoleColor.Yellow);
+
                 using (StreamWriter writer = new StreamWriter(razorPage.IntermediatePath, append: false, Encoding.UTF8))
                     await writer.WriteAsync(result.Content);
             }

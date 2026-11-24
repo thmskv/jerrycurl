@@ -1,0 +1,3 @@
+@query
+@visibility internal
+SELECT 1 AS @R.Prop()

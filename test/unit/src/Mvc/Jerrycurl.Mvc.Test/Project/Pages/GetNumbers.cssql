@@ -1,0 +1,5 @@
+@query
+@model int
+@result int
+
+SELECT @M.Par() AS @R.Prop() UNION SELECT @M.Par() + 1 AS @R.Prop()

@@ -1,0 +1,2 @@
+@query
+SELECT 1 AS @R.Prop()

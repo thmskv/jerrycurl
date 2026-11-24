@@ -20,4 +20,7 @@ public enum RazorType
     Import = 12,
     Input = 14,
     Output = 15,
+    Query = 16,
+    Command = 17,
+    Visibility = 18,
 }

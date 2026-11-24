@@ -6,6 +6,11 @@
 		<AdditionalFileItemNames>$(AdditionalFileItemNames);JerryFile</AdditionalFileItemNames>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<!-- Default visibility of generated pages: internal (default) or public. Overridden by @visibility in _imports.cssql or the page. -->
+		<CompilerVisibleProperty Include="JerrycurlPageVisibility" />
+	</ItemGroup>
+
 	<ItemGroup Condition=" '$(EnableDefaultJerryItems)' == 'true' ">
 		<JerryFile Include="**/*.cssql" />
 	</ItemGroup>

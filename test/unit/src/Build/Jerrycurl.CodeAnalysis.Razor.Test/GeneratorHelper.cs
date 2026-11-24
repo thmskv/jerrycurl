@@ -17,7 +17,9 @@ internal static class GeneratorHelper
     /// <summary>
     /// Parses and generates the given pages (project-relative path → content) and returns the generated C# per page path.
     /// </summary>
-    public static IDictionary<string, string> Generate(params (string Path, string Content)[] files)
+    public static IDictionary<string, string> Generate(params (string Path, string Content)[] files) => Generate("internal", files);
+
+    public static IDictionary<string, string> Generate(string defaultVisibility, params (string Path, string Content)[] files)
     {
         RazorProject project = new RazorProject()
         {
@@ -32,6 +34,7 @@ internal static class GeneratorHelper
         RazorGenerator generator = new RazorGenerator(new RazorGeneratorOptions()
         {
             TemplateCode = RazorTemplates.Page,
+            DefaultVisibility = defaultVisibility,
             Imports = [.. Jerrycurl.Facts.RazorFacts.DefaultNamespaces.Select(ns => new RazorFragment() { Text = ns })],
         });
 
@@ -39,6 +42,19 @@ internal static class GeneratorHelper
     }
 
     public static string GenerateOne(string content, string path = "Queries/Page.cssql") => Generate((path, content)).Values.Single();
+
+    public static IList<RazorDiagnostic> Diagnose(string content, string path = "Queries/Page.cssql")
+    {
+        RazorProject project = new RazorProject() { ProjectDirectory = ProjectDirectory, RootNamespace = "TestApp", IntermediateDirectory = null };
+
+        project.AddItem(Path.Combine(ProjectDirectory, path), content: content);
+
+        RazorPage page = new RazorParser().Parse(project).Single();
+
+        new RazorGenerator(new RazorGeneratorOptions() { TemplateCode = RazorTemplates.Page }).Generate(page.Data);
+
+        return page.Data.Diagnostics;
+    }
 
     public static IList<Diagnostic> Compile(params string[] sources)
     {

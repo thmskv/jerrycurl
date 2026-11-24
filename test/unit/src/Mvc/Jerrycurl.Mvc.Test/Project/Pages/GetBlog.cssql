@@ -1,0 +1,5 @@
+@query
+@input int Id, string Title = "Default title"
+@output int Id, string Title
+
+SELECT @M.Par(m => m.Id) AS @R.Prop(m => m.Id), @M.Par(m => m.Title) AS @R.Prop(m => m.Title)

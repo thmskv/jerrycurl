@@ -51,6 +51,12 @@ public class RazorStartTag : ISymbol
             this.Type = RazorType.Input;
         else if (tokenizer.Func(t => this.ParseDirective(t, "output")))
             this.Type = RazorType.Output;
+        else if (tokenizer.Func(t => this.ParseDirective(t, "query")))
+            this.Type = RazorType.Query;
+        else if (tokenizer.Func(t => this.ParseDirective(t, "command")))
+            this.Type = RazorType.Command;
+        else if (tokenizer.Func(t => this.ParseDirective(t, "visibility")))
+            this.Type = RazorType.Visibility;
         else
             this.Type = RazorType.Inline;
 

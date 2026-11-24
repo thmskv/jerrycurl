@@ -1,0 +1,4 @@
+@command
+@input int Id, string Result
+
+SELECT 'done ' || @M.Par(m => m.Id) AS @M.Prop(m => m.Result)

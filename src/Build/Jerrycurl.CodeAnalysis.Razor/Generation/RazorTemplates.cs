@@ -1,4 +1,4 @@
-namespace Jerrycurl.CodeAnalysis.Razor.Generation;
+﻿namespace Jerrycurl.CodeAnalysis.Razor.Generation;
 
 /// <summary>
 /// The C# skeleton every <c>.cssql</c> page is projected into. Shared by the source generator and the CLI so they can't drift.
@@ -14,7 +14,7 @@ $beginnamespace$
 	#line hidden
 	$localimports$
 	$template$
-	public class $class$ : global::Jerrycurl.Mvc.ProcPage<$model$,$result$>
+	$visibility$ partial class $class$ : global::Jerrycurl.Mvc.ProcPage<$model$,$result$>
 	{
 		#pragma warning disable IDE1006
 		$injectiondefs$
@@ -36,6 +36,7 @@ $beginnamespace$
 
         $inputtype$
         $outputtype$
+        $entrypoints$
 	}
 $endnamespace$
 #pragma warning restore IDE0009";

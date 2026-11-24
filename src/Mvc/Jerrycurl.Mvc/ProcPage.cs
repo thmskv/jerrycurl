@@ -128,7 +128,6 @@ public class ProcPage<TModel, TResult> : ISqlPage
         => Run(pageType, model, resultType ?? typeof(IList<TResult>), engine).Buffer.ReadToEnd();
 
     protected static IList<TItem> QueryCore<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null)
-        where TItem : TResult
     {
         var (queryEngine, queries, result) = PrepareQuery<TItem>(pageType, model, configure, engine);
 
@@ -145,7 +144,6 @@ public class ProcPage<TModel, TResult> : ISqlPage
     }
 
     protected static async Task<IList<TItem>> QueryCoreAsync<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
-        where TItem : TResult
     {
         var (queryEngine, queries, result) = PrepareQuery<TItem>(pageType, model, configure, engine);
 
@@ -162,7 +160,6 @@ public class ProcPage<TModel, TResult> : ISqlPage
     }
 
     protected static TItem AggregateCore<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null)
-        where TItem : TResult
     {
         var (queryEngine, queries, result) = PrepareQuery<TItem>(pageType, model, configure, engine);
 
@@ -181,7 +178,6 @@ public class ProcPage<TModel, TResult> : ISqlPage
     }
 
     protected static async Task<TItem> AggregateCoreAsync<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
-        where TItem : TResult
     {
         var (queryEngine, queries, result) = PrepareQuery<TItem>(pageType, model, configure, engine);
 
@@ -200,7 +196,6 @@ public class ProcPage<TModel, TResult> : ISqlPage
     }
 
     protected static IEnumerable<TItem> EnumerateCore<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null)
-        where TItem : TResult
     {
         var (queryEngine, queries, _) = PrepareQuery<TItem>(pageType, model, configure, engine);
 
@@ -208,7 +203,6 @@ public class ProcPage<TModel, TResult> : ISqlPage
     }
 
     protected static IAsyncEnumerable<TItem> EnumerateCoreAsync<TItem>(Type pageType, TModel model, Action<SqlOptions> configure = null, IProcEngine engine = null, CancellationToken cancellationToken = default)
-        where TItem : TResult
     {
         var (queryEngine, queries, _) = PrepareQuery<TItem>(pageType, model, configure, engine);
 

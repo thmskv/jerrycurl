@@ -56,6 +56,9 @@ public class CSharpBlock : IRule
             case RazorType.Class:
             case RazorType.Input:
             case RazorType.Output:
+            case RazorType.Query:
+            case RazorType.Command:
+            case RazorType.Visibility:
                 this.Type = CSharpType.Directive;
 
                 lexer.Yield(new Argument(ArgumentType.Line, true));

@@ -192,15 +192,78 @@ public class RazorParser
                 case CSharpBlock cs when cs.RazorType == RazorType.Output:
                     pageData.Output = this.CreateFragment(source, lex.Span, sourceName);
                     break;
+                case CSharpBlock cs when cs.RazorType == RazorType.Query:
+                    pageData.Query = this.CreateFragment(source, lex.Span, sourceName);
+                    break;
+                case CSharpBlock cs when cs.RazorType == RazorType.Command:
+                    pageData.Command = this.CreateFragment(source, lex.Span, sourceName);
+                    break;
+                case CSharpBlock cs when cs.RazorType == RazorType.Visibility:
+                    pageData.Visibility = this.CreateFragment(source, lex.Span, sourceName);
+                    break;
                 case SqlBlock sql:
                     pageData.Content.Add(this.CreateSqlFragment(source, lex, sourceName));
                     break;
             }
         }
 
-        return pageData;
+        this.Validate(pageData);
 
+        return pageData;
     }
+
+    private void Validate(RazorPageData pageData)
+    {
+        if (!string.IsNullOrWhiteSpace(pageData.Query?.Text))
+            pageData.Diagnostics.Add(RazorDiagnostics.Error(RazorDiagnostics.InvalidSyntax, "Invalid directive syntax", "@query takes no arguments.", pageData.Query));
+
+        if (!string.IsNullOrWhiteSpace(pageData.Command?.Text))
+            pageData.Diagnostics.Add(RazorDiagnostics.Error(RazorDiagnostics.InvalidSyntax, "Invalid directive syntax", "@command takes no arguments.", pageData.Command));
+
+        if (pageData.Visibility != null && !IsValidVisibility(pageData.Visibility.Text))
+            pageData.Diagnostics.Add(InvalidVisibility(pageData.Visibility.Text, pageData.Visibility));
+
+        ValidateProperties("@input", pageData.Input);
+        ValidateProperties("@output", pageData.Output);
+
+        void ValidateProperties(string directive, RazorFragment fragment)
+        {
+            if (fragment == null)
+                return;
+
+            if (string.IsNullOrWhiteSpace(fragment.Text))
+            {
+                pageData.Diagnostics.Add(RazorDiagnostics.Error(RazorDiagnostics.InvalidSyntax, "Invalid directive syntax", $"{directive} requires at least one property, e.g. '{directive} int Id, string Name'.", fragment));
+
+                return;
+            }
+
+            foreach (string argument in Generation.ArgumentSplitter.SplitArguments(fragment.Text))
+            {
+                (string declaration, _) = Generation.ArgumentSplitter.SplitDefault(argument);
+
+                if (!HasTypeAndName(declaration))
+                    pageData.Diagnostics.Add(RazorDiagnostics.Error(RazorDiagnostics.InvalidSyntax, "Invalid directive syntax", $"Invalid {directive} property '{argument.Trim()}'. Expected '<type> <name>', e.g. 'int Id'.", fragment));
+            }
+        }
+
+        static bool HasTypeAndName(string declaration)
+        {
+            int lastBlank = declaration.LastIndexOfAny([' ', '\t']);
+
+            if (lastBlank <= 0)
+                return false;
+
+            string name = declaration.Substring(lastBlank + 1);
+
+            return name.Length > 0 && (char.IsLetter(name[0]) || name[0] == '_' || name[0] == '@') && name.Skip(1).All(c => char.IsLetterOrDigit(c) || c == '_');
+        }
+    }
+
+    public static bool IsValidVisibility(string text) => text?.Trim() is "public" or "internal";
+
+    public static RazorDiagnostic InvalidVisibility(string value, RazorFragment at = null, string sourceName = null)
+        => RazorDiagnostics.Error(RazorDiagnostics.InvalidVisibility, "Invalid page visibility", $"Invalid page visibility '{value?.Trim()}'. Expected 'public' or 'internal'.", at, sourceName);
 
     private SqlFragment CreateSqlFragment(ISource source, Lexeme lex, string sourceName)
     {
