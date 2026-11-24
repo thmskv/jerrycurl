@@ -11,7 +11,7 @@ public class PageKindTests
         string code = GeneratorHelper.GenerateOne("@query\n@input int Id\n@output int Id, string Title\nSELECT 1", "Queries/Blogs/GetAll.cssql");
 
         code.ShouldContain("namespace TestApp.Queries.Blogs");
-        code.ShouldContain("internal partial class GetAll : global::Jerrycurl.Mvc.ProcPage<GetAll.Input,GetAll.Output>");
+        code.ShouldContain("internal partial class GetAll : global::Jerrycurl.Razor.ProcPage<GetAll.Input,GetAll.Output>");
         code.ShouldContain("public static global::System.Collections.Generic.IList<Output> Query(Input model = default,");
         code.ShouldContain("public static global::System.Collections.Generic.IList<T> Query<T>(Input model = default,");
         code.ShouldContain("QueryAsync(");

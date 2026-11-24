@@ -1,5 +1,5 @@
-﻿using Jerrycurl.Mvc.Sql;
-using Jerrycurl.Mvc.Sql.SqlServer;
+﻿using Jerrycurl.Razor.Sql;
+using Jerrycurl.Razor.Sql.SqlServer;
 using Jerrycurl.Test.Extensions;
 using Jerrycurl.Test.Project.Accessors;
 using Jerrycurl.Test.Project.Models;

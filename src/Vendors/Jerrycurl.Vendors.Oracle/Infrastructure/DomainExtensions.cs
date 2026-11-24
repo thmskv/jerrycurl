@@ -3,7 +3,7 @@ using Jerrycurl.Vendors.Oracle.Filters;
 using Jerrycurl.Vendors.Oracle.Metadata;
 using Oracle.ManagedDataAccess.Client;
 
-namespace Jerrycurl.Mvc;
+namespace Jerrycurl.Razor;
 
 public static class DomainExtensions
 {

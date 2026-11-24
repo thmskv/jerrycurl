@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
     <metadata>
         <id>$PackageId$</id>
@@ -14,11 +14,11 @@
         <tags>$PackageTags$</tags>
         <repository type="git" url="$RepositoryUrl$" commit="$GitCommitId$" />
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Jerrycurl is a high-performance ORM, MVC framework and Razor SQL implementation for .NET.</description>
+        <description>Jerrycurl is a high-performance ORM and Razor SQL implementation for .NET: write SQL in typed .cssql pages and call them from C#.</description>
         <dependencies>
             <group>
                 <dependency id="Jerrycurl.CodeAnalysis.Razor.Compiler" version="$PackageVersion$" />
-                <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
+                <dependency id="Jerrycurl.Razor" version="$PackageVersion$" />
             </group>
         </dependencies>
     </metadata>

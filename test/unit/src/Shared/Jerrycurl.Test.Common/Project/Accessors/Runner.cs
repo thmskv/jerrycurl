@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Jerrycurl.Mvc;
-using Jerrycurl.Mvc.Projections;
+using Jerrycurl.Razor;
+using Jerrycurl.Razor.Projections;
 using Jerrycurl.Test.Project.Commands;
 using Jerrycurl.Test.Project.Models;
 using Jerrycurl.Test.Project.Queries;

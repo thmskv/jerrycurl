@@ -19,7 +19,7 @@
     <File Path="eng/nuspec/Jerrycurl.Cqs.nuspec" />
     <File Path="eng/nuspec/Jerrycurl.Extensions.EntityFrameworkCore.nuspec" />
     <File Path="eng/nuspec/Jerrycurl.Extensions.Newtonsoft.Json.nuspec" />
-    <File Path="eng/nuspec/Jerrycurl.Mvc.nuspec" />
+    <File Path="eng/nuspec/Jerrycurl.Razor.nuspec" />
     <File Path="eng/nuspec/Jerrycurl.nuspec" />
     <File Path="eng/nuspec/Jerrycurl.Relations.nuspec" />
     <File Path="eng/nuspec/Jerrycurl.Tools.nuspec" />
@@ -31,12 +31,12 @@
     <File Path="eng/nuspec/Jerrycurl.Vendors.SqlServer.nuspec" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/Mvc/Jerrycurl.Cqs.Abstractions/Jerrycurl.Cqs.Abstractions.csproj" />
-    <Project Path="src/Mvc/Jerrycurl.Cqs/Jerrycurl.Cqs.csproj" />
-    <Project Path="src/Mvc/Jerrycurl.Mvc.Abstractions/Jerrycurl.Mvc.Abstractions.csproj" />
-    <Project Path="src/Mvc/Jerrycurl.Mvc/Jerrycurl.Mvc.csproj" />
-    <Project Path="src/Mvc/Jerrycurl.Relations.Abstractions/Jerrycurl.Relations.Abstractions.csproj" />
-    <Project Path="src/Mvc/Jerrycurl.Relations/Jerrycurl.Relations.csproj" />
+    <Project Path="src/Core/Jerrycurl.Cqs.Abstractions/Jerrycurl.Cqs.Abstractions.csproj" />
+    <Project Path="src/Core/Jerrycurl.Cqs/Jerrycurl.Cqs.csproj" />
+    <Project Path="src/Razor/Jerrycurl.Razor.Abstractions/Jerrycurl.Razor.Abstractions.csproj" />
+    <Project Path="src/Razor/Jerrycurl.Razor/Jerrycurl.Razor.csproj" />
+    <Project Path="src/Core/Jerrycurl.Relations.Abstractions/Jerrycurl.Relations.Abstractions.csproj" />
+    <Project Path="src/Core/Jerrycurl.Relations/Jerrycurl.Relations.csproj" />
   </Folder>
   <Folder Name="/src/CodeAnalysis/">
     <Project Path="src/Build/Jerrycurl.CodeAnalysis.Razor.Compiler/Jerrycurl.CodeAnalysis.Razor.Compiler.csproj" />
@@ -72,9 +72,9 @@
     <File Path="test/unit/README.md" />
   </Folder>
   <Folder Name="/test/src/">
-    <Project Path="test/unit/src/Mvc/Jerrycurl.Cqs.Test/Jerrycurl.Cqs.Test.csproj" />
-    <Project Path="test/unit/src/Mvc/Jerrycurl.Mvc.Test/Jerrycurl.Mvc.Test.csproj" />
-    <Project Path="test/unit/src/Mvc/Jerrycurl.Relations.Test/Jerrycurl.Relations.Test.csproj" />
+    <Project Path="test/unit/src/Core/Jerrycurl.Cqs.Test/Jerrycurl.Cqs.Test.csproj" />
+    <Project Path="test/unit/src/Razor/Jerrycurl.Razor.Test/Jerrycurl.Razor.Test.csproj" />
+    <Project Path="test/unit/src/Core/Jerrycurl.Relations.Test/Jerrycurl.Relations.Test.csproj" />
   </Folder>
   <Folder Name="/test/src/Build/">
     <Project Path="test/unit/src/Build/Jerrycurl.CodeAnalysis.Razor.Test/Jerrycurl.CodeAnalysis.Razor.Test.csproj" />

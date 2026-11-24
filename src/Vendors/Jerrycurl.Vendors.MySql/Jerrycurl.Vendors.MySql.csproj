@@ -9,8 +9,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Mvc\Jerrycurl.Mvc.Abstractions\Jerrycurl.Mvc.Abstractions.csproj" />
-		<ProjectReference Include="..\..\Mvc\Jerrycurl.Mvc\Jerrycurl.Mvc.csproj" />
+		<ProjectReference Include="..\..\Razor\Jerrycurl.Razor.Abstractions\Jerrycurl.Razor.Abstractions.csproj" />
+		<ProjectReference Include="..\..\Razor\Jerrycurl.Razor\Jerrycurl.Razor.csproj" />
 	</ItemGroup>
 
 	<Import Project="..\..\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems" Label="Shared" />

@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>$(NetMoniker)</TargetFramework>
+		<RootNamespace>Jerrycurl.Razor</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Core\Jerrycurl.Cqs.Abstractions\Jerrycurl.Cqs.Abstractions.csproj" />
+		<ProjectReference Include="..\..\Core\Jerrycurl.Relations.Abstractions\Jerrycurl.Relations.Abstractions.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="Jerrycurl.Razor" />
+	</ItemGroup>
+
+	<Import Project="..\..\Shared\Jerrycurl.Common\Jerrycurl.Common.projitems" Label="Shared" />
+</Project>

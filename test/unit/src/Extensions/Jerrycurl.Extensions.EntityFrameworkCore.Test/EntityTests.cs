@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Jerrycurl.Extensions.EntityFrameworkCore.Test.Entities;
-using Jerrycurl.Mvc.Sql;
+using Jerrycurl.Razor.Sql;
 using Jerrycurl.Test;
 using Jerrycurl.Test.Project.Accessors;
 using Jerrycurl.Test.Project.Models;

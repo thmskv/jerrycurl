@@ -1,4 +1,4 @@
-﻿using Jerrycurl.Mvc;
+﻿using Jerrycurl.Razor;
 
 namespace Jerrycurl.Vendors.Oracle;
 

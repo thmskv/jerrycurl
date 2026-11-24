@@ -1,7 +1,7 @@
 ﻿using Jerrycurl.Vendors.Sqlite.Metadata;
 using Microsoft.Data.Sqlite;
 
-namespace Jerrycurl.Mvc;
+namespace Jerrycurl.Razor;
 
 public static class DomainExtensions
 {

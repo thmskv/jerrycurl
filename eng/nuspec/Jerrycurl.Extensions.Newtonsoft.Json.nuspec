@@ -18,7 +18,7 @@
         <dependencies>
             <group targetFramework="$NetMoniker$">
                 <dependency id="Newtonsoft.Json" version="$JsonNetPackageVersion$" />
-                <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
+                <dependency id="Jerrycurl.Razor" version="$PackageVersion$" />
             </group>
         </dependencies>
     </metadata>

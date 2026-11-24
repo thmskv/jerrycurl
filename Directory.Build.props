@@ -1,4 +1,4 @@
-<Project>
+﻿<Project>
     <Import Project="$(MSBuildThisFileDirectory)eng\versions.props" />
 
     <PropertyGroup Label="Target Monikers">
@@ -34,6 +34,6 @@
         <PackageIconFile>icon.png</PackageIconFile>
         <PackageId>$(MSBuildProjectName)</PackageId>
         <PackageLicense>MIT</PackageLicense>
-        <PackageTags>orm sql razor mvc cqs database relation</PackageTags>
+        <PackageTags>orm sql razor cqs database relation</PackageTags>
     </PropertyGroup>
 </Project>

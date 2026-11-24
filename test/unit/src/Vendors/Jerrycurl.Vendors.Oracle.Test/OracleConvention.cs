@@ -1,4 +1,4 @@
-﻿using Jerrycurl.Mvc;
+﻿using Jerrycurl.Razor;
 using Jerrycurl.Test;
 using Oracle.ManagedDataAccess.Client;
 

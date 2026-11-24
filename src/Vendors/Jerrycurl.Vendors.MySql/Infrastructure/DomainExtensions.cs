@@ -2,7 +2,7 @@
 using Jerrycurl.Vendors.MySql;
 using Jerrycurl.Vendors.MySql.Metadata;
 
-namespace Jerrycurl.Mvc;
+namespace Jerrycurl.Razor;
 
 public static class DomainExtensions
 {

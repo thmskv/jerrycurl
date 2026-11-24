@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Fixie;
-using Jerrycurl.Mvc;
+using Jerrycurl.Razor;
 
 namespace Jerrycurl.Test;
 

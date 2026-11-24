@@ -1,4 +1,4 @@
 ﻿// only here to keep namespace
-namespace Jerrycurl.Mvc.Sql.Postgres;
+namespace Jerrycurl.Razor.Sql.Postgres;
 
 public static class SqlExtensions { }

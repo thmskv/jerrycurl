@@ -1,4 +1,4 @@
 ﻿// only here to keep namespace
-namespace Jerrycurl.Mvc.Sql.Sqlite;
+namespace Jerrycurl.Razor.Sql.Sqlite;
 
 public static class SqlExtensions { }

@@ -17,7 +17,7 @@
         <description>Oracle support for Jerrycurl.</description>
         <dependencies>
             <group targetFramework="$NetMoniker$">
-                <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
+                <dependency id="Jerrycurl.Razor" version="$PackageVersion$" />
                 <dependency id="$OraclePackageId$" version="$OraclePackageVersion$" />
                 <dependency id="System.Security.Cryptography.Pkcs" version="$PkcsPackageVersion$" />
             </group>

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq.Expressions;
-using Jerrycurl.Mvc.Projections;
+using Jerrycurl.Razor.Projections;
 using Jerrycurl.Vendors.Oracle;
 
-namespace Jerrycurl.Mvc.Sql.Oracle;
+namespace Jerrycurl.Razor.Sql.Oracle;
 
 public static class RefcursorExtensions
 {

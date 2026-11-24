@@ -7,8 +7,8 @@ internal static class RazorFacts
         "System",
         "System.Collections.Generic",
         "System.Linq.Expressions",
-        "Jerrycurl.Mvc",
-        "Jerrycurl.Mvc.Projections",
-        "Jerrycurl.Mvc.Sql",
+        "Jerrycurl.Razor",
+        "Jerrycurl.Razor.Projections",
+        "Jerrycurl.Razor.Sql",
     ];
 }

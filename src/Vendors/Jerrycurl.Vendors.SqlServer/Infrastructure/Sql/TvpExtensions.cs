@@ -1,11 +1,11 @@
-﻿using Jerrycurl.Mvc.Projections;
+﻿using Jerrycurl.Razor.Projections;
 using System;
 using System.Linq.Expressions;
 using Jerrycurl.Relations;
 using Jerrycurl.Vendors.SqlServer;
 using System.Linq;
 
-namespace Jerrycurl.Mvc.Sql.SqlServer;
+namespace Jerrycurl.Razor.Sql.SqlServer;
 
 public static class TvpExtensions
 {

@@ -4,7 +4,7 @@ using Jerrycurl.Cqs.Metadata.Json;
 using Jerrycurl.Extensions.Newtonsoft.Json.Metadata;
 using Newtonsoft.Json;
 
-namespace Jerrycurl.Mvc;
+namespace Jerrycurl.Razor;
 
 public static class DomainExtensions
 {

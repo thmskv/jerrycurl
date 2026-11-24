@@ -1,4 +1,4 @@
-﻿using Jerrycurl.Mvc.Sql;
+﻿using Jerrycurl.Razor.Sql;
 using Jerrycurl.Test.Project.Accessors;
 using Jerrycurl.Test.Project.Models;
 using Jerrycurl.Vendors.Postgres.Test.Models;

@@ -17,7 +17,7 @@
         <description>PostgreSQL support for Jerrycurl.</description>
         <dependencies>
             <group targetFramework="$NetMoniker$">
-                <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
+                <dependency id="Jerrycurl.Razor" version="$PackageVersion$" />
                 <dependency id="$PostgresPackageId$" version="$PostgresPackageVersion$" />
                 <dependency id="$PgvectorPackageId$" version="$PgvectorPackageVersion$" />
             </group>

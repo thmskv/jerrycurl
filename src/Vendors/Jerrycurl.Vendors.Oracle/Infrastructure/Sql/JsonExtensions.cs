@@ -1,10 +1,10 @@
-﻿using Jerrycurl.Mvc.Projections;
+﻿using Jerrycurl.Razor.Projections;
 using System;
 using System.Linq.Expressions;
 using Jerrycurl.Cqs.Metadata.Json;
-using Jerrycurl.Mvc.Metadata;
+using Jerrycurl.Razor.Metadata;
 
-namespace Jerrycurl.Mvc.Sql.Oracle;
+namespace Jerrycurl.Razor.Sql.Oracle;
 
 public static class JsonExtensions
 {

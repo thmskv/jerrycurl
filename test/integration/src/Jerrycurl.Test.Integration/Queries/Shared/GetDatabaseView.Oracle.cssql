@@ -1,6 +1,6 @@
 ﻿@query
 @result Jerrycurl.Test.Integration.Views.DatabaseView
-@import Jerrycurl.Mvc.Sql.Oracle
+@import Jerrycurl.Razor.Sql.Oracle
 @{
     var c = this.R.Open(m => m.Cast);
 }

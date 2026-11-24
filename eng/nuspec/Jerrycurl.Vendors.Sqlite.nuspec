@@ -17,7 +17,7 @@
         <description>SQLite support for Jerrycurl.</description>
         <dependencies>
             <group targetFramework="$NetMoniker$">
-                <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
+                <dependency id="Jerrycurl.Razor" version="$PackageVersion$" />
                 <dependency id="$SqlitePackageId$" version="$SqlitePackageVersion$" />
             </group>
         </dependencies>

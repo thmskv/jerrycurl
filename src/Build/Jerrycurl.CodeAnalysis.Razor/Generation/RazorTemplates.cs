@@ -14,13 +14,13 @@ $beginnamespace$
 	#line hidden
 	$localimports$
 	$template$
-	$visibility$ partial class $class$ : global::Jerrycurl.Mvc.ProcPage<$model$,$result$>
+	$visibility$ partial class $class$ : global::Jerrycurl.Razor.ProcPage<$model$,$result$>
 	{
 		#pragma warning disable IDE1006
 		$injectiondefs$
 		#pragma warning restore IDE1006
 
-		public $class$(global::Jerrycurl.Mvc.Projections.IProjection model, global::Jerrycurl.Mvc.Projections.IProjection result)
+		public $class$(global::Jerrycurl.Razor.Projections.IProjection model, global::Jerrycurl.Razor.Projections.IProjection result)
 			: base(model, result)
 		{
 

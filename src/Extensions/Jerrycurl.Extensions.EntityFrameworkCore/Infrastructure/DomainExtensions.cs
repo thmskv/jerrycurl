@@ -3,7 +3,7 @@ using Jerrycurl.Extensions.EntityFrameworkCore.Metadata;
 using Jerrycurl.Relations.Metadata;
 using Microsoft.EntityFrameworkCore;
 
-namespace Jerrycurl.Mvc;
+namespace Jerrycurl.Razor;
 
 public static class DomainExtensions
 {

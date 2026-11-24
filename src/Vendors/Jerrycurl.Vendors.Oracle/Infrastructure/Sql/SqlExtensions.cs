@@ -1,2 +1,2 @@
 ﻿// only here to keep namespace
-namespace Jerrycurl.Mvc.Sql.Oracle;
+namespace Jerrycurl.Razor.Sql.Oracle;

@@ -1,4 +1,4 @@
-﻿using Jerrycurl.Mvc;
+﻿using Jerrycurl.Razor;
 using Jerrycurl.Test;
 
 namespace Jerrycurl.Extensions.EntityFrameworkCore.Test;

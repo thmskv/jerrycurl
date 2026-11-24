@@ -103,7 +103,7 @@ public class RazorGenerator
             else
             {
                 projector.Open("template")
-                    .Write("[global::Jerrycurl.Mvc.Metadata.Annotations.Template(typeof(")
+                    .Write("[global::Jerrycurl.Razor.Metadata.Annotations.Template(typeof(")
                     .WritePragma(pageData.Template)
                     .Write("))]");
             }
@@ -122,7 +122,7 @@ public class RazorGenerator
             else
             {
                 projector.Open("injectiondefs")
-                    .WriteLine("[global::Jerrycurl.Mvc.Metadata.Annotations.Inject]")
+                    .WriteLine("[global::Jerrycurl.Razor.Metadata.Annotations.Inject]")
                     .Write("public ")
                     .WritePragma(inject.Type)
                     .WritePragma(inject.Variable)
@@ -138,8 +138,8 @@ public class RazorGenerator
                 projector.WriteWarning(project.Type, "Projection ignored. Please specify both type and variable name.");
             else
             {
-                projector.WriteLine("[global::Jerrycurl.Mvc.Metadata.Annotations.Inject]")
-                    .Write("public global::Jerrycurl.Mvc.Projections.IProjection<")
+                projector.WriteLine("[global::Jerrycurl.Razor.Metadata.Annotations.Inject]")
+                    .Write("public global::Jerrycurl.Razor.Projections.IProjection<")
                     .WritePragma(project.Type)
                     .Write("> ")
                     .WritePragma(project.Variable)
@@ -223,8 +223,8 @@ public class RazorGenerator
 
     private void WriteEntryPoints(Projector projector, RazorPageData pageData, string className)
     {
-        const string Configure = "global::System.Action<global::Jerrycurl.Mvc.SqlOptions> configure = null";
-        const string Engine = "global::Jerrycurl.Mvc.IProcEngine engine = null";
+        const string Configure = "global::System.Action<global::Jerrycurl.Razor.SqlOptions> configure = null";
+        const string Engine = "global::Jerrycurl.Razor.IProcEngine engine = null";
         const string Token = "global::System.Threading.CancellationToken cancellationToken = default";
 
         if (pageData.Query != null && pageData.Command != null)

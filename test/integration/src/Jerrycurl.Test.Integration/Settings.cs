@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Jerrycurl.Mvc;
+using Jerrycurl.Razor;
 
 namespace Jerrycurl.Test.Integration
 {

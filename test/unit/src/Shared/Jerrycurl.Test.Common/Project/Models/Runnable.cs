@@ -1,6 +1,6 @@
-﻿using Jerrycurl.Mvc;
-using Jerrycurl.Mvc.Projections;
-using Jerrycurl.Mvc.Sql;
+﻿using Jerrycurl.Razor;
+using Jerrycurl.Razor.Projections;
+using Jerrycurl.Razor.Sql;
 using System;
 using System.Collections.Generic;
 

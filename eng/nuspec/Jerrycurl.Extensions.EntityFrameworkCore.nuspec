@@ -18,7 +18,7 @@
         <dependencies>
             <group targetFramework="$NetMoniker$">
                 <dependency id="Microsoft.EntityFrameworkCore.Relational" version="$EntityFrameworkCorePackageVersion$" />
-                <dependency id="Jerrycurl.Mvc" version="$PackageVersion$" />
+                <dependency id="Jerrycurl.Razor" version="$PackageVersion$" />
             </group>
         </dependencies>
     </metadata>

@@ -66,7 +66,7 @@ public abstract class OrmTool
         schema.Imports ??= [];
         schema.Imports.Add("global::System");
         schema.Imports.Add("global::Jerrycurl.Cqs.Metadata.Annotations");
-        schema.Imports.Add("global::Jerrycurl.Mvc.Metadata.Annotations");
+        schema.Imports.Add("global::Jerrycurl.Razor.Metadata.Annotations");
 
         string defaultSchema = schema.Flags?.GetValueOrDefault("defaultSchema");
         bool useNullables = (options.Flags?.GetValueOrDefault("useNullables") != "false");

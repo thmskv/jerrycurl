@@ -1,5 +1,5 @@
-using Jerrycurl.Mvc;
-using Jerrycurl.Mvc.Projections;
+using Jerrycurl.Razor;
+using Jerrycurl.Razor.Projections;
 using Jerrycurl.Test.Project.Models;
 
 namespace Jerrycurl.Test.Project.Commands;

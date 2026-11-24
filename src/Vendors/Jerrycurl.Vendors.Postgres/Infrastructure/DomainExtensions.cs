@@ -3,7 +3,7 @@ using Jerrycurl.Vendors.Postgres;
 using Jerrycurl.Vendors.Postgres.Metadata;
 using Npgsql;
 
-namespace Jerrycurl.Mvc;
+namespace Jerrycurl.Razor;
 
 public static class DomainExtensions
 {

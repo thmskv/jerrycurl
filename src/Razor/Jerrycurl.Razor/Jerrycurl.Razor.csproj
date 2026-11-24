@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>$(NetMoniker)</TargetFramework>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Core\Jerrycurl.Cqs.Abstractions\Jerrycurl.Cqs.Abstractions.csproj" />
+		<ProjectReference Include="..\Jerrycurl.Razor.Abstractions\Jerrycurl.Razor.Abstractions.csproj" />
+		<ProjectReference Include="..\..\Core\Jerrycurl.Cqs\Jerrycurl.Cqs.csproj" />
+		<ProjectReference Include="..\..\Core\Jerrycurl.Relations.Abstractions\Jerrycurl.Relations.Abstractions.csproj" />
+		<ProjectReference Include="..\..\Core\Jerrycurl.Relations\Jerrycurl.Relations.csproj" />
+	</ItemGroup>
+</Project>

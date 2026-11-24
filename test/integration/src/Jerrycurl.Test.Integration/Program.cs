@@ -1,5 +1,5 @@
 ﻿using System;
-using Jerrycurl.Mvc;
+using Jerrycurl.Razor;
 using Jerrycurl.Test.Integration.Accessors;
 using Jerrycurl.Test.Integration.Database;
 using Jerrycurl.Cqs.Metadata.Annotations;

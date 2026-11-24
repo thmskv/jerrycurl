@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
-using Jerrycurl.Mvc;
+using Jerrycurl.Razor;
 using Jerrycurl.Test.Profiling;
 
 namespace Jerrycurl.Test.Extensions;
