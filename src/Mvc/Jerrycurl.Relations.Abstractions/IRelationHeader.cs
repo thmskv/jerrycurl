@@ -6,7 +6,7 @@ namespace Jerrycurl.Relations;
 
 public interface IRelationHeader : IEquatable<IRelationHeader>
 {
-    ISchema Schema { get; }
-    IReadOnlyList<IRelationMetadata> Attributes { get; }
-    int Degree { get; }
+    public ISchema Schema { get; }
+    public IReadOnlyList<IRelationMetadata> Attributes { get; }
+    public int Degree { get; }
 }

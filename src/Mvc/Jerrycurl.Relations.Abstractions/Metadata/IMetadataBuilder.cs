@@ -2,11 +2,11 @@
 
 public interface IMetadataBuilder
 {
-    void Initialize(IMetadataBuilderContext context);
+    public void Initialize(IMetadataBuilderContext context);
 }
 
 public interface IMetadataBuilder<TMetadata> : IMetadataBuilder
      where TMetadata : IMetadata
 {
-    TMetadata GetMetadata(IMetadataBuilderContext context);
+    public TMetadata GetMetadata(IMetadataBuilderContext context);
 }

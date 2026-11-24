@@ -24,8 +24,7 @@ public class TransactionScopeFilter : IFilter
 
     public TransactionScopeFilter(Func<TransactionScope> scopeFactory)
     {
-        if (scopeFactory == null)
-            throw new ArgumentNullException(nameof(scopeFactory));
+        ArgumentNullException.ThrowIfNull(scopeFactory);
 
         this.handler = () => new Handler(scopeFactory);
         this.asyncHandler = () => new AsyncHandler(scopeFactory);

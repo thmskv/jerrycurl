@@ -4,6 +4,6 @@ namespace Jerrycurl.Mvc;
 
 public interface IProcServices
 {
-    TService GetService<TService>() where TService : class;
-    IProjection<TModel> GetProjection<TModel>(IProcContext context);
+    public TService GetService<TService>() where TService : class;
+    public IProjection<TModel> GetProjection<TModel>(IProcContext context);
 }

@@ -4,10 +4,10 @@ namespace Jerrycurl.Relations;
 
 public interface IRelationReader : ITuple, IDisposable
 {
-    IRelation Relation { get; }
-    bool Read();
+    public IRelation Relation { get; }
+    public bool Read();
 
-    void CopyTo(IField[] target, int sourceIndex, int targetIndex, int length);
-    void CopyTo(IField[] target, int length);
+    public void CopyTo(IField[] target, int sourceIndex, int targetIndex, int length);
+    public void CopyTo(IField[] target, int length);
 
 }

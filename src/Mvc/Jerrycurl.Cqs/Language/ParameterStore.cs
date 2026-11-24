@@ -20,8 +20,7 @@ public class ParameterStore : Collection<IParameter>
 
     public IParameter Add(IField field)
     {
-        if (field == null)
-            throw new ArgumentNullException(nameof(field));
+        ArgumentNullException.ThrowIfNull(field);
 
         if (!this.innerMap.TryGetValue(field, out IParameter param))
         {
@@ -39,8 +38,7 @@ public class ParameterStore : Collection<IParameter>
 
     public IList<IParameter> Add(IRelation relation)
     {
-        if (relation == null)
-            throw new ArgumentNullException(nameof(relation));
+        ArgumentNullException.ThrowIfNull(relation);
 
         using IRelationReader reader = relation.GetReader();
 

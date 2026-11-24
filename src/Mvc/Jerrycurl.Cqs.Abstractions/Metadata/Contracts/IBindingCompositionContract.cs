@@ -5,7 +5,7 @@ namespace Jerrycurl.Cqs.Metadata;
 
 public interface IBindingCompositionContract
 {
-    MethodInfo Add { get; }
-    NewExpression Construct { get; }
-    MethodInfo AddDynamic { get; }
+    public MethodInfo Add { get; }
+    public NewExpression Construct { get; }
+    public MethodInfo AddDynamic { get; }
 }

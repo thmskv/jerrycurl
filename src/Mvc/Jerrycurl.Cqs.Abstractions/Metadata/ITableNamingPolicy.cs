@@ -2,6 +2,6 @@
 
 public interface ITableNamingPolicy
 {
-    string[] GetTableName(ITableMetadata metadata);
-    string GetColumnName(ITableMetadata metadata);
+    public string[] GetTableName(ITableMetadata metadata);
+    public string GetColumnName(ITableMetadata metadata);
 }

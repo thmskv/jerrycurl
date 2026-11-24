@@ -4,6 +4,6 @@ namespace Jerrycurl.Cqs.Filters;
 
 public interface IFilter
 {
-    IFilterHandler GetHandler(IDbConnection connection);
-    IFilterAsyncHandler GetAsyncHandler(IDbConnection connection);
+    public IFilterHandler GetHandler(IDbConnection connection);
+    public IFilterAsyncHandler GetAsyncHandler(IDbConnection connection);
 }

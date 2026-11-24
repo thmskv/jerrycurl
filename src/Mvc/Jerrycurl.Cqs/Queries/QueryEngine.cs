@@ -27,8 +27,7 @@ public class QueryEngine
 
     public TResult Execute<TResult>(IEnumerable<Query> queries, QueryType queryType)
     {
-        if (queries == null)
-            throw new ArgumentNullException(nameof(queries));
+        ArgumentNullException.ThrowIfNull(queries);
 
         if (this.Options.Store == null)
             throw new InvalidOperationException("No schema store found.");
@@ -52,8 +51,7 @@ public class QueryEngine
 
     public async Task<TResult> ExecuteAsync<TResult>(IEnumerable<Query> queries, QueryType queryType, CancellationToken cancellationToken = default)
     {
-        if (queries == null)
-            throw new ArgumentNullException(nameof(queries));
+        ArgumentNullException.ThrowIfNull(queries);
 
         if (this.Options.Store == null)
             throw new InvalidOperationException("No schema builder found.");
@@ -78,8 +76,7 @@ public class QueryEngine
     public IAsyncEnumerable<QueryReader> EnumerateAsync(Query query, CancellationToken cancellationToken = default) => this.EnumerateAsync([query], cancellationToken);
     public async IAsyncEnumerable<QueryReader> EnumerateAsync(IEnumerable<Query> queries, [EnumeratorCancellation]CancellationToken cancellationToken = default)
     {
-        if (queries == null)
-            throw new ArgumentNullException(nameof(queries));
+        ArgumentNullException.ThrowIfNull(queries);
 
         if (this.Options.Store == null)
             throw new InvalidOperationException("No schema builder found.");
@@ -109,8 +106,7 @@ public class QueryEngine
     public IEnumerable<QueryReader> Enumerate(Query query) => this.Enumerate([query]);
     public IEnumerable<QueryReader> Enumerate(IEnumerable<Query> queries)
     {
-        if (queries == null)
-            throw new ArgumentNullException(nameof(queries));
+        ArgumentNullException.ThrowIfNull(queries);
 
         if (this.Options.Store == null)
             throw new InvalidOperationException("No schema builder found.");

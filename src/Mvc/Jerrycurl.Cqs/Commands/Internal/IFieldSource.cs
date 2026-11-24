@@ -2,6 +2,6 @@
 
 internal interface IFieldSource
 {
-    object Value { get; }
-    bool HasChanged { get; }
+    public object Value { get; }
+    public bool HasChanged { get; }
 }

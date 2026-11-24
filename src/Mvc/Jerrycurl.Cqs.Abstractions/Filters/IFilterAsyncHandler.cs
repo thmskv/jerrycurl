@@ -5,11 +5,11 @@ namespace Jerrycurl.Cqs.Filters;
 
 public interface IFilterAsyncHandler : IAsyncDisposable
 {
-    Task OnConnectionOpeningAsync(FilterContext context);
-    Task OnConnectionOpenedAsync(FilterContext context);
-    Task OnConnectionClosingAsync(FilterContext context);
-    Task OnConnectionClosedAsync(FilterContext context);
-    Task OnCommandCreatedAsync(FilterContext context);
-    Task OnCommandExecutedAsync(FilterContext context);
-    Task OnExceptionAsync(FilterContext context);
+    public Task OnConnectionOpeningAsync(FilterContext context);
+    public Task OnConnectionOpenedAsync(FilterContext context);
+    public Task OnConnectionClosingAsync(FilterContext context);
+    public Task OnConnectionClosedAsync(FilterContext context);
+    public Task OnCommandCreatedAsync(FilterContext context);
+    public Task OnCommandExecutedAsync(FilterContext context);
+    public Task OnExceptionAsync(FilterContext context);
 }

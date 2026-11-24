@@ -17,11 +17,8 @@ public static class CommandExtensions
     #region " Add "
     public static void Add(this CommandBuffer buffer, IEnumerable<IUpdateBinding> bindings)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
-
-        if (bindings == null)
-            throw new ArgumentNullException(nameof(bindings));
+        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(bindings);
 
         foreach (IUpdateBinding binding in bindings)
             buffer.Add(binding);
@@ -38,8 +35,7 @@ public static class CommandExtensions
     #region " Update "
     public static void UpdateAll(this CommandBuffer buffer, IDataReader dataReader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         do
         {
@@ -53,11 +49,8 @@ public static class CommandExtensions
 
     public static CommandBuffer Update(this CommandBuffer buffer, IRelation relation, IEnumerable<string> targetHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
-
-        if (relation == null)
-            throw new ArgumentNullException(nameof(relation));
+        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(relation);
 
         if (buffer.Store == null)
             throw CommandException.NoSchemaStoreAttached();
@@ -71,11 +64,8 @@ public static class CommandExtensions
 
     public static CommandBuffer Update(this CommandBuffer buffer, IRelation relation)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
-
-        if (relation == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(relation);
 
         if (buffer.Store == null)
             throw CommandException.NoSchemaStoreAttached();
@@ -92,8 +82,7 @@ public static class CommandExtensions
 
     public static CommandBuffer Update<TSource>(this CommandBuffer buffer, TSource source, IEnumerable<string> sourceHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         if (buffer.Store == null)
             throw CommandException.NoSchemaStoreAttached();
@@ -107,8 +96,7 @@ public static class CommandExtensions
 
     public static CommandBuffer Update<TSource>(this CommandBuffer buffer, TSource source, RelationHeader sourceHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         if (buffer.Store == null)
             throw CommandException.NoSchemaStoreAttached();
@@ -122,8 +110,7 @@ public static class CommandExtensions
 
     public static CommandBuffer Update<TSource>(this CommandBuffer buffer, TSource source, params (string Source, string Target)[] mappingHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         if (buffer.Store == null)
             throw CommandException.NoSchemaStoreAttached();
@@ -138,8 +125,7 @@ public static class CommandExtensions
 
     public static CommandBuffer Update<TSource>(this CommandBuffer buffer, TSource source, IEnumerable<string> sourceHeader, IEnumerable<string> targetHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         if (buffer.Store == null)
             throw CommandException.NoSchemaStoreAttached();
@@ -155,8 +141,7 @@ public static class CommandExtensions
     #region " UpdateAsync "
     public static async Task UpdateAllAsync(this CommandBuffer buffer, DbDataReader dataReader, CancellationToken cancellationToken = default)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         do
         {
@@ -170,11 +155,8 @@ public static class CommandExtensions
 
     public static async Task<CommandBuffer> UpdateAsync(this CommandBuffer buffer, IRelation relation, IEnumerable<string> targetHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
-
-        if (relation == null)
-            throw new ArgumentNullException(nameof(relation));
+        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(relation);
 
         if (buffer.Store == null)
             throw CommandException.NoSchemaStoreAttached();
@@ -188,11 +170,8 @@ public static class CommandExtensions
 
     public static async Task<CommandBuffer> UpdateAsync(this CommandBuffer buffer, IRelation relation)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
-
-        if (relation == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(relation);
 
         if (buffer.Store == null)
             throw CommandException.NoSchemaStoreAttached();
@@ -209,8 +188,7 @@ public static class CommandExtensions
 
     public static async Task<CommandBuffer> UpdateAsync<TSource>(this CommandBuffer buffer, TSource source, IEnumerable<string> sourceHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         if (buffer.Store == null)
             throw CommandException.NoSchemaStoreAttached();
@@ -224,8 +202,7 @@ public static class CommandExtensions
 
     public static async Task<CommandBuffer> UpdateAsync<TSource>(this CommandBuffer buffer, TSource source, RelationHeader sourceHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         if (buffer.Store == null)
             throw CommandException.NoSchemaStoreAttached();
@@ -239,11 +216,8 @@ public static class CommandExtensions
 
     public static async Task<CommandBuffer> UpdateAsync<TSource>(this CommandBuffer buffer, TSource source, params (string Source, string Target)[] mappingHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
-
-        if (mappingHeader == null)
-            throw new ArgumentNullException(nameof(mappingHeader));
+        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(mappingHeader);
 
         if (buffer.Store == null)
             throw CommandException.NoSchemaStoreAttached();
@@ -258,8 +232,7 @@ public static class CommandExtensions
 
     public static async Task<CommandBuffer> UpdateAsync<TSource>(this CommandBuffer buffer, TSource source, IEnumerable<string> sourceHeader, IEnumerable<string> targetHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         if (buffer.Store == null)
             throw CommandException.NoSchemaStoreAttached();

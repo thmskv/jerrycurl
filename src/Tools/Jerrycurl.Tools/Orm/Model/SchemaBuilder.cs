@@ -27,8 +27,7 @@ public class SchemaBuilder
 
     public TableModel AddTable(string tableSchema, string tableName, bool ignore = false)
     {
-        if (tableName == null)
-            throw new ArgumentNullException(nameof(tableName));
+        ArgumentNullException.ThrowIfNull(tableName);
 
         TableModel table = this.FindTable(tableSchema, tableName);
 
@@ -66,8 +65,7 @@ public class SchemaBuilder
 
     public ColumnModel AddColumn(string tableSchema, string tableName, string columnName, string typeName = null, bool isNullable = true, bool isIdentity = false, bool ignore = false, bool ignoreTable = false)
     {
-        if (columnName == null)
-            throw new ArgumentNullException(nameof(columnName));
+        ArgumentNullException.ThrowIfNull(columnName);
 
         TableModel table = this.FindTable(tableSchema, tableName);
         ColumnModel column = this.FindColumn(table, columnName);

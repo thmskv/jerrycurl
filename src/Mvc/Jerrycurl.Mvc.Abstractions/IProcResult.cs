@@ -2,7 +2,7 @@
 
 public interface IProcResult
 {
-    ISqlBuffer Buffer { get; }
-    IDomainOptions Domain { get; }
-    ISqlPage Page { get; }
+    public ISqlBuffer Buffer { get; }
+    public IDomainOptions Domain { get; }
+    public ISqlPage Page { get; }
 }

@@ -4,5 +4,5 @@ namespace Jerrycurl.Cqs.Sessions;
 
 public interface IBatch
 {
-    void Build(IDbCommand adoCommand);
+    public void Build(IDbCommand adoCommand);
 }

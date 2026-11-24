@@ -48,8 +48,7 @@ public static class QueryExtensions
     #region " Insert "
     public static void InsertAll(this QueryBuffer buffer, IDataReader dataReader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         do
         {
@@ -65,11 +64,8 @@ public static class QueryExtensions
 
     public static QueryBuffer Insert(this QueryBuffer buffer, IRelation relation, IEnumerable<string> targetHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
-
-        if (relation == null)
-            throw new ArgumentNullException(nameof(relation));
+        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(relation);
 
         using IDataReader dataReader = relation.GetDataReader(targetHeader);
 
@@ -80,11 +76,8 @@ public static class QueryExtensions
 
     public static QueryBuffer Insert(this QueryBuffer buffer, IRelation relation)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
-
-        if (relation == null)
-            throw new ArgumentNullException(nameof(relation));
+        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(relation);
 
         using IDataReader dataReader = relation.GetDataReader();
 
@@ -98,8 +91,7 @@ public static class QueryExtensions
 
     public static QueryBuffer Insert<TSource>(this QueryBuffer buffer, TSource source, IEnumerable<string> sourceHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         ISchema schema = buffer.Store.GetSchema(typeof(TSource));
 
@@ -110,8 +102,7 @@ public static class QueryExtensions
 
     public static QueryBuffer Insert<TSource>(this QueryBuffer buffer, TSource source, RelationHeader sourceHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         IRelation relation = new Relation(buffer.Store.From(source), sourceHeader);
 
@@ -122,11 +113,8 @@ public static class QueryExtensions
 
     public static QueryBuffer Insert<TSource>(this QueryBuffer buffer, TSource source, params (string Source, string Target)[] mappingHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
-
-        if (mappingHeader == null)
-            throw new ArgumentNullException(nameof(mappingHeader));
+        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(mappingHeader);
 
         IEnumerable<string> sourceHeader = mappingHeader.Select(t => t.Source);
         IEnumerable<string> targetHeader = mappingHeader.Select(t => t.Target);
@@ -138,8 +126,7 @@ public static class QueryExtensions
 
     public static QueryBuffer Insert<TSource>(this QueryBuffer buffer, TSource source, IEnumerable<string> sourceHeader, IEnumerable<string> targetHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         IRelation relation = buffer.Store.From(source).Select(sourceHeader);
 
@@ -152,8 +139,7 @@ public static class QueryExtensions
     #region " InsertAsync "
     public static async Task InsertAllAsync(this QueryBuffer buffer, DbDataReader dataReader, CancellationToken cancellationToken = default)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         do
         {
@@ -169,11 +155,8 @@ public static class QueryExtensions
 
     public static async Task<QueryBuffer> InsertAsync(this QueryBuffer buffer, IRelation relation, IEnumerable<string> targetHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
-
-        if (relation == null)
-            throw new ArgumentNullException(nameof(relation));
+        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(relation);
 
         using DbDataReader dataReader = relation.GetDataReader(targetHeader);
 
@@ -184,11 +167,8 @@ public static class QueryExtensions
 
     public static async Task<QueryBuffer> InsertAsync(this QueryBuffer buffer, IRelation relation)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
-
-        if (relation == null)
-            throw new ArgumentNullException(nameof(relation));
+        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(relation);
 
         using DbDataReader dataReader = relation.GetDataReader();
 
@@ -202,8 +182,7 @@ public static class QueryExtensions
 
     public static async Task<QueryBuffer> InsertAsync<TSource>(this QueryBuffer buffer, TSource source, IEnumerable<string> sourceHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         ISchema schema = buffer.Store.GetSchema(typeof(TSource));
 
@@ -214,8 +193,7 @@ public static class QueryExtensions
 
     public static async Task<QueryBuffer> InsertAsync<TSource>(this QueryBuffer buffer, TSource source, RelationHeader sourceHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         IRelation relation = new Relation(buffer.Store.From(source), sourceHeader);
 
@@ -226,11 +204,8 @@ public static class QueryExtensions
 
     public static async Task<QueryBuffer> InsertAsync<TSource>(this QueryBuffer buffer, TSource source, params (string Source, string Target)[] mappingHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
-
-        if (mappingHeader == null)
-            throw new ArgumentNullException(nameof(mappingHeader));
+        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(mappingHeader);
 
         IEnumerable<string> sourceHeader = mappingHeader.Select(t => t.Source);
         IEnumerable<string> targetHeader = mappingHeader.Select(t => t.Target);
@@ -242,8 +217,7 @@ public static class QueryExtensions
 
     public static async Task<QueryBuffer> InsertAsync<TSource>(this QueryBuffer buffer, TSource source, IEnumerable<string> sourceHeader, IEnumerable<string> targetHeader)
     {
-        if (buffer == null)
-            throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
 
         IRelation relation = buffer.Store.From(source).Select(sourceHeader);
 

@@ -32,8 +32,7 @@ public class ProcLocator : IProcLocator
         if (string.IsNullOrWhiteSpace(procName))
             throw new ArgumentException("Argument cannot be empty.", nameof(procName));
 
-        if (originType == null)
-            throw new ArgumentNullException(nameof(originType));
+        ArgumentNullException.ThrowIfNull(originType);
 
         PageLocatorKey key = new PageLocatorKey(procName, originType);
 
@@ -42,8 +41,7 @@ public class ProcLocator : IProcLocator
 
     public DomainDescriptor FindDomain(Type originType)
     {
-        if (originType == null)
-            throw new ArgumentNullException(nameof(originType));
+        ArgumentNullException.ThrowIfNull(originType);
 
         Type domainType = this.GetDomainType(originType);
 

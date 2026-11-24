@@ -2,5 +2,5 @@
 
 public interface IJsonNamingPolicy
 {
-    string GetPropertyName(IJsonMetadata metadata);
+    public string GetPropertyName(IJsonMetadata metadata);
 }

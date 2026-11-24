@@ -29,8 +29,7 @@ internal static class ProjectionHelper
 
     public static IProjectionMetadata GetMetadataFromRelativeLambda(IProjection projection, LambdaExpression expression)
     {
-        if (expression == null)
-            throw new ArgumentNullException(nameof(expression));
+        ArgumentNullException.ThrowIfNull(expression);
 
         string name = projection.Metadata.Identity.Notation.Lambda(expression) ?? throw ProjectionException.InvalidLambda(projection.Metadata, expression);
         string fullName = projection.Metadata.Identity.Notation.Combine(projection.Metadata.Identity.Name, name);

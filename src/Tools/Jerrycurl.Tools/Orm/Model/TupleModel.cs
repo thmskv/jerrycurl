@@ -13,8 +13,7 @@ public class TupleModel : IEnumerable<KeyValuePair<string, object>>
 
     public TupleModel(IDataReader dataReader)
     {
-        if (dataReader == null)
-            throw new ArgumentNullException(nameof(dataReader));
+        ArgumentNullException.ThrowIfNull(dataReader);
 
         this.map = [];
 

@@ -6,15 +6,15 @@ namespace Jerrycurl.Mvc;
 
 public interface ISqlBuffer
 {
-    void Append(IEnumerable<IParameter> parameters);
-    void Append(IEnumerable<IUpdateBinding> bindings);
-    void Append(string text);
-    void Append(ISqlContent content);
+    public void Append(IEnumerable<IParameter> parameters);
+    public void Append(IEnumerable<IUpdateBinding> bindings);
+    public void Append(string text);
+    public void Append(ISqlContent content);
 
-    void Push(int batchIndex);
-    void Pop();
-    void Mark();
+    public void Push(int batchIndex);
+    public void Pop();
+    public void Mark();
 
-    IEnumerable<ISqlContent> Read(ISqlOptions options);
-    ISqlContent ReadToEnd();
+    public IEnumerable<ISqlContent> Read(ISqlOptions options);
+    public ISqlContent ReadToEnd();
 }

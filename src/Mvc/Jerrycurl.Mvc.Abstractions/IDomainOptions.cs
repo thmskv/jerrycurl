@@ -6,10 +6,10 @@ namespace Jerrycurl.Mvc;
 
 public interface IDomainOptions
 {
-    Func<IDbConnection> ConnectionFactory { get; }
-    IDialect Dialect { get; }
-    ISchemaStore Schemas { get; }
-    IProcEngine Engine { get; }
-    IProcServices Services { get; }
-    ISqlOptions Sql { get; }
+    public Func<IDbConnection> ConnectionFactory { get; }
+    public IDialect Dialect { get; }
+    public ISchemaStore Schemas { get; }
+    public IProcEngine Engine { get; }
+    public IProcServices Services { get; }
+    public ISqlOptions Sql { get; }
 }

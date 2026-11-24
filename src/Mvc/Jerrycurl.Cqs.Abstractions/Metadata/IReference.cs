@@ -4,10 +4,10 @@ namespace Jerrycurl.Cqs.Metadata;
 
 public interface IReference : IEquatable<IReference>
 {
-    IReferenceMetadata Metadata { get; }
-    IReferenceMetadata List { get; }
-    IReference Other { get; }
-    ReferenceFlags Flags { get; }
-    IReferenceKey Key { get; }
-    int Priority { get; }
+    public IReferenceMetadata Metadata { get; }
+    public IReferenceMetadata List { get; }
+    public IReference Other { get; }
+    public ReferenceFlags Flags { get; }
+    public IReferenceKey Key { get; }
+    public int Priority { get; }
 }

@@ -9,7 +9,7 @@ public delegate void BodyFactory();
 
 public interface IProcEngine
 {
-    ProcFactory Proc(PageDescriptor descriptor, ProcArgs args);
-    PageFactory Page(Type pageType);
-    IDomainOptions Options(Type domainType);
+    public ProcFactory Proc(PageDescriptor descriptor, ProcArgs args);
+    public PageFactory Page(Type pageType);
+    public IDomainOptions Options(Type domainType);
 }

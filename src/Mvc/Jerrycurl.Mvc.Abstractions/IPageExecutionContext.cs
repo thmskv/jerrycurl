@@ -2,7 +2,7 @@
 
 public interface IPageExecutionContext
 {
-    PageDescriptor Page { get; }
-    ISqlBuffer Buffer { get; }
-    BodyFactory Body { get; }
+    public PageDescriptor Page { get; }
+    public ISqlBuffer Buffer { get; }
+    public BodyFactory Body { get; }
 }

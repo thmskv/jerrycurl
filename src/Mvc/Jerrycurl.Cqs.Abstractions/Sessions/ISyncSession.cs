@@ -6,5 +6,5 @@ namespace Jerrycurl.Cqs.Sessions;
 
 public interface ISyncSession : IDisposable
 {
-    IEnumerable<IDataReader> Execute(IBatch batch);
+    public IEnumerable<IDataReader> Execute(IBatch batch);
 }

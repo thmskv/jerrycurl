@@ -4,5 +4,5 @@ namespace Jerrycurl.Relations;
 
 public interface ITuple : IReadOnlyList<IField>
 {
-    int Degree { get; }
+    public int Degree { get; }
 }

@@ -5,11 +5,11 @@ namespace Jerrycurl.Cqs.Metadata;
 
 public interface IBindingValueInfo
 {
-    bool CanBeNull { get; }
-    bool CanBeDbNull { get; }
-    IBindingMetadata Metadata { get; }
-    Expression Value { get; }
-    Expression Helper { get; }
-    Type SourceType { get; }
-    Type TargetType { get; }
+    public bool CanBeNull { get; }
+    public bool CanBeDbNull { get; }
+    public IBindingMetadata Metadata { get; }
+    public Expression Value { get; }
+    public Expression Helper { get; }
+    public Type SourceType { get; }
+    public Type TargetType { get; }
 }

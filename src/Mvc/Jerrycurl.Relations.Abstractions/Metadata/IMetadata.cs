@@ -2,5 +2,5 @@
 
 public interface IMetadata
 {
-    IRelationMetadata Relation { get; }
+    public IRelationMetadata Relation { get; }
 }

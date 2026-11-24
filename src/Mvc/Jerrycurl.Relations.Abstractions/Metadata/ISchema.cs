@@ -2,15 +2,15 @@
 
 public interface ISchema
 {
-    IRelationMetadata Model { get; }
-    DotNotation Notation { get; }
-    ISchemaStore Store { get; }
+    public IRelationMetadata Model { get; }
+    public DotNotation Notation { get; }
+    public ISchemaStore Store { get; }
 
-    TMetadata Lookup<TMetadata>(string name) where TMetadata : IMetadata;
-    TMetadata Lookup<TMetadata>() where TMetadata : IMetadata;
-    IRelationMetadata Lookup(string name);
+    public TMetadata Lookup<TMetadata>(string name) where TMetadata : IMetadata;
+    public TMetadata Lookup<TMetadata>() where TMetadata : IMetadata;
+    public IRelationMetadata Lookup(string name);
 
-    TMetadata Require<TMetadata>(string name) where TMetadata : IMetadata;
-    TMetadata Require<TMetadata>() where TMetadata : IMetadata;
-    IRelationMetadata Require(string name);
+    public TMetadata Require<TMetadata>(string name) where TMetadata : IMetadata;
+    public TMetadata Require<TMetadata>() where TMetadata : IMetadata;
+    public IRelationMetadata Require(string name);
 }

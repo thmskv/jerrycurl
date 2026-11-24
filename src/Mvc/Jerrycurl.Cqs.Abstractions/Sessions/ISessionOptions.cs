@@ -2,6 +2,6 @@
 
 public interface ISessionOptions
 {
-    IAsyncSession GetAsyncSession();
-    ISyncSession GetSyncSession();
+    public IAsyncSession GetAsyncSession();
+    public ISyncSession GetSyncSession();
 }

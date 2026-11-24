@@ -34,11 +34,8 @@ public class ProcEngine : IProcEngine
 
     public ProcFactory Proc(PageDescriptor descriptor, ProcArgs args)
     {
-        if (descriptor == null)
-            throw new ArgumentNullException(nameof(descriptor));
-
-        if (args == null)
-            throw new ArgumentNullException(nameof(args));
+        ArgumentNullException.ThrowIfNull(descriptor);
+        ArgumentNullException.ThrowIfNull(args);
 
         if (descriptor.DomainType == null)
             throw ProcExecutionException.DomainNotFound(descriptor.PageType);
@@ -50,16 +47,14 @@ public class ProcEngine : IProcEngine
 
     public PageFactory Page(Type pageType)
     {
-        if (pageType == null)
-            throw new ArgumentNullException(nameof(pageType));
+        ArgumentNullException.ThrowIfNull(pageType);
 
         return ProcCache.Pages.GetOrAdd(pageType, _ => this.CreatePageFactory(pageType));
     }
 
     public IDomainOptions Options(Type domainType)
     {
-        if (domainType == null)
-            throw new ArgumentNullException(nameof(domainType));
+        ArgumentNullException.ThrowIfNull(domainType);
 
         return ProcCache.Domains.GetOrAdd(domainType, _ => new Lazy<IDomainOptions>(() => this.GetConfiguredOptions(domainType))).Value;
     }

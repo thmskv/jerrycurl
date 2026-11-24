@@ -7,17 +7,17 @@ namespace Jerrycurl.Cqs.Metadata;
 
 public interface IBindingMetadata : IMetadata
 {
-    MetadataIdentity Identity { get; }
-    Type Type { get; }
-    MemberInfo Member { get; }
-    BindingMetadataFlags Flags { get; }
-    IBindingMetadata Parent { get; }
-    IBindingMetadata Item { get; }
-    IBindingMetadata Owner { get; }
-    IReadOnlyList<IBindingMetadata> Properties { get; }
+    public MetadataIdentity Identity { get; }
+    public Type Type { get; }
+    public MemberInfo Member { get; }
+    public BindingMetadataFlags Flags { get; }
+    public IBindingMetadata Parent { get; }
+    public IBindingMetadata Item { get; }
+    public IBindingMetadata Owner { get; }
+    public IReadOnlyList<IBindingMetadata> Properties { get; }
 
-    IBindingParameterContract Parameter { get; }
-    IBindingCompositionContract Composition { get; }
-    IBindingValueContract Value { get; }
-    IBindingHelperContract Helper { get; }
+    public IBindingParameterContract Parameter { get; }
+    public IBindingCompositionContract Composition { get; }
+    public IBindingValueContract Value { get; }
+    public IBindingHelperContract Helper { get; }
 }

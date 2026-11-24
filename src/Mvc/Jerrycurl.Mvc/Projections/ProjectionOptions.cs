@@ -14,8 +14,7 @@ public class ProjectionOptions : IProjectionOptions
 
     public ProjectionOptions(IProjectionOptions options)
     {
-        if (options == null)
-            throw new ArgumentNullException(nameof(options));
+        ArgumentNullException.ThrowIfNull(options);
 
         this.Separator = options.Separator;
     }

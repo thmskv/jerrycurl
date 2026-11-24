@@ -4,5 +4,5 @@ namespace Jerrycurl.Cqs.Metadata;
 
 public interface ITableMetadataBuilder : IMetadataBuilder<ITableMetadata>
 {
-    ITableNamingPolicy NamingPolicy { get; set; }
+    public ITableNamingPolicy NamingPolicy { get; set; }
 }

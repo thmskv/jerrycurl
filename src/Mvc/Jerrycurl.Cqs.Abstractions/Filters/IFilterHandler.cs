@@ -4,11 +4,11 @@ namespace Jerrycurl.Cqs.Filters;
 
 public interface IFilterHandler : IDisposable
 {
-    void OnConnectionOpening(FilterContext context);
-    void OnConnectionOpened(FilterContext context);
-    void OnConnectionClosing(FilterContext context);
-    void OnConnectionClosed(FilterContext context);
-    void OnCommandCreated(FilterContext context);
-    void OnCommandExecuted(FilterContext context);
-    void OnException(FilterContext context);
+    public void OnConnectionOpening(FilterContext context);
+    public void OnConnectionOpened(FilterContext context);
+    public void OnConnectionClosing(FilterContext context);
+    public void OnConnectionClosed(FilterContext context);
+    public void OnCommandCreated(FilterContext context);
+    public void OnCommandExecuted(FilterContext context);
+    public void OnException(FilterContext context);
 }

@@ -5,12 +5,12 @@ namespace Jerrycurl.Cqs.Metadata;
 
 public interface ITableMetadata : IMetadata
 {
-    MetadataIdentity Identity { get; }
-    TableMetadataFlags Flags { get; }
-    ITableMetadata Owner { get; }
-    IReadOnlyList<ITableMetadata> Properties { get; }
-    ITableMetadata Item { get; }
+    public MetadataIdentity Identity { get; }
+    public TableMetadataFlags Flags { get; }
+    public ITableMetadata Owner { get; }
+    public IReadOnlyList<ITableMetadata> Properties { get; }
+    public ITableMetadata Item { get; }
 
-    IReadOnlyList<string> TableName { get; }
-    string ColumnName { get; }
+    public IReadOnlyList<string> TableName { get; }
+    public string ColumnName { get; }
 }

@@ -17,8 +17,7 @@ public class ParameterBinding : IUpdateBinding
 
     public ParameterBinding(IParameter parameter)
     {
-        if (parameter == null)
-            throw new ArgumentNullException(nameof(parameter));
+        ArgumentNullException.ThrowIfNull(parameter);
 
         this.ParameterName = parameter.Name;
         this.Target = parameter.Source;

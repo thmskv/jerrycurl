@@ -20,11 +20,8 @@ internal class Missing<TValue> : IField
 
     public Missing(string name, IRelationMetadata metadata, FieldData data, IField model)
     {
-        if (name == null)
-            throw new ArgumentNullException(nameof(name));
-
-        if (metadata == null)
-            throw new ArgumentNullException(nameof(metadata));
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(metadata);
 
         this.Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
         this.Identity = new FieldIdentity(metadata.Identity, name);

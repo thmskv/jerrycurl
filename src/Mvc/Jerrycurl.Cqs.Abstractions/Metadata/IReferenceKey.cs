@@ -5,8 +5,8 @@ namespace Jerrycurl.Cqs.Metadata;
 
 public interface IReferenceKey : IEquatable<IReferenceKey>
 {
-    string Name { get; }
-    string Other { get; }
-    ReferenceKeyFlags Flags { get; }
-    IReadOnlyList<IReferenceMetadata> Properties { get; }
+    public string Name { get; }
+    public string Other { get; }
+    public ReferenceKeyFlags Flags { get; }
+    public IReadOnlyList<IReferenceMetadata> Properties { get; }
 }

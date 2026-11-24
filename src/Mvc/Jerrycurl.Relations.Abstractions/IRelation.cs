@@ -5,11 +5,11 @@ namespace Jerrycurl.Relations;
 
 public interface IRelation
 {
-    IRelationHeader Header { get; }
-    IField Source { get; }
-    IRelationReader GetReader();
-    DbDataReader GetDataReader(IEnumerable<string> header);
-    DbDataReader GetDataReader();
+    public IRelationHeader Header { get; }
+    public IField Source { get; }
+    public IRelationReader GetReader();
+    public DbDataReader GetDataReader(IEnumerable<string> header);
+    public DbDataReader GetDataReader();
 
-    IEnumerable<ITuple> Body { get; }
+    public IEnumerable<ITuple> Body { get; }
 }

@@ -5,6 +5,6 @@ namespace Jerrycurl.Relations.Internal.Queues;
 
 internal interface IRelationQueue : IDisposable
 {
-    bool Read();
-    IRelationMetadata Metadata { get; }
+    public bool Read();
+    public IRelationMetadata Metadata { get; }
 }

@@ -6,12 +6,12 @@ namespace Jerrycurl.Cqs.Metadata;
 
 public interface IReferenceMetadata : IMetadata
 {
-    MetadataIdentity Identity { get; }
-    Type Type { get; }
-    IReadOnlyList<IReference> References { get; }
-    IReadOnlyList<IReferenceKey> Keys { get; }
-    ReferenceMetadataFlags Flags { get; }
-    IReadOnlyList<IReferenceMetadata> Properties { get; }
-    IReferenceMetadata Item { get; }
-    IReadOnlyList<Attribute> Annotations { get; }
+    public MetadataIdentity Identity { get; }
+    public Type Type { get; }
+    public IReadOnlyList<IReference> References { get; }
+    public IReadOnlyList<IReferenceKey> Keys { get; }
+    public ReferenceMetadataFlags Flags { get; }
+    public IReadOnlyList<IReferenceMetadata> Properties { get; }
+    public IReferenceMetadata Item { get; }
+    public IReadOnlyList<Attribute> Annotations { get; }
 }

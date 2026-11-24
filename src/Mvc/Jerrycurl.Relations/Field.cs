@@ -23,11 +23,8 @@ internal class Field<TValue, TParent> : IField
 
     public Field(string name, IRelationMetadata metadata, FieldData<TValue, TParent> data, IField model, bool isReadOnly)
     {
-        if (name == null)
-            throw new ArgumentNullException(nameof(name));
-
-        if (metadata == null)
-            throw new ArgumentNullException(nameof(metadata));
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(metadata);
 
         this.Identity = new FieldIdentity(metadata.Identity, name);
         this.Model = model ?? throw new ArgumentNullException(nameof(model));

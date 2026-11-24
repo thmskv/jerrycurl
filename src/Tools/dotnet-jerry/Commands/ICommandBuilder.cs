@@ -4,5 +4,5 @@ namespace Jerrycurl.Tools.DotNet.Cli.Commands;
 
 internal interface ICommandBuilder
 {
-    void Build(RootCommand command);
+    public void Build(RootCommand command);
 }

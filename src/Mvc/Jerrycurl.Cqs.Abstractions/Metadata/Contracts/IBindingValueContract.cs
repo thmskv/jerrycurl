@@ -8,6 +8,6 @@ public delegate MethodInfo BindingValueReader(IBindingColumnInfo columnInfo);
 
 public interface IBindingValueContract
 {
-    BindingValueReader Read { get; }
-    BindingValueConverter Convert { get; }
+    public BindingValueReader Read { get; }
+    public BindingValueConverter Convert { get; }
 }

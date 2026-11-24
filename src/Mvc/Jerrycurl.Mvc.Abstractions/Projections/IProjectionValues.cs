@@ -4,7 +4,7 @@ namespace Jerrycurl.Mvc.Projections;
 
 public interface IProjectionValues<TItem> : IEnumerable<IProjection<TItem>>
 {
-    ProjectionIdentity Identity { get; }
-    IProcContext Context { get; }
-    IEnumerable<IProjection<TItem>> Items { get; }
+    public ProjectionIdentity Identity { get; }
+    public IProcContext Context { get; }
+    public IEnumerable<IProjection<TItem>> Items { get; }
 }

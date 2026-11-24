@@ -2,8 +2,8 @@
 
 public interface IProcExecutionStack
 {
-    IPageExecutionContext Current { get; }
+    public IPageExecutionContext Current { get; }
 
-    void Push(IPageExecutionContext context);
-    IPageExecutionContext Pop();
+    public void Push(IPageExecutionContext context);
+    public IPageExecutionContext Pop();
 }

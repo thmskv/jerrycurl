@@ -4,5 +4,5 @@ namespace Jerrycurl.Mvc;
 
 public interface ISqlSerializer<TData>
 {
-    IEnumerable<TData> Serialize(ISqlOptions options);
+    public IEnumerable<TData> Serialize(ISqlOptions options);
 }

@@ -5,15 +5,15 @@ namespace Jerrycurl.Mvc;
 
 public interface ISqlOptions
 {
-    IReadOnlyCollection<IFilter> Filters { get; }
+    public IReadOnlyCollection<IFilter> Filters { get; }
 
     /// <summary>
     /// The maximum number of bytes each generated ADO.NET command can contain.
     /// </summary>
-    int MaxSql { get; set; }
+    public int MaxSql { get; set; }
 
     /// <summary>
     /// The maximum number of parameters each generated ADO.NET command can contain.
     /// </summary>
-    int MaxParameters { get; set; }
+    public int MaxParameters { get; set; }
 }

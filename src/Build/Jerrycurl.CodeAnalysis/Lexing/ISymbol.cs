@@ -2,5 +2,5 @@
 
 public interface ISymbol
 {
-    bool Parse(Tokenizer tokenizer);
+    public bool Parse(Tokenizer tokenizer);
 }

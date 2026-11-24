@@ -17,8 +17,7 @@ public partial class SyncSession : ISyncSession
 
     public SyncSession(Func<IDbConnection> connectionFactory, ICollection<IFilter> filters)
     {
-        if (connectionFactory == null)
-            throw new ArgumentNullException(nameof(connectionFactory));
+        ArgumentNullException.ThrowIfNull(connectionFactory);
 
         this.connection = connectionFactory.Invoke();
         this.VerifyConnection();

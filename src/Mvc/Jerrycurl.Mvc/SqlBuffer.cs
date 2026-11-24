@@ -62,24 +62,21 @@ public class SqlBuffer : ISqlBuffer
 
     public void Append(IEnumerable<IParameter> parameters)
     {
-        if (parameters == null)
-            throw new ArgumentNullException(nameof(parameters));
+        ArgumentNullException.ThrowIfNull(parameters);
 
         this.Parameters.AddRange(parameters);
     }
 
     public void Append(IEnumerable<IUpdateBinding> bindings)
     {
-        if (bindings == null)
-            throw new ArgumentNullException(nameof(bindings));
+        ArgumentNullException.ThrowIfNull(bindings);
 
         this.Bindings.AddRange(bindings);
     }
 
     public void Append(ISqlContent content)
     {
-        if (content == null)
-            throw new ArgumentNullException(nameof(content));
+        ArgumentNullException.ThrowIfNull(content);
 
         this.Bindings.AddRange(content.Bindings ?? []);
         this.Parameters.AddRange(content.Parameters ?? []);
@@ -88,8 +85,7 @@ public class SqlBuffer : ISqlBuffer
 
     public void Append(string text)
     {
-        if (text == null)
-            throw new ArgumentNullException(nameof(text));
+        ArgumentNullException.ThrowIfNull(text);
 
         this.Text.Append(text);
     }

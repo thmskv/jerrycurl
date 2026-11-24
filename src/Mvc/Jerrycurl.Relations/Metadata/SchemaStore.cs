@@ -52,8 +52,7 @@ public class SchemaStore : ISchemaStore
 
     public ISchema GetSchema(Type modelType)
     {
-        if (modelType == null)
-            throw new ArgumentNullException(nameof(modelType));
+        ArgumentNullException.ThrowIfNull(modelType);
 
         return this.entries.GetOrAdd(modelType, t =>
         {

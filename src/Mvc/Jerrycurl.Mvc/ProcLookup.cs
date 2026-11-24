@@ -14,8 +14,7 @@ public class ProcLookup : IProcLookup
 
     private string FromKey(ProcLookupKey key)
     {
-        if (key == null)
-            throw new ArgumentNullException(nameof(key));
+        ArgumentNullException.ThrowIfNull(key);
 
         if (this.nameMap.TryGetValue(key, out string alias))
             return alias;

@@ -24,14 +24,9 @@ internal class ProcRenderer : IProcRenderer
 
     public ISqlContent Partial(string procName, IProjection model, IProjection result)
     {
-        if (procName == null)
-            throw new ArgumentNullException(nameof(procName));
-
-        if (model == null)
-            throw new ArgumentNullException(nameof(model));
-
-        if (result == null)
-            throw new ArgumentNullException(nameof(result));
+        ArgumentNullException.ThrowIfNull(procName);
+        ArgumentNullException.ThrowIfNull(model);
+        ArgumentNullException.ThrowIfNull(result);
 
         PageDescriptor descriptor = this.Context.Locator.FindPage(procName, model.Context.Execution.Page.PageType);
         PageFactory factory = this.Context.Domain.Engine.Page(descriptor.PageType);

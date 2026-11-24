@@ -2,5 +2,5 @@
 
 public interface IRule
 {
-    bool Parse(Lexer lexer);
+    public bool Parse(Lexer lexer);
 }

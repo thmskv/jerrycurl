@@ -11,22 +11,22 @@ namespace Jerrycurl.Mvc.Projections;
 /// </summary>
 public interface IProjection : ISqlWritable
 {
-    ProjectionIdentity Identity { get; }
-    IEnumerable<IProjectionAttribute> Header { get; }
-    IProjectionMetadata Metadata { get; }
-    IProjectionData Data { get; }
-    IProcContext Context { get; }
-    IProjectionOptions Options { get; }
+    public ProjectionIdentity Identity { get; }
+    public IEnumerable<IProjectionAttribute> Header { get; }
+    public IProjectionMetadata Metadata { get; }
+    public IProjectionData Data { get; }
+    public IProcContext Context { get; }
+    public IProjectionOptions Options { get; }
 
-    IProjection Append(IEnumerable<IParameter> parameters);
-    IProjection Append(IEnumerable<IUpdateBinding> bindings);
-    IProjection Append(string text);
-    IProjection Append(params IParameter[] parameter);
-    IProjection Append(params IUpdateBinding[] bindings);
+    public IProjection Append(IEnumerable<IParameter> parameters);
+    public IProjection Append(IEnumerable<IUpdateBinding> bindings);
+    public IProjection Append(string text);
+    public IProjection Append(params IParameter[] parameter);
+    public IProjection Append(params IUpdateBinding[] bindings);
 
-    IProjection Map(Func<IProjectionAttribute, IProjectionAttribute> mapperFunc);
+    public IProjection Map(Func<IProjectionAttribute, IProjectionAttribute> mapperFunc);
 
-    IProjection With(IProjectionMetadata metadata = null,
+    public IProjection With(IProjectionMetadata metadata = null,
                      IProjectionData data = null,
                      IEnumerable<IProjectionAttribute> header = null,
                      IProjectionOptions options = null);

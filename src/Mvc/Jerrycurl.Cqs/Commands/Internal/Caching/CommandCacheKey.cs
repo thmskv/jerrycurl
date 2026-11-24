@@ -19,8 +19,7 @@ internal class CommandCacheKey : IEquatable<CommandCacheKey>
 
     public CommandCacheKey(MetadataIdentity metadata, ColumnMetadata column)
     {
-        if (metadata == null)
-            throw new ArgumentNullException(nameof(metadata));
+        ArgumentNullException.ThrowIfNull(metadata);
 
         this.Columns = new List<ColumnName>() { new ColumnName(metadata, column) };
     }

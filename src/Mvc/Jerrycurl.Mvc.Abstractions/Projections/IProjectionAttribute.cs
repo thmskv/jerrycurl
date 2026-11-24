@@ -7,19 +7,19 @@ namespace Jerrycurl.Mvc.Projections;
 
 public interface IProjectionAttribute : ISqlWritable
 {
-    ProjectionIdentity Identity { get; }
-    IProjectionMetadata Metadata { get; }
-    IProjectionData Data { get; }
-    IProcContext Context { get; }
-    ISqlContent Content { get; }
+    public ProjectionIdentity Identity { get; }
+    public IProjectionMetadata Metadata { get; }
+    public IProjectionData Data { get; }
+    public IProcContext Context { get; }
+    public ISqlContent Content { get; }
 
-    IProjectionAttribute Append(IEnumerable<IParameter> parameters);
-    IProjectionAttribute Append(IEnumerable<IUpdateBinding> bindings);
-    IProjectionAttribute Append(string text);
-    IProjectionAttribute Append(params IParameter[] parameter);
-    IProjectionAttribute Append(params IUpdateBinding[] bindings);
+    public IProjectionAttribute Append(IEnumerable<IParameter> parameters);
+    public IProjectionAttribute Append(IEnumerable<IUpdateBinding> bindings);
+    public IProjectionAttribute Append(string text);
+    public IProjectionAttribute Append(params IParameter[] parameter);
+    public IProjectionAttribute Append(params IUpdateBinding[] bindings);
 
-    IProjectionAttribute With(IProjectionMetadata metadata = null,
+    public IProjectionAttribute With(IProjectionMetadata metadata = null,
                               IProjectionData data = null,
                               ISqlContent content = null);
 }

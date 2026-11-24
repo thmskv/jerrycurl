@@ -22,8 +22,7 @@ public class AsyncSession : IAsyncSession
 
     public AsyncSession(Func<IDbConnection> connectionFactory, ICollection<IFilter> filters)
     {
-        if (connectionFactory == null)
-            throw new ArgumentNullException(nameof(connectionFactory));
+        ArgumentNullException.ThrowIfNull(connectionFactory);
 
         this.connectionBase = connectionFactory.Invoke();
         this.connection = this.connectionBase as DbConnection;

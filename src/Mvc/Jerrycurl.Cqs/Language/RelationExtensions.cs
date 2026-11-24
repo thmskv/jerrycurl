@@ -102,8 +102,7 @@ public static class RelationExtensions
 
     public static IEnumerable<ColumnBinding> AsBindings(this IRelation targets)
     {
-        if (targets == null)
-            throw new ArgumentNullException(nameof(targets));
+        ArgumentNullException.ThrowIfNull(targets);
 
         using IRelationReader reader = targets.GetReader();
 
@@ -116,8 +115,7 @@ public static class RelationExtensions
     }
     public static IEnumerable<ColumnBinding> AsBindings(this ITuple targets)
     {
-        if (targets == null)
-            throw new ArgumentNullException(nameof(targets));
+        ArgumentNullException.ThrowIfNull(targets);
 
         return targets.Select(t => new ColumnBinding(t));
     }

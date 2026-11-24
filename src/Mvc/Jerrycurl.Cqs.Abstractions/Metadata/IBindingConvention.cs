@@ -2,10 +2,10 @@
 
 public interface IBindingConvention
 {
-    int Priority { get; }
+    public int Priority { get; }
 
-    IBindingParameterContract GetParameterContract(IBindingMetadata metadata);
-    IBindingCompositionContract GetCompositionContract(IBindingMetadata metadata);
-    IBindingValueContract GetValueContract(IBindingMetadata metadata);
-    IBindingHelperContract GetHelperContract(IBindingMetadata metadata);
+    public IBindingParameterContract GetParameterContract(IBindingMetadata metadata);
+    public IBindingCompositionContract GetCompositionContract(IBindingMetadata metadata);
+    public IBindingValueContract GetValueContract(IBindingMetadata metadata);
+    public IBindingHelperContract GetHelperContract(IBindingMetadata metadata);
 }

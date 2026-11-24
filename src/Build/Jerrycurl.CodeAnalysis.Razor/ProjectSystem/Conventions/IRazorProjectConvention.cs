@@ -5,5 +5,5 @@ namespace Jerrycurl.CodeAnalysis.Razor.ProjectSystem.Conventions;
 
 public interface IRazorProjectConvention
 {
-    void Apply(RazorProject project, IList<RazorPage> result);
+    public void Apply(RazorProject project, IList<RazorPage> result);
 }

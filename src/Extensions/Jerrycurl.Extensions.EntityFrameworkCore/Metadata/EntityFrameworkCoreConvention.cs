@@ -22,8 +22,7 @@ public class EntityFrameworkCoreConvention : IRelationConvention, ITableNamingPo
 
     public EntityFrameworkCoreConvention(DbContext dbContext)
     {
-        if (dbContext == null)
-            throw new ArgumentNullException(nameof(dbContext));
+        ArgumentNullException.ThrowIfNull(dbContext);
 
         this.InitializeEntities(dbContext);
     }

@@ -2,14 +2,14 @@
 
 public interface ISource
 {
-    char? this[int position] { get; }
+    public char? this[int position] { get; }
 
-    bool Eof { get; }
-    bool Bof { get; }
+    public bool Eof { get; }
+    public bool Bof { get; }
 
-    SourceSpan Read(int length);
-    void Discard(int length);
+    public SourceSpan Read(int length);
+    public void Discard(int length);
 
-    string GetText(SourceSpan span);
-    string GetText();
+    public string GetText(SourceSpan span);
+    public string GetText();
 }

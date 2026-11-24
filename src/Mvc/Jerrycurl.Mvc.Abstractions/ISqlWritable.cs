@@ -2,5 +2,5 @@
 
 public interface ISqlWritable
 {
-    void WriteTo(ISqlBuffer buffer);
+    public void WriteTo(ISqlBuffer buffer);
 }

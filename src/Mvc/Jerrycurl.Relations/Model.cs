@@ -20,8 +20,7 @@ public class Model : IField
 
     public Model(ISchema schema, object value)
     {
-        if (schema == null)
-            throw new ArgumentNullException(nameof(schema));
+        ArgumentNullException.ThrowIfNull(schema);
 
         this.Metadata = schema.Require<IRelationMetadata>();
         this.Identity = new FieldIdentity(this.Metadata.Identity, this.Metadata.Identity.Name);

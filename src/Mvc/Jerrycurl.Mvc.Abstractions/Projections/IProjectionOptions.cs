@@ -2,5 +2,5 @@
 
 public interface IProjectionOptions
 {
-    string Separator { get; }
+    public string Separator { get; }
 }

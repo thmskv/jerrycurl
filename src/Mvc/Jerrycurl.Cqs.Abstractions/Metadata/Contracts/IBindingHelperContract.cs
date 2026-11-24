@@ -4,6 +4,6 @@ namespace Jerrycurl.Cqs.Metadata;
 
 public interface IBindingHelperContract
 {
-    object Object { get; }
-    Type Type { get; }
+    public object Object { get; }
+    public Type Type { get; }
 }

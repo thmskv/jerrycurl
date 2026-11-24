@@ -4,6 +4,6 @@ namespace Jerrycurl.Mvc;
 
 public interface IProcRenderer
 {
-    ISqlContent Body();
-    ISqlContent Partial(string procName, IProjection model, IProjection result);
+    public ISqlContent Body();
+    public ISqlContent Partial(string procName, IProjection model, IProjection result);
 }

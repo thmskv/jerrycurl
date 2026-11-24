@@ -4,5 +4,5 @@ namespace Jerrycurl.Cqs.Commands;
 
 public interface IUpdateBinding
 {
-    IField Target { get; }
+    public IField Target { get; }
 }

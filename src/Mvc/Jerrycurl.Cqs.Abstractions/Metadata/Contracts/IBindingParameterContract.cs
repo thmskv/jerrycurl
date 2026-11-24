@@ -5,6 +5,6 @@ public delegate object BindingParameterConverter(object value);
 
 public interface IBindingParameterContract
 {
-    BindingParameterWriter Write { get; }
-    BindingParameterConverter Convert { get; }
+    public BindingParameterWriter Write { get; }
+    public BindingParameterConverter Convert { get; }
 }

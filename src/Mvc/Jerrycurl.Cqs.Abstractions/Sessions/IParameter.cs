@@ -5,8 +5,8 @@ namespace Jerrycurl.Cqs.Sessions;
 
 public interface IParameter
 {
-    string Name { get; }
-    IField Source { get; }
+    public string Name { get; }
+    public IField Source { get; }
 
-    void Build(IDbDataParameter adoParameter);
+    public void Build(IDbDataParameter adoParameter);
 }

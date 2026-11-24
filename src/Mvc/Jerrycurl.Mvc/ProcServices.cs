@@ -17,8 +17,7 @@ public class ProcServices : IProcServices
 
     public virtual IProjection<TModel> GetProjection<TModel>(IProcContext context)
     {
-        if (context == null)
-            throw new ArgumentNullException(nameof(context));
+        ArgumentNullException.ThrowIfNull(context);
 
         ISchema schema = context.Domain.Schemas.GetSchema(typeof(IList<TModel>));
         IProjectionMetadata metadata = schema.Require<IProjectionMetadata>();

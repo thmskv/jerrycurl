@@ -174,8 +174,7 @@ public sealed class CommandBuffer
     }
     public void Add(IParameter parameter)
     {
-        if (parameter == null)
-            throw new ArgumentNullException(nameof(parameter));
+        ArgumentNullException.ThrowIfNull(parameter);
 
         FieldBuffer buffer = this.paramHeader.GetOrAdd(parameter.Name);
 
@@ -208,8 +207,7 @@ public sealed class CommandBuffer
 
     public void Add(CascadeBinding binding)
     {
-        if (binding == null)
-            throw new ArgumentNullException(nameof(binding));
+        ArgumentNullException.ThrowIfNull(binding);
 
         FieldBuffer buffer = this.fieldBuffers.GetOrAdd(binding.Target);
 
@@ -219,8 +217,7 @@ public sealed class CommandBuffer
 
     public void Add(ColumnBinding binding)
     {
-        if (binding == null)
-            throw new ArgumentNullException(nameof(binding));
+        ArgumentNullException.ThrowIfNull(binding);
 
         FieldBuffer buffer = this.fieldBuffers.GetOrAdd(binding.Target);
 
@@ -232,8 +229,7 @@ public sealed class CommandBuffer
 
     public void Add(ParameterBinding binding)
     {
-        if (binding == null)
-            throw new ArgumentNullException(nameof(binding));
+        ArgumentNullException.ThrowIfNull(binding);
 
         FieldBuffer buffer = this.fieldBuffers.GetOrAdd(binding.Target);
         FieldBuffer paramBuffer = this.paramHeader.GetOrAdd(binding.ParameterName);

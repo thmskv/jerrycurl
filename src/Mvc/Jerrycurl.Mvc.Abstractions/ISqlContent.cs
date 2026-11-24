@@ -6,13 +6,13 @@ namespace Jerrycurl.Mvc;
 
 public interface ISqlContent : ISqlWritable
 {
-    IEnumerable<IUpdateBinding> Bindings { get; }
-    IEnumerable<IParameter> Parameters { get; }
-    string Text { get; }
+    public IEnumerable<IUpdateBinding> Bindings { get; }
+    public IEnumerable<IParameter> Parameters { get; }
+    public string Text { get; }
 
-    ISqlContent Append(IEnumerable<IParameter> parameters);
-    ISqlContent Append(IEnumerable<IUpdateBinding> bindings);
-    ISqlContent Append(params IParameter[] parameter);
-    ISqlContent Append(params IUpdateBinding[] bindings);
-    ISqlContent Append(string text);
+    public ISqlContent Append(IEnumerable<IParameter> parameters);
+    public ISqlContent Append(IEnumerable<IUpdateBinding> bindings);
+    public ISqlContent Append(params IParameter[] parameter);
+    public ISqlContent Append(params IUpdateBinding[] bindings);
+    public ISqlContent Append(string text);
 }

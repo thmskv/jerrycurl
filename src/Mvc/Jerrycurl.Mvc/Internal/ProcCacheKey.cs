@@ -12,11 +12,8 @@ internal class ProcCacheKey : IEquatable<ProcCacheKey>
 
     public ProcCacheKey(PageDescriptor descriptor, ProcArgs args)
     {
-        if (descriptor == null)
-            throw new ArgumentNullException(nameof(descriptor));
-
-        if (args == null)
-            throw new ArgumentNullException(nameof(args));
+        ArgumentNullException.ThrowIfNull(descriptor);
+        ArgumentNullException.ThrowIfNull(args);
 
         this.PageType = descriptor.PageType;
         this.ModelType = args.ModelType;

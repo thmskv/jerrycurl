@@ -2,8 +2,8 @@
 
 public interface IMetadataBuilderContext
 {
-    IRelationMetadata Relation { get; }
+    public IRelationMetadata Relation { get; }
 
-    void AddMetadata<TMetadata>(TMetadata metadata) where TMetadata : IMetadata;
-    TMetadata GetMetadata<TMetadata>(string name) where TMetadata : IMetadata;
+    public void AddMetadata<TMetadata>(TMetadata metadata) where TMetadata : IMetadata;
+    public TMetadata GetMetadata<TMetadata>(string name) where TMetadata : IMetadata;
 }

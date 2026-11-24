@@ -21,8 +21,7 @@ public class SqlContent : ISqlContent
 
     public SqlContent Append(string text)
     {
-        if (text == null)
-            throw new ArgumentNullException(nameof(text));
+        ArgumentNullException.ThrowIfNull(text);
 
         return new SqlContent()
         {
@@ -34,8 +33,7 @@ public class SqlContent : ISqlContent
 
     public SqlContent Append(IEnumerable<IParameter> parameters)
     {
-        if (parameters == null)
-            throw new ArgumentNullException(nameof(parameters));
+        ArgumentNullException.ThrowIfNull(parameters);
 
         return new SqlContent()
         {
@@ -47,8 +45,7 @@ public class SqlContent : ISqlContent
 
     public SqlContent Append(IEnumerable<IUpdateBinding> bindings)
     {
-        if (bindings == null)
-            throw new ArgumentNullException(nameof(bindings));
+        ArgumentNullException.ThrowIfNull(bindings);
 
         return new SqlContent()
         {

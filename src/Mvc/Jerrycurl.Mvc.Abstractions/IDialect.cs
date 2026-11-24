@@ -2,13 +2,13 @@
 
 public interface IDialect
 {
-    string Identifier(string id);
-    string Parameter(string parameterName);
-    string Variable(string variableName);
-    string Literal(object value);
-    string String(string value);
+    public string Identifier(string id);
+    public string Parameter(string parameterName);
+    public string Variable(string variableName);
+    public string Literal(object value);
+    public string String(string value);
 
-    string Qualifier { get; }
+    public string Qualifier { get; }
 
-    DialectSupport Support { get; }
+    public DialectSupport Support { get; }
 }

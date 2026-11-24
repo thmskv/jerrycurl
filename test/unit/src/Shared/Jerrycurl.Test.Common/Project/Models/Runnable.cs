@@ -75,5 +75,5 @@ public class Runnable : Runnable<object, object>
 
 public interface IRunnable
 {
-    void Execute(ISqlPage page);
+    public void Execute(ISqlPage page);
 }
