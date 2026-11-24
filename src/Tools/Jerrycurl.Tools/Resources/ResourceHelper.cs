@@ -33,5 +33,4 @@ public static class ResourceHelper
             return GetResourceString("transform_template.js", new() { ["tsname"] = typesFileName });
     }
 
-    public static string GetRazorSkeletonString() => GetResourceString("razor_skeleton.txt");
 }

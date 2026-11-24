@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-	<PropertyGroup>
-		<JerrycurlSkeletonPath Condition=" '$(JerrycurlSkeletonPath)' == '' ">$(MSBuildThisFileDirectory)RazorSkeleton.cs.txt</JerrycurlSkeletonPath>
-		<JerrycurlIntermediatePath Condition=" '$(JerrycurlIntermediatePath)' == '' ">$(IntermediateOutputPath)Jerrycurl</JerrycurlIntermediatePath>
-		<JerrycurlRootNamespace Condition=" '$(JerrycurlRootNamespace)' == '' ">$(RootNamespace)</JerrycurlRootNamespace>
-		<JerrycurlVerbose Condition=" '$(JerrycurlVerbose)' == '' ">false</JerrycurlVerbose>
-		<JerrycurlProjectName Condition=" '$(JerrycurlRootNamespace)' == '' ">$(MSBuildProjectName)</JerrycurlProjectName>
-		<JerrycurlUseLinks Condition=" '$(JerrycurlUseLinks)' == '' ">true</JerrycurlUseLinks>
-	</PropertyGroup>
-
 	<ItemGroup>
 		<ProjectCapability Include="JerryProject" />
 	</ItemGroup>

@@ -76,6 +76,9 @@
     <Project Path="test/unit/src/Mvc/Jerrycurl.Mvc.Test/Jerrycurl.Mvc.Test.csproj" />
     <Project Path="test/unit/src/Mvc/Jerrycurl.Relations.Test/Jerrycurl.Relations.Test.csproj" />
   </Folder>
+  <Folder Name="/test/src/Build/">
+    <Project Path="test/unit/src/Build/Jerrycurl.CodeAnalysis.Razor.Test/Jerrycurl.CodeAnalysis.Razor.Test.csproj" />
+  </Folder>
   <Folder Name="/test/src/Extensions/">
     <Project Path="test/unit/src/Extensions/Jerrycurl.Extensions.EntityFrameworkCore.Test/Jerrycurl.Extensions.EntityFrameworkCore.Test.csproj" />
   </Folder>

@@ -76,7 +76,7 @@ public class RazorGenerator
 
         if (pageData.Result?.Text != null)
             projector.Open("result").WritePragma(pageData.Result);
-        else if (pageData.Input != null)
+        else if (pageData.Output != null)
             projector.Open("result").Write($"{className}.Output");
         else
             projector.Open("result").Write("object");
@@ -175,14 +175,15 @@ public class RazorGenerator
 
         void WriteType(string target, string typeName, RazorFragment fragment)
         {
-            string[] arguments = fragment.Text.Split([','], StringSplitOptions.RemoveEmptyEntries);
             string[] properties = [
-                ..arguments.Select(arg =>
+                ..ArgumentSplitter.SplitArguments(fragment.Text).Select(arg =>
                 {
-                    string[] withDef = arg.Split(['='], 2);
-                    string valueDef = withDef.Length == 2 ? withDef[1] : "";
+                    (string declaration, string defaultValue) = ArgumentSplitter.SplitDefault(arg);
 
-                    return $"public {arg} {{ get; set; }}{valueDef}";
+                    if (defaultValue != null)
+                        return $"public {declaration} {{ get; set; }} = {defaultValue};";
+
+                    return $"public {declaration} {{ get; set; }}";
                 })
             ];
 
